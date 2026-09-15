@@ -90,7 +90,8 @@ export default withMermaid(
             { text: "0009 - Bayesian Multi-Signal Risk Scoring", link: "/adr/0009-bayesian-multi-signal-risk-scoring" },
             { text: "0010 - SABSA Alignment & Attribute Profiling", link: "/adr/0010-sabsa-business-architecture-and-attribute-profiling" },
             { text: "0011 - Bipartite Entity-Finding Graph", link: "/adr/0011-bipartite-entity-finding-graph-consolidation" },
-            { text: "0012 - AI Orchestration & MVP Roadmap", link: "/adr/0012-ai-orchestration-runtime-mcp-and-mvp-roadmap" }
+            { text: "0012 - AI Orchestration & MVP Roadmap", link: "/adr/0012-ai-orchestration-runtime-mcp-and-mvp-roadmap" },
+            { text: "0013 - Ambient Deception & Canary Anchors", link: "/adr/0013-ambient-deception-fabric-and-canary-anchors" }
           ]
         }
       ],
