@@ -58,17 +58,58 @@ The documentation is organized logically across strategy, capability mapping, de
 
 ---
 
-## 🛠️ Tooling & Scripts
+## 🛠️ Tooling & Local Development
 
-This repository uses [`bun`](https://bun.sh) for lightweight scripts and tooling:
+This repository uses [`bun`](https://bun.sh) for script execution, documentation serving, and diagram validation:
 
 ```bash
 # Install dependencies
 bun install
 
-# Validate Mermaid diagrams
-bun run diagrams:validate
+# Start local documentation server with live reload & Mermaid rendering
+bun run docs:dev
 
-# Lint markdown files
-bun run lint:md
+# Build production static site to docs/.vitepress/dist
+bun run docs:build
+
+# Validate all Mermaid diagrams for syntax errors
+bun run diagrams:validate
+# Note: In isolated sandboxes, invoke directly:
+# bun ./scripts/validate-diagrams.ts
 ```
+
+---
+
+## 🤝 How to Contribute
+
+TIDIR is an open, vendor-neutral research project. We actively welcome contributions, critiques, and enhancements from security practitioners, detection engineers, data architects, and researchers.
+
+### Ways to Contribute
+
+1. **Open an Issue**:
+   - **Propose New Capabilities**: Have an idea for a capability pattern or layer integration? Open an [Issue](https://github.com/Haribu/TIDIR/issues) with the `feature` or `rfc` label.
+   - **Report Architectural Gaps or Bugs**: If you spot an unhandled attack path, schema inconsistency, broken diagram, or documentation error, please file an issue with context.
+   - **Architectural Decision Records (ADRs)**: Propose a new ADR or debate an existing decision using our [ADR template](docs/adr/template.md).
+
+2. **Submit a Pull Request (PR)**:
+   - Fork the repository and create a branch from `main`:
+     ```bash
+     git checkout -b feat/my-architecture-proposal
+     ```
+   - Follow the established contribution standards:
+     - **Vendor-Neutral First**: Keep architecture specifications decoupled from specific proprietary commercial platforms.
+     - **Schema Alignment**: Telemetry must align with **OCSF**, CTI with **STIX 2.1**, and detection rules with declarative formats (**Sigma**).
+     - **Diagram Syntax**: All diagrams must be written in Mermaid and pass validation (`bun run diagrams:validate`).
+     - **ADR Required**: Any non-trivial technology recommendation or design shift must include an ADR in `docs/adr/`.
+   - Open a PR against `main` explaining the rationale, threat model context, and operational impact.
+
+3. **Direct Contact & Private Inquiries**:
+   - If you prefer to discuss ideas privately, explore research collaboration, or share feedback outside of public GitHub threads, feel free to email:
+     📧 **Harry McLaren** — [`info@harrymclaren.co.uk`](mailto:info@harrymclaren.co.uk)
+
+---
+
+## 📄 License & Attribution
+
+This open architecture and research documentation is published under the **Apache License 2.0**. You are free to adopt, modify, and reference these patterns in your own security operations.
+
