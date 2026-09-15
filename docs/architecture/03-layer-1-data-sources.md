@@ -118,34 +118,7 @@ flowchart LR
 
 ## 4. Source Domain Taxonomy & Functional Capabilities
 
-Layer 1 encompasses 5 distinct input domains that must converge into the architecture:
-
-```mermaid
-mindmap
-  root((Layer 1 Inputs))
-    Runtime Telemetry
-      Host & Workload Activity
-      Network & Perimeter Flows
-      Identity & Access Transmissions
-      Cloud Management Plane APIs
-      Application Transaction Records
-    Threat Intelligence (CTI)
-      Tactical Indicators & Hashes
-      Adversary TTPs & Campaigns
-      Exploit Weaponization Signals
-    Organizational Context
-      Asset & Infrastructure Inventory
-      Directory Structure & Privileges
-      Business Service Criticality
-    Attack Surface & Exposure
-      External Attack Surface (EASM)
-      Public Cloud Asset Footprint
-      Software Supply Chain (SBOM)
-    Control Posture & Health
-      Sensor & Agent Health Heartbeats
-      Configuration Drift & Hardening State
-      Known Vulnerability & Exposure Gaps
-```
+Layer 1 encompasses five distinct input domains that converge into the ingestion fabric:
 
 ### Domain 1: Runtime Operational Telemetry (Activity Streams)
 Ephemeral, high-volume event streams generated continuously as infrastructure and users operate.
