@@ -267,11 +267,15 @@ flowchart TB
   CASE_PROMOTED ==>|Prioritized Dispatch| L4_ENG["Layer 4: Incident Response & Case Management\n(Agentic & Human Operator Investigation)"]
 ```
 
-### 1. Entity-Centric Graph Clustering
+### 1. Entity-Centric Graph Clustering & Supernode Dampening
 Rather than analyzing alerts in isolation, the graph correlation engine continuously extracts identity and infrastructure pivots from every normalized OCSF finding:
 - **Identity Pivots**: `actor.user.name`, `actor.user.uid`, `src_endpoint.ip`, `cloud.account.uid`, `iam.role_arn`.
 - **Infrastructure Pivots**: `device.hostname`, `device.uid`, `process.file.hash`, `process.parent_process.guid`, `container.id`.
 - **Temporal Windows**: Events occurring within sliding correlation windows ($\Delta t = 15\text{m} \dots 2\text{h}$) referencing overlapping pivots are dynamically stitched into a unified Directed Acyclic Graph (DAG). This reconstructs the adversary's lateral traversal across network boundaries and identity roles.
+- **Supernode Pruning & Degree-Capping Heuristics**: In enterprise environments, shared infrastructure nodes—such as outbound egress NAT gateways, VPN concentrators, recursive DNS resolvers, and generic deployment service accounts—frequently connect to thousands of benign events. Uncontrolled graph linking on these high-degree pivots causes catastrophic combinatorial explosion, collapsing unrelated user incidents into single monstrous clusters. Layer 3 enforces:
+  - *Degree Threshold Caps*: Pivots exceeding high-degree thresholds (e.g., connected to > 50 distinct entities within $\Delta t$) are automatically flagged as shared infrastructure supernodes.
+  - *Centrality Dampening*: Supernodes are excluded as primary clustering pivots. Edges passing through supernodes require secondary corroborating pivots (e.g. identical process GUID or matching user session token) to prevent false-positive cluster fusion.
+  - *Exponential Edge Decay*: Edges between entities decay exponentially over time unless reinforced by subsequent related findings, naturally pruning stale pivots.
 
 ### 2. The Composite Risk Lens
 Static alert severities (e.g., standard "Medium" or "High" labels) are fundamentally inadequate for prioritization. Layer 3 evaluates each clustered graph through a composite mathematical risk function:

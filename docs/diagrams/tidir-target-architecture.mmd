@@ -1,124 +1,65 @@
 flowchart TB
   %% Class Definitions for Visual Hierarchy & Styling
-  classDef source fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
-  classDef fabric fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#f8fafc;
-  classDef detection fill:#2e1065,stroke:#c084fc,stroke-width:2px,color:#f8fafc;
-  classDef response fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#f8fafc;
-  classDef engineering fill:#3b0764,stroke:#f472b6,stroke-width:2px,color:#f8fafc,stroke-dasharray: 4 4;
-  classDef gate fill:#451a03,stroke:#fbbf24,stroke-width:2px,color:#f8fafc;
+  classDef layer1 fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
+  classDef layer2 fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#f8fafc;
+  classDef layer3 fill:#2e1065,stroke:#c084fc,stroke-width:2px,color:#f8fafc;
+  classDef layer4 fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#f8fafc;
+  classDef eng fill:#1e293b,stroke:#f472b6,stroke-width:2px,color:#f8fafc,stroke-dasharray: 4 4;
 
-  %% Layer 1: Sources & Environmental Inputs
-  subgraph L1 ["Layer 1: Data Sources & Environmental Inputs"]
-    direction TB
-    S_HOST["Host & Workload Telemetry\n(Process Trees, File, Memory, eBPF)"]:::source
-    S_NET["Network & Perimeter Telemetry\n(Flow Summaries, DNS, TLS Handshakes)"]:::source
-    S_IAM["Identity & Access Telemetry\n(Auth Sessions, Token Grants, MFA)"]:::source
-    S_CLOUD["Cloud Control Plane Telemetry\n(Management APIs, IAM Mutations)"]:::source
-    S_INTEL["External Threat Intelligence\n(Tactical Observables, Attack Flows)"]:::source
-    S_CONTEXT["Organizational & Posture Context\n(Asset CMDB, EASM, Control Status)"]:::source
+  %% Layer 1: Data Sources & Environmental Inputs
+  subgraph L1 ["LAYER 1: DATA SOURCES & CONTEXTUAL INPUTS"]
+    direction LR
+    L1_TELEM["Runtime Operational Telemetry\n• Kernel hooks, eBPF, audit trails\n• Network flows, DNS & identity sessions"]:::layer1
+    L1_CTX["Organizational & Posture Context\n• Asset criticality & CMDB hierarchies\n• Attack surface & control status"]:::layer1
+    L1_CTI["External Threat Intelligence\n• Tactical indicators, CVE weaponization\n• Adversary campaign feeds"]:::layer1
   end
 
-  %% Layer 2: Pipeline, Storage & Query Fabric
-  subgraph L2 ["Layer 2: Pipeline, Storage & Query Fabric"]
-    direction TB
-    P_BUS["Distributed Streaming Buffer\n(Partitioned Ingestion Log)"]:::fabric
-    P_NORM["Line-Rate Normalizer & Validator\n(Schema Registry / OCSF Enforcement)"]:::fabric
-    P_ROUTE{"Value-Based Router\n& Data Forking Engine"}:::gate
-    
-    subgraph Storage ["Tiered Storage Plane"]
-      STORE_HOT["Hot Analytical Index\n(15-30 Days Sub-second Search)"]:::fabric
-      STORE_LAKE["Security Data Lakehouse\n(Open Columnar Table Format)"]:::fabric
-      STORE_COLD["Cold Compliance Archive\n(Long-Term Immutable Object Store)"]:::fabric
-    end
-
-    subgraph Engines ["Multi-Paradigm Query Engines"]
-      ENG_STREAM["Real-Time Stream Engine\n(Sliding Windows, Latency < 5s)"]:::fabric
-      ENG_BATCH["Scheduled Batch Engine\n(Historical Outlier Baselines, SQL)"]:::fabric
-      ENG_FED["Federated Query Engine\n(Query-in-Place across Remote Clouds)"]:::fabric
-      ENG_ML["ML & Anomaly Engine\n(Feature Store & Embedding Models)"]:::fabric
-    end
+  %% Layer 2: Pipeline, Storage & Query Capabilities
+  subgraph L2 ["LAYER 2: PIPELINE, STORAGE & QUERY FABRIC"]
+    direction LR
+    L2_INGEST["Ingestion & Line-Rate OCSF\n• Schema Registry contract gates\n• Unmapped data catch-all & DLQ"]:::layer2
+    L2_ROUTE["Value-Based Data Router\n• Tier A (Hot Index / Stream)\n• Tier B (Lakehouse) / Tier C (Filter)"]:::layer2
+    L2_STORE["Storage & Multi-Paradigm Query\n• Hot Index, Lakehouse & Cold Archive\n• Hybrid temporal state store (Δt)"]:::layer2
   end
 
   %% Layer 3: Threat Intelligence & Detection Engineering
-  subgraph L3 ["Layer 3: Threat Intelligence & Detection Engineering"]
-    direction TB
-    I_FLOW["Machine-Readable Attack Flows\n(Curated Sequential Adversary Paths)"]:::detection
-    D_OPP["Detection Opportunity Engine\n(Prioritizing Backlog via ROI Scoring)"]:::detection
-    D_DAC["Detection-as-Code (DaC) Engine\n(Declarative Rules targeting OCSF)"]:::detection
-    D_SIM["Adversary Simulation Harness\n(Controlled Atomic Execution & Verification)"]:::detection
-    D_FINDINGS["Standardized OCSF Findings\n(Class 2001 Security & Class 2004 Detection)"]:::detection
+  subgraph L3 ["LAYER 3: THREAT INTEL & DETECTION ENGINEERING"]
+    direction LR
+    L3_FLOW["Machine-Readable Attack Flows\n• Priority Intel Requirements (PIRs)\n• Graph-modeled adversary paths"]:::layer3
+    L3_DAC["Detection-as-Code (DaC)\n• Vendor-neutral declarative rules\n• Streaming & Lakehouse batch engines"]:::layer3
+    L3_SYNTH["Alert Correlation & Risk Lens\n• Supernode-dampened graph clustering\n• Compounding ATT&CK progression"]:::layer3
   end
 
   %% Layer 4: Incident Response & Automation
-  subgraph L4 ["Layer 4: Incident Response (Investigation, Cases & SOAR)"]
-    direction TB
-    IR_QUEUE["Triage & Prioritization Queue"]:::response
-    IR_GRAPH["Entity Graph & Timeline Engine\n(Process Lineage, Identity Pivots)"]:::response
-    IR_CASE["Case Dossier & Evidence Locker\n(Tamper-Evident Chain of Custody)"]:::response
-    IR_SOAR["Declarative SOAR Playbook Engine\n(Automated Workflow Execution)"]:::response
-    IR_GATE{"Blast-Radius Policy Gate\n(Risk Tier Evaluation)"}:::gate
-    IR_AUTO["Tier 1: Autonomous Containment\n(Sandbox Quarantine, Session Invalidate)"]:::response
-    IR_MANUAL["Tier 2: Gated Containment\n(Production Isolation, Tenant Lockout)"]:::response
+  subgraph L4 ["LAYER 4: INVESTIGATION, CASE MANAGEMENT & SOAR"]
+    direction LR
+    L4_CASE["Case Dossier & Evidence Locker\n• Entity 360 & process lineage trees\n• Cryptographically sealed timeline"]:::layer4
+    L4_OPS["Symbiotic Operator Model\n• Autonomous agentic scoping\n• Human operator oversight workbench"]:::layer4
+    L4_SOAR["Blast-Radius Gated SOAR\n• Pre-execution impact simulation\n• Tier 0-2 containment playbooks"]:::layer4
   end
 
   %% Cross-Cutting Engineering Plane
-  subgraph L_ENG ["Cross-Cutting Engineering Lifecycle & AI Harnesses"]
+  subgraph ENG ["CROSS-CUTTING ENGINEERING LIFECYCLE & AI HARNESSES"]
     direction LR
-    E_DATA["Data Engineering\n(Schema Evolution & Compaction)"]:::engineering
-    E_INTEL["Intelligence Engineering\n(Decay Tuning & Graph Models)"]:::engineering
-    E_DET["Detection Engineering\n(Synthetic CI/CD & Backtesting)"]:::engineering
-    E_AUTO["Systems SRE\n(Playbook-as-Code & Availability)"]:::engineering
-    E_AI["AI & Agentic Harnesses\n(Context Redaction, Triage Agents, Evals)"]:::engineering
+    E_DATA["Data Engineering\n(Schema Evolution)"]:::eng
+    E_INTEL["Intel Engineering\n(Decay Tuning)"]:::eng
+    E_DET["Detection Eng (DaC)\n(Simulation CI/CD)"]:::eng
+    E_AUTO["Systems SRE\n(Playbooks-as-Code)"]:::eng
+    E_AI["AI Harnesses\n(Context & Judges)"]:::eng
   end
 
-  %% Ingress Connections
-  S_HOST --> P_BUS
-  S_NET --> P_BUS
-  S_IAM --> P_BUS
-  S_CLOUD --> P_BUS
-  S_INTEL --> P_BUS
-  S_CONTEXT --> P_BUS
-
-  %% Layer 2 Internal Wiring
-  P_BUS --> P_NORM
-  P_NORM --> P_ROUTE
-  P_ROUTE -->|High-Fidelity Streams| ENG_STREAM
-  P_ROUTE -->|Recent High-Pivot Telemetry| STORE_HOT
-  P_ROUTE -->|Bulk Forensic Telemetry| STORE_LAKE
-  P_ROUTE -->|Feature Vectors| ENG_ML
-  STORE_LAKE --> STORE_COLD
-
-  STORE_LAKE <--> ENG_BATCH
-  STORE_HOT <--> ENG_FED
-  STORE_LAKE <--> ENG_FED
-
-  %% Layer 3 Interactions
-  S_INTEL -.->|Feeds TTPs| I_FLOW
-  I_FLOW --> D_OPP
-  D_OPP --> D_DAC
-  D_DAC --> D_SIM
-  D_SIM -.->|Deploys to| ENG_STREAM
-  D_SIM -.->|Deploys to| ENG_BATCH
-
-  ENG_STREAM --> D_FINDINGS
-  ENG_BATCH --> D_FINDINGS
-
-  %% Layer 4 Interactions
-  D_FINDINGS ==>|Emits OCSF Findings| IR_QUEUE
-  IR_QUEUE --> IR_GRAPH
-  STORE_HOT -.->|Deep Telemetry Query| IR_GRAPH
-  IR_GRAPH --> IR_CASE
-  IR_CASE --> IR_SOAR
-  IR_SOAR --> IR_GATE
-  IR_GATE -->|Low Risk Pre-Approved| IR_AUTO
-  IR_GATE -->|High Impact Sign-off| IR_MANUAL
+  %% Primary Horizontal Progression
+  L1 ==>|Transport Envelopes & Raw Bytes| L2
+  L2 ==>|Normalized Telemetry & Query APIs| L3
+  L3 ==>|Elevated Incident Dossiers| L4
 
   %% Closed-Loop Feedback
-  IR_CASE -.->|Discovered Indicators & Attributions| S_INTEL
-  IR_CASE -.->|False-Positive Calibration Feedback| D_DAC
+  L4 -.->|Confirmed Attributed IOCs & Flows| L3
+  L4 -.->|Visibility Blindspots| L1
+  L3 -.->|Missing ATT&CK Components| L1
 
-  %% Engineering Plane Intersections
-  L_ENG -.- L1
-  L_ENG -.- L2
-  L_ENG -.- L3
-  L_ENG -.- L4
+  %% Engineering Governance
+  ENG -.->|Governs, Tests & Calibrates| L1
+  ENG -.->|Governs, Tests & Calibrates| L2
+  ENG -.->|Governs, Tests & Calibrates| L3
+  ENG -.->|Governs, Tests & Calibrates| L4

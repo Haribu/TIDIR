@@ -184,6 +184,19 @@ flowchart LR
 | **Tier 1: Targeted Containment** | Autonomous for High-Confidence / Low-Criticality Assets | Host-level process termination, untrusted file quarantine, temporary IP rate-limiting, user session lock. | Mandatory 1-click rollback script verified in advance. |
 | **Tier 2: Disruptive Containment** | Mandatory Dual-Operator or Senior SecOps Approval | Production database network isolation, global firewall rules, tenant-wide account locks, certificate revocation. | Step-by-step verified compensation and recovery procedure. |
 
+### Pre-Execution Blast-Radius Impact Simulator (Anti-Rubber-Stamping Gate)
+In high-stress security incidents, human operators suffer cognitive exhaustion. If an agentic harness presents a compelling narrative recommending host isolation or credential revocation, analysts risk default "rubber-stamping" without verifying topological ramifications.
+
+To prevent inadvertent business disruption from false-positive agent recommendations, Layer 4 mandates a **Deterministic Pre-Execution Impact Simulator**:
+- **Live Dependency Evaluation**: Before presenting an authorization modal to the human operator, the SOAR engine queries Layer 1 CMDB relationships and Layer 2 network flow records to compute active blast radius metrics:
+  - *Active Connection Count*: (e.g. `1,420 client TCP sessions currently routed to this workload`).
+  - *Downstream Service Dependencies*: (e.g. `Host app-worker-04 is a member of the primary payment processing pool`).
+  - *Data Volume in Flight*: (e.g. `Active database read-replica synchronization in progress`).
+- **Explicit Impact Card Rendering**: Authorization interfaces present the simulation summary alongside the agentic recommendation:
+  > **⚠️ Pre-Execution Blast-Radius Preview:**
+  > Authorizing isolation on `srv-payment-api-01` will immediately sever **42 active microservice communication channels** and degrade **Checkout Gateway Availability**. Estimated operational recovery time: **12 minutes**.
+- **Mandatory Reversible Rollback Scripts**: No Tier 2 containment action can be initiated unless an automated compensation/rollback routine (e.g. reversing network isolation, unblocking firewall IP, restoring suspended token) has been cryptographically validated and loaded into memory.
+
 ---
 
 ## 5. Closed-Loop Architectural Feedback

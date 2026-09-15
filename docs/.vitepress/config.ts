@@ -41,7 +41,8 @@ export default withMermaid(
             { text: "Layer 2: Pipeline, Storage & Query", link: "/architecture/04-layer-2-pipeline-storage-query" },
             { text: "Layer 3: Intel & Detection Engineering", link: "/architecture/06-layer-3-threat-intel-detection" },
             { text: "Layer 4: Incident Response & Automation", link: "/architecture/07-layer-4-incident-response" },
-            { text: "Cross-Cutting Engineering Disciplines", link: "/architecture/05-cross-cutting-engineering-disciplines" }
+            { text: "Cross-Cutting Engineering Disciplines", link: "/architecture/05-cross-cutting-engineering-disciplines" },
+            { text: "Operational User Stories", link: "/architecture/08-user-stories" }
           ]
         },
         {
@@ -57,7 +58,9 @@ export default withMermaid(
         {
           text: "Architecture Decisions (ADR)",
           items: [
-            { text: "0001 - ADRs & Mermaid", link: "/adr/0001-record-architecture-decisions" }
+            { text: "0001 - ADRs & Mermaid", link: "/adr/0001-record-architecture-decisions" },
+            { text: "0002 - Unmapped OCSF Data", link: "/adr/0002-preserve-unmapped-telemetry-in-ocsf" },
+            { text: "0003 - Supernode Pruning", link: "/adr/0003-graph-supernode-pruning-and-clustering-boundaries" }
           ]
         }
       ],

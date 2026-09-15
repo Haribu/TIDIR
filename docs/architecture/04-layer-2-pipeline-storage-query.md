@@ -73,7 +73,8 @@ flowchart TB
 ### Line-Rate Normalization & Contract Enforcement
 Raw payloads arrive in heterogeneous formats from varied sensors, clouds, and services. Layer 2 standardizes events at line rate before long-term persistence:
 - **Canonical Schema Coercion**: Events are transformed into Open Cybersecurity Schema Framework (OCSF) objects. Fields are mapped into strongly typed attributes (e.g., process execution commands, user identifiers, network endpoints).
-- **Schema Validation Gate**: Inbound payloads are validated against an authoritative **Schema Registry**. Events failing validation are diverted to a dead-letter queue with error metadata for operational triage, ensuring malformed records never break downstream query engines.
+- **The `unmapped_data` Forensic Catch-All (Zero Schema Truncation)**: Because vendor logs and proprietary sensors frequently emit non-standard attributes that do not map directly to canonical OCSF classes, normalizers must never silently drop unmapped attributes. Any field not covered by the target OCSF class definition is preserved in a structured `unmapped_data` JSON key-value dictionary within the event envelope. This guarantees zero forensic truncation while maintaining strict typing across the primary schema fields.
+- **Schema Validation Gate & Dead-Letter Queue (DLQ)**: Inbound payloads are validated against an authoritative, versioned **Schema Registry**. Events with irrecoverable corruption or breaking schema violations are diverted to an encrypted Dead-Letter Queue (DLQ) with audit metadata (error reason, offending payload offset, source identifier). SRE and data engineering pipelines can inspect, repair, and replay DLQ payloads without loss.
 - **In-Flight Context Enrichment**: During normalization, stream workers perform sub-millisecond lookups against cached organizational context from Layer 1, decorating raw events with asset criticality, physical location, and user role classifications.
 
 ### Value-Based Routing & Data Forking
@@ -112,11 +113,12 @@ Layer 2 decouples storage into three cost- and performance-optimized tiers:
 | **Security Data Lakehouse** | Open table format backed by object storage; columnar compression; partition-pruned by timestamp and schema class. | 365+ days | Scheduled batch analytics, complex cross-dataset joins, long-window baselining, and ML training. |
 | **Cold Compliance Archive** | Immutable, write-once object storage; asynchronous retrieval lifecycle. | 3–7+ years | Regulatory compliance, legal hold, and catastrophic retroactive historical analysis. |
 
-### Lakehouse Open Table Architecture
+### Lakehouse Open Table Architecture & Commit Boundaries
 The security data lakehouse utilizes an open table format to guarantee performance, vendor neutrality, and durability:
 - **Hidden Partitioning**: Partitioned by event timestamp (`dt=YYYY-MM-DD/hh=HH`) and schema class identifier, preventing analytical query engines from performing expensive full-table scans.
 - **Snapshot Isolation & ACID Semantics**: Supports concurrent streaming writes from ingestion workers alongside heavy analytical batch queries without file locking or read-skew anomalies.
 - **Schema Evolution**: Allows attributes to be added, renamed, or deprecated over multi-year spans without corrupting historic data archives.
+- **Micro-Batch Commit Latency Boundary**: Open table formats require batching parquet file writes and manifest commits (typically every 1 to 15 minutes) to avoid file fragmentation. Consequently, detection workloads requiring cross-event correlation within windows of less than 15 minutes cannot rely on Lakehouse table queries alone.
 
 ---
 
@@ -130,7 +132,7 @@ Layer 2 provides four computational engines designed for distinct temporal and a
 ├────────────────────────────┬────────────────────────────┬──────────────────────────────┤
 │ 1. Real-Time Stream Engine │ 2. Scheduled Batch Engine  │ 3. Federated Query Engine    │
 │ • Sliding time windows     │ • Historical baselining    │ • Query-in-place execution   │
-│ • State-machine tracking   │ • Multi-table joins        │ • Remote data plane querying │
+│ • Hybrid State Store       │ • Multi-table joins        │ • Remote data plane querying │
 │ • Latency: < 5 seconds     │ • Latency: Minutes/Hours   │ • Zero data duplication      │
 ├────────────────────────────┴────────────────────────────┴──────────────────────────────┤
 │ 4. Machine Learning & Feature Store Engine                                             │
@@ -139,9 +141,10 @@ Layer 2 provides four computational engines designed for distinct temporal and a
 └────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-1. **Real-Time Stream Processing**:
+1. **Real-Time Stream Processing & Hybrid State Store**:
    - Evaluates stateful sliding windows (e.g., matching a sequence of failed authentications followed by a successful privileged session within a tight time threshold).
-   - Manages local, resilient state storage with checkpointed recovery.
+   - **Hybrid Temporal State Store ($\Delta t = 15\text{m} \dots 2\text{h}$)**: To bridge the gap between sub-second streaming events and the 15-minute Lakehouse commit latency, stream processors maintain a fast, distributed, in-memory/embedded state store. Multi-event detection rules query this hybrid state window for recent context without waiting for lakehouse table commits.
+   - Manages local, resilient state storage with checkpointed recovery and rock-solid failover semantics.
    - Enriches events in flight against cached Layer 1 threat intelligence indicators.
 
 2. **Scheduled Batch Analytics**:

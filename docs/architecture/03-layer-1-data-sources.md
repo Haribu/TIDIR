@@ -61,9 +61,11 @@ Collection mechanisms gather emitted raw events on or near the emitter:
 ### Stage 3: Transport & Egress (The L1 ➔ L2 Handoff)
 Transport is responsible for moving collected events reliably across network boundaries into Layer 2's ingestion streaming bus:
 - **Local Spooling & Backpressure**: If downstream pipeline targets slow down or network partitions occur, collectors spool to bounded local disk queues to prevent data loss.
+- **Dead-Letter Queue (DLQ) & Malformed Buffering**: Payloads rejected due to corruption, unparseable wire formats, or transient network timeouts are diverted to an encrypted local/staging DLQ. This guarantees zero silent event drops and enables deterministic offline replay once connectivity or parser rules are restored.
+- **Raw Payload Envelope Preservation**: The transport envelope preserves an unmutated copy of the original raw event (`raw_payload`) alongside collector-attached origin metadata (collector version, ingestion timestamp, cryptographic agent hash). This ensures forensic non-repudiation before any downstream normalization begins.
 - **Transport Security**: All transport mandates mutual TLS (mTLS) with cryptographically validated client and server identities.
 - **Efficient Wire Formats**: Payloads are batched and compressed (Zstandard / Snappy) over HTTP/2, gRPC, or native streaming producer protocols to minimize bandwidth utilization.
-- **Handoff Contract**: The boundary between Layer 1 and Layer 2 is the ingress port of Layer 2's streaming message bus (e.g. Kafka/Redpanda topic or HTTP ingestion gateway). Once acknowledged by Layer 2, Layer 1 considers the event delivered.
+- **Handoff Contract**: The boundary between Layer 1 and Layer 2 is the ingress port of Layer 2's streaming message bus (e.g. distributed streaming log or HTTP ingestion gateway). Once acknowledged by Layer 2, Layer 1 considers the event delivered.
 
 ---
 
