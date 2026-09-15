@@ -4,7 +4,6 @@
       v-if="isOpen"
       class="diagram-modal-overlay"
       @click.self="closeModal"
-      @keydown.esc="closeModal"
       tabindex="-1"
       ref="modalRef"
     >
@@ -15,14 +14,14 @@
           <span class="diagram-modal-hint">(Pinch / Drag / Scroll to zoom & pan)</span>
         </div>
         <div class="diagram-modal-controls">
-          <button class="ctrl-btn" @click="zoomIn" title="Zoom In (+)">➕</button>
-          <button class="ctrl-btn" @click="zoomOut" title="Zoom Out (-)">➖</button>
-          <button class="ctrl-btn" @click="resetTransform" title="Reset View">↺ 100%</button>
-          <button class="ctrl-btn close-btn" @click="closeModal" title="Close (Esc)">✕</button>
+          <button class="ctrl-btn" @click.stop="zoomIn" title="Zoom In (+)">➕</button>
+          <button class="ctrl-btn" @click.stop="zoomOut" title="Zoom Out (-)">➖</button>
+          <button class="ctrl-btn" @click.stop="resetTransform" title="Reset View">↺ 100%</button>
+          <button class="ctrl-btn close-btn" @click.stop="closeModal" title="Close (Esc)">✕</button>
         </div>
       </div>
 
-      <!-- Interactive Canvas -->
+      <!-- Interactive Canvas Viewport -->
       <div
         class="diagram-canvas-viewport"
         ref="viewportRef"
@@ -38,7 +37,7 @@
             transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`,
             transformOrigin: 'center center'
           }"
-          v-html="currentSvg"
+          v-html="currentSvgHtml"
         ></div>
       </div>
     </div>
@@ -47,17 +46,14 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick } from "vue";
-import { useRoute } from "vitepress";
 
 const isOpen = ref(false);
-const currentSvg = ref("");
+const currentSvgHtml = ref("");
 const scale = ref(1);
 const translateX = ref(0);
 const translateY = ref(0);
 const modalRef = ref(null);
 const viewportRef = ref(null);
-
-const route = useRoute();
 
 let isDragging = false;
 let startX = 0;
@@ -67,12 +63,29 @@ let startY = 0;
 let initialPinchDistance = null;
 let initialScale = 1;
 
-function openModal(svgContent) {
-  currentSvg.value = svgContent;
+function openModal(svgElement) {
+  if (!svgElement) return;
+
+  // Clone SVG so we don't mutate or move the inline diagram
+  const clone = svgElement.cloneNode(true);
+  
+  // Strip constraining inline styles from Mermaid (e.g. max-width: 0px or max-width: 400px)
+  clone.removeAttribute("style");
+  clone.removeAttribute("height");
+  clone.setAttribute("width", "100%");
+  
+  // Ensure the SVG fills the responsive lightbox container
+  clone.style.display = "block";
+  clone.style.width = "100%";
+  clone.style.height = "auto";
+  clone.style.maxHeight = "85vh";
+
+  currentSvgHtml.value = clone.outerHTML;
   scale.value = 1;
   translateX.value = 0;
   translateY.value = 0;
   isOpen.value = true;
+
   nextTick(() => {
     modalRef.value?.focus();
   });
@@ -80,15 +93,15 @@ function openModal(svgContent) {
 
 function closeModal() {
   isOpen.value = false;
-  currentSvg.value = "";
+  currentSvgHtml.value = "";
 }
 
 function zoomIn() {
-  scale.value = Math.min(scale.value * 1.25, 5);
+  scale.value = Math.min(scale.value * 1.3, 6);
 }
 
 function zoomOut() {
-  scale.value = Math.max(scale.value / 1.25, 0.4);
+  scale.value = Math.max(scale.value / 1.3, 0.3);
 }
 
 function resetTransform() {
@@ -99,8 +112,7 @@ function resetTransform() {
 
 function onWheel(e) {
   const delta = e.deltaY < 0 ? 1.15 : 0.85;
-  const newScale = Math.min(Math.max(scale.value * delta, 0.3), 5);
-  scale.value = newScale;
+  scale.value = Math.min(Math.max(scale.value * delta, 0.3), 6);
 }
 
 function onMouseDown(e) {
@@ -150,7 +162,7 @@ function onTouchMove(e) {
   } else if (e.touches.length === 2 && initialPinchDistance) {
     const currentDist = getTouchDistance(e.touches);
     const factor = currentDist / initialPinchDistance;
-    scale.value = Math.min(Math.max(initialScale * factor, 0.3), 5);
+    scale.value = Math.min(Math.max(initialScale * factor, 0.3), 6);
   }
 }
 
@@ -161,52 +173,31 @@ function onTouchEnd(e) {
   }
 }
 
-// Enhance .mermaid containers with click-to-expand badges & handlers
-function attachDiagramListeners() {
-  const containers = document.querySelectorAll(".mermaid");
-  containers.forEach((container) => {
-    if (container.getAttribute("data-modal-attached")) return;
-    container.setAttribute("data-modal-attached", "true");
+// Global delegated click handler: captures any click on .mermaid or its children
+function handleGlobalClick(e) {
+  const container = e.target.closest(".mermaid");
+  if (!container) return;
 
-    // Add expand button / badge
-    const badge = document.createElement("button");
-    badge.className = "diagram-expand-badge";
-    badge.innerHTML = `<span>🔍 Tap to Zoom & Pan</span>`;
-    badge.title = "Open interactive full-screen inspector";
-    badge.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const svg = container.querySelector("svg");
-      if (svg) openModal(svg.outerHTML);
-    });
-
-    container.appendChild(badge);
-
-    // Also click container directly
-    container.addEventListener("click", () => {
-      const svg = container.querySelector("svg");
-      if (svg) openModal(svg.outerHTML);
-    });
-  });
+  const svg = container.querySelector("svg");
+  if (svg) {
+    openModal(svg);
+  }
 }
 
-let observer = null;
+function handleKeyDown(e) {
+  if (e.key === "Escape" && isOpen.value) {
+    closeModal();
+  }
+}
 
 onMounted(() => {
-  attachDiagramListeners();
-
-  // Watch for dynamic page navigation / rendering
-  observer = new MutationObserver(() => {
-    attachDiagramListeners();
-  });
-  observer.observe(document.body, { childList: true, subtree: true });
-
-  window.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && isOpen.value) closeModal();
-  });
+  document.addEventListener("click", handleGlobalClick);
+  window.addEventListener("keydown", handleKeyDown);
 });
 
 onUnmounted(() => {
-  if (observer) observer.disconnect();
+  document.removeEventListener("click", handleGlobalClick);
+  window.removeEventListener("keydown", handleKeyDown);
 });
 </script>
 
@@ -217,9 +208,9 @@ onUnmounted(() => {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(3, 7, 18, 0.94);
-  backdrop-filter: blur(8px);
-  z-index: 9999;
+  background: rgba(3, 7, 18, 0.96);
+  backdrop-filter: blur(10px);
+  z-index: 99999;
   display: flex;
   flex-direction: column;
   outline: none;
@@ -233,6 +224,7 @@ onUnmounted(() => {
   background: #0f172a;
   border-bottom: 1px solid #1e293b;
   color: #f8fafc;
+  z-index: 10;
 }
 
 .diagram-modal-title {
@@ -265,12 +257,12 @@ onUnmounted(() => {
   background: #1e293b;
   border: 1px solid #334155;
   color: #f8fafc;
-  padding: 0.35rem 0.65rem;
+  padding: 0.4rem 0.75rem;
   border-radius: 6px;
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.15s ease;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .ctrl-btn:hover {
@@ -292,6 +284,8 @@ onUnmounted(() => {
 
 .diagram-canvas-viewport {
   flex: 1;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
   position: relative;
   display: flex;
@@ -309,15 +303,18 @@ onUnmounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 92vw;
+  max-width: 1200px;
   will-change: transform;
   user-select: none;
 }
 
 :deep(.diagram-canvas-content svg) {
-  max-width: 90vw !important;
-  max-height: 80vh !important;
-  width: auto !important;
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
   height: auto !important;
-  filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.5));
+  max-height: 85vh !important;
+  filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.6));
 }
 </style>
