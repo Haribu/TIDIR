@@ -68,6 +68,8 @@ bun run docs:preview
 
 # Validate all Mermaid diagrams for syntax errors
 bun run diagrams:validate
+# Note: In isolated sandboxes (where parent directory traversal is restricted), invoke directly:
+# bun ./scripts/validate-diagrams.ts
 
 # Deploy build artifacts to Cloudflare Pages
 bun run deploy

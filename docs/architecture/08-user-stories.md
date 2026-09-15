@@ -65,6 +65,19 @@ All stories adhere to the canonical structure:
 
 ---
 
+### Story H5: Unified Multi-Vendor Finding Fusion
+* **As a** Senior Triage Analyst (Layer 4),
+* **I want** pre-computed external detection findings (EDR detections, CNAPP misconfigurations, and perimeter WAF blocks) to attach directly to affected host and identity entities in the bipartite graph alongside raw telemetry,
+* **So that** I can conduct complete cross-domain investigations in a unified dossier without pivoting across isolated commercial vendor consoles.
+
+#### Acceptance Criteria
+1. External security alerts from commercial providers (CrowdStrike, Defender, Wiz, Prisma, Cloudflare) ingest as OCSF Category 2 Finding classes (Class 2001 Security Finding, Class 2004 Detection Finding).
+2. The graph correlation engine attaches incoming external findings directly to existing entity vertices (`device.hostname`, `actor.user.name`, `ip_address`) using causal bipartite edges.
+3. Overlapping external alerts (e.g. an EDR malware alert and a CNAPP high-risk role assumption on the same EC2 instance) merge into a single correlated case with a synthesized compound risk score.
+4. The investigation workbench renders a unified attack progression without requiring the analyst to cross-reference multiple vendor dashboards.
+
+---
+
 ## 3. Agentic AI Operator User Stories
 
 ### Story A1: Autonomous 30-Day Lakehouse Baseline Scoping
@@ -117,18 +130,32 @@ All stories adhere to the canonical structure:
 
 ---
 
+### Story A5: Zero-Hesitation Autonomous Containment on Canary Triggers
+* **As an** Autonomous Response Agent (Layer 4),
+* **I want** alerts tagged with `metadata.is_canary: true` to bypass probabilistic risk thresholds and trigger immediate Tier 1 containment playbooks,
+* **So that** adversary lateral movement and credential theft are neutralized within seconds without human triage delays.
+
+#### Acceptance Criteria
+1. When an event interacts with an ambient deception primitive (honeytoken cloud key, decoy Active Directory SPN, canary filesystem lure), Layer 1 tags the record with `metadata.is_canary: true`.
+2. The agent treats the alert as having an empirical false-positive probability of zero ($P(\text{Benign} \mid \text{Trigger}) \to 0$), immediately promoting the case to a verified intrusion anchor.
+3. The response engine dispatches targeted, low-disruption Tier 1 containment actions (e.g. revoking the compromised credential, isolating the host process, null-routing the interacting external IP) within 5 seconds of event receipt.
+4. Automated compensation and rollback transactions are staged simultaneously in the Saga state store, and verified alerts are broadcast instantly to the incident commander channel.
+
+---
+
 ## 4. Platform & Systems Engineer User Stories
 
-### Story E1: Zero-Loss Line-Rate Schema Normalization
+### Story E1: Zero-Loss Line-Rate Schema Normalization & Source Ingestion
 * **As a** Security Data Engineer (Layer 2),
-* **I want** ingestion workers to coerce heterogenous telemetry into OCSF while preserving unmapped vendor fields in an `unmapped_data` JSON catch-all,
+* **I want** ingestion workers to coerce heterogeneous logs and alerts—including standard machine-readable logs (Syslog RFC 5424, Windows EVTX, systemd-journald, cloud audit trails) and external vendor finding webhooks (OCSF Category 2)—into canonical OCSF while preserving unmapped vendor fields in an `unmapped_data` JSON catch-all,
 * **So that** the enterprise maintains strict schema contracts for detection engineering without suffering forensic data loss from schema truncation.
 
 #### Acceptance Criteria
 1. Ingestion workers normalize incoming events at line rate (> 100,000 eps per cluster node) with p99 processing latency < 250ms.
-2. Any raw attribute not explicitly defined in the authoritative OCSF schema class is stored verbatim in the `unmapped_data` dictionary.
-3. Payloads with unrecoverable corruption or invalid encoding are safely routed to Dead-Letter Queues (DLQ) with error tags.
-4. Data engineers can replay DLQ streams through updated parser definitions without pipeline downtime.
+2. Parsers support standard enterprise formats: Windows EVTX channels, Linux journald/auditd, RFC 5424 Syslog, cloud control-plane audit streams, and external security finding webhooks (CrowdStrike, Defender, Wiz, Cloudflare).
+3. Any raw attribute not explicitly defined in the authoritative OCSF schema class is stored verbatim in the `unmapped_data` dictionary.
+4. Payloads with unrecoverable corruption or invalid encoding are safely routed to Dead-Letter Queues (DLQ) with error tags.
+5. Data engineers can replay DLQ streams through updated parser definitions without pipeline downtime.
 
 ---
 

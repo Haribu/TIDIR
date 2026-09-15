@@ -7,6 +7,7 @@ flowchart TB
 
   %% Layer 1: Data Sources & Environmental Inputs
   subgraph L1 ["LAYER 1: DATA SOURCES & CONTEXTUAL INGESTION"]
+    L1_LOGS["Machine-Readable Logs & OS Events\n(Syslog RFC 5424, JSON/NDJSON, Windows EVTX, journald, cloud audit)"]:::layer1
     L1_TELEM["Runtime Operational Telemetry\n(Kernel hooks, eBPF, audit trails, network & identity)"]:::layer1
     L1_CTX["Enterprise Posture & Asset Context\n(CMDB hierarchy, attack surface, security posture)"]:::layer1
     L1_CTI["Cyber Threat Intelligence (CTI)\n(STIX 2.1 tactical feeds, CVEs, adversary profiles)"]:::layer1
