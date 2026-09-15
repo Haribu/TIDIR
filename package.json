@@ -1,0 +1,19 @@
+{
+  "name": "tidir-architecture",
+  "version": "0.1.0",
+  "description": "Threat Intelligence, Detection, Investigation & Response Architecture and Research",
+  "type": "module",
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "lint:md": "bunx markdownlint-cli \"**/*.md\" --ignore node_modules",
+    "diagrams:validate": "bun ./scripts/validate-diagrams.ts"
+  },
+  "devDependencies": {
+    "@mermaid-js/mermaid-cli": "^11.4.2",
+    "markdownlint-cli": "^0.44.0",
+    "typescript": "^5.8.2",
+    "wrangler": "3"
+  }
+}

@@ -1,0 +1,89 @@
+flowchart TB
+  %% External Ingestion & Sources
+  subgraph Sources ["1. Telemetry & Intelligence Sources"]
+    EP["Endpoint (EDR/OSQuery)"]
+    CLD["Cloud & SaaS Logs (AWS/Azure/GCP)"]
+    ID["Identity & Access (IdP/SSO/IAM)"]
+    NET["Network & Perimeter (NDR/FW/DNS)"]
+    EXT_FEEDS["External CTI Feeds (STIX/TAXII, ISACs)"]
+  end
+
+  %% Ingestion & Normalization Layer
+  subgraph DataFabric ["2. Data Fabric & Normalization Layer"]
+    COLLECT["Ingestion Collector / Edge Forwarders"]
+    STREAM["Distributed Event Stream (Kafka / Redpanda)"]
+    NORM["Schema Normalizer (OCSF / ECS Mapping)"]
+    HOT_STORE["Hot Search & Analytics Index"]
+    LAKE_STORE["Security Data Lake (Parquet / Iceberg)"]
+  end
+
+  %% Threat Intelligence Platform
+  subgraph CTI ["3. Cyber Threat Intelligence (CTI) Platform"]
+    TIP["TIP Core Engine (Enrichment & De-duplication)"]
+    IOC_STORE["Active Indicator Store (IP, Domain, Hash)"]
+    TTP_STORE["Actor & Campaign Knowledge (MITRE ATT&CK)"]
+  end
+
+  %% Detection Engineering Layer
+  subgraph Detection ["4. Detection Engine"]
+    STREAM_DET["Streaming Real-Time Detection Engine"]
+    SCHEDULED_DET["Scheduled Lakehouse Analytics & Batch Queries"]
+    CORRELATION["Multi-Signal Alert Correlation & Scoring"]
+    DAC["Detection-as-Code Repo (CI/CD Tested Rules)"]
+  end
+
+  %% Investigation & Workbench Layer
+  subgraph Investigation ["5. Investigation & Case Management"]
+    ALERT_QUEUE["Triage & Prioritization Queue"]
+    ENTITY_GRAPH["Entity Graph & Timeline Reconstruction"]
+    CASE_MGMT["Case Management & Evidence Dossier"]
+    ANALYST_UI["SecOps Analyst Workbench"]
+  end
+
+  %% Response & Automation Layer
+  subgraph Response ["6. Response & Orchestration (SOAR)"]
+    SOAR["SOAR Playbook Execution Engine"]
+    GATES{"Blast Radius & Approval Gate"}
+    AUTO_ACT["Automated Low-Risk Actions (Block Hash, Isolate Host)"]
+    MANUAL_ACT["Gated Response Actions (Revoke Identity, Firewall Rule)"]
+  end
+
+  %% Wiring Connections
+  EP --> COLLECT
+  CLD --> COLLECT
+  ID --> COLLECT
+  NET --> COLLECT
+  COLLECT --> STREAM
+  STREAM --> NORM
+  NORM --> STREAM_DET
+  NORM --> HOT_STORE
+  NORM --> LAKE_STORE
+
+  EXT_FEEDS --> TIP
+  TIP --> IOC_STORE
+  TIP --> TTP_STORE
+
+  IOC_STORE -.->|Streaming Enrichment| STREAM_DET
+  TTP_STORE -.->|Context & Mapping| CORRELATION
+
+  STREAM_DET --> CORRELATION
+  SCHEDULED_DET --> CORRELATION
+  LAKE_STORE --> SCHEDULED_DET
+  DAC -.->|Rule Deploy| STREAM_DET
+  DAC -.->|Rule Deploy| SCHEDULED_DET
+
+  CORRELATION --> ALERT_QUEUE
+  ALERT_QUEUE --> ENTITY_GRAPH
+  HOT_STORE -.->|Telemetry Pivot| ENTITY_GRAPH
+  ENTITY_GRAPH --> CASE_MGMT
+  CASE_MGMT <--> ANALYST_UI
+
+  CASE_MGMT --> SOAR
+  SOAR --> GATES
+  GATES -->|Pre-Approved Safe| AUTO_ACT
+  GATES -->|High Impact / Human Review| MANUAL_ACT
+  ANALYST_UI -.->|Approve / Override| GATES
+
+  %% Feedback Loops
+  CASE_MGMT -.->|New IOCs / Attribution Feedback| TIP
+  CASE_MGMT -.->|FP/TP Detection Tuning Feedback| DAC

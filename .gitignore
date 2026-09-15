@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+.bun/
+
+# Build & Cache
+dist/
+.cache/
+*.tsbuildinfo
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+.wrangler/
+.wrangler_home/
+
+# OS & Environment
+.DS_Store
+Thumbs.db
+.env
+.env.local
+*.log
+
+# Generated Diagram Exports
+docs/diagrams/exports/
