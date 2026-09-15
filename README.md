@@ -1,7 +1,14 @@
 # TIDIR — Threat Intelligence, Detection, Investigation & Response
 
 > **Target Architecture & Research Platform**  
-> A unified, open, modular reference architecture for modern security operations.
+> A unified, open, modular reference architecture for modern security operations.  
+> 
+> 🌐 **Live Documentation Portal**: **[https://tidir.pages.dev](https://tidir.pages.dev)** *(Custom domain: [https://tidir.harrymclaren.co.uk](https://tidir.harrymclaren.co.uk))*
+
+[![CI & Integrity Check](https://github.com/Haribu/TIDIR/actions/workflows/ci.yml/badge.svg)](https://github.com/Haribu/TIDIR/actions/workflows/ci.yml)
+[![Deploy to Cloudflare Pages](https://github.com/Haribu/TIDIR/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/Haribu/TIDIR/actions/workflows/deploy-pages.yml)
+[![Live Documentation](https://img.shields.io/badge/docs-tidir.pages.dev-blue.svg)](https://tidir.pages.dev)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-green.svg)](https://github.com/Haribu/TIDIR/blob/main/LICENSE)
 
 ---
 

@@ -2,7 +2,7 @@
 
 Thank you for your interest in contributing to **TIDIR** (Threat Intelligence, Detection, Investigation & Response)!
 
-TIDIR is an open, vendor-neutral research project establishing target technology component architectures for modern security operations. We welcome contributions, RFCs, and improvements from security analysts, detection engineers, and architects.
+TIDIR is an open, vendor-neutral research project establishing target technology component architectures for modern security operations. The full architectural specifications and interactive diagrams are hosted live at **[https://tidir.pages.dev](https://tidir.pages.dev)** *(custom domain: [https://tidir.harrymclaren.co.uk](https://tidir.harrymclaren.co.uk))*. We welcome contributions, RFCs, and improvements from security analysts, detection engineers, and architects.
 
 ---
 
