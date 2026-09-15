@@ -77,6 +77,47 @@ Multi-stage investigations require persistent shared memory across specialist su
   2. Mandatory temporal boundaries (queries without `time >= NOW() - INTERVAL` constraints are rejected to prevent table-scan resource exhaustion).
   3. Strict partition key filtering (must filter on tenant or cluster keys).
 
+### 5. Tri-Color Agent Fleet & Green Self-Healing Remediation
+Rather than treating AI agents as undifferentiated assistants, TIDIR partitions agentic workloads into three specialized operational colors:
+
+```mermaid
+flowchart TB
+  classDef red fill:#4c0519,stroke:#fb7185,stroke-width:2px,color:#f8fafc;
+  classDef blue fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
+  classDef green fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#f8fafc;
+
+  subgraph RED_PLANE ["RED AGENTS (Adversarial Probing)"]
+    R1["Atomic Technique Replay & Fuzzing"]:::red
+    R2["Detection Evasion & Rule Bypasses"]:::red
+  end
+
+  subgraph BLUE_PLANE ["BLUE AGENTS (Active Defense & Triage)"]
+    B1["OCSF Stream Correlation & Lakehouse Queries"]:::blue
+    B2["Specialist Forensic Mesh & Saga Containment"]:::blue
+  end
+
+  subgraph GREEN_PLANE ["GREEN AGENTS (Self-Healing Remediation & Governance)"]
+    G1["DaC Bug Fixing & PR Generation (Rule Self-Healing)"]:::green
+    G2["DLQ Parser Repair (Schema Self-Healing)"]:::green
+    G3["IaC Remediation PRs (Terraform/CSPM Fixes)"]:::green
+    G4["SRE Noise Budget & Grounding Judges (>=95%)"]:::green
+  end
+
+  RED_PLANE -->|Exposes Detection Gaps| GREEN_PLANE
+  BLUE_PLANE -->|Emits False-Positive Clusters & Noise| GREEN_PLANE
+  GREEN_PLANE -->|Drafts Patched DaC Rules & Tests| BLUE_PLANE
+  GREEN_PLANE -->|Drafts IaC Hardening PRs| RED_PLANE
+```
+
+- **Red Agents (Continuous Adversary Emulation):** Simulate attacks in staging environments, probe detection rules for evasive bypasses, and fuzz the Prompt Injection Firewall with malicious payloads embedded in telemetry fields.
+- **Blue Agents (Detection & Incident Resolution):** Operate the runtime defense—correlating events across the Bipartite Entity Graph, executing parallel specialist investigations (Host, Identity, Network), simulating blast radius, and executing policy-gated Saga containment.
+- **Green Agents (Self-Healing Remediation & Governance):** The active maintenance and repair engine of the architecture. Green agents do not simply flag problems; they **programmatically fix defects and hygiene gaps discovered across TIDIR**:
+  1. *Detection-as-Code (DaC) Self-Healing:* When Red simulations expose a detection bypass or missed technique, Green agents analyze the missed telemetry and draft a GitHub Pull Request with the corrected declarative Sigma/SQL rule logic and synthetic regression unit tests.
+  2. *Noise Budget Tuning & False-Positive Pruning:* When a detection rule breaches its 5% SRE noise budget, Green agents cluster the false-positive evidence, identify benign service accounts or batch jobs, and submit pull requests with hardened exclusion filters.
+  3. *DLQ & Parser Self-Repair:* Ingests unparseable log payloads from the Layer 2 Dead-Letter Queue (DLQ) and drafts updated Vector VRL / grok parsing expressions to restore line-rate OCSF normalization.
+  4. *Infrastructure-as-Code (IaC) Posture Remediation:* When external CNAPP/CSPM tools emit critical posture findings (e.g. unencrypted S3 bucket, open security group, over-privileged IAM role), Green agents draft deterministic Terraform/OpenTofu remediation pull requests to eradicate the root cause in code.
+  5. *Quality & Alignment Judges:* Enforces that all Blue and Green pull requests adhere to $\ge 95\%$ grounding fidelity and $100\%$ tool contract validity.
+
 ---
 
 ## 3. The AI Evaluation & Governance Triad: Utility, Trust & Cost
