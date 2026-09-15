@@ -13,7 +13,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Build & Deploy Documentation
-    if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
