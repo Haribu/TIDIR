@@ -13,8 +13,8 @@ hero:
       text: View Capability Model
       link: /architecture/02-capability-model
     - theme: alt
-      text: Browse ADRs
-      link: /adr/0001-record-architecture-decisions
+      text: GitHub Project ↗
+      link: https://github.com/Haribu/TIDIR
 
 features:
   - icon: 🛰️
@@ -141,5 +141,16 @@ Explore the complete architecture and engineering specifications across the plat
 | **Engineering Disciplines** | Cross-cutting disciplines: SRE budgets, Purple Teaming, DaC & Evals. | [Engineering Disciplines](/architecture/05-cross-cutting-engineering-disciplines) |
 | **Operational Scenarios** | End-to-end user stories and automated response workflows. | [User Stories & Scenarios](/architecture/08-user-stories) |
 | **Architectural Decisions** | Formal Architectural Decision Records (ADRs 0001–0014) in MADR format. | [ADR Index](/adr/0001-record-architecture-decisions) · [ADR-0004 (Prompt Firewall)](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall) · [ADR-0005 (Saga Containment)](/adr/0005-saga-pattern-containment-and-break-glass-protocol) · [ADR-0009 (Bayesian Scoring)](/adr/0009-bayesian-multi-signal-risk-scoring) · [ADR-0010 (SABSA Alignment)](/adr/0010-sabsa-business-architecture-and-attribute-profiling) · [ADR-0011 (Entity-Finding Graph)](/adr/0011-bipartite-entity-finding-graph-consolidation) · [ADR-0012 (AI Orchestration)](/adr/0012-ai-orchestration-runtime-mcp-and-mvp-roadmap) · [ADR-0013 (Ambient Deception)](/adr/0013-ambient-deception-fabric-and-canary-anchors) |
+
+---
+
+## 🌐 Open Source & Community
+
+TIDIR is hosted as an open-source research initiative under the **Apache 2.0 License**:
+
+- 💻 **GitHub Project**: [github.com/Haribu/TIDIR](https://github.com/Haribu/TIDIR)
+- 🤝 **Contribute**: Check out the [Contribution Guide](https://github.com/Haribu/TIDIR/blob/main/CONTRIBUTING.md) to propose RFCs or component additions.
+- 🐛 **Issues & Feedback**: Report broken diagrams, links, or architectural proposals on [GitHub Issues](https://github.com/Haribu/TIDIR/issues).
+- 🛡️ **Security Advisories**: Report vulnerabilities privately via [GitHub Security Advisories](https://github.com/Haribu/TIDIR/security/advisories) or directly to `info@harrymclaren.co.uk`.
 
 </div>

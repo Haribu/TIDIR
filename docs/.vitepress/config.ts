@@ -60,7 +60,8 @@ export default withMermaid(
             { text: "AI & Agent Orchestration", link: "/architecture/components/06-ai-orchestration" }
           ]
         },
-        { text: "ADRs", link: "/adr/0001-record-architecture-decisions" }
+        { text: "ADRs", link: "/adr/0001-record-architecture-decisions" },
+        { text: "GitHub ↗", link: "https://github.com/Haribu/TIDIR" }
       ],
       sidebar: [
         {
@@ -123,7 +124,7 @@ export default withMermaid(
         { icon: "github", link: "https://github.com/Haribu/TIDIR" }
       ],
       footer: {
-        message: "TIDIR Reference Architecture — Open & Modular Security Operations",
+        message: 'TIDIR Architecture — <a href="https://github.com/Haribu/TIDIR" target="_blank" rel="noopener">GitHub Project</a> · Apache 2.0 Licensed',
         copyright: "Copyright © 2026 Harry McLaren"
       },
       search: {
