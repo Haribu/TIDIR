@@ -1,15 +1,14 @@
 /* Mermaid Diagram Presentation */
 .mermaid {
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 2rem 0;
-  padding: 2.25rem 1.5rem 1.5rem;
+  display: block;
+  margin: 1.75rem 0;
+  padding: 1.25rem;
   background-color: #0b0f19;
   border: 1px solid #1e293b;
   border-radius: 10px;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
   cursor: zoom-in;
   transition: border-color 0.2s ease;
@@ -19,56 +18,36 @@
   border-color: #38bdf8;
 }
 
+/* Ensure SVG never squashes horizontally into an illegible micro-strip */
 .mermaid svg {
+  display: block;
+  margin: 0 auto;
+  min-width: 650px;
   max-width: 100%;
   height: auto;
 }
 
-/* Ensure node labels and text remain crisp without overriding font metrics */
-.mermaid text {
-  font-weight: 500;
+/* On desktop, if the diagram fits naturally, allow it to scale smoothly */
+@media (min-width: 1024px) {
+  .mermaid svg {
+    min-width: auto;
+    max-width: 100%;
+  }
+}
+
+/* On mobile viewports, enforce minimum width so diagrams scroll cleanly and preserve text size */
+@media (max-width: 768px) {
+  .mermaid {
+    padding: 1rem 0.75rem;
+    margin: 1.25rem 0;
+  }
+  .mermaid svg {
+    min-width: 600px !important;
+  }
 }
 
 /* Subgraph cluster styling */
 .mermaid .cluster rect {
   rx: 8px !important;
   ry: 8px !important;
-}
-
-/* Tap to expand interactive badge */
-.mermaid::after {
-  content: "🔍 Tap to Zoom & Pan";
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  background: rgba(30, 41, 59, 0.85);
-  border: 1px solid #334155;
-  color: #38bdf8;
-  padding: 3px 8px;
-  border-radius: 6px;
-  font-size: 0.72rem;
-  font-weight: 600;
-  backdrop-filter: blur(4px);
-  pointer-events: none;
-  transition: all 0.2s ease;
-  z-index: 10;
-}
-
-.mermaid:hover::after {
-  background: #38bdf8;
-  color: #0b0f19;
-  border-color: #38bdf8;
-}
-
-@media (max-width: 640px) {
-  .mermaid {
-    padding: 2.5rem 0.75rem 1rem;
-    margin: 1.5rem 0;
-  }
-  .mermaid::after {
-    top: 6px;
-    right: 8px;
-    font-size: 0.7rem;
-    padding: 3px 6px;
-  }
 }

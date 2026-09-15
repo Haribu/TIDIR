@@ -81,7 +81,8 @@ function openModal(svgElement) {
   clone.style.maxHeight = "85vh";
 
   currentSvgHtml.value = clone.outerHTML;
-  scale.value = 1;
+  const isMobile = window.innerWidth < 768;
+  scale.value = isMobile ? 1.8 : 1;
   translateX.value = 0;
   translateY.value = 0;
   isOpen.value = true;
