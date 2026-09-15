@@ -27,17 +27,17 @@ flowchart TB
   end
 
   %% Layer 4: Incident Response & Automation
-  subgraph L4 ["LAYER 4: INVESTIGATION, CASE MANAGEMENT & SOAR"]
+  subgraph L4 ["LAYER 4: INVESTIGATION, CASE MANAGEMENT & AUTOMATED RESPONSE"]
     L4_DOSSIER["Unified Investigation & Case Dossier\n(Entity 360, process trees, cryptographically sealed timeline)"]:::layer4
     L4_TRIAGE["Symbiotic Operator Workbench\n(Autonomous agentic scoping, human triage console)"]:::layer4
-    L4_SOAR["Blast-Radius Gated SOAR Engine\n(Pre-execution simulation, Tier 0-2 playbooks, rollback)"]:::layer4
+    L4_RESP["Blast-Radius Gated Response Engine\n(Pre-execution simulation, Tier 0-2 playbooks, rollback)"]:::layer4
   end
 
   %% Closed-Loop Architectural Feedback
   subgraph FB ["CLOSED-LOOP CONTINUOUS CALIBRATION"]
     FB_INTEL["Attributed Threat Flows & IOCs\n(Re-ingested into L1 CTI & L3 Detection Backlog)"]
     FB_GAPS["Telemetry Blindspot Telemetry\n(Re-tunes L1 Sensor Filters & Collection Audits)"]
-    FB_SOAR["Playbook Execution Efficacy\n(Refines L4 Blast-Radius & Simulation Models)"]
+    FB_RESP["Playbook Execution Efficacy\n(Refines L4 Blast-Radius & Simulation Models)"]
   end
 
   %% Operational Progression (Strict Top-to-Bottom DAG)

@@ -4,7 +4,7 @@
 
 **Layer 1 represents the total sensory boundary of the TIDIR architecture.** It encompasses all information producers feeding into the security operations ecosystem.
 
-A modern detection and response architecture fails when it treats security as a simple "log ingestion" problem. Effective detection and triage require evaluating **runtime operational telemetry** against **organizational reality**, **external adversary behavior**, **attack surface exposure**, and **control efficacy**.
+A modern detection and response architecture fails when it treats security as a simple "log ingestion" problem. Effective detection and triage require evaluating **runtime operational telemetry** against **organizational reality**, **external adversary behaviour**, **attack surface exposure**, and **control efficacy**.
 
 ---
 
@@ -53,7 +53,7 @@ Data generation occurs where software, hardware, or external actors execute acti
   - *Network Appliance & System Syslog*: RFC 5424 / RFC 3164 formatted logs emitted by perimeter firewalls, VPN concentrators, load balancers, DNS resolvers, and network switches.
   - *Cloud Management & Data Plane Audit Logs*: Immutable audit trails emitted by cloud provider control planes (management API transactions, identity role assumptions, storage bucket access logs).
 - **Kernel-Level Observability**: Intercepts low-level system calls, process fork/exec chains, module loads, and memory manipulations via kernel instrumentation (Linux eBPF, Windows Event Tracing / ETW, macOS Endpoint Security framework) to catch evasive tradecraft that bypasses user-space loggers.
-- **Service & Identity Eventing**: Authentication challenge evaluations, MFA token issuance, administrative role escalations, and directory service synchronization events.
+- **Service & Identity Eventing**: Authentication challenge evaluations, MFA token issuance, administrative role escalations, and directory service synchronisation events.
 - **Network Interface Taps**: Hardware and virtual taps mirror wire traffic to generate connection state flows and application-layer metadata records without relying on host software.
 - **External Intelligence Publishing**: Third-party providers publish adversary campaigns, vulnerability weaponization telemetry, and active indicators over authenticated feeds.
 
@@ -70,14 +70,14 @@ Transport is responsible for moving collected events reliably across network bou
 - **Dead-Letter Queue (DLQ) & Malformed Buffering**: Payloads rejected due to corruption, unparseable wire formats, or transient network timeouts are diverted to an encrypted local/staging DLQ. This guarantees zero silent event drops and enables deterministic offline replay once connectivity or parser rules are restored.
 - **Raw Payload Envelope Preservation**: The transport envelope preserves an unmutated copy of the original raw event (`raw_payload`) alongside collector-attached origin metadata (collector version, ingestion timestamp, cryptographic agent hash). This ensures forensic non-repudiation before any downstream normalization begins.
 - **Transport Security**: All transport mandates mutual TLS (mTLS) with cryptographically validated client and server identities.
-- **Efficient Wire Formats**: Payloads are batched and compressed (Zstandard / Snappy) over HTTP/2, gRPC, or native streaming producer protocols to minimize bandwidth utilization.
+- **Efficient Wire Formats**: Payloads are batched and compressed (Zstandard / Snappy) over HTTP/2, gRPC, or native streaming producer protocols to minimize bandwidth utilisation.
 - **Handoff Contract**: The boundary between Layer 1 and Layer 2 is the ingress port of Layer 2's streaming message bus (e.g. distributed streaming log or HTTP ingestion gateway). Once acknowledged by Layer 2, Layer 1 considers the event delivered.
 
 ---
 
 ## 3. Schema & Framework Alignment: ATT&CK Data Components to OCSF
 
-To ensure detection engineering (Layer 3) can express vendor-neutral logic, Layer 1 telemetry must be categorized using standardized security frameworks:
+To ensure detection engineering (Layer 3) can express vendor-neutral logic, Layer 1 telemetry must be categorized using standardised security frameworks:
 - **MITRE ATT&CK Data Sources & Data Components**: Define *what adversary activity must be observed* to detect specific techniques.
 - **Open Cybersecurity Schema Framework (OCSF)**: Defines *how that activity is formally structured* into normalized categories and classes.
 
@@ -154,7 +154,7 @@ Ephemeral, high-volume event streams generated continuously as infrastructure an
 - **Identity & Access Telemetry**: Interactive and machine-to-machine authentication transactions, MFA challenge evaluations, session token issuance/refresh/revocation, administrative role escalations, and directory object changes.
 - **Network & Perimeter Telemetry**: Transport flow summaries (NetFlow/IPFIX/VPC Flow), application-layer protocol metadata (DNS queries/responses, HTTP transactions), TLS handshake attributes (cipher suites, SNI, JA3/JA4 fingerprints), and edge firewall state changes.
 - **Cloud Control Plane Telemetry**: Cloud administrative console logins, CLI/API management calls, cross-account trust alterations, IAM policy definitions, and public storage access toggles.
-- **Application Logic Telemetry**: Business-critical application events (e.g. wire transfer authorizations, bulk data exports, privileged policy bypasses), service mesh traces, and API gateway access records.
+- **Application Logic Telemetry**: Business-critical application events (e.g. wire transfer authorisations, bulk data exports, privileged policy bypasses), service mesh traces, and API gateway access records.
 
 ---
 
@@ -248,4 +248,21 @@ To defend against advanced adversaries attempting to truncate, wipe, or tamper w
 - **RFC 3161 Cryptographic Timestamp Tokens**: Critical audit trails obtain trusted time-stamping authority tokens at the collection boundary.
 - **Hardware-Backed Origin Identity**: Collectors leverage TPM 2.0 or secure enclave certificates for mTLS client authentication, ensuring rogue machines cannot spoof legitimate sensor identifiers.
 - **Local Tamper-Evident Append-Only Ring**: Pre-egress spool files are structured as cryptographic hash chains (each log block incorporates the HMAC-SHA256 of the preceding block). Any tampering or excision of un-egressed logs breaks the chain and alerts Layer 2 upon reconnection.
+
+---
+
+## 8. Autonomous AI & Ingestion Leverage
+
+While the data plane transport remains strictly deterministic and high-performance, autonomous AI harnesses provide two high-leverage capabilities in the Layer 1 engineering lifecycle:
+
+1. **Automated Log Parser Synthesis (OCSF CodeGen)**:
+   - *Problem*: Integrating proprietary enterprise applications or legacy network appliances often stalls for weeks while data engineers manually write regex grok patterns or extraction scripts.
+   - *AI Leverage*: Tier 0/1 language models consume raw, unstructured sample logs alongside target OCSF JSON schemas to automatically synthesize high-performance parser definitions (e.g. Vector VRL expressions or Logstash configs).
+   - *Deterministic Safety Gate*: Synthesized parsers must compile without warnings and pass automated unit test suites against golden log corpora before merging into the Schema Registry.
+   
+2. **Synthetic Adversarial Telemetry Generation**:
+   - *Problem*: Testing detection coverage for catastrophic techniques (e.g. ransomware volume shadow copy deletion or DCShadow attacks) on live production systems is hazardous and rarely permitted.
+   - *AI Leverage*: Generative agent harnesses synthesize high-fidelity, schema-valid synthetic OCSF telemetry representing multi-stage intrusions.
+   - *Deterministic Safety Gate*: Synthetic telemetry is tagged with `is_synthetic: true` and routed exclusively to `test` and `dev` pipeline topics, completely isolated from production alerting queues.
+
 

@@ -6,7 +6,7 @@
 
 ## Context and Problem Statement
 
-TIDIR covers complex, cross-cutting security capabilities: Threat Intelligence, Telemetry Ingestion, Detection Engineering, Case Management, and Response Orchestration. Without structured architectural governance and visual modeling standards, decisions become fragmented, undocumented, and difficult to communicate across teams.
+TIDIR covers complex, cross-cutting security capabilities: Threat Intelligence, Telemetry Ingestion, Detection Engineering, Case Management, and Response Orchestration. Without structured architectural governance and visual modelling standards, decisions become fragmented, undocumented, and difficult to communicate across teams.
 
 How should we structure and maintain architectural decisions and diagrams for TIDIR?
 
@@ -28,7 +28,7 @@ How should we structure and maintain architectural decisions and diagrams for TI
 Chosen option: **Markdown Architectural Decision Records (MADR) with Mermaid Diagrams**, because:
 - Stored as plaintext in Git alongside specifications and implementation code.
 - Diagrams are rendered directly from declarative text (`.mmd` / markdown codeblocks), enabling git diffing, pull request reviews, and programmatic syntax validation.
-- Standardized, consistent structure for logging problem statements, considered options, decision drivers, and consequences.
+- Standardised, consistent structure for logging problem statements, considered options, decision drivers, and consequences.
 
 ### Positive Consequences
 

@@ -1,0 +1,227 @@
+# Component Specification: AI & Agentic Orchestration Plane
+
+## 1. Overview & Objectives
+
+The **AI & Agentic Orchestration Plane** provides the runtime execution, model routing, safety guardrails, and tool-calling interfaces required to operate autonomous and collaborative AI agents across the security lifecycle.
+
+Rather than treating AI as an isolated conversational chatbot or a collection of brittle point scripts, this component establishes an enterprise-grade orchestration layer. It exposes standardized **Model Context Protocol (MCP)** tool contracts, dynamically routes inferences across local Small Language Models (Tier 0) and cloud frontier models (Tier 1/2), and enforces deterministic safety boundaries through a **Dual-Plane Prompt Injection Firewall** and **Abstract Syntax Tree (AST) query validation**.
+
+```mermaid
+flowchart TB
+  subgraph DataContext ["Data & Context Substrate (Layers 1-3)"]
+    L2_LAKE["Lakehouse & Hot Index\n(OCSF Schema Tables)"]
+    L3_INTEL["STIX 2.1 Threat Intel\n& ATT&CK Graphs"]
+    CMDB["Enterprise Identity\n& Asset Topology"]
+  end
+
+  subgraph OrchestrationPlane ["AI & Agentic Orchestration Plane"]
+    direction TB
+    GATEWAY["Tiered Inference Gateway\n• Tier 0: Local Edge SLMs (<200ms, $0.00)\n• Tier 1: Cloud High-Velocity (<2s)\n• Tier 2: Cloud Frontier Reasoning"]
+
+    subgraph RuntimeKernel ["Agent Runtime & Safety Kernel"]
+      direction TB
+      MCP_ROUTER["Model Context Protocol (MCP) Bus\n(Strongly Typed SecOps Tool Catalog)"]
+      BLACKBOARD["Stateful Blackboard & DAG Engine\n(Checkpointed Investigation State)"]
+      PROMPT_FW["Dual-Plane Prompt Firewall\n(Strict Data vs. Control Isolation)"]
+      AST_VAL["Deterministic AST Validator\n(SELECT-Only SQL Enforcement)"]
+    end
+
+    EVAL_CI["Continuous Evals-as-Code Harness\n(Golden Incident Regression Suites)"]
+  end
+
+  subgraph Consumers ["Operational Consumers (Layer 4)"]
+    WORKBENCH["Analyst Progressive Workbench\n(Real-Time SSE Streaming Briefings)"]
+    SAGA_RESP["Saga Containment Engine\n(Pre-Execution Blast-Radius Simulation)"]
+  end
+
+  DataContext <-->|Read-Only Queries| MCP_ROUTER
+  GATEWAY <--> RuntimeKernel
+  RuntimeKernel <--> EVAL_CI
+  RuntimeKernel <--> WORKBENCH
+  RuntimeKernel <--> SAGA_RESP
+```
+
+---
+
+## 2. Core Functional Requirements
+
+### 1. Tiered Inference Gateway & Model Routing
+To optimize latency, cost, and data sovereignty, the gateway routes prompts according to task complexity:
+- **Tier 0 (Local SLM / Metal / CPU):** Executes on-premises (e.g. Qwen 2.5 7B/14B, Llama 3.1 8B). Handles high-throughput, latency-sensitive tasks (< 200ms) such as log parsing assistance, regex extraction, PII masking, and preliminary triage classification. Zero external API cost and zero data egress.
+- **Tier 1 (High-Velocity Cloud Models):** Mid-tier fast models (e.g. Gemini 1.5/2.0 Flash, Claude 3.5 Haiku). Handles natural language to OCSF SQL generation, single-turn threat advisory summarization, and triage dossier assembly.
+- **Tier 2 (Cloud Frontier Reasoning Models):** Frontier reasoning models with extended thinking (e.g. Claude 3.7 Sonnet / Opus, Gemini 2.0 Pro). Reserved for complex multi-hop campaign correlation, contradictory evidence arbitration, and root-cause hypothesis debates.
+
+### 2. Model Context Protocol (MCP) as the Canonical Tool Bus
+All forensic, contextual, and simulation tools are exposed to agents exclusively via the **Model Context Protocol (MCP)**:
+- **`mcp-lakehouse-query`**:
+  - `query_ocsf_telemetry`: Executes parameterized SQL queries against Layer 2 lakehouse tables with enforced time bounds and partition limits.
+- **`mcp-process-lineage`**:
+  - `get_process_tree`: Recursively resolves parent, child, and sibling process execution events given a root `process.entity_id`.
+- **`mcp-threat-graph`**:
+  - `lookup_threat_intel`: Queries Layer 3 threat graphs for active IOC decay scores, campaign attribution, and associated ATT&CK techniques.
+- **`mcp-blast-radius`**:
+  - `simulate_containment_impact`: Evaluates active TCP sessions, downstream microservices, and CMDB service tiers before any containment proposal is submitted.
+
+Every tool input parameter is validated against strict JSON Schema contracts.
+
+### 3. Stateful DAG & Blackboard Engine
+Multi-stage investigations require persistent shared memory across specialist subagents:
+- **Shared Incident Blackboard**: Specialists (Host Forensic, Identity, Network) append structured observations, raw evidence pointers, and hypothesis scores to a central, versioned blackboard.
+- **Durable Checkpointing**: State is committed after every subagent tool invocation, ensuring investigations survive network partitions or pod restarts.
+- **Token Quota Budgets**: Each investigation is allocated a maximum token budget (e.g. 150k tokens) and execution timeout (e.g. 180 seconds) to prevent runaway recursive inference loops.
+
+### 4. Deterministic Safety Kernel
+- **Dual-Plane Prompt Injection Firewall**: Untrusted external inputs (log messages, command-line arguments, email bodies, CTI text) are strictly isolated in a sandboxed *Data Plane*. System instructions, agent personas, and tool contracts exist exclusively in a signed *Control Plane*. Prompts never execute instructions contained inside data fields.
+- **Deterministic AST Query Validator**: Generated queries pass through an Abstract Syntax Tree (AST) parser before hitting Lakehouse engines. The validator enforces:
+  1. Strict read-only syntax (`SELECT` only; all `DROP`, `UPDATE`, `DELETE`, `INSERT` commands throw fatal errors).
+  2. Mandatory temporal boundaries (queries without `time >= NOW() - INTERVAL` constraints are rejected to prevent table-scan resource exhaustion).
+  3. Strict partition key filtering (must filter on tenant or cluster keys).
+
+---
+
+## 3. The AI Evaluation & Governance Triad: Utility, Trust & Cost
+
+Adopting AI within mission-critical security operations requires a holistic evaluation framework balancing three interdependent forces: **Utility** (operational impact and metrics), **Trust** (verifiability, safety, and repeatability), and **Cost** (compute economics and pricing models).
+
+```mermaid
+flowchart TD
+  classDef triad fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#f8fafc;
+
+  subgraph TRIAD ["The TIDIR AI Evaluation & Governance Triad"]
+    direction LR
+    U["<b>1. UTILITY</b><br>• Operational Objectives<br>• Quantified KPIs & SLAs<br>• Operationalization Lifecycle"]:::triad
+    T["<b>2. TRUST</b><br>• Testing Modalities & Verifiers<br>• Repeatability & Anti-Hallucination<br>• Cryptographic Audit Trails"]:::triad
+    C["<b>3. COST & ECONOMICS</b><br>• Usage vs. Consumption<br>• Fixed Edge vs. Cloud Burst<br>• Hybrid Offload Strategy"]:::triad
+  end
+
+  U <-->|Justifies Spend| C
+  T <-->|Validates Utility| U
+  C <-->|Enforces Limits| T
+```
+
+---
+
+### Pillar 1: Trust (Verification, Repeatability & Audit)
+
+Security operations cannot tolerate stochastic hallucinations or unverifiable claims. Trust is established through five complementary verification and testing modalities:
+
+#### Comparative Analysis of AI Testing & Trust Modalities
+
+| Testing Modality | Core Mechanism | Strengths (Pros) | Limitations (Cons) | Cost Profile | Scalability & Operational Challenges |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **1. Golden Benchmark Datasets** | Versioned CI/CD test suites replaying curated attack & benign telemetry corpora. | Fully reproducible; zero latency impact on live ops; regression-proof. | Requires continuous curation; risks synthetic drift from novel attack techniques. | Low execution cost (one-time authoring + CI compute). | High scalability in GitOps; challenges in generating diverse multi-stage attack scenarios. |
+| **2. Deterministic Guardrails & Firewalls** | Dual-plane prompt firewalls, PII masks, and AST query validators. | Mathematical certainty; prevents query injection and schema destruction; sub-millisecond. | Static rules cannot catch nuanced semantic hallucinations; risk of over-blocking. | Negligible ($0.00 inference; lightweight regex/AST CPU). | Extreme line-rate scale; requires schema-synchronized parser updates. |
+| **3. LLM-as-a-Judge (Multi-Consensus)** | Independent frontier models evaluate output accuracy, grounding fidelity, and tool usage. | Understands complex semantic context; automates subjective grading at scale. | Susceptible to judge model bias, hallucination, and prompt sensitivity. | High (2x–3x token consumption per evaluated prompt). | Bounded by cloud API rate limits and token budgets; requires prompt version locking. |
+| **4. Statistical Sampling & Shadow Mode** | Asynchronously executes candidate models against a 5–10% sample of live production queries. | Measures drift and performance against authentic, chaotic production telemetry without risk. | Feedback is lagging/asynchronous; does not protect against single-event failures. | Moderate (tunable 5–10% inference duplicate overhead). | Highly scalable; requires isolated shadow execution pipelines and telemetry sinks. |
+| **5. Expert Human Validation (A/B Testing)** | Senior SOC analysts and detection engineers grade and compare competing agent outputs. | Ground-truth gold standard; captures institutional nuances and business risk tolerance. | Severe human bottleneck; analyst fatigue; subjective inconsistencies between evaluators. | Very High (expensive senior engineering hours). | Low scalability; confined to pilot stage evaluations and periodic spot-check audits. |
+
+#### Repeatability, Grounding & Cryptographic Auditability
+- **Grounding Fidelity Standard ($\ge 95\%$)**: Every claim in an agent dossier must cite a specific, verified telemetry record or graph edge returned by an MCP tool. Uncited assertions are deterministically stripped.
+- **Deterministic Prompt & Temperature Pinning**: Agent harnesses in production enforce `temperature = 0.0` (or minimal top-p with seed pinning) to maximize determinism across identical inputs.
+- **Cryptographic Audit Trail (RFC 3161)**: Every agent decision, prompt snapshot, model version, and tool output is sealed with an RFC 3161 cryptographic timestamp and committed to an immutable audit ledger for compliance and forensic reconstruction.
+
+---
+
+### Pillar 2: Utility (Operational Objectives, Metrics & Day-2 Operations)
+
+AI capabilities must solve concrete operational bottlenecks rather than serving as conversational novelties:
+
+#### 1. Core Operational Objectives
+- **Compress Investigation Windows**: Reduce Time-to-Investigate (MTTI) from hours to seconds by pre-assembling hydrated dossiers.
+- **Eliminate Cognitive Pivot Fatigue**: Provide a single, progressive disclosure interface so analysts avoid juggling 10+ disconnected console tabs.
+- **Democratize Deep Lakehouse Querying**: Allow junior analysts to extract multi-table join context via validated natural language query synthesis.
+
+#### 2. Key Utility Metrics & Target SLAs
+
+| Operational Objective | Target Metric / SLA | Baseline (Manual SecOps) | Target State with TIDIR AI |
+| :--- | :--- | :--- | :--- |
+| **Triage Comprehension** | Time-to-Comprehend Dossier | 15–30 minutes per incident | **< 60 seconds** via progressive disclosure |
+| **Investigation Scoping (MTTI)** | End-to-end evidence assembly | 45–90 minutes | **< 2 minutes** (parallel specialist mesh) |
+| **Query Syntax Accuracy** | Natural language to OCSF SQL | N/A (requires DBA/engineer) | **$\ge 98\%$ valid syntax** on first compilation |
+| **Analyst Tool Pivots** | Console switches per case | 8–15 browser tabs | **$\le 2$ primary interfaces** |
+| **Containment Velocity (MTTC)** | Tier 1 low-risk containment | 20–45 minutes | **< 15 seconds** (policy-gated automation) |
+
+#### 3. Day-2 Operationalization & Transition Pathway
+- **Shadow Mode (Day 1–30)**: Agents run silently in the background, attaching recommendations to tickets for retrospective comparison against human analyst notes.
+- **Copilot / Assisted Mode (Day 31–90)**: Agents render read-only briefing cards and pre-drafted Lakehouse queries; analysts must explicitly click to execute.
+- **Supervised Autonomy (Day 90+)**: Agents autonomously execute Tier 0 passive queries and draft Tier 1 containment playbooks, transitioning to autonomous execution only after passing golden benchmark gates.
+
+---
+
+### Pillar 3: Cost & Economic Optimization (TCO & Pricing Models)
+
+Security data operates at extreme scale (terabytes to petabytes per day). Routing uncurated security telemetry directly to commercial frontier LLMs creates catastrophic token inflation and unsustainable OpEx.
+
+#### 1. Analysis of AI Cost & Pricing Paradigms
+
+| Pricing Paradigm | Economic Mechanism | SecOps Suitability & Financial Risks | Mitigation in TIDIR |
+| :--- | :--- | :--- | :--- |
+| **Usage-Based (Pay-Per-Token)** | Variable cost billed per million input/output tokens (e.g. cloud frontier APIs). | High risk during high-volume security incidents (e.g. DDoS or lateral sweeps generating massive log explosions). | Strict token budget quotas per investigation (e.g. 150k token cap) and context window compression. |
+| **Consumption / Compute-Based** | Fixed hourly or monthly cost per dedicated GPU instance (e.g. self-hosted vLLM/Ollama). | Predictable OpEx with zero per-token cost penalties; risk of underutilization during quiet hours. | Optimal for Tier 0 local SLMs processing baseline log parsing and triage 24/7. |
+| **Fixed / Subscription Tiers** | Flat monthly per-seat or per-tenant licensing fees. | Highly predictable budget; often throttled by strict concurrency rate limits during crisis peaks. | Used for non-runtime developer tooling (IDE copilots, code review judges). |
+| **Outcome-Based Pricing** | Billing linked to verified outcomes (e.g. confirmed true-positive cases resolved). | Aligns vendor incentives with operational success; challenging to verify attribution contractually. | Evaluated for external MDR/MSSP commercial packaging. |
+| **Hybrid Tiered Offload (TIDIR Model)** | **Tier 0 Local SLM (70%+) + Tier 1 Cloud (25%) + Tier 2 Frontier (5%)**. | Maximizes cost-efficiency, eliminates data egress, and reserves expensive frontier reasoning for true anomalies. | **Core architectural standard across all TIDIR components.** |
+
+#### 2. The TIDIR Hybrid Token Offload Strategy
+TIDIR implements a tiered economic shield:
+1. **Tier 0 Local Ingest Offload (Edge & On-Prem):** High-throughput, repetitive tasks (< 200ms) execute on local GPUs/CPUs using 8B–14B open-weight models (Qwen 2.5, Llama 3.1). Absorbs **70–80% of total inference requests** at **$0.00 marginal cloud token cost**.
+2. **Context Window Compaction**: Raw telemetry payloads are compacted into structured OCSF summaries before dispatching to cloud tiers, reducing prompt token payload sizes by over **85%**.
+3. **Hard Token & Latency Ceilings**: The AI Gateway enforces hard circuit breakers: no single investigation may consume more than $2.50 in cloud tokens without explicit operator elevation.
+
+---
+
+## 4. Technology Mapping
+
+| Layer Component | Open-Source / Self-Hosted | Cloud-Native Reference | Commercial / Managed |
+| :--- | :--- | :--- | :--- |
+| **Inference Gateway** | LiteLLM Proxy / vLLM / Ollama | AWS Bedrock / Google Vertex AI Gateway | Cloudflare AI Gateway / Portkey |
+| **Tool Calling Protocol** | Anthropic Model Context Protocol (MCP) SDK | Standardized JSON Schema Tool APIs | Microsoft Semantic Kernel / LangChain |
+| **Stateful DAG & Blackboard** | LangGraph / Temporal / Prefect | AWS Step Functions / Google Workflows | Custom Agent Mesh |
+| **Prompt Injection Firewall** | Lakera Gandalf / NeMo Guardrails / Rebuff | AWS Bedrock Guardrails | Palo Alto Prisma AI Guard |
+| **AST Query Validator** | `sqlglot` / `pglast` / Calcite AST parser | Athena Workgroup Query Controls | Snowflake Query Guardrails |
+| **Telemetry & Tracing** | OpenTelemetry GenAI Semantic Conventions | CloudWatch / Cloud Trace | Langfuse / Arize Phoenix |
+
+---
+
+## 5. The 3-Phase MVP Implementation Roadmap (Crawl ➔ Walk ➔ Run)
+
+```mermaid
+flowchart LR
+  classDef crawl fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
+  classDef walk fill:#2e1065,stroke:#c084fc,stroke-width:2px,color:#f8fafc;
+  classDef run fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#f8fafc;
+
+  P1["<b>Phase 1: MVP (Crawl)</b><br>• NL-to-OCSF SQL Querying<br>• CTI Bulletin Summarization<br>• AST SELECT-Only Validator<br>• 100% Read-Only Copilot"]:::crawl
+  P2["<b>Phase 2: Mesh (Walk)</b><br>• Specialist Subagent Mesh<br>• Shared Incident Blackboard<br>• Blast-Radius Simulator<br>• Evals-as-Code in CI/CD"]:::walk
+  P3["<b>Phase 3: Closed-Loop (Run)</b><br>• Autonomous Tier 1 Saga<br>• Purple Team Multi-Consensus<br>• Closed-Loop CTI Calibration<br>• Dual-Auth Consensus Gates"]:::run
+
+  P1 ==>|Milestone: 98% Query Accuracy| P2
+  P2 ==>|Milestone: 95% Grounding Fidelity| P3
+```
+
+### Phase 1: MVP (Assisted Copilot) — Weeks 1 to 8
+* **Focus:** Immediate investigator acceleration with zero environmental risk.
+* **Capabilities:**
+  - Natural language to OCSF SQL query synthesis targeting Layer 2 Lakehouse.
+  - Automated STIX 2.1 threat advisory extraction into ATT&CK DAGs.
+  - Single-turn incident triage briefing card generation.
+* **Architecture:** Stateless inference via LiteLLM gateway, single-turn MCP tool calling (`mcp-lakehouse-query`), deterministic AST validator.
+* **Exit Milestone:** $\ge 98\%$ valid SQL generation syntax across 200 standard SOC query evaluation benchmarks.
+
+### Phase 2: Supervised Agent Mesh (Walk) — Months 3 to 6
+* **Focus:** Deep multi-signal scoping and cognitive fatigue reduction.
+* **Capabilities:**
+  - Lead Triage Orchestrator dispatches parallel specialist subagents (Host Forensic, Identity & Auth, Network & Cloud).
+  - Continuous aggregation to a stateful incident blackboard.
+  - Pre-execution blast-radius simulation for suggested containment actions.
+* **Architecture:** Stateful LangGraph/Temporal runtime, Dual-Plane Prompt Injection Firewall, CI/CD Evals-as-Code pipeline running on every Git pull request.
+* **Exit Milestone:** $\ge 95\%$ grounding fidelity (zero hallucinated IOCs) on golden incident benchmark datasets; sub-60-second end-to-end multi-agent triage synthesis.
+
+### Phase 3: Autonomous Closed-Loop (Run) — Months 6+
+* **Focus:** Sub-minute containment velocity and self-healing detection engineering.
+* **Capabilities:**
+  - Autonomous execution of Tier 1 containment playbooks with compensating Saga rollback transactions.
+  - Continuous automated purple teaming with multi-model consensus evaluating detection rules.
+  - Closed-loop attribution feedback auto-calibrating Layer 3 detection models.
+* **Architecture:** Event-driven agent microservices, cryptographic multi-signature consensus queues for Tier 2 actions, audited emergency break-glass protocol.
+* **Exit Milestone:** Mean Time to Contain (MTTC) for Tier 1 incidents $< 60$ seconds; zero inadvertent production outages caused by containment actions.

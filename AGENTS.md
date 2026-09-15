@@ -11,7 +11,7 @@ TIDIR unifies four core security operational domains into a closed-loop architec
 2. **Telemetry & Data Fabric**: Line-rate OCSF normalization, distributed streaming buses (Kafka/Redpanda), and dual-tier storage (Hot Index vs. Lakehouse).
 3. **Detection Engineering**: Stateful streaming detection, lakehouse batch analytics, and GitOps Detection-as-Code (DaC).
 4. **Investigation & Case Management**: Entity resolution, process/network graphs, unified timelines, and tamper-evident evidence lockers.
-5. **Response & Automation (SOAR)**: Blast-radius risk-tiered playbook execution with strict human-in-the-loop authorization gates.
+5. **Response & Automation**: Blast-radius risk-tiered playbook execution with strict human-in-the-loop authorization gates.
 
 ---
 

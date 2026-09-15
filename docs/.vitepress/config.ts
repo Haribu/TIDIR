@@ -8,7 +8,14 @@ export default withMermaid(
     base: "/",
     cleanUrls: true,
     ignoreDeadLinks: true,
+    markdown: {
+      math: true
+    },
     head: [
+      [
+        "link",
+        { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }
+      ],
       [
         "script",
         {},
@@ -26,41 +33,64 @@ export default withMermaid(
             { text: "Telemetry & Data Fabric", link: "/architecture/components/02-data-fabric-telemetry" },
             { text: "Detection Engine", link: "/architecture/components/03-detection-engine" },
             { text: "Investigation & Cases", link: "/architecture/components/04-investigation-cases" },
-            { text: "Response & Automation", link: "/architecture/components/05-response-automation" }
+            { text: "Response & Automation", link: "/architecture/components/05-response-automation" },
+            { text: "AI & Agent Orchestration", link: "/architecture/components/06-ai-orchestration" }
           ]
         },
         { text: "ADRs", link: "/adr/0001-record-architecture-decisions" }
       ],
       sidebar: [
         {
-          text: "Architecture & Framework",
+          text: "Tier 1: Strategic Architecture",
           items: [
             { text: "System Overview & Topology", link: "/architecture/01-system-overview" },
-            { text: "Capability Model", link: "/architecture/02-capability-model" },
-            { text: "Layer 1: Data Sources & Inputs", link: "/architecture/03-layer-1-data-sources" },
-            { text: "Layer 2: Pipeline, Storage & Query", link: "/architecture/04-layer-2-pipeline-storage-query" },
-            { text: "Layer 3: Intel & Detection Engineering", link: "/architecture/06-layer-3-threat-intel-detection" },
-            { text: "Layer 4: Incident Response & Automation", link: "/architecture/07-layer-4-incident-response" },
-            { text: "Cross-Cutting Engineering Disciplines", link: "/architecture/05-cross-cutting-engineering-disciplines" },
+            { text: "Target Threat Model", link: "/architecture/09-threat-model" }
+          ]
+        },
+        {
+          text: "Tier 2: Capabilities & Taxonomy",
+          items: [
+            { text: "Capability Model & Taxonomy", link: "/architecture/02-capability-model" },
+            { text: "Macro Capabilities & Services", link: "/architecture/10-macro-capabilities-and-services" },
             { text: "Operational User Stories", link: "/architecture/08-user-stories" }
           ]
         },
         {
-          text: "Component Deep Dives",
+          text: "Tier 3: Technical Specifications",
+          items: [
+            { text: "Layer 1: Data Sources & Ingress", link: "/architecture/03-layer-1-data-sources" },
+            { text: "Layer 2: Pipeline, Storage & Query", link: "/architecture/04-layer-2-pipeline-storage-query" },
+            { text: "Layer 3: Intel & Detection Engineering", link: "/architecture/06-layer-3-threat-intel-detection" },
+            { text: "Layer 4: Investigation & Automated Response", link: "/architecture/07-layer-4-incident-response" },
+            { text: "Cross-Cutting Engineering Disciplines", link: "/architecture/05-cross-cutting-engineering-disciplines" }
+          ]
+        },
+        {
+          text: "Subsystem Deep Dives",
           items: [
             { text: "1. Cyber Threat Intelligence", link: "/architecture/components/01-threat-intelligence" },
             { text: "2. Telemetry & Data Fabric", link: "/architecture/components/02-data-fabric-telemetry" },
             { text: "3. Detection Engine", link: "/architecture/components/03-detection-engine" },
             { text: "4. Investigation & Cases", link: "/architecture/components/04-investigation-cases" },
-            { text: "5. Response & Automation", link: "/architecture/components/05-response-automation" }
+            { text: "5. Response & Automation", link: "/architecture/components/05-response-automation" },
+            { text: "6. AI & Agent Orchestration", link: "/architecture/components/06-ai-orchestration" }
           ]
         },
         {
           text: "Architecture Decisions (ADR)",
           items: [
-            { text: "0001 - ADRs & Mermaid", link: "/adr/0001-record-architecture-decisions" },
-            { text: "0002 - Unmapped OCSF Data", link: "/adr/0002-preserve-unmapped-telemetry-in-ocsf" },
-            { text: "0003 - Supernode Pruning", link: "/adr/0003-graph-supernode-pruning-and-clustering-boundaries" }
+            { text: "0001 - Record Decisions & Mermaid", link: "/adr/0001-record-architecture-decisions" },
+            { text: "0002 - Preserve Unmapped OCSF Data", link: "/adr/0002-preserve-unmapped-telemetry-in-ocsf" },
+            { text: "0003 - Supernode Pruning & Graph Clustering", link: "/adr/0003-graph-supernode-pruning-and-clustering-boundaries" },
+            { text: "0004 - Defensive AI & Prompt Firewall", link: "/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall" },
+            { text: "0005 - Saga Containment & Break-Glass", link: "/adr/0005-saga-pattern-containment-and-break-glass-protocol" },
+            { text: "0006 - Agent Evals-as-Code Harness", link: "/adr/0006-agent-evaluation-harness-evals-as-code" },
+            { text: "0007 - Continuous Purple Teaming & Consensus", link: "/adr/0007-continuous-automated-purple-teaming-and-multi-model-consensus" },
+            { text: "0008 - SecOps Error Budgets & Chaos SRE", link: "/adr/0008-secops-error-budgets-and-chaos-security-engineering" },
+            { text: "0009 - Bayesian Multi-Signal Risk Scoring", link: "/adr/0009-bayesian-multi-signal-risk-scoring" },
+            { text: "0010 - SABSA Alignment & Attribute Profiling", link: "/adr/0010-sabsa-business-architecture-and-attribute-profiling" },
+            { text: "0011 - Bipartite Entity-Finding Graph", link: "/adr/0011-bipartite-entity-finding-graph-consolidation" },
+            { text: "0012 - AI Orchestration & MVP Roadmap", link: "/adr/0012-ai-orchestration-runtime-mcp-and-mvp-roadmap" }
           ]
         }
       ],

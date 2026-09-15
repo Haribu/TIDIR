@@ -23,9 +23,9 @@ flowchart TB
 
   D3["<b>Domain 3: Detection Engineering (DET)</b><br/>• DET-01: Stateful Sliding-Window Streaming<br/>• DET-02: Scheduled Batch Lakehouse SQL<br/>• DET-03: Detection-as-Code (DaC) & CI Testing<br/>• DET-04: Supernode-Dampened Graph Clustering<br/>• DET-05: Multi-Factor Composite Risk Lens"]:::det
 
-  D4["<b>Domain 4: Investigation & Case Management (INV)</b><br/>• INV-01: Unified Entity Resolution 360<br/>• INV-02: Chronological Multi-Source Timeline<br/>• INV-03: Relational Execution & Process Graph<br/>• INV-04: Sealed Evidence Locker & RFC 3161<br/>• INV-05: Symbiotic Operator & Agent Workbench"]:::inv
+  D4["<b>Domain 4: Investigation & Case Management (INV)</b><br/>• INV-01: Unified Entity Resolution 360<br/>• INV-02: Chronological Multi-Source Timeline<br/>• INV-03: Relational Execution & Process Graph<br/>• INV-04: Sealed Evidence Locker & RFC 3161<br/>• INV-05: Hierarchical Agent Mesh & Prompt Firewall<br/>• INV-06: Progressive Disclosure Analyst Workbench"]:::inv
 
-  D5["<b>Domain 5: Response & Automation (SOAR)</b><br/>• RESP-01: Declarative Playbook Orchestration<br/>• RESP-02: Blast-Radius Pre-Execution Simulation<br/>• RESP-03: Autonomous Tier 1 Containment<br/>• RESP-04: Dual-Authorization Consensus Engine<br/>• RESP-05: Closed-Loop Attribution Feedback"]:::resp
+  D5["<b>Domain 5: Automated Response & Containment</b><br/>• RESP-01: Declarative Playbook Orchestration<br/>• RESP-02: Blast-Radius & Saga Compensation Modelling<br/>• RESP-03: Autonomous Tier 1 Containment<br/>• RESP-04: Dual-Auth Consensus & Break-Glass Override<br/>• RESP-05: Closed-Loop Attribution Feedback"]:::resp
 
   D1 ==>|Operational Threat Feeds & PIR Flows| D2
   D2 ==>|Normalized Telemetry & Low-Latency State Δt| D3
@@ -40,59 +40,71 @@ flowchart TB
 
 ### Domain 1: Cyber Threat Intelligence (CTI)
 
-| Capability ID | Name | Description | Key Metric / SLA |
-| :--- | :--- | :--- | :--- |
-| **CTI-01** | Feed Aggregation & Ingestion | Ingest commercial, open-source, ISAC, and internal telemetry feeds via STIX/TAXII, REST, and streaming endpoints. | Ingestion latency < 5 min from publication |
-| **CTI-02** | Deduplication & Confidence Scoring | Normalize disparate indicator types, resolve overlapping claims, and compute decay scores over time. | Automated decay curves calculated daily |
-| **CTI-03** | Adversary & TTP Mapping | Attribute techniques, tactics, and procedures to MITRE ATT&CK enterprise matrices. | 100% of validated alerts tagged with ATT&CK TTPs |
-| **CTI-04** | Streaming IOC Dissemination | Publish active, high-confidence indicators to edge detection layers with minimal lookup overhead. | Indicator broadcast to detection tier < 30 sec |
-| **CTI-05** | Retroactive Sweep (Retro-Hunt) | Automatically sweep historical lakehouse telemetry upon discovery of novel zero-day IOCs/TTPs. | 90-day sweep executed in < 15 min |
+| Capability ID | Name | Execution Mode | Description | Key Metric / SLA |
+| :--- | :--- | :--- | :--- | :--- |
+| **CTI-01** | Feed Aggregation & Ingestion | `[Deterministic Engine]` | Ingest commercial, open-source, ISAC, and internal telemetry feeds via STIX/TAXII, REST, and streaming endpoints. | Ingestion latency < 5 min from publication |
+| **CTI-02** | Deduplication & Confidence Scoring | `[Deterministic Engine]` | Normalize disparate indicator types, resolve overlapping claims, and compute decay scores over time. | Automated decay curves calculated daily |
+| **CTI-03** | Adversary & TTP Mapping | `[AI/Agent-Augmented]` | Attribute techniques, tactics, and procedures to MITRE ATT&CK enterprise matrices using LLM advisory parsing. | 100% of validated alerts tagged with ATT&CK TTPs |
+| **CTI-04** | Streaming IOC Dissemination | `[Deterministic Engine]` | Publish active, high-confidence indicators to edge detection layers with minimal lookup overhead. | Indicator broadcast to detection tier < 30 sec |
+| **CTI-05** | Retroactive Sweep (Retro-Hunt) | `[Deterministic Engine]` | Automatically sweep historical lakehouse telemetry upon discovery of novel zero-day IOCs/TTPs. | 90-day sweep executed in < 15 min |
 
 ---
 
 ### Domain 2: Telemetry & Data Fabric
 
-| Capability ID | Name | Description | Key Metric / SLA |
-| :--- | :--- | :--- | :--- |
-| **DATA-01** | Multi-Source Ingestion | Collect telemetry from host kernel instrumentation, cloud control planes, identity providers, and network sensors. | Zero loss, durable acknowledgement |
-| **DATA-02** | Canonical Schema Normalization | Coerce raw schema structures into OCSF (Open Cybersecurity Schema Framework) objects at line rate with unmapped data catch-all. | Normalization overhead < 5ms per event |
-| **DATA-03** | Distributed Stream Buffering | Decouple collectors from consumers using partitioned, distributed append-only streaming logs. | Sustained ingestion capacity > 100k EPS |
-| **DATA-04** | Hot Analytics Index | Provide low-latency search, aggregations, and filtering over recent telemetry (15–30 days). | P95 search latency < 2 sec |
-| **DATA-05** | Historical Security Lakehouse | Store long-term telemetry in open columnar formats with partition pruning and compaction on object storage. | 365+ day retention with sub-linear cost |
+| Capability ID | Name | Execution Mode | Description | Key Metric / SLA |
+| :--- | :--- | :--- | :--- | :--- |
+| **DATA-01** | Multi-Source Ingestion | `[Deterministic Engine]` | Collect telemetry from host kernel instrumentation, cloud control planes, identity token sessions (OCSF 3002), and network sensors. | Zero loss, durable acknowledgement |
+| **DATA-02** | Canonical Schema Normalization | `[Deterministic Engine]` | Coerce raw schema structures into OCSF (Open Cybersecurity Schema Framework) objects at line rate with unmapped data catch-all. | Normalization overhead < 5ms per event |
+| **DATA-03** | Distributed Stream Buffering | `[Deterministic Engine]` | Decouple collectors from consumers using partitioned, distributed append-only streaming logs. | Sustained ingestion capacity > 100k EPS |
+| **DATA-04** | Hot Analytics Index | `[Deterministic Engine]` | Provide low-latency search, aggregations, and filtering over recent telemetry (15–30 days). | P95 search latency < 2 sec |
+| **DATA-05** | Historical Security Lakehouse | `[Deterministic Engine]` | Store long-term telemetry in open columnar formats with partition pruning and compaction on object storage. | 365+ day retention with sub-linear cost |
 
 ---
 
 ### Domain 3: Detection Engineering
 
-| Capability ID | Name | Description | Key Metric / SLA |
-| :--- | :--- | :--- | :--- |
-| **DET-01** | Real-Time Stream Detection | Evaluate sliding-window stateful rules and pattern matches against streaming events. | Time-to-detect < 5 seconds |
-| **DET-02** | Lakehouse Batch Analytics | Execute complex, cross-table SQL analytics, behavioural baselines, and rare event heuristics. | Daily/hourly schedules with auto-retries |
-| **DET-03** | Detection-as-Code Pipeline | Manage rules as vendor-neutral declarative code artifacts tested via automated CI/CD synthetic data runners. | 100% rule tests passing prior to production deploy |
-| **DET-04** | Alert Correlation & Aggregation | Cluster related alerts across time, host, identity, and network into coherent incident candidates. | Reduction of alert volume to analyst by > 75% |
-| **DET-05** | Contextual Risk Scoring | Dynamically score incidents based on asset criticality, user risk, and indicator confidence. | Dynamic composite score (0–100) assigned |
+| Capability ID | Name | Execution Mode | Description | Key Metric / SLA |
+| :--- | :--- | :--- | :--- | :--- |
+| **DET-01** | Real-Time Stream Detection | `[Deterministic Engine]` | Evaluate sliding-window stateful rules, in-flight token replay, and pattern matches against streaming events. | Time-to-detect (MTTD) < 5 seconds |
+| **DET-02** | Lakehouse Batch Analytics | `[Deterministic Engine]` | Execute complex, cross-table SQL analytics, behavioural baselines, and rare event heuristics. | Daily/hourly schedules (MTTD < 24h) |
+| **DET-03** | DaC & Continuous Purple Team | `[AI/Agent-Augmented]` | Manage rules as declarative code validated via continuous automated atomic adversary emulation and multi-model consensus. | 100% rule tests passing prior to production deploy |
+| **DET-04** | Alert Correlation & Aggregation | `[Deterministic Engine]` | Cluster related alerts across time, host, identity, and network into coherent incident candidates via entity graphs. | Reduction of alert volume to analyst by > 75% |
+| **DET-05** | Bayesian Multi-Signal Risk Lens | `[Deterministic Engine]` | Neutralise the Base Rate Fallacy by compounding orthogonal evidence vectors (asset, identity, network) before elevation. | Dynamic composite score (0–100); false alarms < 5% |
+| **DET-06** | SecOps Error Budgets | `[Deterministic Engine]` | Enforce monthly false-positive Noise Budgets per detection class in CI/CD; automated deployment freeze on budget burn. | Rolling 30-day Noise Ratio <= 5% per domain |
 
 ---
 
 ### Domain 4: Investigation & Case Management
 
-| Capability ID | Name | Description | Key Metric / SLA |
-| :--- | :--- | :--- | :--- |
-| **INV-01** | Entity Resolution | Disambiguate and cross-reference identities (usernames, email, Kerberos tickets, hostnames, IP addresses). | Unified entity profile generation < 1 sec |
-| **INV-02** | Interactive Timeline Reconstruction | Automatically construct a chronological sequence of actor actions, child processes, and auth events. | Multi-source timeline generation < 5 sec |
-| **INV-03** | Relational Graph Exploration | Provide interactive graph visualization showing nodes (hosts, users, files, domains) and edges (relations). | Render graphs with > 10,000 nodes smoothly |
-| **INV-04** | Evidence Dossier & Auditability | Maintain immutable records of investigative queries, pinned artifacts, analyst notes, and tags. | Tamper-evident audit logging of analyst actions |
-| **INV-05** | SecOps Collaborative Workspace | Multi-analyst case assignment, handoffs, comments, and task workflows. | Real-time state synchronization |
+| Capability ID | Name | Execution Mode | Description | Key Metric / SLA |
+| :--- | :--- | :--- | :--- | :--- |
+| **INV-01** | Entity Resolution | `[Deterministic Engine]` | Disambiguate and cross-reference identities (usernames, email, Kerberos tickets, hostnames, IP addresses). | Unified entity profile generation < 1 sec |
+| **INV-02** | Interactive Timeline Reconstruction | `[Deterministic Engine]` | Automatically construct a chronological sequence of actor actions, child processes, and auth events. | Multi-source timeline generation < 5 sec |
+| **INV-03** | Relational Graph Exploration | `[Deterministic Engine]` | Provide interactive graph visualization showing nodes (hosts, users, files, domains) and edges (relations). | Render graphs with > 10,000 nodes smoothly |
+| **INV-04** | Evidence Dossier & Auditability | `[Deterministic Engine]` | Maintain immutable records of investigative queries, pinned artifacts, analyst notes, and tags. | Tamper-evident audit logging of analyst actions (RFC 3161) |
+| **INV-05** | Agent Mesh & Multi-Model Consensus | `[AI/Agent-Augmented]` | Coordinate autonomous specialist subagents with adversarial Proposer/Challenger model arbitration behind prompt firewalls. | Time-to-investigate (MTTI) < 60s; > 80% consensus |
+| **INV-06** | Progressive Disclosure Workbench | `[Human-in-the-Loop]` | Surface structured briefings in a 3-tier hierarchy (Situation Report ➔ Evidence Table ➔ On-Demand Graph Lineage). | Analyst triage comprehension < 60 sec |
 
 ---
 
-### Domain 5: Response & Automation (SOAR)
+### Domain 5: Automated Response & Containment
 
-| Capability ID | Name | Description | Key Metric / SLA |
-| :--- | :--- | :--- | :--- |
-| **RESP-01** | Declarative Playbook Orchestration | Execute multi-step containment, enrichment, and recovery workflows across third-party APIs. | Execution step dispatch < 500ms |
-| **RESP-02** | Blast-Radius Risk Gating | Classify actions by business disruption risk, automatically gating critical actions behind authorization. | Zero unauthorized high-impact executions |
-| **RESP-03** | Autonomous Rapid Containment | Execute instantaneous containment for low-blast-radius actions (e.g. host isolation in sandbox, file quarantine). | Action complete < 15 seconds from trigger |
-| **RESP-04** | Interactive Authorization Gateways | Send interactive approvals to analysts or asset owners (chatops webhooks, mobile push, analyst workbench) with 1-click controls. | Approval state reflected instantly |
-| **RESP-05** | Closed-Loop Feedback Integration | Extract confirmed indicators and attack patterns from resolved cases to feed CTI and detection tuning. | Feedback loop dispatch automated on case closure |
+| Capability ID | Name | Execution Mode | Description | Key Metric / SLA |
+| :--- | :--- | :--- | :--- | :--- |
+| **RESP-01** | Declarative Playbook Orchestration | `[Deterministic Engine]` | Execute multi-step containment, enrichment, and recovery workflows across third-party APIs via distributed Sagas. | Execution step dispatch < 500ms |
+| **RESP-02** | Blast-Radius & Saga Compensation | `[AI/Agent-Augmented]` | Pre-execution simulation of active TCP sessions and dependencies with automated compensating rollback transactions. | 100% compensation parity; MTTR < 60 min |
+| **RESP-03** | Autonomous Rapid Containment | `[Deterministic Engine]` | Execute instantaneous containment for low-blast-radius actions (e.g. host isolation in sandbox, token invalidation). | Time-to-contain (MTTC) < 15 seconds |
+| **RESP-04** | Dual-Auth & Break-Glass Protocols | `[Human-in-the-Loop]` | Enforce multi-signature consensus for high-impact actions with authenticated single-commander break-glass overrides. | MTTC < 5 min; break-glass audit broadcast < 5 sec |
+| **RESP-05** | Closed-Loop Feedback Integration | `[Deterministic Engine]` | Extract confirmed indicators and attack patterns from resolved cases to feed CTI and detection tuning. | Feedback loop dispatch automated on case closure |
+
+---
+
+### Cross-Cutting Domain: AI Governance & Verification (AIGOV)
+
+| Capability ID | Name | Execution Mode | Description | Key Metric / SLA |
+| :--- | :--- | :--- | :--- | :--- |
+| **AIGOV-01** | Continuous Evals-as-Code | `[AI/Agent-Augmented]` | Automated CI/CD benchmarking of triage prompts and agent workflows against versioned golden incident datasets. | $\ge 95\%$ grounding fidelity; 100% schema tool validity |
+| **AIGOV-02** | Dual-Plane Data/Control Isolation | `[Deterministic Engine]` | Enforces strict boundaries preventing unformatted raw telemetry strings from acting as agent control instructions. | Zero instruction execution from untrusted log payloads |
+| **AIGOV-03** | Cost & Latency Performance Budgets | `[Deterministic Engine]` | Deterministic per-invocation token ceilings, query timeouts, and rate budgeting across model runtimes. | P95 agent triage latency < 5 sec; strict budget compliance |
 

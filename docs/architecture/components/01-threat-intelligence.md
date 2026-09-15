@@ -59,7 +59,7 @@ flowchart LR
      where $\lambda$ varies by indicator type (e.g., dynamic IP addresses decay rapidly with high $\lambda$; actor-controlled command-and-control domains or binary hashes decay slowly).
 
 4. **Integration Interfaces**:
-   - **Streaming Detection**: Hot key-value lookup cache (Redis/Valkey) updated via change-data-capture (CDC) for sub-millisecond matching in stream detection pipelines.
+   - **Streaming Detection**: In-memory key-value lookup cache updated via change-data-capture (CDC) for sub-millisecond matching in stream detection pipelines.
    - **Retroactive Hunting**: Automated triggering of historical lakehouse scans when high-severity zero-day indicators are ingested.
    - **Analyst Investigation Workbench**: GraphQL / REST endpoints for pulling full threat actor profiles, associated campaigns, and MITRE ATT&CK techniques.
 
@@ -68,17 +68,18 @@ flowchart LR
 ## 3. Data Model & Schemas
 
 The CTI subsystem leverages the **STIX 2.1** standard:
-- **Indicator**: Patterns representing observable artifacts (IPs, hashes, domains, file paths).
-- **Threat Actor**: Profiles of organized cybercrime groups or state-sponsored APTs.
-- **Attack Pattern**: MITRE ATT&CK techniques associated with actor behavior.
+- **Indicator**: Patterns representing observable artefacts (IPs, hashes, domains, file paths).
+- **Threat Actor**: Profiles of organised cybercrime groups or state-sponsored advanced persistent threats.
+- **Attack Pattern**: MITRE ATT&CK techniques associated with actor behaviour.
 - **Relationship**: Directed edges representing `indicates`, `targets`, `uses`, and `attributed-to`.
 
 ---
 
-## 4. Reference Technology Stack Options
+## 4. Architectural Capability Archetypes & Protocol Standards
 
-| Sub-component | Open-Source Option | Cloud Native / Managed Option | Commercial Reference |
-| :--- | :--- | :--- | :--- |
-| **TIP Core** | OpenCTI / MISP | AWS OpenSearch + Graph DB | ThreatConnect / Recorded Future |
-| **Indicator Cache** | Redis / Valkey | Amazon ElastiCache / Azure Cache | Redis Enterprise |
-| **Knowledge Graph** | Neo4j Community / Memgraph | Amazon Neptune / Azure Cosmos DB | Enterprise Graph Engines |
+| Subsystem Component | Functional Capability Pattern | Data Model & Protocol Standards |
+| :--- | :--- | :--- |
+| **Intelligence Ingestion Engine** | Automated polling, validation, and normalization of structured feeds. | TAXII 2.1 client bindings; STIX 2.1 JSON schemas. |
+| **Low-Latency Indicator Cache** | In-memory distributed key-value store optimised for constant-time $O(1)$ lookups. | Binary key-value protocol; CDC replication streams. |
+| **Threat Knowledge Graph** | Property graph database modelling relationships between indicators, actors, and campaigns. | Labeled property graph models; Cypher/openCypher query interfaces. |
+| **Retroactive Hunting Dispatcher** | Asynchronous lakehouse query orchestrator evaluating historical event tables against newly ingested indicators. | Distributed SQL query interfaces; open columnar Parquet partitions. |

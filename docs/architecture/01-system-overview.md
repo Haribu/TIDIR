@@ -44,17 +44,17 @@ flowchart TB
   end
 
   %% Layer 4: Incident Response & Automation
-  subgraph L4 ["LAYER 4: INVESTIGATION, CASE MANAGEMENT & SOAR"]
-    L4_DOSSIER["Unified Investigation & Case Dossier\n(Entity 360, process trees, cryptographically sealed timeline)"]:::layer4
-    L4_TRIAGE["Symbiotic Operator Workbench\n(Autonomous agentic scoping, human triage console)"]:::layer4
-    L4_SOAR["Blast-Radius Gated SOAR Engine\n(Pre-execution simulation, Tier 0-2 playbooks, rollback)"]:::layer4
+  subgraph L4 ["LAYER 4: INVESTIGATION, CASE MANAGEMENT & AUTOMATED RESPONSE"]
+    L4_DOSSIER["Unified Investigation & Case Dossier\n(Entity 360, progressive disclosure UX, sealed timeline)"]:::layer4
+    L4_TRIAGE["Hierarchical Agent Mesh\n(Lead orchestrator, host/network/cloud specialists, prompt firewall)"]:::layer4
+    L4_RESP["Saga Containment Engine\n(Pre-execution simulation, compensation transactions, break-glass override)"]:::layer4
   end
 
   %% Closed-Loop Architectural Feedback
   subgraph FB ["CLOSED-LOOP CONTINUOUS CALIBRATION"]
     FB_INTEL["Attributed Threat Flows & IOCs\n(Re-ingested into L1 CTI & L3 Detection Backlog)"]
     FB_GAPS["Telemetry Blindspot Telemetry\n(Re-tunes L1 Sensor Filters & Collection Audits)"]
-    FB_SOAR["Playbook Execution Efficacy\n(Refines L4 Blast-Radius & Simulation Models)"]
+    FB_RESP["Playbook Execution Efficacy\n(Refines L4 Blast-Radius & Simulation Models)"]
   end
 
   %% Operational Progression (Strict Top-to-Bottom DAG)
@@ -78,23 +78,23 @@ flowchart LR
     E1["Data Engineering\n(Schema Evolution & Contracts)"]:::eng
     E2["Threat Intel Engineering\n(PIRs & Indicator Decay)"]:::eng
     E3["Detection Engineering (DaC)\n(Simulation, Testing & CI/CD)"]:::eng
-    E4["Automation SRE\n(Playbooks-as-Code & Rollback)"]:::eng
-    E5["AI Agent Harnesses\n(Grounding Context & LLM Judges)"]:::eng
+    E4["Automation SRE\n(Playbooks-as-Code & Saga Rollback)"]:::eng
+    E5["AI Agent Harnesses\n(Evals-as-Code & Prompt Firewall)"]:::eng
   end
 
   subgraph TARGETS ["OPERATIONAL TOUCHPOINTS"]
     T_REG["Schema Registry & Ingestion DLQ\n(Layer 1 / Layer 2)"]:::target
     T_GRAPH["Threat Flow & Correlation Graphs\n(Layer 3 Intel)"]:::target
     T_ENG["Streaming & Lakehouse Engines\n(Layer 3 Detection)"]:::target
-    T_SOAR["Connector Ecosystem & Safe APIs\n(Layer 4 Containment)"]:::target
-    T_OPS["Symbiotic Operator Model\n(Layer 4 Investigation)"]:::target
+    T_RESP["Connector Ecosystem & Saga APIs\n(Layer 4 Containment)"]:::target
+    T_OPS["Hierarchical Agent Mesh & Workbench\n(Layer 4 Investigation)"]:::target
   end
 
   E1 -->|Enforces Schemas| T_REG
   E2 -->|Calibrates Attack Flows| T_GRAPH
   E3 -->|Deploys Tested Rules| T_ENG
-  E4 -->|Deploys Gated Playbooks| T_SOAR
-  E5 -->|Supervises Triage Prompts| T_OPS
+  E4 -->|Deploys Gated Playbooks| T_RESP
+  E5 -->|Supervises Evals & Prompts| T_OPS
 ```
 
 ---
@@ -107,24 +107,25 @@ flowchart LR
 - See full spec: [Layer 1 Specification](03-layer-1-data-sources.md).
 
 ### Layer 2: Pipeline, Storage & Query Fabric
-- **Line-Rate Normalization**: Standardizes raw payloads into Open Cybersecurity Schema Framework (OCSF) objects via an authoritative Schema Registry.
+- **Line-Rate Normalization**: Standardises raw payloads into Open Cybersecurity Schema Framework (OCSF) objects via an authoritative Schema Registry.
 - **Value-Based Routing**: Diverts high-value security events to hot indexing and stream engines while streaming bulk forensic telemetry into low-cost columnar lakehouse storage.
 - **Multi-Paradigm Querying**: Provides four specialized engines: Real-Time Streaming (< 5s), Scheduled Batch SQL (7–90 day baselines), Federated Query-in-Place, and ML Feature Stores.
 - See full spec: [Layer 2 Specification](04-layer-2-pipeline-storage-query.md).
 
 ### Layer 3: Threat Intelligence & Detection Engineering
-- **Machine-Readable Attack Flows**: Codifies multi-stage adversary behaviors into structured graphs, prioritizing detection engineering backlogs via threat likelihood and asset exposure.
+- **Machine-Readable Attack Flows**: Codifies multi-stage adversary behaviours into structured graphs, prioritising detection engineering backlogs via threat likelihood and asset exposure.
 - **Detection-as-Code (DaC)**: All rules are authored as declarative vendor-neutral code targeting OCSF schema classes, versioned in Git.
 - **Empirical Test Harness**: Validates rules through controlled adversary simulation, synthetic unit tests, and 30-day historical lakehouse backtesting.
-- **Standardized Findings**: Emits OCSF Class 2001 (Security Finding) and Class 2004 (Detection Finding) objects.
+- **Standardised Findings**: Emits OCSF Class 2001 (Security Finding) and Class 2004 (Detection Finding) objects.
 - See full spec: [Layer 3 Specification](06-layer-3-threat-intel-detection.md).
 
-### Layer 4: Incident Response (Investigation, Case Management & SOAR)
-- **Entity Resolution & Interactive Graph**: Synthesizes parent-child process trees, identity pivots, and chronological event timelines from Layer 2 storage.
-- **Tamper-Evident Evidence Dossier**: Records queries, annotations, and artifacts with cryptographic integrity for post-incident review (PIR).
-- **Blast-Radius Gated SOAR**: Separates autonomous low-risk containment (Tier 1) from disruptive actions (Tier 2) requiring signed human-in-the-loop authorization.
-- **Closed-Loop Feedback**: Directly feeds novel IOCs discovered during triage back into Layer 1/3 threat intelligence and rule calibration.
-- See full spec: [Layer 4 Specification](components/05-response-automation.md).
+### Layer 4: Incident Response (Investigation, Case Management & Automated Containment)
+- **Progressive Disclosure Workbench**: Presents a 3-tier cognitive hierarchy (Situation Summary ➔ Forensic Evidence Table ➔ On-Demand Graph Lineage) to achieve sub-60-second analyst comprehension without visual fatigue.
+- **Hierarchical Agent Mesh**: Dispatches specialized autonomous subagents (host forensic, identity, network, cloud) coordinated by a Lead Triage Orchestrator behind an isolated **Prompt Injection Firewall**.
+- **Tamper-Evident Evidence Dossier**: Records queries, annotations, and artifacts with cryptographic integrity (RFC 3161 timestamps) for post-incident review.
+- **Saga-Pattern Gated Containment**: Executes containment playbooks as distributed Sagas with automated compensating transactions, separating low-risk actions (Tier 1) from disruptive actions (Tier 2) governed by dual-authorisation consensus and an audited **Break-Glass Emergency Protocol**.
+- **Closed-Loop Feedback**: Automatically feeds confirmed indicators and false-positive tuning parameters back into Layer 1/3 threat intelligence and rule calibration.
+- See full spec: [Layer 4 Specification](07-layer-4-incident-response.md) and [AI & Agentic Orchestration Plane](components/06-ai-orchestration.md).
 
 ---
 
@@ -135,8 +136,9 @@ flowchart LR
 | **L1 ➔ L2 Ingress** | Native / Schema Registry Envelope | Bounded transport batch carrying origin metadata and raw event facts. |
 | **L2 Normalization** | OCSF (Open Cybersecurity Schema Framework) | Canonical schema across system, identity, network, cloud, and application domains. |
 | **L3 Detection Target** | OCSF Classes (1001, 1007, 3002, 4001, etc.) | Vendor-neutral detection logic decoupled from physical database columns. |
-| **L3 ➔ L4 Handoff** | OCSF Class 2001 & Class 2004 Findings | Standardized security and detection findings carrying evidence, ATT&CK tags, and risk scores. |
-| **L4 Containment** | Declarative Action Specifications | Parameterized containment payloads executed against third-party API connectors. |
+| **L3 ➔ L4 Handoff** | OCSF Class 2001 & Class 2004 Findings | Standardised security and detection findings carrying evidence, ATT&CK tags, and risk scores. |
+| **L4 Agent Tool Contract** | Model Context Protocol (MCP) & Typed JSON Schema | Parameters for read-only forensic queries; strictly isolates prompts from unformatted raw telemetry. |
+| **L4 Saga Containment** | Bidirectional Action Specifications | Parameterized forward action ($T_i$) and automated compensation ($C_i$) payloads executed against downstream connectors. |
 
 ---
 
@@ -144,23 +146,23 @@ flowchart LR
 
 For executive cybersecurity leaders (CISOs and SecOps Directors), integrating Artificial Intelligence into security operations carries dual imperatives: **maximizing defensive velocity while enforcing deterministic safety boundaries**. 
 
-TIDIR deliberately confines AI models to high-leverage cognitive tasks (synthesis, drafting, baselining, hypothesis formulation) while anchoring execution, schema enforcement, and disruptive containment behind deterministic engineering gates.
+TIDIR establishes an **AI-First Defence Architecture** that moves beyond single-prompt helpers to an orchestrated agent mesh, while anchoring execution, schema contracts, and disruptive containment behind deterministic engineering gates and evals.
 
 | Architectural Layer | Autonomous AI / Agent Opportunity | Deterministic Safety Gate | Strategic CISO ROI & Business Value |
 | :--- | :--- | :--- | :--- |
-| **Layer 1: Data Sources & Ingress** | **Automated Log Parser Synthesis**: Generative models analyze unmapped vendor logs (JSON, EVTX, Syslog) and draft OCSF mapping parsers and regular expressions. | **Schema Registry Validation**: Parsers cannot deploy without passing compiler type-checking and automated regression replay. | **85% Faster Source Onboarding**: Eliminates weeks of manual log ingestion engineering for proprietary enterprise tools. |
+| **Layer 1: Data Sources & Ingress** | **Automated Log Parser Synthesis**: Generative models analyze unmapped vendor logs and draft canonical OCSF mapping parsers. | **Schema Registry Validation**: Parsers cannot deploy without passing compiler type-checking and automated regression replay. | **85% Faster Source Onboarding**: Eliminates weeks of manual log ingestion engineering for proprietary enterprise tools. |
 | **Layer 1: Data Sources & Ingress** | **Synthetic Telemetry Generation**: Generates high-fidelity attack telemetry for dangerous, untestable techniques (e.g. ransomware encryption loops). | **Isolated Test Sandbox**: Generated telemetry executes strictly within non-production environments. | **Zero-Risk Efficacy Testing**: Validates detection sensors against catastrophic exploits without running malware on live systems. |
-| **Layer 2: Pipeline & Storage Fabric** | **Natural Language Data Exploration**: Translates plain-language analyst questions (*"Show all outbound HTTPS sessions from accounting workstations to unclassified ASNs"*) into optimized SQL/streaming queries. | **Read-Only AST AST Validator**: Enforces strict SELECT-only query constraints and compute timeout budgets. | **3x Analyst Query Velocity**: Junior analysts conduct complex multi-table lakehouse investigations without learning complex SQL dialects. |
-| **Layer 3: Detection Engineering** | **Threat Advisory to Attack Flow Synthesis**: Ingests unstructured CTI advisories and threat bulletins (PDF, HTML) and extracts structured MITRE ATT&CK DAG flows. | **Human CTI Peer Review**: Analyst ratifies extracted Priority Intelligence Requirements (PIRs). | **10x Faster Threat Codification**: Reduces the window between zero-day public disclosure and detection backlog prioritization from days to minutes. |
-| **Layer 3: Detection Engineering** | **Automated Detection Quality Judge**: Multi-agent LLM judges audit candidate Detection-as-Code rules for schema compliance, regex backtracking risks, and missing triage documentation. | **CI/CD Unit & Regression Suite**: Rules must achieve 100% pass rate on synthetic unit tests and 30-day lakehouse backtests. | **Eliminates Production Alert Thrashing**: Prevents brittle, performance-degrading detection rules from reaching production engines. |
-| **Layer 4: Investigation & Cases** | **Autonomous Triage Scoper**: Upon finding elevation, the agent autonomously dispatches 90-day entity baseline and sibling asset queries across Layer 2 without analyst prompting. | **Deterministic Entity Boundaries**: Scoper operates strictly on pre-resolved graph pivots; cannot execute environmental modifications. | **75% Reduction in Pivot Fatigue**: Tier-1 analysts receive a fully hydrated case dossier containing complete process lineage and host context upon initial ticket open. |
-| **Layer 4: Incident Response (SOAR)** | **Pre-Execution Blast-Radius Simulator**: Evaluates active network connections, business service criticality, and dependency trees to calculate operational disruption risk. | **Dual-Authorization Consensus Engine**: Tier 2 containment requires cryptographic multi-signature approval; single-agent action is structurally impossible. | **Zero Inadvertent Outages**: Completely eliminates the risk of false-positive agent recommendations isolating critical revenue-generating infrastructure. |
+| **Layer 2: Pipeline & Storage Fabric** | **Natural Language Data Exploration**: Translates plain-language analyst questions into optimised SQL/streaming queries. | **Read-Only AST Validator**: Enforces strict SELECT-only query constraints and compute timeout budgets. | **3x Analyst Query Velocity**: Junior analysts conduct complex multi-table lakehouse investigations without learning complex query dialects. |
+| **Layer 3: Detection Engineering** | **Threat Advisory to Attack Flow Synthesis**: Ingests unstructured CTI advisories and bulletins and extracts structured ATT&CK DAG flows. | **Human CTI Peer Review**: Analyst ratifies extracted Priority Intelligence Requirements (PIRs). | **10x Faster Threat Codification**: Reduces the window between zero-day public disclosure and detection backlog prioritisation from days to minutes. |
+| **Layer 3: Detection Engineering** | **Continuous Evals-as-Code & DaC Quality Judge**: Multi-agent judges and CI benchmark suites audit detection rules and agent prompts against golden incident datasets. | **CI/CD Unit & Regression Suite**: Rules and agent prompts must achieve 100% pass rate on synthetic fixtures and 30-day lakehouse backtests. | **Eliminates Production Alert Thrashing**: Prevents brittle, performance-degrading detection rules and drifting agent prompts from reaching production. |
+| **Layer 4: Investigation & Cases** | **Hierarchical Agent Mesh (Host/Identity/Network)**: Lead orchestrator dispatches specialist subagents to scope 90-day baselines, process lineages, and lateral movement simultaneously. | **Prompt Injection Firewall & Dual-Plane Isolation**: Telemetry strings are treated as untrusted data planes; agents invoke typed tools without executing raw string commands. | **75% Reduction in Pivot Fatigue**: Tier-1 analysts receive a fully hydrated case dossier containing complete process lineage and host context upon initial ticket open. |
+| **Layer 4: Incident Response (Automated Containment)** | **Pre-Execution Blast-Radius Simulator & Saga Engine**: Evaluates active network connections, service criticality, and dependency trees; drafts forward and compensating actions. | **Dual-Authorisation Consensus & Audited Break-Glass**: Tier 2 containment requires multi-signature approval; high-velocity outbreaks support single-commander break-glass with cryptographic broadcast. | **Zero Inadvertent Outages**: Completely eliminates the risk of false-positive agent recommendations isolating critical revenue-generating infrastructure. |
 
 ---
 
 ## 5. The Detection Engineer's Operational Walkthrough (The Practitioner Lens)
 
-To understand how the TIDIR architecture functions in day-to-day cyber defense, consider how a **Detection Engineer** navigates the lifecycle from a novel threat advisory to a hardened, deployed detection rule:
+To understand how the TIDIR architecture functions in day-to-day cyber defence, consider how a **Detection Engineer** navigates the lifecycle from a novel threat advisory to a hardened, deployed detection rule:
 
 ```mermaid
 flowchart LR

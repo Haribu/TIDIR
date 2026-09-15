@@ -2,20 +2,20 @@
 
 ## 1. Overview & Architectural Role
 
-**Layer 3 represents the cognitive and analytical core of the TIDIR architecture.** It synthesizes raw, normalized telemetry from Layer 2 with operational adversary context to identify active attacks, policy violations, and anomalous behaviors.
+**Layer 3 represents the cognitive and analytical core of the TIDIR architecture.** It synthesises raw, normalised telemetry from Layer 2 with operational adversary context to identify active attacks, policy violations, and anomalous behaviours.
 
-Rather than treating threat intelligence as a passive repository of static indicators and detection as an unmanaged collection of ad-hoc alerts, Layer 3 formalizes an **intelligence-driven, code-first engineering lifecycle**. Threat intelligence directly produces **machine-readable attack flows** that illuminate detection opportunities, which in turn drive test-driven **Detection-as-Code (DaC)** pipelines validated through automated adversary simulation and CI/CD regression suites.
+Rather than treating threat intelligence as a passive repository of static indicators and detection as an unmanaged collection of ad-hoc alerts, Layer 3 formalises an **intelligence-driven, code-first engineering lifecycle**. Threat intelligence directly produces **machine-readable attack flows** that illuminate detection opportunities, which in turn drive test-driven **Detection-as-Code (DaC)** pipelines validated through automated adversary simulation and CI/CD regression suites.
 
 ```mermaid
 flowchart TB
   subgraph L3_Intel ["1. Intelligence Lifecycle & Attack Flow Engine"]
     PIR["Priority Intelligence Requirements (PIRs)"]
-    INTEL_PROC["Intelligence Processing & Normalization\n(Deduplication, Entity Resolution, Decay Scoring)"]
+    INTEL_PROC["Intelligence Processing & Normalisation\n(Deduplication, Entity Resolution, Decay Scoring)"]
     MRIP["Machine-Readable Intelligence Products\n(Structured Attack Flows & Relationship Graphs)"]
     PIR --> INTEL_PROC --> MRIP
   end
 
-  subgraph L3_Prioritization ["2. Detection Opportunity Prioritization"]
+  subgraph L3_Prioritization ["2. Detection Opportunity Prioritisation"]
     OPP_ENGINE["Detection Opportunity Backlog\n(Scoring: Threat Prevalence × Asset Criticality × Feasibility)"]
     GAP_ANALYSIS["Telemetry & Visibility Gap Analysis\n(Cross-referencing L1 Sources & ATT&CK Components)"]
     MRIP --> OPP_ENGINE
@@ -57,10 +57,10 @@ Threat intelligence in Layer 3 operates as a structured, closed-loop discipline 
 
 ```mermaid
 flowchart LR
-  DIR["1. Direction\n(PIRs & Threat Modeling)"]
+  DIR["1. Direction\n(PIRs & Threat Modelling)"]
   COL["2. Collection\n(L1 Telemetry & Feeds)"]
   PROC["3. Processing\n(Normalization & Decay)"]
-  ANALYSIS["4. Analysis\n(Actor & Campaign Modeling)"]
+  ANALYSIS["4. Analysis\n(Actor & Campaign Modelling)"]
   PROD["5. Production\n(Machine-Readable Flows)"]
   EVAL["6. Feedback\n(Efficacy & Tuning)"]
 
@@ -72,7 +72,7 @@ flowchart LR
 1. **Direction & Planning**: Establishes Priority Intelligence Requirements (PIRs) aligned with business risks, executive threat models, and crown jewel assets.
 2. **Collection**: Ingests raw threat data from Layer 1 (technical observables, vulnerability advisories, community disclosures, internal case discoveries).
 3. **Processing & Normalization**: Deduplicates overlapping claims, extracts technical observables into structured entities, applies mathematical decay curves, and resolves multi-source contradictions.
-4. **Analysis**: Correlates technical observables with tactical adversary behaviors, campaign waves, and threat actor profiles.
+4. **Analysis**: Correlates technical observables with tactical adversary behaviours, campaign waves, and threat actor profiles.
 5. **Production (Machine-Readable Attack Flows)**: Generates structured, consumable intelligence products designed for direct ingestion by automated detection pipelines.
 6. **Feedback & Evaluation**: Measures whether produced intelligence successfully enabled detection, prevented compromise, or produced excessive noise, refining PIRs accordingly.
 
@@ -80,17 +80,17 @@ flowchart LR
 Traditional threat intelligence produces static PDF reports that require human interpretation. Layer 3 mandates the production of **Machine-Readable Intelligence Products**:
 - **Structured Attack Flow Definitions**: Codifies multi-step adversary attack paths into directed acyclic graphs (DAGs) representing sequential and concurrent attacker steps (e.g., *Phishing Attachment $\rightarrow$ Script Execution $\rightarrow$ Process Injection $\rightarrow$ LSASS Memory Dump $\rightarrow$ SMB Lateral Movement*).
 - **Contextual Relationship Schemas**: Expresses explicit relationship edges: `ThreatActor` $\xrightarrow{\text{uses}}$ `Tool` $\xrightarrow{\text{implements}}$ `AttackPattern` $\xrightarrow{\text{targets}}$ `Vulnerability` $\xrightarrow{\text{generates}}$ `TelemetryObservable`.
-- **Actionable Emulation Plans**: Machine-executable step sequences detailing specific command lines, APIs, and network behaviors required to simulate the adversary during detection validation.
+- **Actionable Emulation Plans**: Machine-executable step sequences detailing specific command lines, APIs, and network behaviours required to simulate the adversary during detection validation.
 
 ---
 
-## 3. Intel-Driven Detection Opportunity Prioritization
+## 3. Intel-Driven Detection Opportunity Prioritisation
 
-Rather than authoring rules reactively or attempting exhaustive coverage of hundreds of generic techniques, Layer 3 utilizes a deterministic **Detection Opportunity Engine** to prioritize engineering effort.
+Rather than authoring rules reactively or attempting exhaustive coverage of hundreds of generic techniques, Layer 3 uses a deterministic **Detection Opportunity Engine** to prioritise engineering effort.
 
 ```mermaid
 flowchart TD
-  subgraph Inputs ["Prioritization Inputs"]
+  subgraph Inputs ["Prioritisation Inputs"]
     FLOWS["Machine-Readable Attack Flows"]
     ASSETS["Asset & Crown Jewel Criticality (L1 Context)"]
     POSTURE["Control & Patch Posture (L1 Posture)"]
@@ -99,7 +99,7 @@ flowchart TD
 
   subgraph OpportunityEngine ["Detection Opportunity Scoring Engine"]
     SCORE["Opportunity Score Calculation\n(Threat Likelihood × Impact × Detection Feasibility)"]
-    BACKLOG["Prioritized Detection Backlog\n(Ranked by Defensibility ROI)"]
+    BACKLOG["Prioritised Detection Backlog\n(Ranked by Defensibility ROI)"]
   end
 
   FLOWS --> SCORE
@@ -110,12 +110,12 @@ flowchart TD
 ```
 
 ### Detection Opportunity Scoring Algorithm
-Each candidate detection opportunity is prioritized using a composite scoring model:
+Each candidate detection opportunity is prioritised using a composite scoring model:
 
 $$\text{Priority Score} = \frac{\text{Threat Likelihood} \times \text{Asset Exposure} \times \text{Impact Severity}}{\text{Engineering Complexity} \times \text{Noise Risk}}$$
 
 - **Threat Likelihood**: Derived from active campaign tracking, exploit weaponization telemetry, and prevalence within targeted industry sectors.
-- **Asset Exposure & Impact**: Evaluated against Layer 1 organizational context (e.g., whether vulnerable systems are public-facing or hold sensitive regulatory data).
+- **Asset Exposure & Impact**: Evaluated against Layer 1 organisational context (e.g., whether vulnerable systems are public-facing or hold sensitive regulatory data).
 - **Detection Feasibility & Telemetry Coverage**: Audits whether Layer 1 emits the required MITRE ATT&CK Data Components (e.g., process creation command lines, network flow summaries). If telemetry is absent, the system generates an upstream **Telemetry Engineering Request** for Layer 1.
 
 ---
@@ -201,7 +201,7 @@ Artificial intelligence is integrated into Layer 3 not as an unconstrained decis
 ```mermaid
 flowchart LR
   subgraph AI_Capabilities ["AI Acceleration in Layer 3"]
-    FLOW_SYNTH["1. Attack Flow Synthesizer\n(Converts unstructured CTI PDFs into structured DAGs)"]
+    FLOW_SYNTH["1. Attack Flow Synthesiser\n(Converts unstructured CTI PDFs into structured DAGs)"]
     DAC_GEN["2. Detection Rule Copilot\n(Drafts vendor-neutral OCSF logic from Attack Flows)"]
     SYNTH_LOGS["3. Synthetic Log Generator\n(Generates rare attack telemetry for untestable exploits)"]
     LLM_JUDGE["4. Quality & Ambiguity Judge\n(Audits rules for schema compliance and logic pitfalls)"]
@@ -219,9 +219,9 @@ flowchart LR
 
 ## 7. Finding Consolidation, Graph Clustering & The Risk Lens
 
-In modern enterprise environments, a single cyber operation triggers dozens or hundreds of disparate, low-level alerts across siloed detection engines (streaming EDR rules, cloud audit logs, WAF rate limiters, network anomaly engines, scheduled lakehouse queries). Treating each alert as an independent ticket causes catastrophic alert fatigue, fragmented investigative context, and slow containment.
+In modern enterprise environments, a single cyber operation triggers dozens or hundreds of disparate, low-level alerts across siloed detection engines (streaming host sensor rules, cloud audit logs, web application firewalls, network anomaly engines, scheduled lakehouse queries). Treating each alert as an independent ticket causes catastrophic alert fatigue, fragmented investigative context, and slow containment.
 
-Layer 3 culminates in an **Alert-to-Incident Synthesis Engine** that projects a graph correlation model and composite risk lens across all inbound findings before elevating them to Layer 4.
+Layer 3 culminates in an **Alert-to-Incident Synthesis Engine** that projects a bipartite graph correlation model and composite risk lens across all inbound findings before elevating them to Layer 4. For architectural rationale, trade-off analysis, and formal justification against direct alert-to-alert graphs, see [ADR-0011: Bipartite Entity-Finding Graph Architecture for Finding Consolidation](/adr/0011-bipartite-entity-finding-graph-consolidation).
 
 ```mermaid
 flowchart TB
@@ -229,17 +229,18 @@ flowchart TB
     direction LR
     F_STREAM["Real-Time Streaming Alerts\n(OCSF Class 2004)"]
     F_BATCH["Lakehouse Batch Detections\n(OCSF Class 2004)"]
-    F_SECURITY["Vendor / Sensor Findings\n(OCSF Class 2001)"]
+    F_SECURITY["Sensor & Tool Findings\n(OCSF Class 2001)"]
     F_INTEL["CTI Retro-Match Hits\n(STIX Observables)"]
   end
 
-  subgraph GraphClustering ["2. Temporal & Entity Graph Clustering Engine"]
-    PIVOT["Entity Resolution & Pivot Extraction\n(Principal ARN, IP, Host ID, User Session)"]
-    GRAPH["Dynamic Correlation Graph\n(Causal links across identity & infrastructure)"]
-    WINDOW["Temporal Sliding Window (Δt)\n(Grouping related stages of an attack chain)"]
+  subgraph BipartiteGraphEngine ["2. Bipartite Entity-Finding Graph Engine"]
+    direction TB
+    ENTITY_LAYER["Entity Substrate Layer (V_E)\n(Hosts, Accounts, Processes, Network IPs)"]
+    FINDING_LAYER["Finding Annotation Layer (V_F)\n(OCSF Detections & Alerts attached to Entities)"]
+    COMMUNITY["Community Detection & Graph Clustering\n(Weakly Connected Components & Louvain Modularities)"]
     
-    PIVOT --> GRAPH
-    WINDOW --> GRAPH
+    FINDING_LAYER -.->|Bipartite Assignment| ENTITY_LAYER
+    ENTITY_LAYER -->|Topological Clustering| COMMUNITY
   end
 
   subgraph RiskLens ["3. The Multi-Dimensional Risk Lens"]
@@ -259,19 +260,21 @@ flowchart TB
     CASE_PROMOTED["Elevated Incident Dossier\n(OCSF Incident Case)"]
   end
 
-  IngressFindings --> PIVOT
-  GRAPH --> RiskLens
+  IngressFindings --> FINDING_LAYER
+  COMMUNITY --> RiskLens
   RL_SCORE -->|Risk Score < Threshold| NOISE
   RL_SCORE -->|Risk Score >= Critical Threshold| CASE_PROMOTED
 
-  CASE_PROMOTED ==>|Prioritized Dispatch| L4_ENG["Layer 4: Incident Response & Case Management\n(Agentic & Human Operator Investigation)"]
+  CASE_PROMOTED ==>|Prioritised Dispatch| L4_ENG["Layer 4: Incident Response & Case Management\n(Agentic & Human Operator Investigation)"]
 ```
 
-### 1. Entity-Centric Graph Clustering & Supernode Dampening
-Rather than analyzing alerts in isolation, the graph correlation engine continuously extracts identity and infrastructure pivots from every normalized OCSF finding:
-- **Identity Pivots**: `actor.user.name`, `actor.user.uid`, `src_endpoint.ip`, `cloud.account.uid`, `iam.role_arn`.
-- **Infrastructure Pivots**: `device.hostname`, `device.uid`, `process.file.hash`, `process.parent_process.guid`, `container.id`.
-- **Temporal Windows**: Events occurring within sliding correlation windows ($\Delta t = 15\text{m} \dots 2\text{h}$) referencing overlapping pivots are dynamically stitched into a unified Directed Acyclic Graph (DAG). This reconstructs the adversary's lateral traversal across network boundaries and identity roles.
+### 1. Bipartite Entity-Finding Graph Clustering & Supernode Dampening
+Direct "alert-to-alert" linking is an architectural anti-pattern: alerts are sparse epiphenomena, whereas adversary operations occur primarily within undetected telemetry and living-off-the-land executions. Missing an intermediate alert would fracture a direct alert-to-alert chain.
+
+TIDIR implements a **Bipartite Entity-Finding Graph Model**:
+- **Entity Substrate (Layer $V_E$)**: Physical and logical actors—such as identities (`actor.user.name`, `iam.role_arn`), host endpoints (`device.hostname`, `device.uid`), processes (`process.entity_id`, `process.parent_process.guid`), and network endpoints (`src_endpoint.ip`, `dst_endpoint.ip`)—form the structural topology linked by causal interaction edges (`AUTHENTICATED_TO`, `SPAWNED`, `CONNECTED_TO`).
+- **Finding Annotations (Layer $V_F$)**: Detection findings and alerts attach to one or more entity vertices via bipartite assignment edges ($e = (f, v)$ where $f \in V_F, v \in V_E$), serving as contextual risk annotations rather than primary graph nodes.
+- **Community Detection**: Weakly connected components and modularity-based community detection algorithms (such as Louvain or label propagation) cluster densely connected subgraphs across sliding temporal windows ($\Delta t = 15\text{m} \dots 2\text{h}$) into cohesive incident candidates.
 
 #### Mathematical Supernode Centrality Dampening
 In enterprise environments, shared infrastructure nodes—such as outbound egress NAT gateways, VPN concentrators, recursive DNS resolvers, and generic deployment service accounts—frequently connect to thousands of benign events. Uncontrolled graph linking on these high-degree pivots causes catastrophic combinatorial explosion, collapsing unrelated user incidents into single monstrous clusters. Layer 3 enforces **Centrality Dampening**:
@@ -283,7 +286,7 @@ Where:
 - $\theta_{\text{deg}}$ is the degree threshold cap (e.g. $\theta_{\text{deg}} = 50$).
 - $\alpha$ is the dampening decay rate ($\alpha = 0.15$).
 
-Edges propagating through node $v$ are scaled by $\Omega(v)$. If $\deg(v) \gg \theta_{\text{deg}}$, $\Omega(v) \to 0$, neutralizing the supernode from triggering cluster fusion unless accompanied by strong unshared secondary pivots (e.g. identical process GUID or matching user session token).
+Edges propagating through node $v$ are scaled by $\Omega(v)$. If $\deg(v) \gg \theta_{\text{deg}}$, $\Omega(v) \to 0$, neutralising the supernode from triggering cluster fusion unless accompanied by strong unshared secondary pivots (e.g. identical process GUID or matching user session token).
 
 #### Exponential Edge Decay Half-Life
 Relationships between entities are not static. The edge weight $W_e(t)$ between two connected entities decays exponentially with elapsed time $\Delta t$ since the last corroborating event:
@@ -293,17 +296,17 @@ $$W_e(t) = W_0 \cdot \exp\left( -\frac{\ln(2)}{t_{1/2}} \cdot \Delta t \right)$$
 Where $t_{1/2}$ represents the configured half-life (e.g. $t_{1/2} = 45\text{ minutes}$). Once $W_e(t)$ drops below an operational severance threshold $\tau_{\text{edge}}$, the edge is pruned from memory, preventing stale activity from falsely compounding with fresh telemetry.
 
 ### 2. The Composite Risk Lens Algorithm
-Static alert severities (e.g., standard "Medium" or "High" labels) are fundamentally inadequate for prioritization. Layer 3 evaluates each clustered graph through a composite mathematical risk function:
+Static alert severities (e.g., standard "Medium" or "High" labels) are fundamentally inadequate for prioritisation. Layer 3 evaluates each clustered graph through a composite mathematical risk function:
 
 $$\text{Cluster Risk} = \left[ \sum_{i \in \text{Findings}} \Big( C_i \times (1 - \text{FPR}_{30d, i})^\beta \times \Phi(\text{Technique}_i) \Big) \right] \times \Psi_{\text{progression}} \times M_{\text{asset}} \times P_{\text{PIR}}$$
 
 Where:
 - $C_i$: Base confidence score ($0.0 \dots 1.0$) of finding $i$.
-- $\text{FPR}_{30d, i}$: Historical 30-day false-positive rate of rule $i$, penalizing historically noisy detections via sensitivity exponent $\beta = 1.5$.
+- $\text{FPR}_{30d, i}$: Historical 30-day false-positive rate of rule $i$, penalising historically noisy detections via sensitivity exponent $\beta = 1.5$.
 - $\Phi(\text{Technique}_i)$: Technique severity weight derived from MITRE ATT&CK objective impact (e.g. credential dumping vs discovery).
 - $\Psi_{\text{progression}}$: Compounding ATT&CK Progression Multiplier ($\Psi = 1.0 + 0.5 \cdot (k_{\text{tactics}} - 1)^{1.2}$), exponentially rewarding findings that advance across sequential kill-chain phases (Initial Access $\to$ Credential Access $\to$ Exfiltration).
 - $M_{\text{asset}}$: Asset Criticality Multiplier ($1.0 \dots 5.0$) extracted from Layer 1 CMDB posture (Domain Controllers, production databases, executive credentials).
-- $P_{\text{PIR}}$: Priority Intelligence Requirement Priority Factor ($1.0 \dots 2.5$) for active threat actor campaigns targeting the organization's specific sector.
+- $P_{\text{PIR}}$: Priority Intelligence Requirement Priority Factor ($1.0 \dots 2.5$) for active threat actor campaigns targeting the organisation's specific sector.
 
 ### 3. Noise Suppression & Intelligent De-duplication
 - **Volumetric Consolidation**: Hundreds of individual endpoint or network flow events triggered during a port sweep, password spray, or port scan are collapsed into a single multi-event finding cluster.
@@ -315,3 +318,20 @@ When a cluster crosses the critical composite risk threshold, Layer 3 does not f
 - **Chronological Attack Timeline**: Formatted sequence of observed attacker milestones tagged with MITRE ATT&CK techniques.
 - **Automated Triage Summary**: Pre-computed blast-radius assessment and recommended response playbooks.
 - **Actionable Assignment**: Dispatched directly to Layer 4 investigation workbenches for coordinated **human and agentic operator execution**.
+
+---
+
+## 5. Autonomous AI & Detection Engineering Leverage
+
+In Layer 3, autonomous AI and agentic harnesses transform how threat intelligence is ingested and how detection logic is tested and validated:
+
+1. **Threat Advisory to Machine-Readable ATT&CK Flow Synthesis**:
+   - *Problem*: Vulnerability disclosures, CISA alerts, and commercial threat bulletins are published in unstructured prose, requiring hours of manual analyst decomposition to extract actionable indicators and behavioral logic.
+   - *AI Leverage*: Tier 1/2 reasoning models ingest unstructured advisories, identify prerequisite attack sequences, and output machine-readable ATT&CK DAG flows specifying exact OCSF schema classes (`1007: Process Activity`, `3002: Authentication`).
+   - *Deterministic Safety Gate*: Extracted attack flows must undergo human CTI analyst peer review and schema compiler validation before triggering detection engineering backlogs.
+
+2. **Continuous Evals-as-Code & DaC Quality Judges**:
+   - *Problem*: Brittle detection rules written without broad test coverage cause alert fatigue or severe performance degradation on production streaming buses.
+   - *AI Leverage*: Multi-model agent judges audit Detection-as-Code (DaC) pull requests, scoring candidate Sigma/SQL rules for schema deprecation, logic ambiguities, and triage documentation completeness.
+   - *Deterministic Safety Gate*: Rules cannot deploy to production without passing automated 30-day historical lakehouse backtests and synthetic unit test suites in CI/CD, guaranteeing zero syntax errors and bounded False Positive Rates ($\text{FPR} < 1\%$).
+

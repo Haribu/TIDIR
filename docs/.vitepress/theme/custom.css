@@ -18,22 +18,25 @@
   border-color: #38bdf8;
 }
 
-/* Ensure SVG scales naturally without artificial text bloat */
+/* Ensure SVG scales naturally on desktop, but doesn't shrink below readable threshold on mobile */
 .mermaid svg {
   display: block;
   margin: 0 auto;
-  max-width: 100% !important;
+  max-width: 100%;
   height: auto;
 }
 
-/* On mobile viewports, keep padding compact and allow natural scaling */
+/* On mobile viewports, keep diagrams legible with smooth horizontal scrolling rather than microscopic shrinking */
 @media (max-width: 768px) {
   .mermaid {
     padding: 0.75rem 0.5rem;
     margin: 1.25rem 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
   .mermaid svg {
-    max-width: 100% !important;
+    min-width: 520px;
+    max-width: none !important;
   }
 }
 
@@ -41,4 +44,12 @@
 .mermaid .cluster rect {
   rx: 8px !important;
   ry: 8px !important;
+}
+
+/* MathJax Equation Styling */
+.vp-doc mjx-container[jax="CHTML"][display="true"] {
+  margin: 1.25rem 0 !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.5rem 0;
 }

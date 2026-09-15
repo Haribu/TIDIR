@@ -1,0 +1,145 @@
+# TIDIR Macro Capabilities & Operational Services Delivery Model
+
+Implementing the TIDIR target architecture elevates enterprise security operations from a fragmented, tool-centric cost centre into a **high-throughput, closed-loop software and reliability engineering discipline**. 
+
+While the [Capability Model](/architecture/02-capability-model) specifies twenty-five atomic technical functions, enterprise stakeholders require a consumable operational service catalogue. This document synthesises TIDIR's technical specifications into **four macro capabilities** delivering **ten core operational services** to the enterprise.
+
+---
+
+## 1. Enterprise Service Architecture & Value Stream
+
+The diagram below illustrates the end-to-end service delivery lifecycle—from external threat intelligence ingestion to closed-loop engineering adaptation:
+
+```mermaid
+flowchart TB
+    subgraph MACRO1 ["1. Threat Horizon & Continuous Intelligence"]
+        direction TB
+        S11["<b>Service 1.1: Dynamic Threat Intelligence & Indicator Cache</b><br>STIX/TAXII ingestion, decay scoring, in-memory edge matching"]
+        S12["<b>Service 1.2: Automated Retrospective Hunting Sweeps</b><br>Asynchronous 365+ day historical lakehouse scans on zero-day emergence"]
+    end
+
+    subgraph MACRO2 ["2. Universal Telemetry Fabric & Open Lakehouse"]
+        direction TB
+        S21["<b>Service 2.1: Universal Ingestion & Line-Rate OCSF Normalisation</b><br>High-throughput collection across host, cloud, and network sensors"]
+        S22["<b>Service 2.2: Decoupled Hot & Cold Forensic Data Fabric</b><br>Sub-second hot indexing (15–30d) vs columnar lakehouse (365d+)"]
+    end
+
+    subgraph MACRO3 ["3. Continuous Detection & Automated Purple Teaming"]
+        direction TB
+        S31["<b>Service 3.1: GitOps Detection-as-Code & Continuous Testing</b><br>Declarative rules, CI/CD atomic emulation, and regression suites"]
+        S32["<b>Service 3.2: SRE Noise Budgeting & Bayesian Risk Scoring</b><br>False-positive error budgets (&lt; 5% FPR) and multi-signal graph compounding"]
+    end
+
+    subgraph MACRO4 ["4. Autonomous Investigation & Gated Containment"]
+        direction TB
+        S41["<b>Service 4.1: Agentic Triage & Progressive Disclosure Investigation</b><br>Hierarchical agent mesh, prompt firewall, and Situation Summaries"]
+        S42["<b>Service 4.2: Blast-Radius Gated Containment & Saga Orchestration</b><br>Pre-execution impact simulation, automated compensation rollbacks"]
+        S43["<b>Service 4.3: Audited Break-Glass & Crisis Containment</b><br>Machine-speed containment override and cryptographic audit trails"]
+        S44["<b>Service 4.4: Closed-Loop Engineering Feedback</b><br>Automatic indicator back-propagation and Evals-as-Code calibration"]
+    end
+
+    MACRO1 ==> MACRO2
+    MACRO2 ==> MACRO3
+    MACRO3 ==> MACRO4
+    MACRO4 -.->|"Closed-Loop Feedback & Evals"| MACRO1
+
+    classDef default fill:#1e293b,stroke:#475569,stroke-width:1px,color:#f8fafc;
+    classDef macro fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#f8fafc;
+    class S11,S12,S21,S22,S31,S32,S41,S42,S43,S44 default;
+    class MACRO1,MACRO2,MACRO3,MACRO4 macro;
+```
+
+---
+
+## 2. Detailed Service Catalogue
+
+### Macro Capability 1: Threat Horizon & Continuous Intelligence Management
+Transforms raw threat data from passive reference lists into an active, machine-speed driver of detection and proactive hunting.
+
+#### Service 1.1: Dynamic Threat Intelligence & Indicator Cache
+* **Description:** Continuous ingestion, normalisation, and automated confidence-decay scoring of external attacker tradecraft, indicators, and attack flows—caching high-fidelity threat observables into sub-millisecond memory for line-rate matching.
+* **Customer Value:** Replaces static indicator lists with living, temporal intelligence; protects against indicator pollution via automated half-life decay.
+* **Operational SLAs:** Ingestion-to-cache latency $< 30\,\text{seconds}$; constant-time $O(1)$ stream lookups.
+* **Underpinning Capabilities:** `CTI-01`, `CTI-02`, `CTI-04`.
+
+#### Service 1.2: Automated Retrospective Hunting Sweeps
+* **Description:** Whenever a zero-day exploit or high-severity threat campaign emerges, the platform automatically sweeps historical telemetry across 365+ days of lakehouse storage, answering *"were we compromised before this was public?"* within minutes.
+* **Customer Value:** Eliminates the historical blind spot; provides verifiable answers to board and regulatory enquiries regarding newly disclosed vulnerabilities.
+* **Operational SLAs:** 90-day forensic sweep completed in $< 15\,\text{minutes}$; 365-day petabyte sweep completed in $< 60\,\text{minutes}$.
+* **Underpinning Capabilities:** `CTI-05`, `DATA-05`.
+
+---
+
+### Macro Capability 2: Universal Telemetry Fabric & Open Lakehouse Analytics
+Eliminates proprietary data silos and per-gigabyte licensing penalties, providing an open, searchable data foundation for the entire enterprise.
+
+#### Service 2.1: Universal Ingestion & Line-Rate OCSF Normalisation
+* **Description:** High-throughput collection across host sensors, cloud audit planes, identity providers, and network boundaries—compiling raw payloads into the Open Cybersecurity Schema Framework (OCSF) at line rate.
+* **Customer Value:** Decouples detection logic from proprietary vendor log formats; ensures zero data loss via automated Dead-Letter Queue (DLQ) quarantine envelopes.
+* **Operational SLAs:** Line-rate normalisation latency $< 5\,\text{ms}$ per event; sustained throughput $\ge 500\text{k EPS}$.
+* **Underpinning Capabilities:** `DATA-01`, `DATA-02`, `DATA-03`.
+
+#### Service 2.2: Decoupled Hot & Cold Forensic Data Fabric
+* **Description:** Dual-tier storage management that routes immediate operational telemetry into sub-second hot indices (15–30 days) while streaming complete forensic histories into cost-effective columnar lakehouses (Parquet)—retaining full evidentiary fidelity without artificial edge filtering.
+* **Customer Value:** Reduces infrastructure and licensing costs by $\ge 70\%$ compared to legacy centralized indexing; ensures full multi-year compliance auditability.
+* **Operational SLAs:** Hot tier P95 search latency $< 2\,\text{seconds}$; Lakehouse data availability $< 5\,\text{minutes}$ from emission.
+* **Underpinning Capabilities:** `DATA-04`, `DATA-05`.
+
+---
+
+### Macro Capability 3: Continuous Detection Engineering & Automated Purple Teaming
+Replaces manual rule writing with modern software engineering disciplines, continuous testing, and mathematically grounded alert synthesis.
+
+#### Service 3.1: GitOps Detection-as-Code (DaC) & Continuous Testing
+* **Description:** Detection rules are treated as software: authored in declarative, vendor-neutral code, versioned in Git, and continuously regression-tested in CI/CD against atomic attack simulations before reaching production.
+* **Customer Value:** Prevents rule rot; guarantees detection coverage against evolving attacker tradecraft; eliminates syntax and logic errors in production.
+* **Operational SLAs:** 100% pass rate in CI/CD synthetic test suites; rule deployment cycle $< 10\,\text{minutes}$ from merge.
+* **Underpinning Capabilities:** `DET-01`, `DET-02`, `DET-03`.
+
+#### Service 3.2: SRE Noise Budgeting & Bayesian Risk Scoring
+* **Description:** Enforces Site Reliability Engineering (SRE) Alert Noise Error Budgets ($< 5\%$ false-positive rate) to prevent analyst burnout. Treats single anomalies as weak graph signals, elevating incidents only after Bayesian multi-signal compounding confirms anomalous behaviour across assets, identities, and network flows.
+* **Customer Value:** Mathematically overcomes the Base Rate Fallacy / False Positive Paradox; eliminates alert fatigue; ensures analysts investigate only high-probability, actionable findings.
+* **Operational SLAs:** Alert False Positive Rate $< 5\%$; automated deployment freezes triggered when noise budget is exhausted.
+* **Underpinning Capabilities:** `DET-04`, `DET-05`, `DET-06`.
+
+---
+
+### Macro Capability 4: Autonomous Investigation & Blast-Radius-Gated Containment
+Compresses investigation and containment timelines from hours to seconds while maintaining deterministic safety rails and human oversight.
+
+#### Service 4.1: Agentic Triage & Progressive Disclosure Investigation
+* **Description:** Hierarchical autonomous agents (behind dual-plane prompt injection firewalls) assemble complete 90-day baselines, process lineages, and identity graphs upon alert trigger—presenting analysts with a concise Situation Summary rather than raw alert floods.
+* **Customer Value:** Reduces Mean Time to Investigate (MTTI) from hours to under 60 seconds; eliminates pivot fatigue; ensures zero hallucinated containment recommendations via Proposer/Challenger dual-model consensus.
+* **Operational SLAs:** Automated case dossier hydration $< 60\,\text{seconds}$; Proposer/Challenger agreement rate $> 80\%$.
+* **Underpinning Capabilities:** `INV-01`, `INV-02`, `INV-03`, `INV-05`, `INV-06`.
+
+#### Service 4.2: Blast-Radius Gated Containment & Saga Orchestration
+* **Description:** Automated response workflows structured as distributed Saga state machines. Low-risk actions execute autonomously within seconds; disruptive actions (e.g. host isolation) evaluate active network sessions and service criticality before presenting pre-computed impact cards to human commanders.
+* **Customer Value:** Rapid containment of lateral movement; zero self-inflicted business outages; guaranteed recovery via automated compensating rollback transactions if containment fails midway.
+* **Operational SLAs:** Automated Tier 1 containment $< 15\,\text{seconds}$; 100% compensating rollback parity.
+* **Underpinning Capabilities:** `RESP-01`, `RESP-02`, `RESP-03`.
+
+#### Service 4.3: Audited Break-Glass & Crisis Containment
+* **Description:** Provides an authenticated, emergency override protocol for machine-speed attacks (e.g. automated ransomware outbreaks), paired with cryptographically sealed, tamper-evident evidence lockers satisfying court and regulatory standards.
+* **Customer Value:** Halts machine-speed adversary propagation before data exfiltration occurs; provides legally defensible non-repudiation audit trails for regulators and cyber insurance underwriters.
+* **Operational SLAs:** Emergency break-glass execution $< 5\,\text{minutes}$; audit broadcast latency $< 5\,\text{seconds}$; RFC 3161 cryptographic verification $100\%$.
+* **Underpinning Capabilities:** `INV-04`, `RESP-04`.
+
+#### Service 4.4: Closed-Loop Engineering Feedback
+* **Description:** Every confirmed incident automatically feeds indicators back into intelligence stores, calibrates detection models, and updates agent evaluation suites (Evals-as-Code) to ensure the system learns permanently from every attack.
+* **Customer Value:** Ensures the enterprise never falls victim to the same threat campaign twice; continuously hardens autonomous agent prompts against emerging jailbreaks and evasions.
+* **Operational SLAs:** Feedback loops dispatched automatically upon incident closure; prompt eval suites executed within CI/CD pull requests.
+* **Underpinning Capabilities:** `RESP-05`, `AIGOV-01`, `AIGOV-02`.
+
+---
+
+## 3. Executive Business Value & ROI Matrix
+
+The matrix below maps the enterprise outcomes, financial benefits, and operational metrics delivered by the TIDIR service architecture:
+
+| Macro Capability | Core Enterprise Business Outcomes | Financial & Operational ROI | Primary Metric & Service Level |
+| :--- | :--- | :--- | :--- |
+| **1. Threat Horizon & Intelligence** | Proactive posture adaptation; instantaneous exposure quantification during global zero-day crises. | Eliminates emergency incident response consultancy fees during major threat outbreaks. | Retrospective sweep completion $< 15\,\text{min}$ |
+| **2. Telemetry Fabric & Lakehouse** | Complete operational and compliance visibility; elimination of vendor lock-in and data retention penalties. | $\ge 70\%$ reduction in annual storage and indexing licensing expenditure. | Ingestion throughput $\ge 500\text{k EPS}$; Hot search latency $< 2\,\text{s}$ |
+| **3. Continuous Detection & Purple Teaming** | Resilient detections that do not rot; predictable alert queues; elimination of operational fatigue. | Multiplies engineering output by $5\times$; eliminates wasted hours investigating false alarms. | Detection MTTD $< 5\,\text{s}$ (stream) / $< 24\,\text{h}$ (batch); Noise ratio $< 5\%$ |
+| **4. Autonomous Investigation & Containment** | Machine-speed threat neutralisation; zero accidental operational outages; regulatory-grade defensibility. | Protects enterprise revenue by preventing self-inflicted production downtime during incidents. | Investigation MTTI $< 60\,\text{s}$; Automated MTTC $< 15\,\text{s}$; Human MTTC $< 5\,\text{min}$ |

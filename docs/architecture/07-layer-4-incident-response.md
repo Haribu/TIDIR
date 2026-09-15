@@ -24,17 +24,17 @@ flowchart TB
   subgraph L4_Operators ["2. Symbiotic Operator Model"]
     direction LR
     AGENT_HARNESS["Agentic Investigation Harness\n• Autonomous context gathering\n• Historical lakehouse queries (L2)\n• Hypothesis formulation & triage scoring"]
-    HUMAN_WORKBENCH["Human Operator Workbench\n• Exploratory threat hunting\n• Multi-signal forensic judgment\n• High-impact containment authorization"]
+    HUMAN_WORKBENCH["Human Operator Workbench\n• Exploratory threat hunting\n• Multi-signal forensic judgment\n• High-impact containment authorisation"]
 
     AGENT_HARNESS <-->|Collaborative Case State| HUMAN_WORKBENCH
   end
 
-  subgraph L4_Response ["3. Blast-Radius Gated Response & Automation (SOAR)"]
+  subgraph L4_Response ["3. Blast-Radius Gated Automated Response & Containment"]
     direction TB
     ROUTER{"Blast-Radius\nRisk Classification"}
     TIER0["Tier 0: Read-Only Enrichment\n(Autonomous Execution)"]
     TIER1["Tier 1: Targeted Low-Disruption\n(Policy-Gated Automation)"]
-    TIER2["Tier 2: Potentially Disruptive\n(Mandatory Human Authorization)"]
+    TIER2["Tier 2: Potentially Disruptive\n(Mandatory Human Authorisation)"]
     CONNECTOR["Perimeter, Identity & Endpoint Connectors\n(Declarative Playbook Runtimes)"]
 
     ROUTER -->|Read-Only| TIER0
@@ -121,7 +121,7 @@ flowchart TD
     A_QUERY --> A_ENRICH --> A_HYPOTHESIS --> A_REC
   end
 
-  subgraph HumanWorkbench ["Human Operator Workbench (Supervision & Authorization)"]
+  subgraph HumanWorkbench ["Human Operator Workbench (Supervision & Authorisation)"]
     direction TB
     H_REVIEW["1. Triage Briefing Review\n(Consumes structured summary & evidence graph)"]
     H_HUNT["2. Exploratory Deep-Dive\n(Directs agent to run targeted hypothesis tests)"]
@@ -130,7 +130,7 @@ flowchart TD
     H_REVIEW --> H_HUNT --> H_AUTH
   end
 
-  subgraph SOAR_Execution ["Response Execution Plane"]
+  subgraph RESP_Execution ["Response Execution Plane"]
     AUTO_EXEC["Execute Automated Containment Playbook"]
     ESCALATE["Escalate / Engage Incident Response Team"]
   end
@@ -142,8 +142,14 @@ flowchart TD
   H_AUTH -->|Complex Crisis| ESCALATE
 ```
 
-### 1. The Agentic Investigation Harness (The Analytical Multiplier)
-- **Autonomous Scoping Queries**: The agent immediately dispatches federated queries to the Layer 2 lakehouse without human prompting—determining whether a suspicious IP has appeared elsewhere in the last 90 days, checking authentication baselines, and enumerating sibling assets.
+### 1. The Hierarchical Agentic Investigation Mesh (The Analytical Multiplier)
+- **Specialist Subagent Mesh**: Rather than relying on a monolithic prompt, the Lead Triage Orchestrator dispatches parallel, domain-specialized subagents:
+  - *Host Forensic Agent*: Recursively reconstructs parent-child process execution trees, inspects loaded DLL modules, and isolates local script blocks.
+  - *Identity & Auth Agent*: Resolves cross-cloud identity tokens, IAM role escalation chains, and anomalous geolocation hops.
+  - *Network & Cloud Agent*: Correlates VPC flow records, egress proxy connections, and external IP reputation scores.
+- **Model Context Protocol (MCP) Tool Calling**: Subagents interact with enterprise telemetry exclusively through strongly-typed MCP servers (`mcp-lakehouse-query`, `mcp-process-lineage`, `mcp-threat-graph`, `mcp-blast-radius`). This guarantees parameter validation via JSON Schema and prohibits arbitrary command execution.
+- **Dual-Plane Prompt Injection Firewall**: All raw telemetry strings (e.g. command lines, URLs, file contents) are sandboxed within the unprivileged data plane, ensuring malicious payload strings cannot hijack agent execution flow.
+- **Autonomous Scoping Queries**: The agentic mesh immediately dispatches federated queries to the Layer 2 lakehouse without human prompting—determining whether a suspicious indicator has appeared elsewhere in the last 90 days, checking authentication baselines, and enumerating sibling assets.
 - **Hypothesis Formulation**: Evaluates the evidence against established attack patterns and outputs a plain-language hypothesis detailing: *What happened, how access was gained, what assets are affected, and what the attacker is attempting next.*
 - **Action Plan Drafting**: Proposes an exact sequence of remediation steps, complete with estimated downtime, user impact, and blast-radius scores.
 
@@ -154,7 +160,7 @@ flowchart TD
 
 ---
 
-## 4. Blast-Radius Gated Response & Automation (SOAR)
+## 4. Blast-Radius Gated Automated Response & Containment
 
 To eliminate operational risk while maximizing response velocity, automated actions are strictly compartmentalized into three **Blast-Radius Risk Tiers**:
 
@@ -171,14 +177,14 @@ flowchart LR
   end
 
   subgraph Tier2 ["Tier 2: Disruptive / High Impact"]
-    T2_DESC["• Human Authorization Mandatory\n• Blast Radius: Substantial\n• Significant business disruption"]
+    T2_DESC["• Human Authorisation Mandatory\n• Blast Radius: Substantial\n• Significant business disruption"]
     T2_ACT["Actions:\n• Network isolate production server\n• Revoke executive SSO session tokens\n• Push enterprise firewall egress block\n• Invalidate tenant API secrets"]
   end
 ```
 
 ### Blast-Radius Risk Tier Matrix
 
-| Risk Tier | Authorization Policy | Permitted Actions | Automated Rollback Requirement |
+| Risk Tier | Authorisation Policy | Permitted Actions | Automated Rollback Requirement |
 | :--- | :--- | :--- | :--- |
 | **Tier 0: Passive Enrichment** | Fully Autonomous | Read-only threat intel queries, directory lookups, telemetry scoping, lakehouse scans. | Not applicable (no environmental state mutation). |
 | **Tier 1: Targeted Containment** | Autonomous for High-Confidence / Low-Criticality Assets | Host-level process termination, untrusted file quarantine, temporary IP rate-limiting, user session lock. | Mandatory 1-click rollback script verified in advance. |
@@ -188,18 +194,18 @@ flowchart LR
 In high-stress security incidents, human operators suffer cognitive exhaustion. If an agentic harness presents a compelling narrative recommending host isolation or credential revocation, analysts risk default "rubber-stamping" without verifying topological ramifications.
 
 To prevent inadvertent business disruption from false-positive agent recommendations, Layer 4 mandates a **Deterministic Pre-Execution Impact Simulator**:
-- **Live Dependency Evaluation**: Before presenting an authorization modal to the human operator, the SOAR engine queries Layer 1 CMDB relationships and Layer 2 network flow records to compute active blast radius metrics:
+- **Live Dependency Evaluation**: Before presenting an authorisation modal to the human operator, the response orchestrator queries Layer 1 CMDB relationships and Layer 2 network flow records to compute active blast radius metrics:
   - *Active Connection Count*: (e.g. `1,420 client TCP sessions currently routed to this workload`).
   - *Downstream Service Dependencies*: (e.g. `Host app-worker-04 is a member of the primary payment processing pool`).
-  - *Data Volume in Flight*: (e.g. `Active database read-replica synchronization in progress`).
-- **Explicit Impact Card Rendering**: Authorization interfaces present the simulation summary alongside the agentic recommendation:
+  - *Data Volume in Flight*: (e.g. `Active database read-replica synchronisation in progress`).
+- **Explicit Impact Card Rendering**: Authorisation interfaces present the simulation summary alongside the agentic recommendation:
   > **⚠️ Pre-Execution Blast-Radius Preview:**
-  > Authorizing isolation on `srv-payment-api-01` will immediately sever **42 active microservice communication channels** and degrade **Checkout Gateway Availability**. Estimated operational recovery time: **12 minutes**.
+  > Authorising isolation on `srv-payment-api-01` will immediately sever **42 active microservice communication channels** and degrade **Checkout Gateway Availability**. Estimated operational recovery time: **12 minutes**.
 
-### Dual-Authorization Consensus Engine (Two-Person Rule)
+### Dual-Authorisation Consensus Engine (Two-Person Rule)
 For Tier 2 actions whose blast-radius score exceeds an enterprise criticality threshold $\theta_{\text{critical}}$ (e.g. actions affecting Domain Controllers, core transactional databases, or executive access keys), a single analyst signature is architecturally insufficient:
-1. **Multi-Signature Handshake**: The SOAR orchestrator holds the containment transaction in an unexecuted staged queue and dispatches an out-of-band cryptographic challenge to a secondary designated authorizer (Incident Commander, SecOps Lead, or System Owner).
-2. **Time-To-Live Expiration**: If the secondary signature is not cryptographically ratified within the configured TTL (e.g. 15 minutes), the staged action safely expires, preventing stale authorizations from executing against an altered operational topology.
+1. **Multi-Signature Handshake**: The response orchestrator holds the containment transaction in an unexecuted staged queue and dispatches an out-of-band cryptographic challenge to a secondary designated authoriser (Incident Commander, SecOps Lead, or System Owner).
+2. **Time-To-Live Expiration**: If the secondary signature is not cryptographically ratified within the configured TTL (e.g. 15 minutes), the staged action safely expires, preventing stale authorisations from executing against an altered operational topology.
 3. **Emergency Break-Glass Override**: For active ransomware encryption in flight, a single authenticated commander can trigger a break-glass override. This executes containment immediately while generating an immutable, priority-1 audit event forwarded to executive stakeholders.
 
 ### Compensating Rollback Transactions (Atomic Containment)

@@ -27,7 +27,7 @@ flowchart TB
     C_STREAM["Streaming Engine\n(Stateful sliding windows & fast state Δt)"]:::comp
     C_BATCH["Lakehouse Batch SQL\n(Historical baselines & complex joins)"]:::comp
     C_FED["Federated Query Engine\n(In-place remote environment pushdown)"]:::comp
-    C_ML["Feature Store & Anomaly Engine\n(Behavioral baseline vectors & embeddings)"]:::comp
+    C_ML["Feature Store & Anomaly Engine\n(Behavioural baseline vectors & embeddings)"]:::comp
   end
 
   subgraph STAGE3 ["3. Tiered Storage Core"]
@@ -57,7 +57,7 @@ flowchart TB
 ## 2. Ingestion, Line-Rate Normalization & Value-Based Routing
 
 ### Line-Rate Normalization & Contract Enforcement
-Raw payloads arrive in heterogeneous formats from varied sensors, clouds, and services. Layer 2 standardizes events at line rate before long-term persistence:
+Raw payloads arrive in heterogeneous formats from varied sensors, clouds, and services. Layer 2 standardises events at line rate before long-term persistence:
 - **Canonical Schema Coercion**: Events are transformed into Open Cybersecurity Schema Framework (OCSF) objects. Fields are mapped into strongly typed attributes (e.g., process execution commands, user identifiers, network endpoints).
 - **The `unmapped_data` Forensic Catch-All (Zero Schema Truncation)**: Because vendor logs and proprietary sensors frequently emit non-standard attributes that do not map directly to canonical OCSF classes, normalizers must never silently drop unmapped attributes. Any field not covered by the target OCSF class definition is preserved in a structured `unmapped_data` JSON key-value dictionary within the event envelope. This guarantees zero forensic truncation while maintaining strict typing across the primary schema fields.
 - **Schema Validation Gate & Dead-Letter Queue (DLQ)**: Inbound payloads are validated against an authoritative, versioned **Schema Registry**. Events with irrecoverable corruption or breaking schema violations are diverted to an encrypted Dead-Letter Queue (DLQ) with audit metadata (error reason, offending payload offset, source identifier). SRE and data engineering pipelines can inspect, repair, and replay DLQ payloads without loss.
@@ -91,7 +91,7 @@ Not all telemetry possesses equal analytical value. Storing petabytes of high-vo
 
 ## 3. Tiered Storage Architecture
 
-Layer 2 decouples storage into three cost- and performance-optimized tiers:
+Layer 2 decouples storage into three cost- and performance-optimised tiers:
 
 | Storage Tier | Functional Characteristics | Retention Window | Primary Workload / Consumer |
 | :--- | :--- | :--- | :--- |
@@ -100,7 +100,7 @@ Layer 2 decouples storage into three cost- and performance-optimized tiers:
 | **Cold Compliance Archive** | Immutable, write-once object storage; asynchronous retrieval lifecycle. | 3–7+ years | Regulatory compliance, legal hold, and catastrophic retroactive historical analysis. |
 
 ### Lakehouse Open Table Architecture & Commit Boundaries
-The security data lakehouse utilizes an open table format to guarantee performance, vendor neutrality, and durability:
+The security data lakehouse uses an open table format to guarantee performance, vendor neutrality, and durability:
 - **Hidden Partitioning**: Partitioned by event timestamp (`dt=YYYY-MM-DD/hh=HH`) and schema class identifier, preventing analytical query engines from performing expensive full-table scans.
 - **Snapshot Isolation & ACID Semantics**: Supports concurrent streaming writes from ingestion workers alongside heavy analytical batch queries without file locking or read-skew anomalies.
 - **Schema Evolution**: Allows attributes to be added, renamed, or deprecated over multi-year spans without corrupting historic data archives.
@@ -168,8 +168,8 @@ flowchart LR
 ```
 
 ### Schema Registry & Language-Agnostic Abstraction
-- **Contract Enforcement**: Data models are defined declaratively in a centralized registry.
-- **Decoupled Interfaces**: Upstream detection engines (Layer 3) and investigation tools (Layer 4) interact with standardized OCSF query abstractions rather than physical column mappings, insulating detection logic from underlying storage changes.
+- **Contract Enforcement**: Data models are defined declaratively in a centralised registry.
+- **Decoupled Interfaces**: Upstream detection engines (Layer 3) and investigation tools (Layer 4) interact with standardised OCSF query abstractions rather than physical column mappings, insulating detection logic from underlying storage changes.
 
 ### Environment Tiering & Ingestion Segregation
 Layer 2 provides native support for multiple deployment tiers:
@@ -226,7 +226,7 @@ To ensure erroneous schema migrations or corrupted ingestion batches never pollu
 
 ### 6.2 Asynchronous Compaction & Bin-Packing
 A background compaction daemon continuously monitors small file proliferation:
-- **Compaction Interval**: Compacts files `< 32MB` into optimized `128MB–512MB` Parquet row groups every 60 minutes.
+- **Compaction Interval**: Compacts files `< 32MB` into optimised `128MB–512MB` Parquet row groups every 60 minutes.
 - **Snapshot Expiration & Vacuum**: Cleans up orphan files and expires snapshots beyond the 30-day hot retention window to reclaim object storage capacity.
 - **Z-Ordering & Clustering**: Restructures physical files along the primary query predicates (`event_time`, `ocsf_class`, `tenant_id`), enabling query engines to skip up to 90% of data files via file-level min/max statistics.
 
@@ -238,12 +238,12 @@ A background compaction daemon continuously monitors small file proliferation:
 
 ## 7. Downstream Contract: OCSF Findings & Alerts
 
-When computation engines in Layer 2 or Layer 3 identify suspicious activity or threshold violations, they emit standardized **OCSF Finding Objects** rather than ad-hoc alerts.
+When computation engines in Layer 2 or Layer 3 identify suspicious activity or threshold violations, they emit standardised **OCSF Finding Objects** rather than ad-hoc alerts.
 
 ### OCSF Class 2001: Security Finding
 Used when a security control or automated engine identifies a confirmed vulnerability, policy violation, or baseline anomaly:
 - `finding_info`: Title, description, unique identifier, creation/update timestamps, and source tool metadata.
-- `severity_id`: Standardized 0–5 scale (Unknown, Informational, Low, Medium, High, Critical).
+- `severity_id`: Standardised 0–5 scale (Unknown, Informational, Low, Medium, High, Critical).
 - `risk_score`: Normalized 0–100 integer reflecting asset criticality and threat context.
 - `resources`: Array of affected target resources (hosts, users, databases, cloud resources).
 
@@ -254,5 +254,39 @@ Used when real-time streaming or lakehouse analytics match an active attack tech
 - `actor`: Entity attributing the action (user identity, process lineage, session token).
 - `disposition_id`: Detection disposition (e.g., Detected, Blocked, Quarantined, Suppressed).
 
-By standardizing all findings into OCSF classes, Layer 3 and Layer 4 consume a single unified format regardless of whether the finding was generated by a real-time stream rule, a batch lakehouse query, or a machine learning anomaly model.
+By standardising all findings into OCSF classes, Layer 3 and Layer 4 consume a single unified format regardless of whether the finding was generated by a real-time stream rule, a batch lakehouse query, or a machine learning anomaly model.
+
+---
+
+## 8. Architectural Axiom: Rejection of "Output-Driven Ingestion"
+
+Industry commentary frequently advocates for an **"Output-Driven SIEM Model"**, stipulating that data should only enter security storage if it is tied to an active, pre-existing detection rule, dashboard, or compliance report. While intended to alleviate legacy SIEM per-gigabyte licensing costs, **TIDIR categorically rejects this approach as a critical architectural anti-pattern**.
+
+### Why Output-Driven Ingestion Fails Modern Cyber Defence
+1. **Blindness to Novel Zero-Days**: Adversaries frequently exploit techniques for which no pre-existing detection rule exists. If telemetry is discarded at ingress because no current rule demands it, retrospective threat hunting (`CTI-05`) becomes impossible when a zero-day is disclosed weeks or months later.
+2. **Detection Engineering Pre-Requisite Paradox**: Detection engineers cannot backtest candidate rules against historical baseline telemetry if the required data was never collected in the first place.
+3. **Forensic Integrity Failure**: During post-incident review (PIR), investigating analysts require surrounding ambient telemetry (DNS lookups, transient network sockets, benign process lineages) to establish true root cause and full intrusion blast radius.
+
+### The Decoupled Lakehouse Solution
+TIDIR resolves the underlying economic driver of the output-driven model without starving the enterprise of visibility:
+- **Broad Lakehouse Ingestion**: All normalized security telemetry flows at line rate into open columnar lakehouse storage (Parquet/Iceberg on commodity object storage), where storage costs are sub-linear and orders of magnitude lower than traditional hot analytics engines.
+- **Value-Based Selective Hot Indexing**: Only high-value operational streams and high-fidelity detection candidates are routed into the expensive 15–30 day hot analytical search index.
+- **Result**: Comprehensive 365+ day retrospective visibility and robust historical backtesting with zero SIEM licensing penalties.
+
+---
+
+## 9. Autonomous AI & Query Fabric Leverage
+
+Layer 2 provides the foundational data substrate consumed by AI models and agentic workflows. To democratize data access while preventing compute exhaustion and hallucinated queries:
+
+1. **Natural Language to OCSF SQL/Streaming Translation**:
+   - *Problem*: Tier-1 SOC analysts and incident commanders often lack deep SQL/streaming query syntax expertise across complex, nested OCSF schemas.
+   - *AI Leverage*: Tier 1 cloud models translate conversational investigator prompts (e.g. *"Show all SMB sessions from ws-finance-02 to production databases in the last 4 hours"*) into optimized, partition-pruned SQL queries targeting the lakehouse.
+   - *Deterministic Safety Gate*: Synthesized queries must pass a deterministic Abstract Syntax Tree (AST) validator. The validator rejects any query containing mutating keywords (`DROP`, `DELETE`, `UPDATE`, `INSERT`), mandates temporal bounds (`event_time >= NOW() - INTERVAL`), and enforces tenant boundary predicates before execution.
+
+2. **Semantic & Vector Embeddings on Threat Artifacts**:
+   - *Problem*: Traditional lexical search (keyword matching) misses subtle variations in command-line obfuscation, novel script block patterns, and semantic campaign parallels.
+   - *AI Leverage*: Embedding models compute dense vector representations for PowerShell script blocks, process execution arguments, and STIX threat actor reports, storing embeddings alongside columnar Parquet files.
+   - *Deterministic Safety Gate*: Vector distance similarity scores are utilized strictly as enrichment features and contextual hints, never as sole triggers for automated disruption.
+
 

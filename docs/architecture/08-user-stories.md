@@ -8,7 +8,7 @@ To ensure that the TIDIR architecture translates into seamless operational execu
 3. **Platform & Systems Engineers**: Data Engineers, Detection Engineers (DaC), Threat Intelligence Engineers, and SecOps SREs who author, test, version, and maintain the system.
 
 All stories adhere to the canonical structure:
-$$\text{As a } [\text{Role}], \text{ I want } [\text{Capability}], \text{ so that } [\text{Outcome}].$$
+> **As a** `[Role]`, **I want** `[Capability]`, **so that** `[Outcome]`.
 
 ---
 
@@ -27,16 +27,16 @@ $$\text{As a } [\text{Role}], \text{ I want } [\text{Capability}], \text{ so tha
 
 ---
 
-### Story H2: Authorizing Disruptive Containment with Impact Previews
+### Story H2: Authorising Disruptive Containment with Impact Previews
 * **As an** Incident Commander (Layer 4),
-* **I want** the system to execute a deterministic pre-execution blast-radius simulation before I authorize high-impact containment actions (Tier 2),
+* **I want** the system to execute a deterministic pre-execution blast-radius simulation before I authorise high-impact containment actions (Tier 2),
 * **So that** I do not inadvertently sever critical business operations, drop transactional customer connections, or trigger unexpected service outages.
 
 #### Acceptance Criteria
-1. Prior to prompting for human authorization, the SOAR engine queries Layer 1 CMDB relationships and Layer 2 network flow caches to compute live blast-radius metrics (active TCP sessions, downstream dependent microservices, database replica status).
-2. The authorization modal explicitly presents the simulation summary: affected hostnames, projected service disruption, and estimated recovery time.
+1. Prior to prompting for human authorisation, the response orchestrator queries Layer 1 CMDB relationships and Layer 2 network flow caches to compute live blast-radius metrics (active TCP sessions, downstream dependent microservices, database replica status).
+2. The authorisation modal explicitly presents the simulation summary: affected hostnames, projected service disruption, and estimated recovery time.
 3. No Tier 2 containment action can be dispatched unless an automated compensation/rollback routine (e.g. reverting network isolation, reinstating API keys) is pre-compiled and verified.
-4. Authorizations are cryptographically logged to the immutable audit register with the authorizing commander's digital signature and stated operational rationale.
+4. Authorisations are cryptographically logged to the immutable audit register with the authorising commander's digital signature and stated operational rationale.
 
 ---
 
@@ -52,24 +52,37 @@ $$\text{As a } [\text{Role}], \text{ I want } [\text{Capability}], \text{ so tha
 
 ---
 
+### Story H4: Break-Glass Emergency Containment During High-Velocity Outbreak
+* **As an** Incident Commander (Layer 4),
+* **I want** to invoke an authenticated emergency break-glass override on pre-compiled Tier 2 containment playbooks when an active ransomware or exfiltration pattern is verified,
+* **So that** I can sever adversary lateral traversal across critical infrastructure within 15 seconds without awaiting multi-party consensus.
+
+#### Acceptance Criteria
+1. The incident commander can trigger break-glass execution only when system telemetry validates an active catastrophic threat signature crossing the automated threshold.
+2. The authorisation instantly executes forward containment across target connectors while automatically staging verified compensating rollback tasks.
+3. Invocation immediately emits signed cryptographic alerts across real-time executive broadcast streams.
+4. The authorisation event, rationale, and digital signature are permanently committed to the tamper-evident audit ledger.
+
+---
+
 ## 3. Agentic AI Operator User Stories
 
 ### Story A1: Autonomous 30-Day Lakehouse Baseline Scoping
 * **As an** Agentic Triage Harness (Layer 4),
 * **I want** to autonomously formulate and execute read-only Lakehouse queries upon alert elevation,
-* **So that** I can calculate normal behavioral baselines for the affected user and endpoint before the human analyst opens the case.
+* **So that** I can calculate normal behavioural baselines for the affected user and endpoint before the human analyst opens the case.
 
 #### Acceptance Criteria
 1. The agent triggers immediately upon receipt of an OCSF Class 2004 Detection Finding crossing the risk threshold.
 2. The agent queries Layer 2 lakehouse storage for the affected `actor.user.name` and `device.hostname` spanning the preceding 30 days.
 3. The agent extracts: typical operating hours, frequently accessed cloud roles, baseline data egress volumes, and rare administrative actions.
-4. The agent operates strictly under **Tier 0 (Read-Only)** authorization boundaries, with zero environmental write capabilities.
+4. The agent operates strictly under **Tier 0 (Read-Only)** authorisation boundaries, with zero environmental write capabilities.
 
 ---
 
 ### Story A2: Adversary Hypothesis Generation & Plan Drafting
 * **As an** Agentic Investigation Harness (Layer 4),
-* **I want** to evaluate clustered graph findings against MITRE ATT&CK patterns and synthesize an explanatory narrative with a prioritized containment plan,
+* **I want** to evaluate clustered graph findings against MITRE ATT&CK patterns and synthesize an explanatory narrative with a prioritised containment plan,
 * **So that** human responders receive a structured investigative briefing rather than disconnected telemetry fragments.
 
 #### Acceptance Criteria
@@ -86,8 +99,21 @@ $$\text{As a } [\text{Role}], \text{ I want } [\text{Capability}], \text{ so tha
 
 #### Acceptance Criteria
 1. When a case is resolved as True Positive, verified attacker hashes, IP infrastructure, and C2 domains are automatically structured into STIX 2.1 entities and pushed to Layer 3 CTI.
-2. The agent initiates an automated retro-hunt across the Layer 2 Lakehouse for all newly cataloged indicators.
-3. When a case is closed as False Positive / Benign Baseline, the agent analyzes the triggering rule logic, generates an exclusion predicate (e.g. filtering out an authorized backup daemon), validates the change against synthetic test suites, and opens a Git pull request for human detection engineer review.
+2. The agent initiates an automated retro-hunt across the Layer 2 Lakehouse for all newly catalogued indicators.
+3. When a case is closed as False Positive / Benign Baseline, the agent analyzes the triggering rule logic, generates an exclusion predicate (e.g. filtering out an authorised backup daemon), validates the change against synthetic test suites, and opens a Git pull request for human detection engineer review.
+
+---
+
+### Story A4: Cognitive Isolation Against Adversarial Prompt Injection in Telemetry
+* **As a** defensive AI Triage Agent (Layer 4),
+* **I want** all incoming event command lines, file strings, and threat intelligence bodies to be schema-validated and ingested through an isolated data plane,
+* **So that** adversary-injected instructions embedded within process arguments or payload strings cannot hijack my investigative reasoning or weaponize my tool access.
+
+#### Acceptance Criteria
+1. Untrusted raw telemetry payloads are parsed into typed JSON structures by an isolated pre-processing filter before context injection.
+2. The agent reasoning prompt physically isolates data blocks from instruction blocks; the agent never evaluates raw text as operational commands.
+3. Tool invocations enforce strongly typed parameters checked by deterministic schema validators; raw command-line string interpolation is architecturally blocked.
+4. If adversarial prompt injection patterns are identified within telemetry strings, the agent logs an adversarial evasion finding (OCSF Class 2004) without halting the triage workflow.
 
 ---
 
@@ -113,7 +139,7 @@ $$\text{As a } [\text{Role}], \text{ I want } [\text{Capability}], \text{ so tha
 
 #### Acceptance Criteria
 1. Detection rules are versioned as declarative text files (YAML/DSL) referencing standard OCSF attributes and MITRE ATT&CK tags.
-2. The CI/CD pipeline runs unit tests asserting rule behavior against synthetic true-positive and benign edge-case payloads.
+2. The CI/CD pipeline runs unit tests asserting rule behaviour against synthetic true-positive and benign edge-case payloads.
 3. The pipeline verifies candidate rules against recorded adversary simulation telemetry executed in the `test` environment.
 4. The pipeline replays candidate rules across a 30-day historical lakehouse sample in `pre-prod`, calculating the Expected Alert Volume (EAV) and rejecting rules that exceed noise thresholds.
 
@@ -121,7 +147,7 @@ $$\text{As a } [\text{Role}], \text{ I want } [\text{Capability}], \text{ so tha
 
 ### Story E3: Machine-Readable Attack Flow Production
 * **As a** Cyber Threat Intelligence (CTI) Engineer (Layer 3),
-* **I want** to model tactical threat actor behaviors as structured, machine-readable Directed Acyclic Graphs (DAGs) aligned with Priority Intelligence Requirements (PIRs),
+* **I want** to model tactical threat actor behaviours as structured, machine-readable Directed Acyclic Graphs (DAGs) aligned with Priority Intelligence Requirements (PIRs),
 * **So that** detection engineers can immediately build targeted, multi-stage detection logic without interpreting ambiguous free-text PDF reports.
 
 #### Acceptance Criteria
@@ -131,12 +157,25 @@ $$\text{As a } [\text{Role}], \text{ I want } [\text{Capability}], \text{ so tha
 
 ---
 
-### Story E4: Blast-Radius Policy Modeling & SRE Availability Management
+### Story E4: Blast-Radius Policy Modelling & SRE Availability Management
 * **As a** SecOps Automation SRE (Layer 4),
 * **I want** to define declarative playbook execution policies with verified rollback logic, rate limits, and health checks,
 * **So that** automated response workflows execute with five-nines availability and zero unintended cascading failures.
 
 #### Acceptance Criteria
 1. Playbooks are defined as configuration files with explicit timeout, retry, backoff, and circuit-breaker thresholds per connector.
-2. Connectors to third-party endpoints (EDR, Cloud IAM, Firewalls) run continuous synthetic health checks; degraded connectors automatically fall back to human queuing.
+2. Connectors to third-party endpoints (endpoint control planes, cloud identity providers, perimeter firewalls) run continuous synthetic health checks; degraded connectors automatically fall back to human queuing.
 3. Every automated mutation records a corresponding compensation action to guarantee deterministic recovery in the event of partial playbook failure.
+
+---
+
+### Story E5: CI/CD Agent Evaluation Benchmark Run (Evals-as-Code)
+* **As an** AI Systems Engineer (Layer 4),
+* **I want** to execute automated regression and evaluation benchmarks across candidate agent prompts, system rules, and tool schemas during Git pull requests,
+* **So that** model updates or prompt modifications do not introduce hallucinations, degrade triage accuracy, or exceed latency and token budgets.
+
+#### Acceptance Criteria
+1. The CI pipeline executes the candidate agent against a versioned Golden Incident Benchmark Dataset covering diverse attack vectors and benign scenarios.
+2. The pipeline enforces deterministic assertions validating that 100% of tool invocations adhere to typed JSON schemas and all hypotheses cite verified OCSF event records.
+3. Structured evaluation judges calculate qualitative metrics, blocking merge if grounding fidelity falls below 95%.
+4. Invocations are measured against p95 latency thresholds (< 5 seconds for triage synthesis) and strict per-case token budgets.

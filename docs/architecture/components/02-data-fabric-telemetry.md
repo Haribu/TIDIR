@@ -2,26 +2,26 @@
 
 ## 1. Overview & Objectives
 
-The Telemetry & Data Fabric provides the foundational data infrastructure for TIDIR. It guarantees reliable, high-throughput ingestion from heterogeneous security data sources, real-time normalization into the Open Cybersecurity Schema Framework (OCSF), and tier-optimized storage across hot analytical indices and durable lakehouse repositories.
+The Telemetry & Data Fabric provides the foundational data infrastructure for TIDIR. It guarantees reliable, high-throughput ingestion from heterogeneous security data sources, real-time normalization into the Open Cybersecurity Schema Framework (OCSF), and tier-optimised storage across hot analytical indices and durable lakehouse repositories.
 
 ```mermaid
 flowchart TD
   subgraph Collectors ["Telemetry Collection"]
-    AGENTS["Endpoint Collectors (EDR, OSquery, Elastic-Agent)"]
-    CLOUD_INGEST["Cloud Connectors (CloudTrail, M365, GCP Audit)"]
-    NET_INGEST["Network Probes (Zeek, Suricata, FlowLogs)"]
-    AUTH_INGEST["Identity Logs (Okta, Entra ID, Kerberos)"]
+    AGENTS["Endpoint Sensors (Host Telemetry & Kernel Collectors)"]
+    CLOUD_INGEST["Cloud Connectors (Control Plane & Infrastructure Logs)"]
+    NET_INGEST["Network Probes (Session Flows & Protocol Metadata)"]
+    AUTH_INGEST["Identity Logs (Authentication & Federation Events)"]
   end
 
   subgraph IngestionStream ["Streaming Pipeline"]
-    STREAM_BUS["Message Bus (Kafka / Redpanda Topics)"]
+    STREAM_BUS["Distributed Event Bus (Partitioned Message Topics)"]
     SCHEMA_NORM["OCSF Transformation Workers"]
     DLQ["Dead-Letter Queue (DLQ)"]
   end
 
   subgraph DualStorage ["Storage Architecture"]
     HOT_INDEX["Hot Analytics Index\n(15-30 days retention)\n(Sub-second Search)"]
-    LAKEHOUSE["Security Data Lakehouse\n(Parquet / Apache Iceberg)\n(Multi-year Retention)"]
+    LAKEHOUSE["Security Data Lakehouse\n(Columnar Parquet & Metadata Catalogue)\n(Multi-year Retention)"]
   end
 
   AGENTS --> STREAM_BUS
@@ -40,7 +40,7 @@ flowchart TD
 ## 2. Core Functional Requirements
 
 1. **Scalable Ingestion & Buffering**:
-   - Resilient against downstream pipeline slowdowns using distributed partition logs (Kafka/Redpanda).
+   - Resilient against downstream pipeline slowdowns using distributed partitioned commit logs.
    - Dynamic partition autoscaling based on incoming event rates (Events Per Second - EPS).
    - At-least-once message delivery semantics with consumer deduplication.
 
@@ -55,22 +55,22 @@ flowchart TD
 
 3. **Dual-Tier Storage Architecture**:
    - **Hot Tier (Search & Immediate Triage)**:
-     - Fast column/text indices (OpenSearch, Quickwit, ClickHouse).
+     - High-throughput inverted text and columnar indices.
      - Retains recent 15–30 days.
-     - Optimized for needle-in-a-haystack lookups, timeline queries, and analyst interactive dashboards.
+     - Optimised for needle-in-a-haystack lookups, timeline queries, and analyst interactive dashboards.
    - **Lakehouse Tier (Historical, Deep Analytics & ML)**:
-     - Open table format (Apache Iceberg) backed by S3 / GCS / Azure Blob.
+     - Open table metadata catalogue backed by highly durable object storage.
      - Columnar Parquet compression (Snappy / Zstd).
      - Partitioned by event timestamp (`dt=YYYY-MM-DD/hh=HH`) and OCSF class.
-     - Queryable via distributed engines (Trino, DuckDB, AWS Athena, BigQuery).
+     - Queryable via distributed SQL execution engines.
 
 ---
 
-## 3. Reference Technology Stack Options
+## 3. Architectural Capability Archetypes & Protocol Standards
 
-| Sub-component | Open-Source Option | Cloud Native / Managed Option | Commercial Reference |
-| :--- | :--- | :--- | :--- |
-| **Stream Bus** | Redpanda / Apache Kafka | AWS Kinesis / Azure Event Hubs | Confluent Cloud |
-| **Normalization** | Vector / Fluent Bit / Logstash | AWS Lambda / Google Cloud Dataflow | Cribl Stream |
-| **Hot Analytics** | OpenSearch / Quickwit / ClickHouse | Amazon OpenSearch / Azure Monitor | Splunk / Elastic |
-| **Lakehouse** | Apache Iceberg + MinIO + Trino | AWS S3 + Athena / Snowflake | Databricks / Snowflake |
+| Subsystem Component | Functional Capability Pattern | Data Model & Protocol Standards |
+| :--- | :--- | :--- |
+| **Streaming Message Fabric** | Distributed partitioned append-only log with horizontal partition rebalancing and consumer offset tracking. | Binary streaming protocol; SASL/SCRAM authentication; mTLS encryption. |
+| **Line-Rate Normalisation Engine** | Stateless, horizontally scalable schema translation workers compiling proprietary event formats into standard records. | Open Cybersecurity Schema Framework (OCSF v1.3+); JSON/Avro serialization. |
+| **Hot Analytics Engine** | Distributed columnar and inverted search index supporting sub-second aggregations and temporal range queries. | Open search query dialect; REST/HTTP API. |
+| **Columnar Lakehouse Engine** | Serverless distributed query engine operating directly against immutable columnar file stores with ACID snapshot isolation. | Open table format metadata specifications; Apache Parquet format. |
