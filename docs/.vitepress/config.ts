@@ -65,7 +65,18 @@ export default withMermaid(
       }
     },
     mermaid: {
-      theme: "dark"
+      theme: "dark",
+      themeVariables: {
+        darkMode: true,
+        background: "#0b0f19",
+        primaryColor: "#1e293b",
+        primaryTextColor: "#f8fafc",
+        primaryBorderColor: "#38bdf8",
+        lineColor: "#64748b",
+        secondaryColor: "#1e1b4b",
+        tertiaryColor: "#0f172a",
+        fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif"
+      }
     }
   })
 );
