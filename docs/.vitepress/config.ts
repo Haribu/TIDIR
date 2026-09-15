@@ -29,7 +29,8 @@ export default withMermaid(
           text: "Architecture & Framework",
           items: [
             { text: "System Overview & Topology", link: "/architecture/01-system-overview" },
-            { text: "Capability Model", link: "/architecture/02-capability-model" }
+            { text: "Capability Model", link: "/architecture/02-capability-model" },
+            { text: "Layer 1: Data Sources & Inputs", link: "/architecture/03-layer-1-data-sources" }
           ]
         },
         {
