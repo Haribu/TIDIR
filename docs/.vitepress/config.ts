@@ -31,7 +31,8 @@ export default withMermaid(
             { text: "System Overview & Topology", link: "/architecture/01-system-overview" },
             { text: "Capability Model", link: "/architecture/02-capability-model" },
             { text: "Layer 1: Data Sources & Inputs", link: "/architecture/03-layer-1-data-sources" },
-            { text: "Layer 2: Pipeline, Storage & Query", link: "/architecture/04-layer-2-pipeline-storage-query" }
+            { text: "Layer 2: Pipeline, Storage & Query", link: "/architecture/04-layer-2-pipeline-storage-query" },
+            { text: "Cross-Cutting Engineering Disciplines", link: "/architecture/05-cross-cutting-engineering-disciplines" }
           ]
         },
         {
