@@ -119,3 +119,8 @@ bun run deploy
 4. **Runtime Standard (Zero Node/NPM)**:
    - Always invoke commands using `bun` / `bunx`. Never attempt `node`, `npm`, or `npx`.
 
+5. **Branch Protection & Production Gating**:
+   - The `main` branch enforces required CI checks (`Validate Diagrams & Build Site`) and requires 1 approving review on pull requests from external contributors.
+   - Force-pushes (`allow_force_pushes: false`) and branch deletions (`allow_deletions: false`) are strictly prohibited.
+   - Repository administrator (`Haribu`) retains push privileges to `main` when local verification passes.
+
