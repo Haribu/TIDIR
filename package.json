@@ -9,6 +9,7 @@
     "docs:preview": "vitepress preview docs",
     "lint:md": "bunx markdownlint-cli \"**/*.md\" --ignore node_modules",
     "diagrams:validate": "bun ./scripts/validate-diagrams.ts",
+    "pre-commit": "bash ./scripts/pre-commit.sh",
     "deploy": "bun ./scripts/deploy-cf.ts"
   },
   "devDependencies": {
