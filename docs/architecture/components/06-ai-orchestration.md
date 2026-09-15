@@ -51,6 +51,19 @@ To optimize latency, cost, and data sovereignty, the gateway routes prompts acco
 - **Tier 1 (High-Velocity Cloud Models):** Mid-tier fast models (e.g. Gemini 1.5/2.0 Flash, Claude 3.5 Haiku). Handles natural language to OCSF SQL generation, single-turn threat advisory summarization, and triage dossier assembly.
 - **Tier 2 (Cloud Frontier Reasoning Models):** Frontier reasoning models with extended thinking (e.g. Claude 3.7 Sonnet / Opus, Gemini 2.0 Pro). Reserved for complex multi-hop campaign correlation, contradictory evidence arbitration, and root-cause hypothesis debates.
 
+#### 1.1 Safety Refusal Circuit Breakers & Sovereign Open-Weights Fallbacks
+In mission-critical security operations, relying exclusively on commercial public LLM APIs introduces two acute operational vulnerabilities:
+
+1. **The "False-Positive Safety Refusal" Trap**:
+   - Commercial frontier models enforce aggressive public alignment guardrails designed to prevent malicious weaponization. During high-severity incidents, these filters frequently trigger false-positive refusals on legitimate defensive tasks—such as decompiling obfuscated PowerShell, analyzing shellcode strings, or explaining exploit primitives.
+   - A safety refusal (e.g., *"I cannot assist with analyzing this exploit payload"*) breaks automated triage pipelines and stalls response velocity.
+   - **Refusal-Resistant Fallback Routing**: The AI Gateway monitors incoming token streams for standard refusal semantics and finish reasons (`content_filter`, refusal substrings). Upon detecting a refusal on an authorized SecOps analysis task, the gateway automatically reroutes the prompt with elevated forensic context headers to a specialized, defensively-aligned model endpoint.
+
+2. **Self-Hosted Open-Weights Sovereign Backup (Air-Gapped Disaster Recovery)**:
+   - To guarantee operational continuity during commercial cloud outages, rate-limit exhaustion, or WAN isolation during major cyber attacks, TIDIR specifies an on-premises or private-cloud **Sovereign Open-Weights Inference Cluster** (e.g. Llama 3.3 70B, Qwen 2.5 72B, DeepSeek-R1 running on vLLM/Triton).
+   - **Zero Censorship on Defensive Payloads**: Self-hosted open-weights models operate without third-party public guardrails, enabling uninhibited reverse-engineering of live malware payloads, zero-day shellcode, and forensic dumps.
+   - **Absolute Data Sovereignty**: Critical breach evidence, executive communications, and unredacted customer PII can be safely processed entirely within the enterprise perimeter without third-party cloud data egress.
+
 ### 2. Model Context Protocol (MCP) as the Canonical Tool Bus
 All forensic, contextual, and simulation tools are exposed to agents exclusively via the **Model Context Protocol (MCP)**:
 - **`mcp-lakehouse-query`**:
@@ -216,6 +229,7 @@ TIDIR implements a tiered economic shield:
 | Layer Component | Open-Source / Self-Hosted | Cloud-Native Reference | Commercial / Managed |
 | :--- | :--- | :--- | :--- |
 | **Inference Gateway** | LiteLLM Proxy / vLLM / Ollama | AWS Bedrock / Google Vertex AI Gateway | Cloudflare AI Gateway / Portkey |
+| **Sovereign Open-Weights Cluster** | vLLM / Triton (Llama 3.3 70B, Qwen 2.5 72B, DeepSeek-R1) | Private GPU VPC (AWS EC2 g5/p4, Google Cloud A3) | Dedicated Enterprise Bare-Metal GPU Nodes |
 | **Tool Calling Protocol** | Anthropic Model Context Protocol (MCP) SDK | Standardized JSON Schema Tool APIs | Microsoft Semantic Kernel / LangChain |
 | **Stateful DAG & Blackboard** | LangGraph / Temporal / Prefect | AWS Step Functions / Google Workflows | Custom Agent Mesh |
 | **Prompt Injection Firewall** | Lakera Gandalf / NeMo Guardrails / Rebuff | AWS Bedrock Guardrails | Palo Alto Prisma AI Guard |
