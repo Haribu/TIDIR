@@ -112,10 +112,7 @@ TIDIR strictly rejects artificial "output-driven" ingestion where logs are disca
 ### 2. Neutralising the Base Rate Fallacy with Bayesian Compounding
 When processing billions of daily events, even detections with a 99.9% accuracy rate produce thousands of false alarms because malicious actions are rare events (the *False Positive Paradox*). TIDIR solves this by treating single-point anomalies as **weak graph signals** rather than standalone alerts. Detections are only elevated to an active incident once Bayesian compounding correlates multiple independent signals:
 $$
-\begin{aligned}
-\text{Compounded Risk} = f(&\text{Telemetry Anomaly}, \text{Asset Criticality}, \\
-&\text{Identity Privilege}, \text{Network Egress})
-\end{aligned}
+\text{Compounded Risk} = f(\text{Telemetry Anomaly}, \text{Asset Criticality}, \text{Identity Privilege}, \text{Network Egress})
 $$
 
 ### 3. Continuous Purple Teaming & SecOps Error Budgets

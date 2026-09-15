@@ -6,16 +6,37 @@ html, body {
   padding: 0;
 }
 
-/* Ensure MathJax / KaTeX equations scroll horizontally on mobile instead of expanding viewport */
+/* Hide MathJax assistive MathML so browsers supporting native MathML do not visually double-render / overlap the SVG */
+mjx-assistive-mml {
+  display: none !important;
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden !important;
+  padding: 0 !important;
+  border: 0 !important;
+  height: 1px !important;
+  width: 1px !important;
+}
+
+/* Ensure block MathJax / KaTeX equations scroll horizontally on mobile instead of expanding viewport */
 .katex-display,
-.MathJax,
-mjx-container {
+mjx-container[display="true"] {
   display: block !important;
   max-width: 100% !important;
   overflow-x: auto !important;
   overflow-y: hidden !important;
   -webkit-overflow-scrolling: touch;
   padding: 0.75rem 0;
+}
+
+/* Ensure inline math renders properly as inline elements */
+mjx-container:not([display="true"]) {
+  display: inline-block !important;
+  max-width: 100%;
 }
 
 /* Ensure Mermaid diagrams scroll horizontally within container on mobile */

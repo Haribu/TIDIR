@@ -20,6 +20,11 @@ export default withMermaid(
         "script",
         {},
         "if (location.hostname === 'tidir.pages.dev') { location.replace('https://tidir.harrymclaren.co.uk' + location.pathname + location.search + location.hash); }"
+      ],
+      [
+        "style",
+        {},
+        "mjx-assistive-mml { display: none !important; position: absolute !important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); user-select: none; white-space: nowrap; overflow: hidden !important; padding: 0 !important; border: 0 !important; height: 1px !important; width: 1px !important; } mjx-container[display='true'] { display: block !important; max-width: 100% !important; overflow-x: auto !important; overflow-y: hidden !important; padding: 0.75rem 0; } mjx-container:not([display='true']) { display: inline-block !important; max-width: 100%; }"
       ]
     ],
     themeConfig: {
