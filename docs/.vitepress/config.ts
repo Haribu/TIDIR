@@ -94,7 +94,7 @@ export default withMermaid(
         titleColor: "#38bdf8",
         edgeLabelBackground: "#1e293b",
         fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
-        fontSize: "14px"
+        fontSize: "13px"
       }
     }
   })
