@@ -217,11 +217,78 @@ flowchart LR
 
 ---
 
-## 7. Operational Handoff to Layer 4
+## 7. Finding Consolidation, Graph Clustering & The Risk Lens
 
-When detection logic matches an active attack pattern in either the real-time streaming engine or the scheduled batch lakehouse engine, it compiles and emits an **OCSF Class 2004: Detection Finding**:
+In modern enterprise environments, a single cyber operation triggers dozens or hundreds of disparate, low-level alerts across siloed detection engines (streaming EDR rules, cloud audit logs, WAF rate limiters, network anomaly engines, scheduled lakehouse queries). Treating each alert as an independent ticket causes catastrophic alert fatigue, fragmented investigative context, and slow containment.
 
-- **Attributed Threat Context**: Linked MITRE ATT&CK technique IDs, associated threat actor profiles, and triggering Attack Flow step.
-- **Forensic Evidences**: Pointers to the raw operational events stored in Layer 2 (exact process IDs, network socket tuples, user sessions).
-- **Operational Severity & Risk Score**: Dynamically computed composite score incorporating asset criticality from Layer 1.
-- **Recommended Triage Playbook**: Pointers to standardized Layer 4 investigation graphs and blast-radius gated containment workflows.
+Layer 3 culminates in an **Alert-to-Incident Synthesis Engine** that projects a graph correlation model and composite risk lens across all inbound findings before elevating them to Layer 4.
+
+```mermaid
+flowchart TB
+  subgraph IngressFindings ["1. Heterogeneous Findings Ingress"]
+    direction LR
+    F_STREAM["Real-Time Streaming Alerts\n(OCSF Class 2004)"]
+    F_BATCH["Lakehouse Batch Detections\n(OCSF Class 2004)"]
+    F_SECURITY["Vendor / Sensor Findings\n(OCSF Class 2001)"]
+    F_INTEL["CTI Retro-Match Hits\n(STIX Observables)"]
+  end
+
+  subgraph GraphClustering ["2. Temporal & Entity Graph Clustering Engine"]
+    PIVOT["Entity Resolution & Pivot Extraction\n(Principal ARN, IP, Host ID, User Session)"]
+    GRAPH["Dynamic Correlation Graph\n(Causal links across identity & infrastructure)"]
+    WINDOW["Temporal Sliding Window (Δt)\n(Grouping related stages of an attack chain)"]
+    
+    PIVOT --> GRAPH
+    WINDOW --> GRAPH
+  end
+
+  subgraph RiskLens ["3. The Multi-Dimensional Risk Lens"]
+    direction TB
+    RL_ASSET["Asset & Crown Jewel Criticality\n(Production DB vs. Dev Pod)"]
+    RL_CTI["CTI Priority Alignment\n(PIR-tagged threat actor campaigns)"]
+    RL_STAGE["ATT&CK Progression Compounding\n(Recon ➔ Cred Access ➔ Exfil)"]
+    RL_SCORE["Composite Risk Scoring Algorithm\n(Suppression threshold vs. Promotion)"]
+
+    RL_ASSET --> RL_SCORE
+    RL_CTI --> RL_SCORE
+    RL_STAGE --> RL_SCORE
+  end
+
+  subgraph PromotionDecision ["4. Case Promotion & Triage Filter"]
+    NOISE["Suppressed / Deduplicated Cluster\n(Logged to Lakehouse for audit/replay)"]
+    CASE_PROMOTED["Elevated Incident Dossier\n(OCSF Incident Case)"]
+  end
+
+  IngressFindings --> PIVOT
+  GRAPH --> RiskLens
+  RL_SCORE -->|Risk Score < Threshold| NOISE
+  RL_SCORE -->|Risk Score >= Critical Threshold| CASE_PROMOTED
+
+  CASE_PROMOTED ==>|Prioritized Dispatch| L4_ENG["Layer 4: Incident Response & Case Management\n(Agentic & Human Operator Investigation)"]
+```
+
+### 1. Entity-Centric Graph Clustering
+Rather than analyzing alerts in isolation, the graph correlation engine continuously extracts identity and infrastructure pivots from every normalized OCSF finding:
+- **Identity Pivots**: `actor.user.name`, `actor.user.uid`, `src_endpoint.ip`, `cloud.account.uid`, `iam.role_arn`.
+- **Infrastructure Pivots**: `device.hostname`, `device.uid`, `process.file.hash`, `process.parent_process.guid`, `container.id`.
+- **Temporal Windows**: Events occurring within sliding correlation windows ($\Delta t = 15\text{m} \dots 2\text{h}$) referencing overlapping pivots are dynamically stitched into a unified Directed Acyclic Graph (DAG). This reconstructs the adversary's lateral traversal across network boundaries and identity roles.
+
+### 2. The Composite Risk Lens
+Static alert severities (e.g., standard "Medium" or "High" labels) are fundamentally inadequate for prioritization. Layer 3 evaluates each clustered graph through a composite mathematical risk function:
+
+$$\text{Cluster Risk} = \left( \sum_{i \in \text{Findings}} \text{Confidence}_i \times \text{ATT\&CK Weight}_i \right) \times \text{Asset Multiplier} \times \text{PIR Priority}$$
+
+- **ATT&CK Progression Multiplier**: A standalone brute-force event yields a low progression weight. However, when the cluster links **Initial Access (T1078)** $\rightarrow$ **Privilege Escalation (T1068)** $\rightarrow$ **Defense Evasion (T1562)** within 20 minutes, the progression factor compounds exponentially.
+- **Asset Criticality Weighting (Layer 1 Context)**: Findings occurring on internet-facing core transactional databases or tier-0 identity infrastructure (Domain Controllers / Cloud IdP admins) carry a maximal risk multiplier, while findings on isolated testing nodes are scored lower.
+- **PIR Priority Alignment (CTI Context)**: If observables in the cluster match an active Priority Intelligence Requirement (e.g., a known ransomware syndicate targeting the organization's specific sector), the cluster is prioritized above baseline threshold scores.
+
+### 3. Noise Suppression & Intelligent De-duplication
+- **Volumetric Consolidation**: Hundreds of individual endpoint or network flow events triggered during a port sweep, password spray, or port scan are collapsed into a single multi-event finding cluster.
+- **Benign Baseline Suppression**: Graph clusters whose total risk score falls below the operational activation threshold are suppressed from real-time alert queues, preventing analyst burnout while preserving the complete graph record in the Layer 2 lakehouse for retrospective auditing.
+
+### 4. Handoff to Layer 4: The Elevated Incident Dossier
+When a cluster crosses the critical composite risk threshold, Layer 3 does not forward a raw list of alert notifications. It compiles a rich **Incident Dossier**:
+- **Consolidated Entity Graph**: Pre-mapped relationships between users, assets, processes, and remote IPs.
+- **Chronological Attack Timeline**: Formatted sequence of observed attacker milestones tagged with MITRE ATT&CK techniques.
+- **Automated Triage Summary**: Pre-computed blast-radius assessment and recommended response playbooks.
+- **Actionable Assignment**: Dispatched directly to Layer 4 investigation workbenches for coordinated **human and agentic operator execution**.

@@ -1,31 +1,76 @@
 /* Mermaid Diagram Presentation */
 .mermaid {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 2rem 0;
-  padding: 1.5rem;
+  padding: 2.25rem 1.5rem 1.5rem;
   background-color: #0b0f19;
   border: 1px solid #1e293b;
   border-radius: 10px;
   overflow-x: auto;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  cursor: zoom-in;
+  transition: border-color 0.2s ease;
+}
+
+.mermaid:hover {
+  border-color: #38bdf8;
 }
 
 .mermaid svg {
   max-width: 100%;
   height: auto;
-  font-family: var(--vp-font-family-base) !important;
 }
 
-/* Ensure node labels and text remain crisp */
+/* Ensure node labels and text remain crisp without overriding font metrics */
 .mermaid text {
   font-weight: 500;
-  letter-spacing: 0.01em;
 }
 
 /* Subgraph cluster styling */
 .mermaid .cluster rect {
   rx: 8px !important;
   ry: 8px !important;
+}
+
+/* Tap to expand interactive badge */
+.diagram-expand-badge {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: rgba(30, 41, 59, 0.85);
+  border: 1px solid #334155;
+  color: #38bdf8;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  backdrop-filter: blur(4px);
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.diagram-expand-badge:hover {
+  background: #38bdf8;
+  color: #0b0f19;
+  border-color: #38bdf8;
+}
+
+@media (max-width: 640px) {
+  .mermaid {
+    padding: 2.5rem 0.75rem 1rem;
+    margin: 1.5rem 0;
+  }
+  .diagram-expand-badge {
+    top: 6px;
+    right: 8px;
+    font-size: 0.7rem;
+    padding: 4px 8px;
+  }
 }
