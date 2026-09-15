@@ -195,7 +195,21 @@ To prevent inadvertent business disruption from false-positive agent recommendat
 - **Explicit Impact Card Rendering**: Authorization interfaces present the simulation summary alongside the agentic recommendation:
   > **⚠️ Pre-Execution Blast-Radius Preview:**
   > Authorizing isolation on `srv-payment-api-01` will immediately sever **42 active microservice communication channels** and degrade **Checkout Gateway Availability**. Estimated operational recovery time: **12 minutes**.
-- **Mandatory Reversible Rollback Scripts**: No Tier 2 containment action can be initiated unless an automated compensation/rollback routine (e.g. reversing network isolation, unblocking firewall IP, restoring suspended token) has been cryptographically validated and loaded into memory.
+
+### Dual-Authorization Consensus Engine (Two-Person Rule)
+For Tier 2 actions whose blast-radius score exceeds an enterprise criticality threshold $\theta_{\text{critical}}$ (e.g. actions affecting Domain Controllers, core transactional databases, or executive access keys), a single analyst signature is architecturally insufficient:
+1. **Multi-Signature Handshake**: The SOAR orchestrator holds the containment transaction in an unexecuted staged queue and dispatches an out-of-band cryptographic challenge to a secondary designated authorizer (Incident Commander, SecOps Lead, or System Owner).
+2. **Time-To-Live Expiration**: If the secondary signature is not cryptographically ratified within the configured TTL (e.g. 15 minutes), the staged action safely expires, preventing stale authorizations from executing against an altered operational topology.
+3. **Emergency Break-Glass Override**: For active ransomware encryption in flight, a single authenticated commander can trigger a break-glass override. This executes containment immediately while generating an immutable, priority-1 audit event forwarded to executive stakeholders.
+
+### Compensating Rollback Transactions (Atomic Containment)
+Containment playbooks often involve multi-step API execution chains (e.g. 1. Terminate user web session $\to$ 2. Revoke OAuth tokens $\to$ 3. Push firewall drop rule $\to$ 4. Isolate host network interface). If Step 4 fails due to a network timeout or third-party API outage, the system enters an inconsistent, half-contained state.
+
+Layer 4 mandates **Saga-Pattern Compensating Transactions**:
+- Every forward containment action $A_i$ must define an exact inverse compensating action $A_i^{-1}$.
+- If any step in a containment pipeline fails, the execution engine halts forward progress and executes the compensating rollback sequence ($A_{k-1}^{-1}, \dots, A_1^{-1}$) in reverse order to restore known-good environmental state, while raising an immediate critical operator alarm.
+- Rollback scripts are verified during CI/CD playbook build time, ensuring zero unrecoverable operational mutations.
+
 
 ---
 

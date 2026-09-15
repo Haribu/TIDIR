@@ -8,62 +8,48 @@ Its architectural mission is to provide an elastic, multi-paradigm processing an
 
 ```mermaid
 flowchart TB
-  subgraph L1_Ingress ["Layer 1 Handoff"]
-    RAW_IN["Raw Transported Telemetry & Context\n(Secure Transport Streams & Batches)"]
-  end
+  %% Styling Classes
+  classDef ing fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#f8fafc;
+  classDef comp fill:#2e1065,stroke:#c084fc,stroke-width:2px,color:#f8fafc;
+  classDef store fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#f8fafc;
+  classDef meta fill:#1e293b,stroke:#94a3b8,stroke-width:1.5px,color:#f8fafc;
 
-  subgraph L2 ["Layer 2: Pipeline, Storage & Query Fabric"]
+  subgraph STAGE1 ["1. Ingestion & Value-Based Routing"]
     direction TB
-    
-    subgraph IngestionRouter ["1. Ingestion Bus & Value-Based Router"]
-      BUS["Distributed Streaming Log\n(Partitioned, Append-Only Buffer)"]
-      PARSER["Line-Rate Normalizer & Validator\n(Schema Registry Enforcement)"]
-      ROUTER{"Value-Based Router\n& Data Forking Engine"}
-    end
-
-    subgraph ComputeTiers ["2. Multi-Paradigm Compute & Query Engines"]
-      STREAM_COMP["Real-Time Stream Engine\n(Stateful sliding windows, sub-second latency)"]
-      BATCH_COMP["Scheduled Lakehouse Engine\n(Complex joins, historical baselines, analytical queries)"]
-      FED_COMP["Federated Query Engine\n(In-place querying across remote environments)"]
-      ML_COMP["ML & Anomaly Engine\n(Feature stores, embeddings, behavioral baselines)"]
-    end
-
-    subgraph StorageTiers ["3. Tiered Storage Architecture"]
-      HOT_STORE["Hot Analytical Index Tier\n(Short retention, sub-second interactive search)"]
-      LAKE_STORE["Security Data Lakehouse Tier\n(Open columnar table format, multi-year retention)"]
-      COLD_STORE["Cold Compliance Archive Tier\n(Immutable, cost-optimized object store)"]
-    end
-
-    subgraph MetaFramework ["4. Meta Information & Governance Framework"]
-      SCHEMA_REG["Schema Registry (OCSF Contracts)"]
-      LINEAGE["Data Lineage & Catalog Tracking"]
-      ENV_MGR["Environment Segregation & Tagging\n(Dev / Test / Pre-Prod / Prod)"]
-    end
+    BUS["Distributed Streaming Bus\n(Partitioned, append-only buffer)"]:::ing
+    NORM["Line-Rate OCSF Normalizer\n(Schema enforcement & unmapped catch-all)"]:::ing
+    ROUTER{"Value-Based Router\n& Forking Engine"}:::ing
+    BUS --> NORM --> ROUTER
   end
 
-  subgraph DownstreamTiers ["Downstream Consumption (Layers 3 & 4)"]
-    FINDINGS["Standardized OCSF Findings\n(Security Finding & Detection Finding Classes)"]
-    ANALYST["Analyst Investigation & Case Workbench"]
+  subgraph STAGE2 ["2. Multi-Paradigm Compute Engines"]
+    direction TB
+    C_STREAM["Streaming Engine\n(Stateful sliding windows & fast state Δt)"]:::comp
+    C_BATCH["Lakehouse Batch SQL\n(Historical baselines & complex joins)"]:::comp
+    C_FED["Federated Query Engine\n(In-place remote environment pushdown)"]:::comp
+    C_ML["Feature Store & Anomaly Engine\n(Behavioral baseline vectors & embeddings)"]:::comp
   end
 
-  RAW_IN --> BUS
-  BUS --> PARSER
-  PARSER <--> SCHEMA_REG
-  PARSER --> ROUTER
+  subgraph STAGE3 ["3. Tiered Storage Core"]
+    direction TB
+    S_HOT["Hot Analytical Index Tier\n(15–30d retention, sub-second interactive search)"]:::store
+    S_LAKE["Columnar Security Lakehouse Tier\n(365+ days open table format, partitioned & compacted)"]:::store
+    S_COLD["Cold Compliance Archive Tier\n(Multi-year immutable object store)"]:::store
+    S_LAKE --> S_COLD
+  end
 
-  ROUTER -->|High-fidelity security streams| STREAM_COMP
-  ROUTER -->|Recent high-pivot data| HOT_STORE
-  ROUTER -->|Bulk forensic telemetry| LAKE_STORE
-  ROUTER -->|Feature extraction streams| ML_COMP
+  %% Routing Flows
+  ROUTER -->|High-Fidelity Stream| C_STREAM
+  ROUTER -->|Recent High-Pivot| S_HOT
+  ROUTER -->|Bulk Telemetry| S_LAKE
+  ROUTER -->|Feature Ingestion| C_ML
 
-  STREAM_COMP --> FINDINGS
-  BATCH_COMP <--> LAKE_STORE
-  BATCH_COMP --> FINDINGS
-  FED_COMP <--> StorageTiers
-  FED_COMP <--> ANALYST
-
-  LAKE_STORE --> COLD_STORE
-  HOT_STORE <--> ANALYST
+  %% Query & Compute Access
+  C_STREAM -->|OCSF Class 2004| DOWNSTREAM["Downstream Detections & Cases (Layers 3 & 4)"]
+  C_BATCH <--> S_LAKE
+  C_BATCH -->|OCSF Class 2001/2004| DOWNSTREAM
+  C_FED <--> S_HOT
+  C_FED <--> S_LAKE
 ```
 
 ---
@@ -198,7 +184,59 @@ All Layer 2 configurations are managed through GitOps workflows:
 
 ---
 
-## 6. Downstream Contract: OCSF Findings & Alerts
+## 6. Lakehouse SRE, Compaction & Write-Audit-Publish (WAP) Lifecycle
+
+In high-throughput security data fabrics, streaming ingestion produces hundreds of small files per minute. Without proactive storage engineering, this triggers query metadata thrashing, slow predicate scans, and lakehouse commit bottlenecks. Layer 2 formalizes an **SRE Storage Management Lifecycle**:
+
+```mermaid
+flowchart TB
+  %% Class Definitions
+  classDef ing fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#f8fafc;
+  classDef wap fill:#2e1065,stroke:#c084fc,stroke-width:2px,color:#f8fafc;
+  classDef lake fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#f8fafc;
+
+  subgraph STREAM ["1. Streaming Micro-Batches"]
+    MB1["Micro-Batch Ingestion\n(100KB–5MB Parquet files)"]:::ing
+    STG["Staging Branch\n(Isolated commit snapshot)"]:::ing
+  end
+
+  subgraph AUDIT ["2. Write-Audit-Publish (WAP) Gate"]
+    WAP_CHECK["Invariant Validation Gate\n• Schema Registry compliance\n• Zero corrupt or unmapped primary keys\n• Partition timestamp monotonicity"]:::wap
+  end
+
+  subgraph COMPACT ["3. Canonical Production Lakehouse"]
+    PUB["Atomic Fast-Forward Merge\n(Published to canonical table)"]:::lake
+    OPT["Asynchronous Bin-Packing Daemon\n(Compacts into 128MB–512MB columnar files)"]:::lake
+    Z_ORDER["Multidimensional Z-Ordering\n(Clustering: event_time, ocsf_class, tenant_id)"]:::lake
+  end
+
+  MB1 --> STG
+  STG --> WAP_CHECK
+  WAP_CHECK -->|Audit Passes| PUB
+  WAP_CHECK -.->|Audit Fails| DLQ_STORE["Quarantine DLQ & Alert"]
+  PUB --> OPT
+  OPT --> Z_ORDER
+```
+
+### 6.1 The Write-Audit-Publish (WAP) Pattern
+To ensure erroneous schema migrations or corrupted ingestion batches never pollute the canonical queryable lakehouse:
+1. **Write**: Ingestion workers write new micro-batches to an isolated staging snapshot or branch.
+2. **Audit**: Automated validation verifies schema conformity, partition constraints, and null-check invariants against the Schema Registry.
+3. **Publish**: Upon audit verification, the staging snapshot is atomically fast-forward merged into the production table manifest. If the audit fails, the commit aborts and the payload routes to the Dead-Letter Queue (DLQ).
+
+### 6.2 Asynchronous Compaction & Bin-Packing
+A background compaction daemon continuously monitors small file proliferation:
+- **Compaction Interval**: Compacts files `< 32MB` into optimized `128MB–512MB` Parquet row groups every 60 minutes.
+- **Snapshot Expiration & Vacuum**: Cleans up orphan files and expires snapshots beyond the 30-day hot retention window to reclaim object storage capacity.
+- **Z-Ordering & Clustering**: Restructures physical files along the primary query predicates (`event_time`, `ocsf_class`, `tenant_id`), enabling query engines to skip up to 90% of data files via file-level min/max statistics.
+
+### 6.3 Dead-Letter Queue (DLQ) Governance & Replay Contract
+- **Quarantine Envelope**: Payloads that fail parsing or OCSF validation are written to an encrypted DLQ topic with failure diagnostics (e.g. `error_type`, `parser_version`, `raw_bytes_ref`).
+- **Replay Handshake**: Once a schema definition or parser bug is resolved in GitOps, an idempotent replay tool consumes the DLQ topic and re-injects events through the normalization pipeline without creating duplicate entries.
+
+---
+
+## 7. Downstream Contract: OCSF Findings & Alerts
 
 When computation engines in Layer 2 or Layer 3 identify suspicious activity or threshold violations, they emit standardized **OCSF Finding Objects** rather than ad-hoc alerts.
 
@@ -217,3 +255,4 @@ Used when real-time streaming or lakehouse analytics match an active attack tech
 - `disposition_id`: Detection disposition (e.g., Detected, Blocked, Quarantined, Suppressed).
 
 By standardizing all findings into OCSF classes, Layer 3 and Layer 4 consume a single unified format regardless of whether the finding was generated by a real-time stream rule, a batch lakehouse query, or a machine learning anomaly model.
+

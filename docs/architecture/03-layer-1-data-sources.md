@@ -196,3 +196,50 @@ To preserve loose coupling between source emitters and the processing platform, 
 2. **Authoritative Timestamping**: Every emitted payload must include an RFC 3339 UTC origin timestamp captured at generation, distinct from collection or ingestion timestamps.
 3. **Identity & Origin Provenance**: Events must carry immutable source provenance tags (tenant ID, host identifier, sensor ID, collector version) to ensure traceability and tamper detection.
 4. **Transport Resilience Guarantee**: Transport clients must guarantee at-least-once delivery into Layer 2 through bounded local spooling and acknowledgement handshakes.
+
+---
+
+## 6. Edge Resilience, Backpressure & Adaptive Priority Shedding
+
+Under volumetric stress (e.g. host DDoS flood, compilation storms, or kernel ring buffer saturation), collectors must never fail silently or destabilize host workloads. Layer 1 implements an **Adaptive 3-Tier Priority Shedding Hierarchy**:
+
+```mermaid
+flowchart TB
+  %% Priority Tiers
+  classDef crit fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#f8fafc;
+  classDef med fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#f8fafc;
+  classDef bulk fill:#0f172a,stroke:#64748b,stroke-width:1.5px,color:#f8fafc;
+
+  subgraph STRESS ["Edge Sensor Volumetric Pressure"]
+    direction TB
+    S1["Sensor Queue > 70% Capacity\n(Activate In-Memory Throttling)"]
+    S2["Sensor Queue > 85% Capacity\n(Tier 3 Shedding Activated)"]
+    S3["Sensor Queue > 95% Capacity\n(Tier 2 Shedding Activated)"]
+  end
+
+  subgraph TIERS ["Telemetry Preservation Tiers"]
+    T1["Tier 1: Non-Sheddable Invariants\n• Process creation & lineage (1007)\n• User authentication & token issuance (3002)\n• Security control tamper events"]:::crit
+    T2["Tier 2: Sampled Intermediate Context\n• File system writes & mutations (1001)\n• TCP connection start/close metadata (4001)\n• Cloud control plane audit logs"]:::med
+    T3["Tier 3: Bulk Sheddable Observables\n• High-frequency DNS queries (4003)\n• Ephemeral NetFlow / VPC flow summaries\n• Raw verbose kernel debug traces"]:::bulk
+  end
+
+  S2 -.->|Drop / Aggregate 90%| T3
+  S3 -.->|Dynamic Reservoir Sampling 50%| T2
+  STRESS ==>|Guaranteed Zero Loss| T1
+```
+
+### Deterministic Shedding & Ring Buffer Drop Policies
+1. **Ring Buffer Watermarks**: eBPF and ETW kernel buffer pollers trigger user-space backpressure signals when consumer lag crosses 75%.
+2. **Shedding Accounting & Drop Metrics**: Whenever Tier 2 or Tier 3 events are sampled or shed, the collector emits an immutable `TelemetryDropCount` metric specifying the exact timestamp window, shedded class, and dropped record volume. Downstream detection engines (Layer 3) leverage this signal to compute visibility uncertainty bounds.
+3. **Local Spool Bounding**: On-disk edge spools are capped at a hard disk budget (e.g. 2GB or 5% free disk). When disk budgets exhaust, FIFO eviction applies strictly across Tier 3 first, then Tier 2. Tier 1 events are never evicted without an operator-audited emergency alarm.
+
+---
+
+## 7. Point-of-Capture Event Attestation & Tamper Sealing
+
+To defend against advanced adversaries attempting to truncate, wipe, or tamper with event logs prior to egress:
+
+- **RFC 3161 Cryptographic Timestamp Tokens**: Critical audit trails obtain trusted time-stamping authority tokens at the collection boundary.
+- **Hardware-Backed Origin Identity**: Collectors leverage TPM 2.0 or secure enclave certificates for mTLS client authentication, ensuring rogue machines cannot spoof legitimate sensor identifiers.
+- **Local Tamper-Evident Append-Only Ring**: Pre-egress spool files are structured as cryptographic hash chains (each log block incorporates the HMAC-SHA256 of the preceding block). Any tampering or excision of un-egressed logs breaks the chain and alerts Layer 2 upon reconnection.
+

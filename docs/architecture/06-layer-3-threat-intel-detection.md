@@ -272,19 +272,38 @@ Rather than analyzing alerts in isolation, the graph correlation engine continuo
 - **Identity Pivots**: `actor.user.name`, `actor.user.uid`, `src_endpoint.ip`, `cloud.account.uid`, `iam.role_arn`.
 - **Infrastructure Pivots**: `device.hostname`, `device.uid`, `process.file.hash`, `process.parent_process.guid`, `container.id`.
 - **Temporal Windows**: Events occurring within sliding correlation windows ($\Delta t = 15\text{m} \dots 2\text{h}$) referencing overlapping pivots are dynamically stitched into a unified Directed Acyclic Graph (DAG). This reconstructs the adversary's lateral traversal across network boundaries and identity roles.
-- **Supernode Pruning & Degree-Capping Heuristics**: In enterprise environments, shared infrastructure nodes—such as outbound egress NAT gateways, VPN concentrators, recursive DNS resolvers, and generic deployment service accounts—frequently connect to thousands of benign events. Uncontrolled graph linking on these high-degree pivots causes catastrophic combinatorial explosion, collapsing unrelated user incidents into single monstrous clusters. Layer 3 enforces:
-  - *Degree Threshold Caps*: Pivots exceeding high-degree thresholds (e.g., connected to > 50 distinct entities within $\Delta t$) are automatically flagged as shared infrastructure supernodes.
-  - *Centrality Dampening*: Supernodes are excluded as primary clustering pivots. Edges passing through supernodes require secondary corroborating pivots (e.g. identical process GUID or matching user session token) to prevent false-positive cluster fusion.
-  - *Exponential Edge Decay*: Edges between entities decay exponentially over time unless reinforced by subsequent related findings, naturally pruning stale pivots.
 
-### 2. The Composite Risk Lens
+#### Mathematical Supernode Centrality Dampening
+In enterprise environments, shared infrastructure nodes—such as outbound egress NAT gateways, VPN concentrators, recursive DNS resolvers, and generic deployment service accounts—frequently connect to thousands of benign events. Uncontrolled graph linking on these high-degree pivots causes catastrophic combinatorial explosion, collapsing unrelated user incidents into single monstrous clusters. Layer 3 enforces **Centrality Dampening**:
+
+$$\Omega(v) = \frac{1}{1 + \alpha \cdot \max\left(0, \deg(v) - \theta_{\text{deg}}\right)}$$
+
+Where:
+- $\deg(v)$ is the node degree (unique entity connections within sliding window $\Delta t$).
+- $\theta_{\text{deg}}$ is the degree threshold cap (e.g. $\theta_{\text{deg}} = 50$).
+- $\alpha$ is the dampening decay rate ($\alpha = 0.15$).
+
+Edges propagating through node $v$ are scaled by $\Omega(v)$. If $\deg(v) \gg \theta_{\text{deg}}$, $\Omega(v) \to 0$, neutralizing the supernode from triggering cluster fusion unless accompanied by strong unshared secondary pivots (e.g. identical process GUID or matching user session token).
+
+#### Exponential Edge Decay Half-Life
+Relationships between entities are not static. The edge weight $W_e(t)$ between two connected entities decays exponentially with elapsed time $\Delta t$ since the last corroborating event:
+
+$$W_e(t) = W_0 \cdot \exp\left( -\frac{\ln(2)}{t_{1/2}} \cdot \Delta t \right)$$
+
+Where $t_{1/2}$ represents the configured half-life (e.g. $t_{1/2} = 45\text{ minutes}$). Once $W_e(t)$ drops below an operational severance threshold $\tau_{\text{edge}}$, the edge is pruned from memory, preventing stale activity from falsely compounding with fresh telemetry.
+
+### 2. The Composite Risk Lens Algorithm
 Static alert severities (e.g., standard "Medium" or "High" labels) are fundamentally inadequate for prioritization. Layer 3 evaluates each clustered graph through a composite mathematical risk function:
 
-$$\text{Cluster Risk} = \left( \sum_{i \in \text{Findings}} \text{Confidence}_i \times \text{ATT\&CK Weight}_i \right) \times \text{Asset Multiplier} \times \text{PIR Priority}$$
+$$\text{Cluster Risk} = \left[ \sum_{i \in \text{Findings}} \Big( C_i \times (1 - \text{FPR}_{30d, i})^\beta \times \Phi(\text{Technique}_i) \Big) \right] \times \Psi_{\text{progression}} \times M_{\text{asset}} \times P_{\text{PIR}}$$
 
-- **ATT&CK Progression Multiplier**: A standalone brute-force event yields a low progression weight. However, when the cluster links **Initial Access (T1078)** $\rightarrow$ **Privilege Escalation (T1068)** $\rightarrow$ **Defense Evasion (T1562)** within 20 minutes, the progression factor compounds exponentially.
-- **Asset Criticality Weighting (Layer 1 Context)**: Findings occurring on internet-facing core transactional databases or tier-0 identity infrastructure (Domain Controllers / Cloud IdP admins) carry a maximal risk multiplier, while findings on isolated testing nodes are scored lower.
-- **PIR Priority Alignment (CTI Context)**: If observables in the cluster match an active Priority Intelligence Requirement (e.g., a known ransomware syndicate targeting the organization's specific sector), the cluster is prioritized above baseline threshold scores.
+Where:
+- $C_i$: Base confidence score ($0.0 \dots 1.0$) of finding $i$.
+- $\text{FPR}_{30d, i}$: Historical 30-day false-positive rate of rule $i$, penalizing historically noisy detections via sensitivity exponent $\beta = 1.5$.
+- $\Phi(\text{Technique}_i)$: Technique severity weight derived from MITRE ATT&CK objective impact (e.g. credential dumping vs discovery).
+- $\Psi_{\text{progression}}$: Compounding ATT&CK Progression Multiplier ($\Psi = 1.0 + 0.5 \cdot (k_{\text{tactics}} - 1)^{1.2}$), exponentially rewarding findings that advance across sequential kill-chain phases (Initial Access $\to$ Credential Access $\to$ Exfiltration).
+- $M_{\text{asset}}$: Asset Criticality Multiplier ($1.0 \dots 5.0$) extracted from Layer 1 CMDB posture (Domain Controllers, production databases, executive credentials).
+- $P_{\text{PIR}}$: Priority Intelligence Requirement Priority Factor ($1.0 \dots 2.5$) for active threat actor campaigns targeting the organization's specific sector.
 
 ### 3. Noise Suppression & Intelligent De-duplication
 - **Volumetric Consolidation**: Hundreds of individual endpoint or network flow events triggered during a port sweep, password spray, or port scan are collapsed into a single multi-event finding cluster.

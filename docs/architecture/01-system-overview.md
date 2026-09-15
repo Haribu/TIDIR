@@ -10,72 +10,91 @@ The architecture operates across two orthogonal dimensions:
 1. **The Operational Runtime Plane**: Four horizontal layers governing event ingestion, computation, detection, and mitigation.
 2. **The Engineering Lifecycle Plane**: Five vertical disciplines governing schemas, intelligence curation, Detection-as-Code (DaC), systems automation, and AI harnesses.
 
+### 1.1 Operational Runtime Pipeline
+
+The operational pipeline processes security events in a strict directional flow from point-of-origin generation to automated mitigation, with an outer perimeter feedback channel for attributed threat intelligence and visibility calibration:
+
 ```mermaid
 flowchart TB
-  %% Class Definitions for Visual Hierarchy & Styling
-  classDef layer1 fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
-  classDef layer2 fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#f8fafc;
-  classDef layer3 fill:#2e1065,stroke:#c084fc,stroke-width:2px,color:#f8fafc;
-  classDef layer4 fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#f8fafc;
-  classDef eng fill:#1e293b,stroke:#f472b6,stroke-width:2px,color:#f8fafc,stroke-dasharray: 4 4;
+  %% Styling Classes
+  classDef layer1 fill:#0b1329,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
+  classDef layer2 fill:#16193b,stroke:#818cf8,stroke-width:2px,color:#f8fafc;
+  classDef layer3 fill:#24123f,stroke:#c084fc,stroke-width:2px,color:#f8fafc;
+  classDef layer4 fill:#06372b,stroke:#34d399,stroke-width:2px,color:#f8fafc;
 
   %% Layer 1: Data Sources & Environmental Inputs
-  subgraph L1 ["LAYER 1: DATA SOURCES & CONTEXTUAL INPUTS"]
-    direction LR
-    L1_TELEM["Runtime Operational Telemetry\n• Kernel hooks, eBPF, audit trails\n• Network flows, DNS & identity sessions"]:::layer1
-    L1_CTX["Organizational & Posture Context\n• Asset criticality & CMDB hierarchies\n• Attack surface & control status"]:::layer1
-    L1_CTI["External Threat Intelligence\n• Tactical indicators, CVE weaponization\n• Adversary campaign feeds"]:::layer1
+  subgraph L1 ["LAYER 1: DATA SOURCES & CONTEXTUAL INGESTION"]
+    L1_TELEM["Runtime Operational Telemetry\n(Kernel hooks, eBPF, audit trails, network flows & identity)"]:::layer1
+    L1_CTX["Enterprise Posture & Asset Context\n(CMDB hierarchy, attack surface exposure, control status)"]:::layer1
+    L1_CTI["Cyber Threat Intelligence (CTI)\n(STIX 2.1 tactical feeds, CVE weaponization, threat actors)"]:::layer1
   end
 
-  %% Layer 2: Pipeline, Storage & Query Capabilities
+  %% Layer 2: Pipeline, Storage & Query Fabric
   subgraph L2 ["LAYER 2: PIPELINE, STORAGE & QUERY FABRIC"]
-    direction LR
-    L2_INGEST["Ingestion & Line-Rate OCSF\n• Schema Registry contract gates\n• Unmapped data catch-all & DLQ"]:::layer2
-    L2_ROUTE["Value-Based Data Router\n• Tier A (Hot Index / Stream)\n• Tier B (Lakehouse) / Tier C (Filter)"]:::layer2
-    L2_STORE["Storage & Multi-Paradigm Query\n• Hot Index, Lakehouse & Cold Archive\n• Hybrid temporal state store (Δt)"]:::layer2
+    L2_INGEST["Line-Rate Ingestion & OCSF Normalization\n(Schema registry, unmapped data catch-all & DLQ)"]:::layer2
+    L2_ROUTER["Value-Based Tiering & Stream Router\n(Tier A hot stream, Tier B lakehouse, Tier C filter)"]:::layer2
+    L2_STORAGE["Multi-Paradigm Storage & Query Core\n(Hot index, columnar lakehouse, hybrid state store Δt)"]:::layer2
   end
 
   %% Layer 3: Threat Intelligence & Detection Engineering
   subgraph L3 ["LAYER 3: THREAT INTEL & DETECTION ENGINEERING"]
-    direction LR
-    L3_FLOW["Machine-Readable Attack Flows\n• Priority Intel Requirements (PIRs)\n• Graph-modeled adversary paths"]:::layer3
-    L3_DAC["Detection-as-Code (DaC)\n• Vendor-neutral declarative rules\n• Streaming & Lakehouse batch engines"]:::layer3
-    L3_SYNTH["Alert Correlation & Risk Lens\n• Supernode-dampened graph clustering\n• Compounding ATT&CK progression"]:::layer3
+    L3_FLOW["Machine-Readable Threat Models\n(Adversary attack flows, PIRs, graph mapping)"]:::layer3
+    L3_DAC["Detection-as-Code (DaC) Engine\n(Stateful streaming rules, lakehouse scheduled SQL)"]:::layer3
+    L3_RISK["Risk Lens & Finding Synthesis\n(Supernode-dampened graph clustering, OCSF 2001/2004)"]:::layer3
   end
 
   %% Layer 4: Incident Response & Automation
   subgraph L4 ["LAYER 4: INVESTIGATION, CASE MANAGEMENT & SOAR"]
-    direction LR
-    L4_CASE["Case Dossier & Evidence Locker\n• Entity 360 & process lineage trees\n• Cryptographically sealed timeline"]:::layer4
-    L4_OPS["Symbiotic Operator Model\n• Autonomous agentic scoping\n• Human operator oversight workbench"]:::layer4
-    L4_SOAR["Blast-Radius Gated SOAR\n• Pre-execution impact simulation\n• Tier 0-2 containment playbooks"]:::layer4
+    L4_DOSSIER["Unified Investigation & Case Dossier\n(Entity 360, process trees, cryptographically sealed timeline)"]:::layer4
+    L4_TRIAGE["Symbiotic Operator Workbench\n(Autonomous agentic scoping, human triage console)"]:::layer4
+    L4_SOAR["Blast-Radius Gated SOAR Engine\n(Pre-execution simulation, Tier 0-2 playbooks, rollback)"]:::layer4
   end
 
-  %% Cross-Cutting Engineering Plane
-  subgraph ENG ["CROSS-CUTTING ENGINEERING LIFECYCLE & AI HARNESSES"]
-    direction LR
-    E_DATA["Data Engineering\n(Schema Evolution)"]:::eng
-    E_INTEL["Intel Engineering\n(Decay Tuning)"]:::eng
-    E_DET["Detection Eng (DaC)\n(Simulation CI/CD)"]:::eng
-    E_AUTO["Systems SRE\n(Playbooks-as-Code)"]:::eng
-    E_AI["AI Harnesses\n(Context & Judges)"]:::eng
+  %% Closed-Loop Architectural Feedback
+  subgraph FB ["CLOSED-LOOP CONTINUOUS CALIBRATION"]
+    FB_INTEL["Attributed Threat Flows & IOCs\n(Re-ingested into L1 CTI & L3 Detection Backlog)"]
+    FB_GAPS["Telemetry Blindspot Telemetry\n(Re-tunes L1 Sensor Filters & Collection Audits)"]
+    FB_SOAR["Playbook Execution Efficacy\n(Refines L4 Blast-Radius & Simulation Models)"]
   end
 
-  %% Primary Horizontal Progression
-  L1 ==>|Transport Envelopes & Raw Bytes| L2
-  L2 ==>|Normalized Telemetry & Query APIs| L3
-  L3 ==>|Elevated Incident Dossiers| L4
+  %% Operational Progression (Strict Top-to-Bottom DAG)
+  L1 ==>|1. Transport Envelopes & Raw Ingestion| L2
+  L2 ==>|2. Normalized Telemetry & Low-Latency State Δt| L3
+  L3 ==>|3. Correlated Security & Detection Findings| L4
+  L4 ==>|4. Incident Dossiers & Post-Mortem Outcomes| FB
+```
 
-  %% Closed-Loop Feedback
-  L4 -.->|Confirmed Attributed IOCs & Flows| L3
-  L4 -.->|Visibility Blindspots| L1
-  L3 -.->|Missing ATT&CK Components| L1
+### 1.2 Engineering Lifecycle & Closed-Loop Governance Plane
 
-  %% Engineering Governance
-  ENG -.->|Governs, Tests & Calibrates| L1
-  ENG -.->|Governs, Tests & Calibrates| L2
-  ENG -.->|Governs, Tests & Calibrates| L3
-  ENG -.->|Governs, Tests & Calibrates| L4
+The engineering plane governs the operational pipeline through version-controlled specifications, declarative policy engines, and automated validation gates:
+
+```mermaid
+flowchart LR
+  %% Styling Classes
+  classDef eng fill:#1e293b,stroke:#f472b6,stroke-width:2px,color:#f8fafc;
+  classDef target fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#f8fafc;
+
+  subgraph DISCIPLINES ["ENGINEERING DISCIPLINES"]
+    E1["Data Engineering\n(Schema Evolution & Contracts)"]:::eng
+    E2["Threat Intel Engineering\n(PIRs & Indicator Decay)"]:::eng
+    E3["Detection Engineering (DaC)\n(Simulation, Testing & CI/CD)"]:::eng
+    E4["Automation SRE\n(Playbooks-as-Code & Rollback)"]:::eng
+    E5["AI Agent Harnesses\n(Grounding Context & LLM Judges)"]:::eng
+  end
+
+  subgraph TARGETS ["OPERATIONAL TOUCHPOINTS"]
+    T_REG["Schema Registry & Ingestion DLQ\n(Layer 1 / Layer 2)"]:::target
+    T_GRAPH["Threat Flow & Correlation Graphs\n(Layer 3 Intel)"]:::target
+    T_ENG["Streaming & Lakehouse Engines\n(Layer 3 Detection)"]:::target
+    T_SOAR["Connector Ecosystem & Safe APIs\n(Layer 4 Containment)"]:::target
+    T_OPS["Symbiotic Operator Model\n(Layer 4 Investigation)"]:::target
+  end
+
+  E1 -->|Enforces Schemas| T_REG
+  E2 -->|Calibrates Attack Flows| T_GRAPH
+  E3 -->|Deploys Tested Rules| T_ENG
+  E4 -->|Deploys Gated Playbooks| T_SOAR
+  E5 -->|Supervises Triage Prompts| T_OPS
 ```
 
 ---
