@@ -112,13 +112,16 @@ flowchart LR
 | **User Account** | User Account Modification | `Identity & Access` (3005: Entity Management) | Active Directory replication / SaaS Directory API | Webhook push or low-frequency scheduled poll |
 | **Cloud Storage** | Storage Object Access | `Cloud / Account` (1001: Object Storage Activity) | Cloud provider control plane S3/Blob audit trail | Stream-forwarded cloud delivery (S3 notification/PubSub) |
 | **Vulnerability** | Software Vulnerability State | `Findings / Discovery` (2002: Vulnerability Finding) | Host/network vulnerability scanner engine | Scheduled batch snapshot; periodic diff sync |
+| **Cloud Security Posture** | Misconfiguration / IAM Drift (CSPM/CNAPP) | `Findings / Discovery` (2001: Security Finding) | Cloud security posture scanner (Wiz, Prisma, Orca) | Webhook push or API sync; high fidelity |
+| **External Detections** | Commercial EDR / XDR / WAF Finding | `Findings / Discovery` (2004: Detection Finding) | CrowdStrike, Defender, SentinelOne, Cloudflare WAF | Streaming webhook / PubSub queue; priority ingress |
+| **Ambient Deception** | Honeytoken / Canary Interaction | Any Target Class + `metadata.is_canary: true` | Decoy AWS keys, canary files, Kerberos SPN lures | Instantaneous priority stream; zero base rate |
 | **Threat Intelligence** | Indicator Observable | `Threat Intelligence` (5001: Threat Intelligence) | STIX/TAXII 2.1 repository / Threat Feed API | Polled incremental batch / Change-data-capture |
 
 ---
 
 ## 4. Source Domain Taxonomy & Functional Capabilities
 
-Layer 1 encompasses five distinct input domains that converge into the ingestion fabric:
+Layer 1 encompasses six distinct input domains that converge into the ingestion fabric:
 
 ### Domain 1: Runtime Operational Telemetry (Activity Streams)
 Ephemeral, high-volume event streams generated continuously as infrastructure and users operate.
@@ -164,6 +167,16 @@ Telemetry describing the status, fidelity, and coverage of defensive controls.
 - **Sensor & Agent Health**: Agent deployment coverage percentages, sensor process heartbeats, signature/engine update freshness, and tamper prevention alerts (pinpointing instrumentation blind spots).
 - **Configuration & Hardening Posture**: Operating system hardening benchmarks (e.g. CIS), endpoint isolation policy states, disk encryption status, and firewall rule configurations.
 - **Vulnerability Posture & Patch State**: Identified CVEs across software installations, exposure reachability metrics, and patch remediation timelines.
+
+---
+
+### Domain 6: External Security Tool Findings (XDR, CNAPP, CSPM & Vulnerability)
+High-level analytical assertions, detections, and posture evaluations emitted by external commercial and cloud-native security systems:
+
+- **Endpoint & Identity XDR Detections**: Pre-computed detection findings from commercial EDR/XDR suites (CrowdStrike Falcon, Microsoft Defender for Endpoint/Identity, SentinelOne), including process trees, memory injection alerts, and identity risk evaluations.
+- **Cloud-Native Application Protection (CNAPP / CSPM / CWPP)**: Misconfiguration findings, public storage exposure alerts, over-privileged IAM entitlements (CIEM), and container runtime deviations emitted by platforms like Wiz, Orca, or Prisma Cloud.
+- **Perimeter & Edge Defenses**: WAF blocks, rate-limiting triggers, and automated bot mitigation events emitted by edge platforms (Cloudflare, Fastly, AWS WAF).
+- **Application Security & Vulnerability Scanners**: Static/dynamic analysis findings (SAST/DAST) and host/container CVE catalogs (Snyk, Veracode, Qualys, Tenable).
 
 ---
 
