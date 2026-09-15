@@ -24,8 +24,26 @@ export default withMermaid(
     ],
     themeConfig: {
       nav: [
-        { text: "Overview", link: "/architecture/01-system-overview" },
-        { text: "Capabilities", link: "/architecture/02-capability-model" },
+        {
+          text: "Architecture",
+          items: [
+            { text: "System Overview & Topology", link: "/architecture/01-system-overview" },
+            { text: "Target Threat Model", link: "/architecture/09-threat-model" },
+            { text: "Layer 1: Data Sources & Ingress", link: "/architecture/03-layer-1-data-sources" },
+            { text: "Layer 2: Pipeline, Storage & Query", link: "/architecture/04-layer-2-pipeline-storage-query" },
+            { text: "Layer 3: Intel & Detection Engineering", link: "/architecture/06-layer-3-threat-intel-detection" },
+            { text: "Layer 4: Investigation & Automated Response", link: "/architecture/07-layer-4-incident-response" },
+            { text: "Cross-Cutting Engineering Disciplines", link: "/architecture/05-cross-cutting-engineering-disciplines" }
+          ]
+        },
+        {
+          text: "Capabilities",
+          items: [
+            { text: "Capability Model & Taxonomy", link: "/architecture/02-capability-model" },
+            { text: "Macro Capabilities & Services", link: "/architecture/10-macro-capabilities-and-services" },
+            { text: "Operational User Stories", link: "/architecture/08-user-stories" }
+          ]
+        },
         {
           text: "Components",
           items: [

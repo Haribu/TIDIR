@@ -62,7 +62,7 @@ To balance executive clarity with engineering precision, TIDIR is organised acro
 ## Core Architectural Paradigms
 
 ```mermaid
-flowchart LR
+flowchart TB
     subgraph S1["1. INGESTION & DATA FABRIC"]
         direction TB
         RAW["Raw Telemetry"] --> NORM["Line-rate OCSF Normalisation"]
@@ -96,7 +96,7 @@ flowchart LR
         SAGA --> CIRCUIT --> BG
     end
 
-    S1 --> S2 --> S3 --> S4
+    S1 ==> S2 ==> S3 ==> S4
     S4 -.->|"Closed-Loop Tuning & Evals"| S1
 
     classDef default fill:#1e293b,stroke:#475569,stroke-width:1px,color:#f8fafc;
@@ -111,7 +111,12 @@ TIDIR strictly rejects artificial "output-driven" ingestion where logs are disca
 
 ### 2. Neutralising the Base Rate Fallacy with Bayesian Compounding
 When processing billions of daily events, even detections with a 99.9% accuracy rate produce thousands of false alarms because malicious actions are rare events (the *False Positive Paradox*). TIDIR solves this by treating single-point anomalies as **weak graph signals** rather than standalone alerts. Detections are only elevated to an active incident once Bayesian compounding correlates multiple independent signals:
-$$\text{Compounded Risk} = f(\text{Telemetry Anomaly}, \text{Asset Criticality}, \text{Identity Privilege}, \text{Network Egress})$$
+$$
+\begin{aligned}
+\text{Compounded Risk} = f(&\text{Telemetry Anomaly}, \text{Asset Criticality}, \\
+&\text{Identity Privilege}, \text{Network Egress})
+\end{aligned}
+$$
 
 ### 3. Continuous Purple Teaming & SecOps Error Budgets
 Borrowing from Site Reliability Engineering (SRE), detection quality is enforced through quantifiable **Alert Noise Error Budgets** (target: false positive rate $< 5\%$). Detection-as-Code (DaC) repositories execute continuous atomic attack emulation in CI/CD pipelines. If a detection rule exhausts its noise budget in production, an automated deployment freeze prevents new rule promotions until the noisy rule is tuned or deprecated.
