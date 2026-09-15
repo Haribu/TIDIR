@@ -1,5 +1,12 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
+import DOMPurify from "dompurify";
+import mermaid from "mermaid";
+
+(DOMPurify as any).addHook = () => {};
+(DOMPurify as any).sanitize = (s: string) => s;
+
+mermaid.initialize({ startOnLoad: false });
 
 function findFiles(dir: string, extension: string, fileList: string[] = []): string[] {
   const files = readdirSync(dir);
@@ -16,44 +23,26 @@ function findFiles(dir: string, extension: string, fileList: string[] = []): str
   return fileList;
 }
 
-const validStarters = [
-  "flowchart",
-  "graph",
-  "sequenceDiagram",
-  "classDiagram",
-  "stateDiagram",
-  "erDiagram",
-  "journey",
-  "gantt",
-  "pie",
-  "requirementDiagram",
-  "gitGraph",
-  "C4Context",
-  "C4Container",
-  "C4Component",
-  "mindmap"
-];
+console.log("🔍 Rigorously validating all Mermaid diagrams with mermaid.parse()...\n");
 
-console.log("🔍 Scanning for all Mermaid diagrams (.mmd and markdown codeblocks)...");
-
-// 1. Validate standalone .mmd files
-const mmdFiles = findFiles("./docs", ".mmd");
 let totalDiagrams = 0;
-let hasError = false;
+let failedDiagrams: { file: string; block: number | string; error: string; snippet: string }[] = [];
 
+// 1. Standalone .mmd files
+const mmdFiles = findFiles("./docs", ".mmd");
 for (const file of mmdFiles) {
   const content = readFileSync(file, "utf-8").trim();
   totalDiagrams++;
-  const firstLine = content.split("\n")[0].trim();
-  const isValid = validStarters.some((prefix) => content.startsWith(prefix));
-  if (!isValid) {
-    console.warn(`⚠️ Warning: ${file} starts with unknown type: ${firstLine}`);
-  } else {
+  try {
+    await mermaid.parse(content);
     console.log(`✅ [MMD] ${file}`);
+  } catch (err: any) {
+    console.error(`❌ [MMD FAIL] ${file}: ${err.message}`);
+    failedDiagrams.push({ file, block: "file", error: err.message, snippet: content.slice(0, 150) });
   }
 }
 
-// 2. Validate embedded mermaid blocks in .md files
+// 2. Embedded mermaid code blocks in .md files
 const mdFiles = findFiles("./docs", ".md");
 const mermaidRegex = /```mermaid\s*([\s\S]*?)```/g;
 
@@ -65,24 +54,36 @@ for (const file of mdFiles) {
     totalDiagrams++;
     const diagramCode = match[1].trim();
     if (!diagramCode) {
-      console.error(`❌ Empty mermaid block in ${file} (block #${blockIndex})`);
-      hasError = true;
+      console.error(`❌ [EMPTY] ${file} (block #${blockIndex})`);
+      failedDiagrams.push({ file, block: blockIndex, error: "Empty mermaid block", snippet: "" });
+      blockIndex++;
       continue;
     }
-    const isValid = validStarters.some((prefix) => diagramCode.startsWith(prefix));
-    if (!isValid) {
-      const firstLine = diagramCode.split("\n")[0].trim();
-      console.warn(`⚠️ Warning in ${file} (block #${blockIndex}): unknown type '${firstLine}'`);
-    } else {
-      console.log(`✅ [MD] ${file} (block #${blockIndex}: ${diagramCode.split("\n")[0].trim()})`);
+    try {
+      await mermaid.parse(diagramCode);
+      console.log(`✅ [MD] ${file} (block #${blockIndex})`);
+    } catch (err: any) {
+      console.error(`❌ [MD FAIL] ${file} (block #${blockIndex}): ${err.message}`);
+      failedDiagrams.push({ file, block: blockIndex, error: err.message, snippet: diagramCode.slice(0, 200) });
     }
     blockIndex++;
   }
 }
 
-if (hasError) {
-  console.error("\n❌ Some diagrams failed validation.");
+console.log(`\n========================================`);
+console.log(`Total diagrams evaluated: ${totalDiagrams}`);
+console.log(`Passed: ${totalDiagrams - failedDiagrams.length}`);
+console.log(`Failed: ${failedDiagrams.length}`);
+console.log(`========================================\n`);
+
+if (failedDiagrams.length > 0) {
+  console.error("FAILURES:");
+  for (const f of failedDiagrams) {
+    console.error(`\n📄 ${f.file} [Block #${f.block}]`);
+    console.error(`Error: ${f.error}`);
+    console.error(`Snippet:\n${f.snippet}`);
+  }
   process.exit(1);
 } else {
-  console.log(`\n🎉 Successfully validated all ${totalDiagrams} Mermaid diagrams across repository.`);
+  console.log("🎉 All diagrams successfully verified by Mermaid parser!");
 }

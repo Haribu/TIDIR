@@ -20,7 +20,7 @@ flowchart TB
     L3["Layer 3: Intel & Detection\n(Enrichment, Real-time & Batch Rules)"]
     L4["Layer 4: Incident Response\n(Triage, Graph Scoping, SOAR)"]
 
-    L1 ➔ L2 ➔ L3 ➔ L4
+    L1 --> L2 --> L3 --> L4
   end
 
   %% Cross-Cutting Engineering Disciplines (Vertical Plane)

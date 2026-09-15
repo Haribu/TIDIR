@@ -82,7 +82,15 @@ export default withMermaid(
         lineColor: "#64748b",
         secondaryColor: "#1e1b4b",
         tertiaryColor: "#0f172a",
-        fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif"
+        mainBkg: "#1e293b",
+        nodeBorder: "#38bdf8",
+        nodeTextColor: "#f8fafc",
+        clusterBkg: "#0f172a",
+        clusterBorder: "#334155",
+        titleColor: "#38bdf8",
+        edgeLabelBackground: "#1e293b",
+        fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
+        fontSize: "14px"
       }
     }
   })
