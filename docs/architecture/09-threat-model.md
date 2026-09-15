@@ -116,7 +116,7 @@ flowchart TB
 * **Architectural Mitigations:**
   1. **Multi-Source Corroboration & Dynamic Confidence Decay:** Indicators require verification across multiple independent feeds before triggering active enforcement.
   2. **Protected Infrastructure Allow-Lists:** Core infrastructure assets (identity providers, public gateways, critical business domains) reside on an immutable, cryptographic allow-list that overrides any inbound CTI feed.
-  3. **Decoupled Lakehouse Ingestion:** Rejecting restrictive "output-driven" filtering ensures that external threat intelligence cannot manipulate which internal events are retained in long-term storage ([ADR-0007](/adr/0007-continuous-automated-purple-teaming-and-multi-model-consensus)).
+  3. **Decoupled Lakehouse Ingestion:** Rejecting restrictive "output-driven" filtering ensures that external threat intelligence cannot manipulate which internal events are retained in long-term storage ([ADR-0007 §3](/adr/0007-continuous-automated-purple-teaming-and-multi-model-consensus) and [Layer 2 Architectural Axiom](/architecture/04-layer-2-pipeline-storage-query#_8-architectural-axiom-rejection-of-output-driven-ingestion)).
 
 ---
 

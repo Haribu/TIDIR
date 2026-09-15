@@ -89,7 +89,7 @@ Traditional threat intelligence produces static PDF reports that require human i
 Rather than authoring rules reactively or attempting exhaustive coverage of hundreds of generic techniques, Layer 3 uses a deterministic **Detection Opportunity Engine** to prioritise engineering effort.
 
 ```mermaid
-flowchart TD
+flowchart TB
   subgraph Inputs ["Prioritisation Inputs"]
     FLOWS["Machine-Readable Attack Flows"]
     ASSETS["Asset & Crown Jewel Criticality (L1 Context)"]
@@ -160,7 +160,7 @@ Every detection rule is maintained as a structured code artifact containing five
 Detection rules cannot be trusted without empirical verification. Layer 3 defines an automated test harness combining synthetic validation with controlled adversary simulation.
 
 ```mermaid
-flowchart TD
+flowchart TB
   subgraph TestHarness ["Automated Detection Testing Harness"]
     direction TB
     subgraph SimEngine ["1. Controlled Adversary Simulation"]
@@ -322,7 +322,7 @@ When a cluster crosses the critical composite risk threshold, Layer 3 does not f
 
 ---
 
-## 5. Autonomous AI & Detection Engineering Leverage
+## 8. Autonomous AI & Detection Engineering Leverage
 
 In Layer 3, autonomous AI and agentic harnesses transform how threat intelligence is ingested and how detection logic is tested and validated:
 

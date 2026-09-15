@@ -2,15 +2,15 @@
 
 ## 1. Overview & Objectives
 
-The Investigation & Case Management subsystem empowers security analysts and incident responders to rapidly triage, scope, and document security incidents. It combines automated entity resolution, process and network graph visualization, unified chronological timeline reconstruction, and tamper-evident case evidence tracking.
+The Investigation & Case Management subsystem empowers security analysts and incident responders to rapidly triage, scope, and document security incidents. It combines automated entity resolution, process and network graph visualisation, unified chronological timeline reconstruction, and tamper-evident case evidence tracking.
 
 ```mermaid
-flowchart TD
+flowchart TB
   subgraph Inputs ["Correlated Finding Inputs"]
     INCIDENT_IN["Correlated Security & Detection Findings\n(OCSF Class 2001 / 2004)"]
   end
 
-  subgraph DefensiveFirewall ["defensive AI Runtime & Data Isolation"]
+  subgraph DefensiveFirewall ["Defensive AI Runtime & Data Isolation"]
     PROMPT_FW["Prompt Injection Firewall\n(Dual-plane data vs. control separation)"]
     TYPED_EXTRACT["Typed Schema Extractor\n(Coerces untrusted payloads into verified JSON)"]
   end
@@ -65,7 +65,7 @@ flowchart TD
 
 ---
 
-## 3. Architectural Patterns & Capability Archetypes
+## 3. Architectural Capability Archetypes & Protocol Standards
 
 | Architectural Subsystem | Functional Capability Pattern | Data Model & Protocol Standards |
 | :--- | :--- | :--- |

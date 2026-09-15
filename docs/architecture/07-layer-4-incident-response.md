@@ -106,7 +106,7 @@ flowchart LR
 Modern high-velocity security operations cannot rely exclusively on human triage (which cannot scale to enterprise alert volumes) nor unconstrained autonomous agents (which lack business context and risk tolerance). Layer 4 pairs **Agentic AI Harnesses** with **Human SecOps Operators** in a continuous collaborative loop:
 
 ```mermaid
-flowchart TD
+flowchart TB
   subgraph Ingestion ["Case Elevation"]
     INCIDENT["High-Fidelity Incident Dossier (from Layer 3)"]
   end

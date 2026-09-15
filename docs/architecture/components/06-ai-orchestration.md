@@ -138,7 +138,7 @@ flowchart TB
 Adopting AI within mission-critical security operations requires a holistic evaluation framework balancing three interdependent forces: **Utility** (operational impact and metrics), **Trust** (verifiability, safety, and repeatability), and **Cost** (compute economics and pricing models).
 
 ```mermaid
-flowchart TD
+flowchart TB
   classDef triad fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#f8fafc;
 
   subgraph TRIAD ["The TIDIR AI Evaluation & Governance Triad"]
@@ -174,6 +174,49 @@ Security operations cannot tolerate stochastic hallucinations or unverifiable cl
 - **Deterministic Prompt & Temperature Pinning**: Agent harnesses in production enforce `temperature = 0.0` (or minimal top-p with seed pinning) to maximize determinism across identical inputs.
 - **Cryptographic Audit Trail (RFC 3161)**: Every agent decision, prompt snapshot, model version, and tool output is sealed with an RFC 3161 cryptographic timestamp and committed to an immutable audit ledger for compliance and forensic reconstruction.
 
+#### SLM-Powered Local Judges & Two-Tier Evaluation Pipeline
+To avoid cloud egress costs and eliminate API rate limits during high-volume triage, TIDIR implements a **Two-Tier Model-as-a-Judge Architecture**:
+
+```mermaid
+flowchart LR
+  AGENT_OUT["Agent Output / Dossier"] --> T0_SLM["Tier 0: Local SLM Judge\n(Phi-4 / Gemma 3 / Qwen 2.5 3B)\n(Sub-100ms, On-Prem GPU)"]
+  
+  T0_SLM -->|Deterministic Checks Pass| EVAL_PASS["Passed Runtime Gate\n(Grounding >= 95%, Schema Valid)"]
+  T0_SLM -->|Ambiguity / Borderline Score| T2_CLOUD["Tier 2: Frontier Cloud Judge\n(Claude 3.7 / Gemini 2.0 Pro)\n(Complex Semantic Arbitration)"]
+  
+  EVAL_PASS --> GOLDEN_DB["Evaluation Ledger & Drift Metrics"]
+  T2_CLOUD --> GOLDEN_DB
+```
+
+1. **Tier 0 Local SLM Judges (Line-Rate Guardrails)**:
+   - Dedicated small language models (SLMs) such as Microsoft Phi-4 (14B), Google Gemma 3 (4B/12B), or Qwen 2.5 (3B/7B) run on local inference engines (vLLM/Ollama) alongside the data pipeline.
+   - **Responsibility**: Sub-100ms structural auditing. Verifies schema compliance, extracts entity references, scores grounding citation presence, and detects blatant instruction leakage before any dossier reaches the analyst workbench.
+   - **Economic & Operational Value**: $0.00 incremental cloud API cost; absolute data sovereignty; operates under total WAN severance.
+
+2. **Tier 2 Frontier Model Escalation (Semantic Multi-Consensus)**:
+   - When the local SLM judge scores confidence between 70% and 85% (borderline ambiguity) or when triage recommendations involve Tier 1/2 containment, the evaluation escalates to a cloud frontier model for adversarial multi-model consensus (Proposer vs. Challenger).
+
+3. **Continuous Judge Calibration Loop**:
+   - The system periodically replays golden benchmark datasets against both the local SLM judge and the frontier model to measure alignment drift.
+   - If SLM-to-Frontier verdict agreement falls below 92%, an automated fine-tuning task is triggered to realign the SLM judge weights.
+
+#### AI Decision Trace Logging & Forensic Auditability
+Regulatory compliance (SOC 2, ISO 27001, EU AI Act) and post-incident forensic reviews demand that every AI-led recommendation is fully auditable down to individual token invocations:
+
+1. **OpenTelemetry GenAI Semantic Conventions**:
+   - Every inference request, completion, and tool invocation emits OpenTelemetry-compliant trace spans containing:
+     - `gen_ai.system`: Provider identifier (e.g. `anthropic`, `google`, `vllm`).
+     - `gen_ai.request.model`: Exact model checkpoint and version hash.
+     - `gen_ai.usage.input_tokens` / `gen_ai.usage.output_tokens`: Precise token accounting.
+     - `gen_ai.response.finish_reasons`: Verification of natural completion vs. safety refusal filter trips.
+     - Custom TIDIR attributes: `tidir.investigation_id`, `tidir.agent_color` (Red/Blue/Green), `tidir.blast_radius_tier`, and `tidir.grounding_score`.
+
+2. **Deterministic Agent Decision DAG Reconstruction**:
+   - The stateful DAG blackboard emits a versioned checkpoint of the entire reasoning graph for each case. Investigators can step backward and forward through the timeline of subagent tool calls, intermediate hypothesis evaluations, and contradictory evidence reconciliations.
+
+3. **Tamper-Sealed Decision Archives**:
+   - Full raw prompts and model completions for all containment recommendations are archived into the Tier 2 Lakehouse and sealed with SHA-256 hash chains and RFC 3161 timestamps, preventing retrospective repudiation.
+
 ---
 
 ### Pillar 2: Utility (Operational Objectives, Metrics & Day-2 Operations)
@@ -199,6 +242,43 @@ AI capabilities must solve concrete operational bottlenecks rather than serving 
 - **Shadow Mode (Day 1–30)**: Agents run silently in the background, attaching recommendations to tickets for retrospective comparison against human analyst notes.
 - **Copilot / Assisted Mode (Day 31–90)**: Agents render read-only briefing cards and pre-drafted Lakehouse queries; analysts must explicitly click to execute.
 - **Supervised Autonomy (Day 90+)**: Agents autonomously execute Tier 0 passive queries and draft Tier 1 containment playbooks, transitioning to autonomous execution only after passing golden benchmark gates.
+
+#### 4. Continuous Self-Learning & Model Improvement Loops
+To prevent agent obsolescence and close the loop between operational incidents and platform intelligence, TIDIR establishes automated self-learning pipelines:
+
+```mermaid
+flowchart LR
+  INC_RESOLVED["Closed & Verified Incident\n(Analyst Ratified Ground Truth)"] --> HARVEST["Harvesting Engine\n(Extracts TTPs, Indicators, Actions)"]
+  HARVEST --> KB["Resolved Incident Knowledge Base\n(Vector Embeddings & Graph Nodes)"]
+  
+  KB --> FEW_SHOT["Dynamic Few-Shot Exemplars\n(Injected into Agent System Prompts)"]
+  KB --> SLM_TUNE["Quarterly SLM Fine-Tuning Pipeline\n(LoRA / QLoRA on Sovereign GPU Cluster)"]
+  KB --> DAC_FEEDBACK["Detection Quality Scoring Update\n(True-Positive Rate Feedback into L3)"]
+  
+  DRIFT_MON["Continuous Drift & SLA Monitor\n(>2σ Drift Triggers SOC Engineering Alert)"]
+```
+
+1. **Resolved Incident Knowledge Base (Ground-Truth Harvesting)**:
+   - Every closed investigation ratified by human analysts is automatically harvested into a structured knowledge base. The system pairs initial raw alerts and environmental context with the confirmed root cause, verified false leads, and optimal containment sequence.
+   - Raw data is sanitised of transient secrets before embedding into the Layer 2 vector catalogue.
+
+2. **Dynamic Few-Shot Exemplar Selection**:
+   - During active triage, the AI Gateway queries the Resolved Incident Knowledge Base using semantic similarity over the current finding's MITRE ATT&CK techniques and OCSF classes.
+   - The top 2–3 most relevant historical incident resolutions are dynamically injected as few-shot exemplars into specialist agent prompts, continually improving reasoning without requiring model retraining.
+
+3. **Quarterly Sovereign SLM Fine-Tuning**:
+   - High-volume, privacy-sensitive local SLM models (used for triage classification, OCSF SQL extraction, and Tier 0 judging) are periodically fine-tuned using parameter-efficient methods (LoRA/QLoRA) on the accumulated internal incident corpus.
+   - Operates entirely on the on-premises or private-cloud Sovereign GPU Cluster, ensuring internal tradecraft never leaves the enterprise perimeter.
+
+4. **Detection Effectiveness & Confidence Scoring Feedback**:
+   - Real-world incident outcomes feed back into Layer 3 Detection Opportunity Scoring (§3 of Layer 3). Detection rules that repeatedly yield confirmed incidents receive elevated confidence weighting, whereas rules generating high analyst dismissal rates automatically trigger Green Agent noise-budget tuning PRs.
+
+5. **Statistical Drift & Degradation Circuit Breakers**:
+   - Key operational metrics (triage comprehension time, SQL compilation success rate, grounding fidelity, judge consensus rate) are monitored continuously against rolling 30-day baselines.
+   - A statistically significant degradation ($> 2\sigma$ variance over a 7-day sliding window) triggers an automated alert to the SecOps engineering team and temporarily down-ranks autonomous agent privileges to Assisted Copilot mode.
+
+6. **Human-in-the-Loop Preference Alignment**:
+   - Analyst interactions on the workbench (edits to agent hypotheses, reordered response plans, thumbs up/down feedback) are captured as Direct Preference Optimisation (DPO) training pairs, ensuring future agent iterations align with human operator judgment.
 
 ---
 

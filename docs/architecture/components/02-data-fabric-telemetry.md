@@ -2,10 +2,10 @@
 
 ## 1. Overview & Objectives
 
-The Telemetry & Data Fabric provides the foundational data infrastructure for TIDIR. It guarantees reliable, high-throughput ingestion from heterogeneous security data sources, real-time normalization into the Open Cybersecurity Schema Framework (OCSF), and tier-optimised storage across hot analytical indices and durable lakehouse repositories.
+The Telemetry & Data Fabric provides the foundational data infrastructure for TIDIR. It guarantees reliable, high-throughput ingestion from heterogeneous security data sources, real-time normalisation into the Open Cybersecurity Schema Framework (OCSF), and tier-optimised storage across hot analytical indices and durable lakehouse repositories.
 
 ```mermaid
-flowchart TD
+flowchart TB
   subgraph Collectors ["Telemetry Collection"]
     AGENTS["Endpoint Sensors (Host Telemetry & Kernel Collectors)"]
     CLOUD_INGEST["Cloud Connectors (Control Plane & Infrastructure Logs)"]
@@ -31,7 +31,7 @@ flowchart TD
 
   STREAM_BUS --> SCHEMA_NORM
   SCHEMA_NORM -->|Failed Validation| DLQ
-  SCHEMA_NORM -->|Normalized Stream| HOT_INDEX
+  SCHEMA_NORM -->|Normalised Stream| HOT_INDEX
   SCHEMA_NORM -->|Micro-batch Flush| LAKEHOUSE
 ```
 
@@ -44,7 +44,7 @@ flowchart TD
    - Dynamic partition autoscaling based on incoming event rates (Events Per Second - EPS).
    - At-least-once message delivery semantics with consumer deduplication.
 
-2. **OCSF Schema Normalization**:
+2. **OCSF Schema Normalisation**:
    - Decouple raw vendor telemetry from detection logic.
    - Mapping catalog for:
      - Host Activity (Process Creation, Network Connections, File Operations) -> OCSF System Activity / Process Activity classes.

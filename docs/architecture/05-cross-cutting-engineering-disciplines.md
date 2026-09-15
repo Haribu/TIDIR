@@ -171,7 +171,7 @@ AI and Agentic Harnesses introduce autonomous reasoning and acceleration across 
 flowchart TB
   subgraph AI_Harness ["AI & Agentic Harness Architecture"]
     direction TB
-    subgraph ContextEngine ["1. defensive Ingestion & Context Assembly"]
+    subgraph ContextEngine ["1. Defensive Ingestion & Context Assembly"]
       FIREWALL["Prompt Injection Firewall\n(Dual-plane data vs. control separation)"]
       GATHER["Entity Aggregator\n(Pulls CMDB, auth history, active alerts)"]
       REDACT["Deterministic Privacy Redaction\n(Masks PII, keys, customer data)"]

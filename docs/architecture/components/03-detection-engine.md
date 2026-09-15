@@ -5,7 +5,7 @@
 The Detection Engine applies threat logic against both streaming and historical telemetry. It couples near-real-time streaming pattern recognition with scheduled analytical lakehouse queries, adopting a **Detection-as-Code (DaC)** lifecycle to ensure that detection logic is versioned, unit-tested, and maintainable.
 
 ```mermaid
-flowchart TD
+flowchart TB
   subgraph DaCPipeline ["Detection-as-Code (DaC) & Continuous Purple Team"]
     GIT["Rule Repository (Declarative YAML / DSL)"]
     CI["CI Pipeline: Linting, Unit Testing & Syntax Check"]
@@ -68,7 +68,7 @@ flowchart TD
 
 ---
 
-## 3. Architectural Patterns & Capability Archetypes
+## 3. Architectural Capability Archetypes & Protocol Standards
 
 | Sub-component | Functional Architecture Pattern | Data Model & Protocol Standards |
 | :--- | :--- | :--- |

@@ -5,7 +5,7 @@
 The Automated Response & Containment capability executes codified playbooks to accelerate incident triage, enrich investigations, and contain active security threats. To protect business operations while achieving high containment velocity, the architecture enforces a **Blast-Radius Risk Tiering** model that cleanly separates automated, low-risk operational steps from disruptive actions requiring human-in-the-loop authorisation.
 
 ```mermaid
-flowchart TD
+flowchart TB
   subgraph Triggers ["Execution Triggers"]
     T1["Correlated High-Confidence Alert\n(OCSF Class 2004)"]
     T2["Analyst Workbench Proposal\n(Agent or Human Drafted)"]
@@ -80,7 +80,7 @@ flowchart TD
 
 ---
 
-## 3. Architectural Patterns & Capability Archetypes
+## 3. Architectural Capability Archetypes & Protocol Standards
 
 | Subsystem Component | Functional Architecture Pattern | Data Model & Protocol Standards |
 | :--- | :--- | :--- |

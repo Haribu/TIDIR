@@ -1,4 +1,4 @@
-# 0004. defensive AI Runtime and Prompt Injection Firewall
+# 0004. Defensive AI Runtime and Prompt Injection Firewall
 
 * Status: accepted
 * Deciders: Architecture Team / Harry
