@@ -1,0 +1,34 @@
+name: CI & Integrity Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    name: Validate Diagrams & Build Site
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install Dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Validate Mermaid Diagrams
+        run: bun ./scripts/validate-diagrams.ts
+
+      - name: Build VitePress Documentation
+        run: bun run docs:build

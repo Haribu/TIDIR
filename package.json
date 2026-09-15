@@ -16,6 +16,7 @@
     "markdown-it-mathjax3": "^5.2.0",
     "markdownlint-cli": "^0.44.0",
     "typescript": "^5.8.2",
+    "vitepress": "^1.6.4",
     "wrangler": "3"
   }
 }
