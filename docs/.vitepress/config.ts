@@ -8,6 +8,13 @@ export default withMermaid(
     base: "/",
     cleanUrls: true,
     ignoreDeadLinks: true,
+    head: [
+      [
+        "script",
+        {},
+        "if (location.hostname === 'tidir.pages.dev') { location.replace('https://tidir.harrymclaren.co.uk' + location.pathname + location.search + location.hash); }"
+      ]
+    ],
     themeConfig: {
       nav: [
         { text: "Overview", link: "/architecture/01-system-overview" },
