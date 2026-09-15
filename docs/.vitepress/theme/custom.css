@@ -20,14 +20,54 @@ mjx-container {
 
 /* Ensure Mermaid diagrams scroll horizontally within container on mobile */
 .mermaid {
+  position: relative;
   display: block;
   max-width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  margin: 1.5rem 0;
+  margin: 1.75rem 0;
+  padding: 1.25rem;
+  background-color: #0b0f19;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  cursor: zoom-in;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mermaid:hover {
+  border-color: #38bdf8;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.12);
+}
+
+.mermaid::after {
+  content: "🔍 Click to Zoom";
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid #334155;
+  color: #38bdf8;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  pointer-events: none;
+  opacity: 0.8;
+  backdrop-filter: blur(4px);
+  transition: all 0.2s ease;
+  z-index: 5;
+}
+
+.mermaid:hover::after {
+  opacity: 1;
+  border-color: #38bdf8;
+  color: #7dd3fc;
 }
 
 .mermaid svg {
+  display: block;
+  margin: 0 auto;
   max-width: 100%;
   height: auto;
 }
