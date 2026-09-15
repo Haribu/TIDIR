@@ -38,15 +38,24 @@ flowchart TB
         S44["<b>Service 4.4: Closed-Loop Engineering Feedback</b><br>Automatic indicator back-propagation and Evals-as-Code calibration"]
     end
 
-    MACRO1 ==> MACRO2
-    MACRO2 ==> MACRO3
-    MACRO3 ==> MACRO4
-    MACRO4 -.->|"Closed-Loop Feedback & Evals"| MACRO1
+    subgraph FEEDBACK ["5. CLOSED-LOOP CONTINUOUS CALIBRATION & ADAPTATION"]
+        direction LR
+        FB1["<b>Threat Feed Auto-Calibration</b><br>Confirmed campaign indicators & TTPs re-injected into CTI Cache (Service 1.1)"]
+        FB2["<b>Detection & Purple Team Tuning</b><br>Triage discoveries & noise budgets auto-calibrate DaC rules (Service 3.1)"]
+        FB3["<b>Evals-as-Code Verification</b><br>Post-mortem scenarios compiled into regression test suites (Service 4.4)"]
+    end
+
+    MACRO1 ==>|1. Threat Context & CTI Edge Matching| MACRO2
+    MACRO2 ==>|2. Line-Rate OCSF Telemetry & Hot/Cold Stores| MACRO3
+    MACRO3 ==>|3. Correlated Findings & Bayesian Graph Signals| MACRO4
+    MACRO4 ==>|4. Incident Dossiers & Efficacy Outcomes| FEEDBACK
 
     classDef default fill:#1e293b,stroke:#475569,stroke-width:1px,color:#f8fafc;
     classDef macro fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#f8fafc;
-    class S11,S12,S21,S22,S31,S32,S41,S42,S43,S44 default;
+    classDef feedback fill:#052e16,stroke:#10b981,stroke-width:1.5px,color:#f8fafc;
+    class S11,S12,S21,S22,S31,S32,S41,S42,S43,S44,FB1,FB2,FB3 default;
     class MACRO1,MACRO2,MACRO3,MACRO4 macro;
+    class FEEDBACK feedback;
 ```
 
 ---
