@@ -115,7 +115,7 @@ export default withMermaid(
         }
       ],
       socialLinks: [
-        { icon: "github", link: "https://github.com/harrymclaren/TIDIR" }
+        { icon: "github", link: "https://github.com/Haribu" }
       ],
       footer: {
         message: "TIDIR Reference Architecture — Open & Modular Security Operations",
