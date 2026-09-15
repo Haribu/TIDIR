@@ -137,3 +137,58 @@ flowchart LR
 | **L3 Detection Target** | OCSF Classes (1001, 1007, 3002, 4001, etc.) | Vendor-neutral detection logic decoupled from physical database columns. |
 | **L3 ➔ L4 Handoff** | OCSF Class 2001 & Class 2004 Findings | Standardized security and detection findings carrying evidence, ATT&CK tags, and risk scores. |
 | **L4 Containment** | Declarative Action Specifications | Parameterized containment payloads executed against third-party API connectors. |
+
+---
+
+## 4. The Executive AI & Autonomous Agentic Opportunity Matrix (The CISO Lens)
+
+For executive cybersecurity leaders (CISOs and SecOps Directors), integrating Artificial Intelligence into security operations carries dual imperatives: **maximizing defensive velocity while enforcing deterministic safety boundaries**. 
+
+TIDIR deliberately confines AI models to high-leverage cognitive tasks (synthesis, drafting, baselining, hypothesis formulation) while anchoring execution, schema enforcement, and disruptive containment behind deterministic engineering gates.
+
+| Architectural Layer | Autonomous AI / Agent Opportunity | Deterministic Safety Gate | Strategic CISO ROI & Business Value |
+| :--- | :--- | :--- | :--- |
+| **Layer 1: Data Sources & Ingress** | **Automated Log Parser Synthesis**: Generative models analyze unmapped vendor logs (JSON, EVTX, Syslog) and draft OCSF mapping parsers and regular expressions. | **Schema Registry Validation**: Parsers cannot deploy without passing compiler type-checking and automated regression replay. | **85% Faster Source Onboarding**: Eliminates weeks of manual log ingestion engineering for proprietary enterprise tools. |
+| **Layer 1: Data Sources & Ingress** | **Synthetic Telemetry Generation**: Generates high-fidelity attack telemetry for dangerous, untestable techniques (e.g. ransomware encryption loops). | **Isolated Test Sandbox**: Generated telemetry executes strictly within non-production environments. | **Zero-Risk Efficacy Testing**: Validates detection sensors against catastrophic exploits without running malware on live systems. |
+| **Layer 2: Pipeline & Storage Fabric** | **Natural Language Data Exploration**: Translates plain-language analyst questions (*"Show all outbound HTTPS sessions from accounting workstations to unclassified ASNs"*) into optimized SQL/streaming queries. | **Read-Only AST AST Validator**: Enforces strict SELECT-only query constraints and compute timeout budgets. | **3x Analyst Query Velocity**: Junior analysts conduct complex multi-table lakehouse investigations without learning complex SQL dialects. |
+| **Layer 3: Detection Engineering** | **Threat Advisory to Attack Flow Synthesis**: Ingests unstructured CTI advisories and threat bulletins (PDF, HTML) and extracts structured MITRE ATT&CK DAG flows. | **Human CTI Peer Review**: Analyst ratifies extracted Priority Intelligence Requirements (PIRs). | **10x Faster Threat Codification**: Reduces the window between zero-day public disclosure and detection backlog prioritization from days to minutes. |
+| **Layer 3: Detection Engineering** | **Automated Detection Quality Judge**: Multi-agent LLM judges audit candidate Detection-as-Code rules for schema compliance, regex backtracking risks, and missing triage documentation. | **CI/CD Unit & Regression Suite**: Rules must achieve 100% pass rate on synthetic unit tests and 30-day lakehouse backtests. | **Eliminates Production Alert Thrashing**: Prevents brittle, performance-degrading detection rules from reaching production engines. |
+| **Layer 4: Investigation & Cases** | **Autonomous Triage Scoper**: Upon finding elevation, the agent autonomously dispatches 90-day entity baseline and sibling asset queries across Layer 2 without analyst prompting. | **Deterministic Entity Boundaries**: Scoper operates strictly on pre-resolved graph pivots; cannot execute environmental modifications. | **75% Reduction in Pivot Fatigue**: Tier-1 analysts receive a fully hydrated case dossier containing complete process lineage and host context upon initial ticket open. |
+| **Layer 4: Incident Response (SOAR)** | **Pre-Execution Blast-Radius Simulator**: Evaluates active network connections, business service criticality, and dependency trees to calculate operational disruption risk. | **Dual-Authorization Consensus Engine**: Tier 2 containment requires cryptographic multi-signature approval; single-agent action is structurally impossible. | **Zero Inadvertent Outages**: Completely eliminates the risk of false-positive agent recommendations isolating critical revenue-generating infrastructure. |
+
+---
+
+## 5. The Detection Engineer's Operational Walkthrough (The Practitioner Lens)
+
+To understand how the TIDIR architecture functions in day-to-day cyber defense, consider how a **Detection Engineer** navigates the lifecycle from a novel threat advisory to a hardened, deployed detection rule:
+
+```mermaid
+flowchart LR
+  %% Practitioner Steps
+  classDef step fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
+  classDef gate fill:#2e1065,stroke:#c084fc,stroke-width:2px,color:#f8fafc;
+  classDef prod fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#f8fafc;
+
+  S1["1. Threat Advisory\n(Novel Attack Technique)"]:::step
+  S2["2. Machine-Readable Flow\n(Layer 3 ATT&CK DAG)"]:::step
+  S3["3. DaC Rule Authoring\n(Targets OCSF Class 1007)"]:::step
+  S4["4. CI/CD Simulation Gate\n(Synthetic unit & 30d backtest)"]:::gate
+  S5["5. Production Deployment\n(Streaming <5s & Lakehouse SQL)"]:::prod
+  S6["6. Correlated Dossier\n(Risk Lens clusters findings)"]:::prod
+
+  S1 --> S2 --> S3 --> S4 --> S5 --> S6
+```
+
+### Step-by-Step Practitioner Journey
+
+1. **Adversary Technique Published**: A threat intelligence alert details a novel DLL Search Order Hijacking technique (*MITRE ATT&CK T1574.002*).
+2. **Attack Flow Ingestion**: In **Layer 3**, the intelligence engine parses the advisory into a machine-readable attack flow detailing the prerequisite process execution events, file creations, and command-line arguments.
+3. **Telemetry Verification (Layer 1)**: The Detection Engineer confirms that enterprise endpoints emit the required telemetry—verifying that Windows Event Log Channel `Microsoft-Windows-Sysmon/Operational` (Event ID 7: Image Load) and Linux eBPF module loads are actively ingested and mapped to **OCSF Class 1007 (Process Activity)**. Any non-standard fields are verified in `unmapped_data`.
+4. **Declarative Rule Authoring (DaC)**: In the Detection-as-Code repository, the engineer writes a vendor-neutral declarative rule targeting `process.file.name` and `process.loaded_modules.path`.
+5. **Automated CI/CD Validation**: Upon opening a Git Pull Request:
+   - *Synthetic Unit Tests*: Run mock OCSF payloads through the rule parser to verify true-positive trigger conditions and benign edge-case pass-through.
+   - *30-Day Historical Backtest*: The CI pipeline queries a 30-day lakehouse sample in `pre-prod` to calculate the **Expected Alert Volume (EAV)** and ensure the false-positive rate falls within error budgets.
+   - *LLM Quality Judge*: An automated harness audits the rule for schema field deprecations and ensures triage guidance is complete.
+6. **Deployment & Execution (Layer 2 & 3)**: Once merged to `main`, GitOps automations deploy the rule to the **Streaming Engine** (for sub-5-second alerting on interactive sessions) and the **Lakehouse Batch Engine** (for 24-hour baseline sweeps).
+7. **Risk-Lens Correlation & Incident Elevation (Layer 3 ➔ Layer 4)**: If the rule fires in production, the alert is not thrown into an unmanaged ticket queue. Layer 3's graph correlation engine links the event with network connections and user authentication events, computes the composite risk score, and elevates a structured **Incident Dossier** directly to the Tier-1 operator workbench.
+

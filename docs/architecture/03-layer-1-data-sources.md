@@ -47,16 +47,22 @@ flowchart LR
 
 ### Stage 1: Generation (Event Emission Primitives)
 Data generation occurs where software, hardware, or external actors execute actions. Telemetry must be captured as close to the point of origin as possible to guarantee forensic integrity and prevent evasion:
-- **Kernel-Level Observability**: Intercepts low-level system calls, process fork/exec chains, module loads, and memory manipulations via kernel instrumentation (Linux eBPF, Windows Event Tracing / ETW, macOS Endpoint Security framework).
-- **Service & Control-Plane Eventing**: Management planes record administrative transactions, identity provisioning, and API calls via immutable audit logs (cloud management trails, IdP event logs).
+- **Standard Machine-Readable Logging**: The operational baseline of enterprise security observability:
+  - *Structured JSON / NDJSON*: Line-delimited JSON emitted directly by modern microservices, container runtimes, API gateways, and web application servers.
+  - *Operating System Event Subsystems*: Structured OS event pipelines, including Windows Event Logs (EVTX channels: Security, System, PowerShell Script Block Logging, TaskScheduler) and Linux `systemd-journald` / `auditd` event streams.
+  - *Network Appliance & System Syslog*: RFC 5424 / RFC 3164 formatted logs emitted by perimeter firewalls, VPN concentrators, load balancers, DNS resolvers, and network switches.
+  - *Cloud Management & Data Plane Audit Logs*: Immutable audit trails emitted by cloud provider control planes (management API transactions, identity role assumptions, storage bucket access logs).
+- **Kernel-Level Observability**: Intercepts low-level system calls, process fork/exec chains, module loads, and memory manipulations via kernel instrumentation (Linux eBPF, Windows Event Tracing / ETW, macOS Endpoint Security framework) to catch evasive tradecraft that bypasses user-space loggers.
+- **Service & Identity Eventing**: Authentication challenge evaluations, MFA token issuance, administrative role escalations, and directory service synchronization events.
 - **Network Interface Taps**: Hardware and virtual taps mirror wire traffic to generate connection state flows and application-layer metadata records without relying on host software.
 - **External Intelligence Publishing**: Third-party providers publish adversary campaigns, vulnerability weaponization telemetry, and active indicators over authenticated feeds.
 
 ### Stage 2: Collection (Edge Gathering & Buffering)
 Collection mechanisms gather emitted raw events on or near the emitter:
-- **Agent-Based Collection**: Lightweight user-space daemons subscribe to local OS event rings. They must enforce strict CPU/memory throttling and handle kernel buffer overflows gracefully.
+- **File & Tail Collectors**: Lightweight daemons monitoring on-disk log files (`/var/log/*`, rotated application logs, Windows EVTX channels) with persistent file offset watermarking to guarantee zero missed lines across log rotations.
+- **Agent-Based Kernel Collectors**: Lightweight user-space daemons subscribe to local OS event rings (eBPF ring buffers, ETW sessions). They must enforce strict CPU/memory throttling and handle kernel buffer overflows gracefully.
 - **Pull-Based API Ingestion**: Distributed schedulers poll third-party cloud and SaaS endpoints, maintaining watermarked checkpoint cursors to guarantee at-least-once collection without duplicates.
-- **Network Ingestion Listeners**: Horizontally scalable listeners accept push-based streaming formats (Syslog RFC 5424, NetFlow v9 / IPFIX, direct webhooks).
+- **Network Ingestion Listeners**: Horizontally scalable listeners accept push-based streaming formats (Syslog RFC 5424 over TCP/TLS, NetFlow v9 / IPFIX, direct HTTPS webhooks).
 
 ### Stage 3: Transport & Egress (The L1 ➔ L2 Handoff)
 Transport is responsible for moving collected events reliably across network boundaries into Layer 2's ingestion streaming bus:
