@@ -96,3 +96,26 @@ bun run deploy
 4. **Security & Secrets Non-Negotiable**:
    - **Zero credentials in Git**: Never commit API keys, tokens, or personal identifiers.
    - All external deployment tokens must be read from external local environment stores or CI secrets.
+
+---
+
+## ⚠️ Operational Gotchas & Agent Guidelines (Learned Lessons)
+
+1. **Explicit Dependency Closure**:
+   - Every package imported in `docs/.vitepress/config.ts`, `docs/`, or `scripts/` (e.g., `vitepress`, `vitepress-plugin-mermaid`, `markdown-it-mathjax3`) **must** be explicitly declared in `package.json` (`devDependencies` or `dependencies`).
+   - Never assume packages exist ambiently in parent directories or developer global paths.
+
+2. **Frozen Lockfile Discipline (`bun.lock`)**:
+   - Any modification to `package.json` dependencies must be immediately followed by `bun install` with network access to re-sync and save `bun.lock`.
+   - CI executes `bun install --frozen-lockfile`. If `package.json` and `bun.lock` diverge by even a single character, CI will fail immediately.
+
+3. **Pre-Push Holistic Verification**:
+   - Before pushing changes to `main`:
+     1. Run diagram validation: `bun ./scripts/validate-diagrams.ts`
+     2. Run docs build: `bun ./node_modules/.bin/vitepress build docs` (or `bun run docs:build`)
+     3. Verify working tree is clean: `git status`
+   - Never commit speculative fixes piecemeal to `origin/main` to test in CI. Verify local closure first.
+
+4. **Runtime Standard (Zero Node/NPM)**:
+   - Always invoke commands using `bun` / `bunx`. Never attempt `node`, `npm`, or `npx`.
+
