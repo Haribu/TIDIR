@@ -34,28 +34,30 @@ flowchart TB
   subgraph L2 ["LAYER 2: PIPELINE, STORAGE & QUERY FABRIC"]
     L2_INGEST["Line-Rate Ingestion & OCSF Normalization\n(Schema registry, unmapped data catch-all & DLQ)"]:::layer2
     L2_ROUTER["Value-Based Tiering & Stream Router\n(Tier A hot stream, Tier B lakehouse, Tier C filter)"]:::layer2
-    L2_STORAGE["Multi-Paradigm Storage & Query Core\n(Hot index, columnar lakehouse, hybrid state store Δt)"]:::layer2
+    L2_STORAGE["Multi-Paradigm Storage & Query Core\n(Hot index, columnar lakehouse, two-tier sketch state Δt)"]:::layer2
   end
 
   %% Layer 3: Threat Intelligence & Detection Engineering
   subgraph L3 ["LAYER 3: THREAT INTEL & DETECTION ENGINEERING"]
     L3_FLOW["Machine-Readable Threat Models\n(Adversary attack flows, PIRs, graph mapping)"]:::layer3
-    L3_DAC["Detection-as-Code (DaC) Engine\n(Stateful streaming rules, lakehouse scheduled SQL)"]:::layer3
+    L3_DAC["Dual-Lane DaC Engine\n(Fast-lane emergency zero-day + standard 30d lakehouse)"]:::layer3
     L3_RISK["Risk Lens & Finding Synthesis\n(Supernode-dampened graph clustering, OCSF 2001/2004)"]:::layer3
   end
 
   %% Layer 4: Incident Response & Automation
   subgraph L4 ["LAYER 4: INVESTIGATION, CASE MANAGEMENT & AUTOMATED RESPONSE"]
     L4_DOSSIER["Unified Investigation & Case Dossier\n(Entity 360, progressive disclosure UX, sealed timeline)"]:::layer4
-    L4_TRIAGE["Hierarchical Agent Mesh\n(Lead orchestrator, host/network/cloud specialists, prompt firewall)"]:::layer4
-    L4_RESP["Saga Containment Engine\n(Pre-execution simulation, compensation transactions, break-glass override)"]:::layer4
+    L4_TRIAGE["Hierarchical Agent Mesh & JIT Elevation\n(Lead orchestrator, host/network/cloud specialists, JIT orders)"]:::layer4
+    L4_RESP["Asymmetric Fail-Secure Containment\n(Forward escalation, dual-auth gates, break-glass override)"]:::layer4
   end
 
   %% Closed-Loop Architectural Feedback
   subgraph FB ["CLOSED-LOOP CONTINUOUS CALIBRATION"]
     FB_INTEL["Attributed Threat Flows & IOCs\n(Re-ingested into L1 CTI & L3 Detection Backlog)"]
     FB_GAPS["Telemetry Blindspot Analysis\n(Re-tunes L1 Sensor Filters & Collection Audits)"]
-    FB_RESP["Playbook Execution Efficacy\n(Refines L4 Blast-Radius & Simulation Models)"]
+    FB_JIT["JIT Telemetry Elevation Orders\n(Dynamically re-instruments L1 edge sensors for 15-30m)"]
+    FB_RESP["Playbook Execution Efficacy\n(Refines L4 Blast-Radius & Forward Models)"]
+    FB_GREEN["Green Team Prevention Triggers\n(IaC Pull Requests & Defense-in-Depth Hardening)"]
   end
 
   %% Operational Progression (Strict Top-to-Bottom DAG)
@@ -81,6 +83,7 @@ flowchart LR
     E3["Detection Engineering (DaC)\n(Simulation, Testing & CI/CD)"]:::eng
     E4["Automation SRE\n(Playbooks-as-Code & Saga Rollback)"]:::eng
     E5["AI Agent Harnesses\n(Evals-as-Code & Prompt Firewall)"]:::eng
+    E6["Green Team Engineering\n(IaC Remediation & Defense-in-Depth)"]:::eng
   end
 
   subgraph TARGETS ["OPERATIONAL TOUCHPOINTS"]
@@ -89,6 +92,7 @@ flowchart LR
     T_ENG["Streaming & Lakehouse Engines\n(Layer 3 Detection)"]:::target
     T_RESP["Connector Ecosystem & Saga APIs\n(Layer 4 Containment)"]:::target
     T_OPS["Hierarchical Agent Mesh & Workbench\n(Layer 4 Investigation)"]:::target
+    T_PREV["Enterprise Posture & Cloud IaC\n(Preventative Hardening)"]:::target
   end
 
   E1 -->|Enforces Schemas| T_REG
@@ -96,6 +100,7 @@ flowchart LR
   E3 -->|Deploys Tested Rules| T_ENG
   E4 -->|Deploys Gated Playbooks| T_RESP
   E5 -->|Supervises Evals & Prompts| T_OPS
+  E6 -->|Submits Hardening PRs| T_PREV
 ```
 
 ---
@@ -125,7 +130,7 @@ flowchart LR
 - **Hierarchical Agent Mesh**: Dispatches specialized autonomous subagents (host forensic, identity, network, cloud) coordinated by a Lead Triage Orchestrator behind an isolated **Prompt Injection Firewall**.
 - **Tamper-Evident Evidence Dossier**: Records queries, annotations, and artifacts with cryptographic integrity (RFC 3161 timestamps) for post-incident review.
 - **Saga-Pattern Gated Containment**: Executes containment playbooks as distributed Sagas with automated compensating transactions, separating low-risk actions (Tier 1) from disruptive actions (Tier 2) governed by dual-authorisation consensus and an audited **Break-Glass Emergency Protocol**.
-- **Closed-Loop Feedback**: Automatically feeds confirmed indicators and false-positive tuning parameters back into Layer 1/3 threat intelligence and rule calibration.
+- **Closed-Loop Feedback & Green Team Prevention**: While TIDIR intentionally scopes its core engine to threat intelligence, detection, investigation, and incident response (deliberately avoiding duplicating inline prevention appliances), it completes the closed loop by programmatically recommending and triggering **Green Teams** (infrastructure, platform, and cloud security engineering). Post-incident findings, exploited misconfigurations, and lateral movement paths automatically synthesize Infrastructure-as-Code (IaC) pull requests, identity boundary tightenings, and preventative control improvements to permanently eradicate root causes and deepen enterprise defense-in-depth.
 - See full spec: [Layer 4 Specification](07-layer-4-incident-response.md) and [AI & Agentic Orchestration Plane](components/06-ai-orchestration.md).
 
 ---

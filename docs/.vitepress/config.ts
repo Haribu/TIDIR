@@ -60,7 +60,7 @@ export default withMermaid(
             { text: "AI & Agent Orchestration", link: "/architecture/components/06-ai-orchestration" }
           ]
         },
-        { text: "ADRs", link: "/adr/0001-record-architecture-decisions" },
+        { text: "ADRs", link: "/adr/" },
         { text: "GitHub ↗", link: "https://github.com/Haribu/TIDIR" }
       ],
       sidebar: [
@@ -101,22 +101,52 @@ export default withMermaid(
           ]
         },
         {
-          text: "Architecture Decisions (ADR)",
+          text: "Architecture Decisions: Governance & Strategy",
+          collapsed: false,
           items: [
-            { text: "0001 - Record Decisions & Mermaid", link: "/adr/0001-record-architecture-decisions" },
-            { text: "0002 - Preserve Unmapped OCSF Data", link: "/adr/0002-preserve-unmapped-telemetry-in-ocsf" },
-            { text: "0003 - Supernode Pruning & Graph Clustering", link: "/adr/0003-graph-supernode-pruning-and-clustering-boundaries" },
-            { text: "0004 - Defensive AI & Prompt Firewall", link: "/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall" },
-            { text: "0005 - Saga Containment & Break-Glass", link: "/adr/0005-saga-pattern-containment-and-break-glass-protocol" },
-            { text: "0006 - Agent Evals-as-Code Harness", link: "/adr/0006-agent-evaluation-harness-evals-as-code" },
-            { text: "0007 - Continuous Purple Teaming & Consensus", link: "/adr/0007-continuous-automated-purple-teaming-and-multi-model-consensus" },
-            { text: "0008 - SecOps Error Budgets & Chaos SRE", link: "/adr/0008-secops-error-budgets-and-chaos-security-engineering" },
-            { text: "0009 - Bayesian Multi-Signal Risk Scoring", link: "/adr/0009-bayesian-multi-signal-risk-scoring" },
+            { text: "ADR Registry Overview", link: "/adr/" },
+            { text: "0001 - Record Architecture Decisions", link: "/adr/0001-record-architecture-decisions" },
             { text: "0010 - SABSA Alignment & Attribute Profiling", link: "/adr/0010-sabsa-business-architecture-and-attribute-profiling" },
+            { text: "0008 - SecOps Error Budgets & Chaos SRE", link: "/adr/0008-secops-error-budgets-and-chaos-security-engineering" }
+          ]
+        },
+        {
+          text: "Architecture Decisions: Data Fabric & Ingress",
+          collapsed: false,
+          items: [
+            { text: "0002 - Preserve Unmapped OCSF Telemetry", link: "/adr/0002-preserve-unmapped-telemetry-in-ocsf" },
+            { text: "0015 - Sandboxed Agents & OTLP Convergence", link: "/adr/0015-sandboxed-agent-execution-otlp-convergence-and-ephemeral-identity" },
+            { text: "0016 - JIT Telemetry Elevation & Forensics", link: "/adr/0016-just-in-time-telemetry-elevation-and-ephemeral-forensics" }
+          ]
+        },
+        {
+          text: "Architecture Decisions: Detection & Intel",
+          collapsed: false,
+          items: [
+            { text: "0007 - Continuous Purple Teaming & Consensus", link: "/adr/0007-continuous-automated-purple-teaming-and-multi-model-consensus" },
+            { text: "0009 - Bayesian Multi-Signal Risk Scoring", link: "/adr/0009-bayesian-multi-signal-risk-scoring" },
             { text: "0011 - Bipartite Entity-Finding Graph", link: "/adr/0011-bipartite-entity-finding-graph-consolidation" },
+            { text: "0013 - Ambient Deception & Canary Anchors", link: "/adr/0013-ambient-deception-fabric-and-canary-anchors" }
+          ]
+        },
+        {
+          text: "Architecture Decisions: Investigation & Response",
+          collapsed: false,
+          items: [
+            { text: "0003 - Supernode Pruning & Graph Clustering", link: "/adr/0003-graph-supernode-pruning-and-clustering-boundaries" },
+            { text: "0005 - Asymmetric Containment & Break-Glass", link: "/adr/0005-saga-pattern-containment-and-break-glass-protocol" }
+          ]
+        },
+        {
+          text: "Architecture Decisions: AI Runtime & Observability",
+          collapsed: false,
+          items: [
+            { text: "0004 - Defensive AI & Prompt Firewall", link: "/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall" },
+            { text: "0006 - Agent Evals-as-Code Harness", link: "/adr/0006-agent-evaluation-harness-evals-as-code" },
             { text: "0012 - AI Orchestration & MVP Roadmap", link: "/adr/0012-ai-orchestration-runtime-mcp-and-mvp-roadmap" },
-            { text: "0013 - Ambient Deception & Canary Anchors", link: "/adr/0013-ambient-deception-fabric-and-canary-anchors" },
-            { text: "0014 - AI Observability & SLM Judges", link: "/adr/0014-ai-observability-self-learning-and-slm-judges" }
+            { text: "0014 - AI Observability & SLM Judges", link: "/adr/0014-ai-observability-self-learning-and-slm-judges" },
+            { text: "0017 - Agent Fleet Control & Loop Breakers", link: "/adr/0017-agent-fleet-control-plane-and-runtime-observability" },
+            { text: "0018 - NHI Lifecycle & Machine Attestation", link: "/adr/0018-non-human-identity-lifecycle-and-machine-attestation" }
           ]
         }
       ],

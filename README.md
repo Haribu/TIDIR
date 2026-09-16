@@ -30,11 +30,15 @@ TIDIR brings together four traditionally siloed operational domains into a conti
     └──────────┬───────────┘             │
                ▼                         │
     ┌──────────────────────┐             │
-    │ Response Automation  │─────────────┘
+    │ Response Automation  │─────────────┤
+    └──────────┬───────────┘             │
+               ▼                         │  Green Team Preventative Loop
+    ┌──────────────────────┐             │  (IaC PRs, Posture Hardening &
+    │ Green Team Prevention│─────────────┘   Defense-in-Depth)
     └──────────────────────┘
 ```
 
-The objective is to establish an actionable, vendor-neutral target technology architecture that solves modern operational challenges: alert fatigue, telemetry fragmentation, delayed containment, and disparate case management.
+The objective is to establish an actionable, vendor-neutral target technology architecture that solves modern operational challenges: alert fatigue, telemetry fragmentation, delayed containment, and disparate case management. While TIDIR deliberately focuses on detection, investigation, and response (rather than inline prevention appliances), it **closes the operational loop** by recommending and triggering **Green Teams** (platform, infrastructure, and cloud security engineering) to eliminate root causes through automated Infrastructure-as-Code (IaC) hardening and posture improvements.
 
 ---
 
@@ -60,7 +64,7 @@ The documentation is organized logically across strategy, capability mapping, de
 1. **Schema Standardisation First**: Telemetry and alerts adopt standardised schemas (OCSF, STIX 2.1) early in the pipeline to prevent vendor lock-in.
 2. **Streaming-First with Lakehouse Persistence**: Decouple real-time detection streams from petabyte-scale historical search and model training.
 3. **Detection-as-Code (DaC)**: All rules, analytics, and correlation logic are managed in Git, version-controlled, tested, and validated in CI/CD pipelines.
-4. **Bi-directional Intel Loops**: Investigation discoveries and response artifacts automatically enrich Threat Intelligence feeds for retroactive retro-hunts and detection tuning.
+4. **Bi-directional Intel & Preventative Loops**: Investigation discoveries and response artifacts automatically enrich Threat Intelligence feeds for retro-hunting, while triggering Green Team preventative engineering (IaC pull requests and cloud posture hardening) to permanently eradicate root causes and deepen defense-in-depth.
 5. **Human-in-the-Loop Orchestration**: Autonomous response is scoped by blast radius; high-impact actions mandate structured analyst authorisation.
 
 ---

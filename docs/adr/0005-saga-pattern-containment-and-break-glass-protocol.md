@@ -29,9 +29,10 @@ How does the architecture guarantee reliable, consistent automated containment w
 
 ## Decision Outcome
 
-Chosen option: **Saga Orchestration Pattern with Automated Compensating Transactions and Audited Break-Glass Override**, because:
-- **Saga Orchestration Engine**: All multi-step response playbooks are compiled as stateful Sagas. Every mutating forward action ($T_i$, e.g. isolate endpoint) has an explicitly defined and automated compensating action ($C_i$, e.g. re-enable endpoint network interface).
-  - If any step in a forward containment sequence fails after exhausted idempotent retries and exponential backoff, the orchestrator invokes compensating transactions in reverse order ($C_{i-1}, \dots, C_1$), safely returning the infrastructure to a known baseline state.
+Chosen option: **Saga Orchestration Pattern with Asymmetric Fail-Secure Forward Escalation and Audited Break-Glass Override**, because:
+- **Asymmetric Security Containment Engine**: Containment workflows are executed as distributed Sagas, but with a critical security departure from commercial transaction processing: **Security containment operations are asymmetric and fail-secure**.
+  - If any step in a forward containment sequence ($T_1 \dots T_n$) fails after exhausted idempotent retries and exponential backoff, the orchestrator **NEVER rolls back or reverses previously executed containment actions** ($C_{i-1} \dots C_1$). Reversing containment (e.g. un-quarantining a host or re-enabling a revoked session token because a firewall API timed out) actively restores adversary footholds and weaponizes transient network faults against the defense.
+  - **Forward Containment Escalation**: Upon step failure, the orchestrator freezes the current containment boundary and executes forward escalation: applying broader, out-of-band perimeter network fences (e.g. boundary route shunts, upstream VPC ACL drops) and elevating the incident with high-priority paging to on-duty Incident Commanders.
 - **Circuit Breakers and Rate-Limiting Decoupling**: API connectors maintain stateful circuit breakers. If a downstream provider exhibits elevated error rates, the connector trips into a fallback state, queueing operations for human operator evaluation rather than silently failing.
 - **Break-Glass Emergency Containment Protocol**:
   - Under verified high-severity triggers (e.g. stateful detection of active cryptographic file encryption on multiple endpoints), an on-duty Incident Commander can invoke an authenticated **Break-Glass Override**.
@@ -40,11 +41,11 @@ Chosen option: **Saga Orchestration Pattern with Automated Compensating Transact
 
 ### Positive Consequences
 
-* Guarantees zero orphaned partial-containment states across hybrid enterprise environments.
-* Eliminates containment dwell time during existential, high-velocity intrusions without sacrificing authorisation auditability.
-* Provides deterministic rollback procedures for every containment capability.
+* Eliminates the catastrophic risk of automated rollbacks dismantling containment perimeters during active attacks.
+* Guarantees fail-secure posture across hybrid enterprise environments.
+* Eliminates containment dwell time during existential, high-velocity intrusions without sacrificing authorization auditability.
 
 ### Negative Consequences
 
-* Requires playbooks-as-code to author, test, and maintain bidirectional action pairs (forward action + compensating action) for every integration connector.
-* Compensating actions in security are not always perfectly symmetric (e.g. re-enabling a revoked session token requires re-authentication rather than a pure state restoration).
+* Step failures require human operator intervention to manually evaluate and reconcile partially contained states.
+* Upstream perimeter escalation may affect broader network segments if endpoint-level isolation fails.

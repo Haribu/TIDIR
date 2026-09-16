@@ -113,7 +113,7 @@ flowchart LR
 | **Cloud Storage** | Storage Object Access | `Cloud / Account` (1001: Object Storage Activity) | Cloud provider control plane S3/Blob audit trail | Stream-forwarded cloud delivery (S3 notification/PubSub) |
 | **Vulnerability** | Software Vulnerability State | `Findings / Discovery` (2002: Vulnerability Finding) | Host/network vulnerability scanner engine | Scheduled batch snapshot; periodic diff sync |
 | **Cloud Security Posture** | Misconfiguration / IAM Drift (CSPM/CNAPP) | `Findings / Discovery` (2001: Security Finding) | Cloud security posture scanner (Wiz, Prisma, Orca) | Webhook push or API sync; high fidelity |
-| **External Detections** | Commercial EDR / XDR / WAF Finding | `Findings / Discovery` (2004: Detection Finding) | CrowdStrike, Defender, SentinelOne, Cloudflare WAF | Streaming webhook / PubSub queue; priority ingress |
+| **Application Trace & Audit** | Service Mesh / HTTP / DB Traces | `Application Activity` (Class 1003 / 4002 / 6001) | OpenTelemetry (OTLP gRPC/HTTP :4317/:4318) | Streaming JSON/Protobuf batches; line-rate OCSF transform |
 | **Ambient Deception** | Honeytoken / Canary Interaction | Any Target Class + `metadata.is_canary: true` | Decoy AWS keys, canary files, Kerberos SPN lures | Instantaneous priority stream; zero base rate |
 | **Threat Intelligence** | Indicator Observable | `Threat Intelligence` (5001: Threat Intelligence) | STIX/TAXII 2.1 repository / Threat Feed API | Polled incremental batch / Change-data-capture |
 

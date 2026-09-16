@@ -63,6 +63,11 @@ flowchart TB
    - **Temporal Entity Resolution**: Maintains historical identity-to-asset bindings across ephemeral networks (binding DHCP IP leases at timestamp $T$ to device GUIDs, MAC addresses, and authenticated Kerberos/OAuth sessions).
    - **Tamper-Evident Evidence Locker**: Captures raw query snapshots, PCAP extracts, and analyst annotations with RFC 3161 cryptographic timestamps and immutable checksums for post-incident review (PIR) and legal defensibility.
 
+4. **Just-in-Time (JIT) Telemetry Elevation & Ephemeral Deep Context**:
+   - **Programmatic Forensic Elevation**: When an investigator or autonomous specialist subagent identifies a hypothesis gap that cannot be resolved via existing baseline telemetry, the orchestrator issues a signed **JIT Telemetry Elevation Order**.
+   - **Time-Bounded Edge Re-Instrumentation**: Commands edge sensors (Host eBPF, network taps, cloud control planes) to temporarily elevate logging fidelity (e.g. enabling full Script Block Logging, process memory page string dumps, or rolling wire-level PCAP) for a surgical time window ($\text{TTL} \le 30\text{ minutes}$).
+   - **Ephemeral Sinks & Auto-Eviction**: Deep forensic data streams into an isolated object storage bucket configured with a 48-hour auto-eviction policy. If confirmed as a true-positive incident, the specific evidence slice is promoted to the permanent Evidence Locker; otherwise, it expires with zero storage waste.
+
 ---
 
 ## 3. Architectural Capability Archetypes & Protocol Standards

@@ -33,8 +33,8 @@ features:
     title: Automated Response & Containment
     details: Blast-radius risk-tiered Saga state machines executing automated containment with compensating rollbacks, circuit breakers, and break-glass human-in-the-loop controls.
   - icon: 🔄
-    title: Closed-Loop Feedback
-    details: Incident discoveries and post-incident lessons automatically feed back into CTI repositories, detection tuning, and automated agent evaluation suites (Evals-as-Code).
+    title: Closed-Loop Feedback & Green Teams
+    details: Incident discoveries feed back into CTI and DaC tuning, while triggering Green Team preventative hardening (IaC pull requests and defense-in-depth improvements).
 ---
 
 <div class="vp-doc" style="max-width: 1152px; margin: 0 auto; padding: 2rem 1.5rem;">
@@ -135,12 +135,12 @@ Explore the complete architecture and engineering specifications across the plat
 | Section | Description | Direct Links |
 | :--- | :--- | :--- |
 | **System Overview** | High-level topology, interaction flows, and operating principles. | [System Architecture](/architecture/01-system-overview) · [Target Threat Model](/architecture/09-threat-model) |
-| **Capability Model** | 25+ atomic capabilities, 4 macro capabilities & 10 enterprise operational services. | [Capability Matrix](/architecture/02-capability-model) · [Macro Capabilities & Services](/architecture/10-macro-capabilities-and-services) |
+| **Capability Model** | 35+ atomic capabilities, 4 macro capabilities & 10 enterprise operational services. | [Capability Matrix](/architecture/02-capability-model) · [Macro Capabilities & Services](/architecture/10-macro-capabilities-and-services) |
 | **Layer Specifications** | Detailed layer-by-layer architectural contracts and data pipelines. | [L1: Data Sources](/architecture/03-layer-1-data-sources) · [L2: Pipeline & Storage](/architecture/04-layer-2-pipeline-storage-query) · [L3: Threat Intel & Detection](/architecture/06-layer-3-threat-intel-detection) · [L4: Incident Response](/architecture/07-layer-4-incident-response) |
 | **Component Deep Dives** | Deep technical specifications for each functional subsystem. | [Threat Intelligence](/architecture/components/01-threat-intelligence) · [Data Fabric](/architecture/components/02-data-fabric-telemetry) · [Detection Engine](/architecture/components/03-detection-engine) · [Investigation & Cases](/architecture/components/04-investigation-cases) · [Response & Automation](/architecture/components/05-response-automation) · [AI & Agent Orchestration](/architecture/components/06-ai-orchestration) |
 | **Engineering Disciplines** | Cross-cutting disciplines: SRE budgets, Purple Teaming, DaC & Evals. | [Engineering Disciplines](/architecture/05-cross-cutting-engineering-disciplines) |
 | **Operational Scenarios** | End-to-end user stories and automated response workflows. | [User Stories & Scenarios](/architecture/08-user-stories) |
-| **Architectural Decisions** | Formal Architectural Decision Records (ADRs 0001–0014) in MADR format. | [ADR Index](/adr/0001-record-architecture-decisions) · [ADR-0004 (Prompt Firewall)](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall) · [ADR-0005 (Saga Containment)](/adr/0005-saga-pattern-containment-and-break-glass-protocol) · [ADR-0009 (Bayesian Scoring)](/adr/0009-bayesian-multi-signal-risk-scoring) · [ADR-0010 (SABSA Alignment)](/adr/0010-sabsa-business-architecture-and-attribute-profiling) · [ADR-0011 (Entity-Finding Graph)](/adr/0011-bipartite-entity-finding-graph-consolidation) · [ADR-0012 (AI Orchestration)](/adr/0012-ai-orchestration-runtime-mcp-and-mvp-roadmap) · [ADR-0013 (Ambient Deception)](/adr/0013-ambient-deception-fabric-and-canary-anchors) |
+| **Architectural Decisions** | Formal Architectural Decision Records (ADRs 0001–0018) in MADR format. | [ADR Registry](/adr/) · [ADR-0004 (Prompt Firewall)](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall) · [ADR-0005 (Saga Containment)](/adr/0005-saga-pattern-containment-and-break-glass-protocol) · [ADR-0009 (Bayesian Scoring)](/adr/0009-bayesian-multi-signal-risk-scoring) · [ADR-0015 (OTLP Convergence)](/adr/0015-sandboxed-agent-execution-otlp-convergence-and-ephemeral-identity) · [ADR-0017 (Agent Fleet Control)](/adr/0017-agent-fleet-control-plane-and-runtime-observability) · [ADR-0018 (Machine Attestation)](/adr/0018-non-human-identity-lifecycle-and-machine-attestation) |
 
 ---
 

@@ -120,30 +120,63 @@ $$\text{Priority Score} = \frac{\text{Threat Likelihood} \times \text{Asset Expo
 
 ---
 
-## 4. Detection-as-Code (DaC) Lifecycle & Architecture
+## 4. Detection-as-Code (DaC) Lifecycle & Dual-Lane CI/CD Architecture
 
-All detection logic in Layer 3 is developed, versioned, tested, and deployed according to strict software engineering principles: **Detection-as-Code (DaC)**.
+All detection logic in Layer 3 is developed, versioned, tested, and deployed according to strict software engineering principles: **Detection-as-Code (DaC)**. 
+
+To eliminate the operational conflict between rigorous 30-day noise budget validation and urgent zero-day containment velocity, TIDIR implements a **Dual-Lane Staged CI/CD Pipeline**:
 
 ```mermaid
-flowchart LR
-  subgraph GitOps ["1. Version Control (Git)"]
-    REPO["Declarative Detection Repo\n• Rule Logic (OCSF Targeted)\n• Metadata & ATT&CK Tags\n• Synthetic Test Vectors\n• False-Positive Exclusions"]
+flowchart TB
+  classDef repo fill:#1e293b,stroke:#f472b6,stroke-width:2px,color:#f8fafc;
+  classDef fast fill:#4c0519,stroke:#fb7185,stroke-width:2px,color:#f8fafc;
+  classDef std fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#f8fafc;
+  classDef prod fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#f8fafc;
+
+  subgraph GITOPS ["1. Detection Repository (GitOps)"]
+    PR_EMERGENCY["Emergency Zero-Day PR\n(Fast-Lane Tagged)"]:::fast
+    PR_STANDARD["Standard Persistent PR\n(Feature / Baseline Rule)"]:::std
   end
 
-  subgraph CI ["2. Automated CI/CD Pipeline"]
-    LINT["Schema & Syntax Linting"]
-    UNIT["Synthetic Unit Testing"]
-    ADVERSARY["Adversary Simulation Replay"]
-    BACKTEST["Historical Volume Backtest"]
+  subgraph DUAL_CI ["2. Dual-Lane Automated Validation Engine"]
+    subgraph FAST_LANE ["Fast Lane (< 5 min SLA)"]
+      F_LINT["Schema & Syntax Linting"]:::fast
+      F_UNIT["Synthetic Mock Payload Tests"]:::fast
+      F_24H["24-Hour Historical Telemetry Replay"]:::fast
+      F_LINT --> F_UNIT --> F_24H
+    end
+
+    subgraph STD_LANE ["Standard Lane (Full Assurance)"]
+      S_LINT["Schema & Syntax Linting"]:::std
+      S_UNIT["Synthetic Unit & Adversary Emulation"]:::std
+      S_30D["30-Day Historical Lakehouse Replay"]:::std
+      S_SRE["5% SRE Monthly Noise Budget Gate"]:::std
+      S_LINT --> S_UNIT --> S_30D --> S_SRE
+    end
   end
 
-  subgraph CD ["3. Staged Deployment"]
-    SHADOW["Shadow Mode (Pre-Prod)\n(Evaluates live events without alerting)"]
-    PROD["Production Deployment\n(Real-Time Streams & Batch Lakehouse)"]
+  subgraph DEPLOY_TARGET ["3. Staged Production Runtime"]
+    PROD_EPHEMERAL["Ephemeral Production Deployment\n(Strict 7-Day Auto-Expiry TTL & Quarantine Tag)"]:::fast
+    PROD_CANONICAL["Canonical Production Engine\n(Real-Time Streaming & Scheduled Lakehouse SQL)"]:::prod
   end
 
-  REPO --> LINT --> UNIT --> ADVERSARY --> BACKTEST --> SHADOW --> PROD
+  PR_EMERGENCY --> FAST_LANE
+  FAST_LANE -->|All Gates Pass| PROD_EPHEMERAL
+  PROD_EPHEMERAL -.->|Background Graduation| STD_LANE
+
+  PR_STANDARD --> STD_LANE
+  STD_LANE -->|Full Budget Conformance| PROD_CANONICAL
 ```
+
+### 4.1 Fast-Lane vs. Standard-Lane Operational Contract
+1. **Fast Lane (Emergency TTP / Active Outbreak Response)**:
+   - **Trigger**: Active zero-day exploitation, CISA emergency directives, or high-velocity ransomware variants requiring sub-minute detection authoring.
+   - **Verification Gates**: Schema registry compiler linting, synthetic unit assertions, and a rapid 24-hour historical lakehouse replay (SLA: $< 5$ minutes).
+   - **Fail-Safe Constraint**: Fast-lane rules deploy as **ephemeral detections** carrying an enforced **7-day auto-expiry TTL** and quarantine tag. They alert on-duty analysts but automatically expire unless graduated through the Standard Lane.
+2. **Standard Lane (Persistent Detection Corpus)**:
+   - **Trigger**: Permanent enterprise detection coverage, behavioral baselines, and complex multi-event heuristics.
+   - **Verification Gates**: Schema validation, continuous purple-team adversary emulation, full 30-day historical lakehouse backtesting, and strict compliance with the **5% monthly SRE noise budget**.
+   - **Result**: Ensures zero-day defense is never paralyzed by batch lakehouse latency, while permanently preventing un-backtested rules from rotting production alert queues.
 
 ### Declarative Detection Metadata Specification
 Every detection rule is maintained as a structured code artifact containing five mandatory blocks:

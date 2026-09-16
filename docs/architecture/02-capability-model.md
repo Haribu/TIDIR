@@ -6,7 +6,7 @@ This document specifies the functional capability taxonomy required across the T
 
 ## 1. Capability Taxonomy Matrix
 
-The TIDIR capability model defines twenty-five core functional capabilities organized across five operational domains, spanning from raw sensory ingestion to closed-loop response automation:
+The TIDIR capability model defines **twenty-nine operational capabilities** organized across five functional domains, underpinned by **seven cross-cutting AI Governance and Verification capabilities** (36 capabilities in total), spanning from raw sensory ingestion to closed-loop response automation:
 
 ```mermaid
 flowchart TB
@@ -16,6 +16,7 @@ flowchart TB
   classDef det fill:#2e1065,stroke:#c084fc,stroke-width:2px,color:#f8fafc;
   classDef inv fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#f8fafc;
   classDef resp fill:#4c0519,stroke:#fb7185,stroke-width:2px,color:#f8fafc;
+  classDef aigov fill:#1e293b,stroke:#f472b6,stroke-width:2px,color:#f8fafc;
 
   D1["<b>Domain 1: Cyber Threat Intelligence (CTI)</b><br/>• CTI-01: Feed Aggregation & STIX/TAXII Ingestion<br/>• CTI-02: Indicator Deduplication & Half-Life Decay<br/>• CTI-03: Attack Flow & Adversary TTP Mapping<br/>• CTI-04: Line-Rate IOC Dissemination to Edge<br/>• CTI-05: Retroactive Lakehouse Threat Sweeps"]:::cti
 
@@ -23,15 +24,19 @@ flowchart TB
 
   D3["<b>Domain 3: Detection Engineering (DET)</b><br/>• DET-01: Stateful Sliding-Window Streaming<br/>• DET-02: Scheduled Batch Lakehouse SQL<br/>• DET-03: Detection-as-Code (DaC) & CI Testing<br/>• DET-04: Supernode-Dampened Graph Clustering<br/>• DET-05: Multi-Factor Composite Risk Lens<br/>• DET-06: SecOps Alert Noise Error Budgets<br/>• DET-07: Ambient Deception & Canary Fabric"]:::det
 
-  D4["<b>Domain 4: Investigation & Case Management (INV)</b><br/>• INV-01: Unified Entity Resolution 360<br/>• INV-02: Chronological Multi-Source Timeline<br/>• INV-03: Relational Execution & Process Graph<br/>• INV-04: Sealed Evidence Locker & RFC 3161<br/>• INV-05: Hierarchical Agent Mesh & Prompt Firewall<br/>• INV-06: Progressive Disclosure Analyst Workbench"]:::inv
+  D4["<b>Domain 4: Investigation & Case Management (INV)</b><br/>• INV-01: Unified Entity Resolution 360<br/>• INV-02: Chronological Multi-Source Timeline<br/>• INV-03: Relational Execution & Process Graph<br/>• INV-04: Sealed Evidence Locker & RFC 3161<br/>• INV-05: Hierarchical Agent Mesh & Prompt Firewall<br/>• INV-06: Progressive Disclosure Analyst Workbench<br/>• INV-07: Just-in-Time (JIT) Telemetry Elevation"]:::inv
 
-  D5["<b>Domain 5: Automated Response & Containment</b><br/>• RESP-01: Declarative Playbook Orchestration<br/>• RESP-02: Blast-Radius & Saga Compensation Modelling<br/>• RESP-03: Autonomous Tier 1 Containment<br/>• RESP-04: Dual-Auth Consensus & Break-Glass Override<br/>• RESP-05: Closed-Loop Attribution Feedback"]:::resp
+  D5["<b>Domain 5: Automated Response & Containment (RESP)</b><br/>• RESP-01: Declarative Playbook Orchestration<br/>• RESP-02: Blast-Radius & Saga Compensation Modelling<br/>• RESP-03: Autonomous Tier 1 Containment<br/>• RESP-04: Dual-Auth Consensus & Break-Glass Override<br/>• RESP-05: Closed-Loop & Green Team Triggers"]:::resp
+
+  GOV["<b>Cross-Cutting: AI Governance & Verification (AIGOV)</b><br/>• AIGOV-01: Continuous Evals-as-Code & Grounding<br/>• AIGOV-02: Dual-Plane Data/Control Isolation<br/>• AIGOV-03: Cost & Latency Performance Budgets<br/>• AIGOV-04: Agent Fleet Lifecycle & Preemption<br/>• AIGOV-05: MCP Tool Observability & Loop Breakers<br/>• AIGOV-06: Ephemeral Attestation & SVIDs<br/>• AIGOV-07: Non-Human Identity (NHI) Profiling"]:::aigov
 
   D1 ==>|Operational Threat Feeds & PIR Flows| D2
   D2 ==>|Normalized Telemetry & Low-Latency State Δt| D3
   D3 ==>|Elevated Risk-Scored Incident Dossiers| D4
   D4 ==>|Validated Remediation & Containment Tasks| D5
   D5 -.->|Attributed Intel & Blindspot Calibration| D1
+  GOV -.-|Enforces Evals & Prompt Firewalls Across| D4
+  GOV -.-|Enforces Blast-Radius & Attestation Across| D5
 ```
 
 ---
@@ -86,6 +91,7 @@ flowchart TB
 | **INV-04** | Evidence Dossier & Auditability | `[Deterministic Engine]` | Maintain immutable records of investigative queries, pinned artifacts, analyst notes, and tags. | Tamper-evident audit logging of analyst actions (RFC 3161) |
 | **INV-05** | Agent Mesh & Multi-Model Consensus | `[AI/Agent-Augmented]` | Coordinate autonomous specialist subagents with adversarial Proposer/Challenger model arbitration behind prompt firewalls. | Time-to-investigate (MTTI) < 60s; > 80% consensus |
 | **INV-06** | Progressive Disclosure Workbench | `[Human-in-the-Loop]` | Surface structured briefings in a 3-tier hierarchy (Situation Report ➔ Evidence Table ➔ On-Demand Graph Lineage). | Analyst triage comprehension < 60 sec |
+| **INV-07** | Just-in-Time (JIT) Telemetry Elevation | `[AI/Agent-Augmented]` | Programmatically command edge sensors to elevate collection fidelity (eBPF, PCAP, memory) for bounded windows (TTL <= 30m). | Elevation command dispatch < 10 sec; 48h auto-eviction |
 
 ---
 
@@ -94,10 +100,10 @@ flowchart TB
 | Capability ID | Name | Execution Mode | Description | Key Metric / SLA |
 | :--- | :--- | :--- | :--- | :--- |
 | **RESP-01** | Declarative Playbook Orchestration | `[Deterministic Engine]` | Execute multi-step containment, enrichment, and recovery workflows across third-party APIs via distributed Sagas. | Execution step dispatch < 500ms |
-| **RESP-02** | Blast-Radius & Saga Compensation | `[AI/Agent-Augmented]` | Pre-execution simulation of active TCP sessions and dependencies with automated compensating rollback transactions. | 100% compensation parity; MTTR < 60 min |
+| **RESP-02** | Asymmetric Containment & Forward Escalation | `[AI/Agent-Augmented]` | Fail-secure execution that never rolls back containment on partial failure; executes forward perimeter escalation on error. | Fail-secure posture 100%; MTTR < 60 min |
 | **RESP-03** | Autonomous Rapid Containment | `[Deterministic Engine]` | Execute instantaneous containment for low-blast-radius actions (e.g. host isolation in sandbox, token invalidation). | Time-to-contain (MTTC) < 15 seconds |
 | **RESP-04** | Dual-Auth & Break-Glass Protocols | `[Human-in-the-Loop]` | Enforce multi-signature consensus for high-impact actions with authenticated single-commander break-glass overrides. | MTTC < 5 min; break-glass audit broadcast < 5 sec |
-| **RESP-05** | Closed-Loop Feedback Integration | `[Deterministic Engine]` | Extract confirmed indicators and attack patterns from resolved cases to feed CTI and detection tuning. | Feedback loop dispatch automated on case closure |
+| **RESP-05** | Closed-Loop & Green Team Triggers | `[Deterministic Engine]` | Extract confirmed indicators for CTI, calibrate DaC rules, and synthesize IaC hardening pull requests for Green Teams to improve defense-in-depth. | Closed-loop & hardening dispatch automated on case closure |
 
 ---
 
@@ -108,4 +114,9 @@ flowchart TB
 | **AIGOV-01** | Continuous Evals-as-Code | `[AI/Agent-Augmented]` | Automated CI/CD benchmarking of triage prompts and agent workflows against versioned golden incident datasets. | $\ge 95\%$ grounding fidelity; 100% schema tool validity |
 | **AIGOV-02** | Dual-Plane Data/Control Isolation | `[Deterministic Engine]` | Enforces strict boundaries preventing unformatted raw telemetry strings from acting as agent control instructions. | Zero instruction execution from untrusted log payloads |
 | **AIGOV-03** | Cost & Latency Performance Budgets | `[Deterministic Engine]` | Deterministic per-invocation token ceilings, query timeouts, and rate budgeting across model runtimes. | P95 agent triage latency < 5 sec; strict budget compliance |
+| **AIGOV-04** | Agent Fleet Lifecycle & Preemption | `[Deterministic Engine]` | Centralized supervisor tracking agent liveness, heartbeats, zombie task reaping, and priority preemption under Sev-1 crises. | Worker zombie reap < 15 sec; preemption cascade < 1 sec |
+| **AIGOV-05** | MCP Tool Observability & Loop Breakers | `[Deterministic Engine]` | OTel telemetry across MCP servers, parameter schema drift audits, and semantic query oscillation circuit breakers. | Max 8 recursive tool hops; loop termination < 100ms |
+| **AIGOV-06** | Ephemeral Agent Attestation & SVIDs | `[Deterministic Engine]` | Cryptographic SPIFFE/SPIRE attestation issuing task-scoped, short-lived X.509 SVIDs (TTL <= 15m) for every agent worker. | Dynamic SVID minting < 100ms; auto-revocation on task closure |
+| **AIGOV-07** | Non-Human Identity (NHI) Profiling | `[Deterministic Engine]` | Line-rate behavioral profiling and anomaly detection for service accounts, API keys, and machine tokens across clouds. | 14-day baseline drift alert; token replay detection < 5 sec |
+
 

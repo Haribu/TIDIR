@@ -90,7 +90,31 @@ Multi-stage investigations require persistent shared memory across specialist su
   2. Mandatory temporal boundaries (queries without `time >= NOW() - INTERVAL` constraints are rejected to prevent table-scan resource exhaustion).
   3. Strict partition key filtering (must filter on tenant or cluster keys).
 
-### 5. Tri-Color Agent Fleet & Green Self-Healing Remediation
+### 5. Agent Fleet Supervisor & Control Plane Management
+To prevent zombie worker accumulation, runaway background tasks, and unmonitored subagent sprawl during major multi-stage incidents, TIDIR mandates an active **Agent Fleet Supervisor & Lifecycle Kernel** (ADR-0017):
+- **Dynamic Lease Renewals & Heartbeats**: Every active agent pod or microVM must emit a cryptographic heartbeat and lease renewal every 30 seconds. Agents that miss 3 consecutive heartbeats are automatically evicted, their ephemeral identities revoked via SPIFFE/SPIRE, and their in-flight state committed to the blackboard.
+- **Strict Concurrency Limits**: The supervisor caps concurrent running agent workers per incident (maximum 8 active subagents) and cluster-wide (maximum 64 active workers) to prevent downstream API and compute starvation.
+- **Priority Preemption**: When high-priority P1/P2 incidents erupt, the supervisor preempts lower-priority background tasks (e.g. Green Agent routine noise-tuning or DLQ repairs) in favor of Blue active triage workers.
+
+### 6. Semantic Loop Breakers & Cost Circuit Breakers
+Autonomous subagents are susceptible to deadlocks, oscillating tool loops (repeatedly querying the same entities with minor semantic variations), and runaway inference chains:
+- **Semantic State Hashing & Loop Detection**: The runtime kernel maintains a rolling sliding window of tool calls and prompt hashes. If an agent executes identical tool calls or oscillates between two non-progressing states $> 3$ consecutive times, the loop breaker terminates the loop, logs an anomalous divergence trace, and forces escalation to a senior human operator.
+- **Hard Tool-Hop & Time Ceilings**: Maximum 8 sequential tool hops and a 180-second execution wall-clock timeout per investigation branch.
+- **Financial Cost Circuit Breakers**: Hard financial ceiling of $2.50 or 150k tokens per single incident branch. Exceeding this cap immediately freezes execution until explicitly elevated by an analyst.
+
+### 7. Model Context Protocol (MCP) Tool Observability & Circuit Breaking
+All external integrations are exposed via MCP tool servers, governed by line-rate telemetry and circuit breakers:
+- **Distributed W3C Trace Propagation**: Every MCP JSON-RPC tool invocation propagates W3C trace context (`traceparent`, `tracestate`) down into target lakehouse, graph, and API sinks, generating end-to-end distributed flame graphs.
+- **Tool Error Circuit Breakers**: If an MCP tool server exhibits a $> 20\%$ error rate or latency $> 5000$ms over a 1-minute window, the tool circuit breaker trips to `OPEN`, immediately shielding agents from hallucinating workarounds and alerting platform engineers.
+- **Schema Drift Detection**: MCP schema inputs and responses are audited against registered JSON schemas on every invocation. Schema mismatches trigger automated DLQ routing and Green Agent parser alerts.
+
+### 8. Ephemeral Agent Identity & Machine Identity Fabric
+To prevent credential theft, lateral impersonation, and non-repudiation failure across the agent mesh, TIDIR establishes a dedicated **Non-Human Identity (NHI) & Machine Attestation Fabric** (ADR-0018):
+- **Dynamic Task-Scoped SVIDs (SPIFFE/SPIRE)**: Agents never execute using static service account credentials or hardcoded API keys. At container/microVM instantiation, the runtime kernel attests the workload and issues an ephemeral X.509 SVID (e.g. `spiffe://tidir.local/agent/blue/forensic/8492`) with a maximum 15-minute TTL.
+- **Per-Task Capability Attestation**: SVID claims strictly bound agent access. A Host Forensic subagent cannot access network containment endpoints; containment playbooks require dynamically minted SVIDs signed by both the orchestrator and an approving human operator.
+- **Line-Rate NHI Behavioral Profiling**: Service accounts, workload tokens, and automated CI/CD machines are normalized into OCSF Class 3002/3005 and profiled across 14-day rolling windows to detect token theft, out-of-VPC token replays, and dormancy awakening at line rate.
+
+### 9. Tri-Color Agent Fleet & Green Self-Healing Remediation
 Rather than treating AI agents as undifferentiated assistants, TIDIR partitions agentic workloads into three specialized operational colors:
 
 ```mermaid

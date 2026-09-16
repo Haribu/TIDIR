@@ -2,7 +2,7 @@
 
 Implementing the TIDIR target architecture elevates enterprise security operations from a fragmented, tool-centric cost centre into a **high-throughput, closed-loop software and reliability engineering discipline**. 
 
-While the [Capability Model](/architecture/02-capability-model) specifies twenty-five atomic technical functions, enterprise stakeholders require a consumable operational service catalogue. This document synthesises TIDIR's technical specifications into **four macro capabilities** delivering **ten core operational services** to the enterprise.
+While the [Capability Model](/architecture/02-capability-model) specifies twenty-nine operational capabilities and seven AI governance disciplines, enterprise stakeholders require a consumable operational service catalogue. This document synthesises TIDIR's technical specifications into **four macro capabilities** delivering **ten core operational services** to the enterprise.
 
 ---
 
@@ -35,7 +35,7 @@ flowchart TB
         S41["<b>Service 4.1: Agentic Triage & Progressive Disclosure Investigation</b><br>Hierarchical agent mesh, prompt firewall, and Situation Summaries"]
         S42["<b>Service 4.2: Blast-Radius Gated Containment & Saga Orchestration</b><br>Pre-execution impact simulation, automated compensation rollbacks"]
         S43["<b>Service 4.3: Audited Break-Glass & Crisis Containment</b><br>Machine-speed containment override and cryptographic audit trails"]
-        S44["<b>Service 4.4: Closed-Loop Engineering Feedback</b><br>Automatic indicator back-propagation and Evals-as-Code calibration"]
+        S44["<b>Service 4.4: Closed-Loop Feedback & Green Team Prevention</b><br>Indicator back-propagation, Evals calibration, and IaC hardening PRs"]
     end
 
     subgraph FEEDBACK ["5. CLOSED-LOOP CONTINUOUS CALIBRATION & ADAPTATION"]
@@ -43,6 +43,7 @@ flowchart TB
         FB1["<b>Threat Feed Auto-Calibration</b><br>Confirmed campaign indicators & TTPs re-injected into CTI Cache (Service 1.1)"]
         FB2["<b>Detection & Purple Team Tuning</b><br>Triage discoveries & noise budgets auto-calibrate DaC rules (Service 3.1)"]
         FB3["<b>Evals-as-Code Verification</b><br>Post-mortem scenarios compiled into regression test suites (Service 4.4)"]
+        FB4["<b>Green Team Preventative Hardening</b><br>Root-cause attack paths trigger IaC PRs & defense-in-depth posture upgrades (Service 4.4)"]
     end
 
     MACRO1 ==>|1. Threat Context & CTI Edge Matching| MACRO2
@@ -53,7 +54,7 @@ flowchart TB
     classDef default fill:#1e293b,stroke:#475569,stroke-width:1px,color:#f8fafc;
     classDef macro fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#f8fafc;
     classDef feedback fill:#052e16,stroke:#10b981,stroke-width:1.5px,color:#f8fafc;
-    class S11,S12,S21,S22,S31,S32,S41,S42,S43,S44,FB1,FB2,FB3 default;
+    class S11,S12,S21,S22,S31,S32,S41,S42,S43,S44,FB1,FB2,FB3,FB4 default;
     class MACRO1,MACRO2,MACRO3,MACRO4 macro;
     class FEEDBACK feedback;
 ```
@@ -134,10 +135,10 @@ Compresses investigation and containment timelines from hours to seconds while m
 * **Operational SLAs:** Emergency break-glass execution $< 5\,\text{minutes}$; audit broadcast latency $< 5\,\text{seconds}$; RFC 3161 cryptographic verification $100\%$.
 * **Underpinning Capabilities:** `INV-04`, `RESP-04`.
 
-#### Service 4.4: Closed-Loop Engineering Feedback
-* **Description:** Every confirmed incident automatically feeds indicators back into intelligence stores, calibrates detection models, and updates agent evaluation suites (Evals-as-Code) to ensure the system learns permanently from every attack.
-* **Customer Value:** Ensures the enterprise never falls victim to the same threat campaign twice; continuously hardens autonomous agent prompts against emerging jailbreaks and evasions.
-* **Operational SLAs:** Feedback loops dispatched automatically upon incident closure; prompt eval suites executed within CI/CD pull requests.
+#### Service 4.4: Closed-Loop Engineering Feedback & Green Team Prevention
+* **Description:** Every confirmed incident automatically feeds indicators back into intelligence stores, calibrates detection models, updates agent evaluation suites (Evals-as-Code), and synthesises actionable Infrastructure-as-Code (IaC) hardening pull requests for Green Teams (Platform / Cloud Engineering) to eliminate root causes.
+* **Customer Value:** Closes the loop between reactive response and proactive defense-in-depth; ensures the enterprise never falls victim to the same threat campaign twice while systematically shrinking the attack surface.
+* **Operational SLAs:** Feedback loops dispatched automatically upon incident closure; prompt eval suites executed within CI/CD pull requests; Green Team hardening PRs staged within $< 1\,\text{hour}$.
 * **Underpinning Capabilities:** `RESP-05`, `AIGOV-01`, `AIGOV-02`.
 
 ---

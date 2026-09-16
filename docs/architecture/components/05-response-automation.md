@@ -24,9 +24,9 @@ flowchart TB
     BREAK_GLASS{"Emergency Break-Glass\nOverride Gate"}
   end
 
-  subgraph ActionExecution ["Action Connectors & Compensation Bus"]
+  subgraph ActionExecution ["Action Connectors & Forward Escalation"]
     FORWARD_EXEC["Forward Containment Execution (Ti)\n(Host isolation, credential revocation, network egress drop)"]
-    ROLLBACK_EXEC["Automated Compensating Rollback (Ci)\n(Reverse network block, re-enable account, restore baseline)"]
+    ESCALATE_EXEC["Asymmetric Forward Escalation (Ei)\n(Fail-secure perimeter fence, router ACL shunt, SOC page)"]
     AUDIT_LOG["Cryptographic Audit Ledger\n(RFC 3161 signed state transition trail)"]
   end
 
@@ -41,18 +41,18 @@ flowchart TB
   TIER2_GATE -->|Consensus Signed| CIRCUIT
   BREAK_GLASS -->|Commander Single-Sign & Broadcast| CIRCUIT
 
-  CIRCUIT -->|Step Failure| ROLLBACK_EXEC
-  FORWARD_EXEC & ROLLBACK_EXEC --> AUDIT_LOG
+  CIRCUIT -->|Step Failure| ESCALATE_EXEC
+  FORWARD_EXEC & ESCALATE_EXEC --> AUDIT_LOG
 ```
 
 ---
 
 ## 2. Core Functional Requirements
 
-1. **Saga Orchestration & Compensating State Machine**:
-   - Multi-step containment and mitigation workflows are executed as distributed **Sagas** to eliminate orphaned or half-contained states.
-   - For every mutating forward action ($T_i$, e.g. isolate endpoint network interface), the playbook explicitly defines a tested compensating action ($C_i$, e.g. re-enable network interface).
-   - If any downstream API fails during a containment sequence after exponential retries are exhausted, the orchestrator halts forward progress and executes compensating actions in reverse topological order ($C_{i-1}, \dots, C_1$), safely restoring the enterprise environment to a deterministic baseline state.
+1. **Saga Orchestration & Asymmetric Fail-Secure State Machine**:
+   - Multi-step containment and mitigation workflows are executed as distributed **Sagas**, structured on a **fail-secure asymmetric model**.
+   - Unlike transactional ecommerce workflows, **security containment actions are never symmetrically reversed upon partial failure**. Reversing containment (e.g. un-quarantining a host or un-blocking an IP because a downstream token API timed out) actively restores attacker access.
+   - If any downstream API fails during a containment sequence after exponential retries are exhausted, the orchestrator freezes the existing containment boundary and executes **Forward Containment Escalation**: applying broader out-of-band perimeter network fences (e.g. upstream firewall route drops) and triggering high-priority incident commander paging.
 
 2. **Blast-Radius Risk Tiering & Emergency Protocols**:
    - **Tier 0 (Passive Enrichment & Querying)**:
@@ -73,10 +73,11 @@ flowchart TB
    - Downstream integration connectors enforce strict rate limits, exponential backoff, and stateful circuit breakers.
    - If a third-party control plane experiences elevated error rates ($> 5\%$ 5xx responses or timeouts), the connector trips open, diverting automated actions to an operator escalation queue rather than stalling the pipeline.
 
-4. **Closed-Loop Intelligence & DaC Feedback**:
-   - Upon incident containment and resolution:
-     - Verified indicators (hashes, C2 domains) are exported directly into the Layer 1/3 Threat Intelligence fabric.
-     - Case outcome classifications (True Positive vs. Benign Baseline) trigger automated rule tuning pull requests in the Detection-as-Code repository.
+4. **Closed-Loop Intelligence, DaC Tuning & Green Team Prevention**:
+   - While TIDIR intentionally focuses on Threat Intelligence, Detection, Investigation & Response (and deliberately avoids duplicating inline prevention appliances), it completes the closed loop by programmatically bridging into **Green Teams** (platform, infrastructure, and cloud security engineering):
+     - **Attributed Threat Feedback**: Verified indicators (hashes, C2 domains) and campaign flows are immediately exported back into the Layer 1/3 Threat Intelligence fabric for retroactive sweeps and edge cache matching.
+     - **DaC Quality & Noise Tuning**: Case classifications automatically trigger rule calibration pull requests in the Detection-as-Code repository, pruning false-positive noise or adjusting sensitivity thresholds.
+     - **Green Team Preventative Hardening**: When an investigation exposes an exploited misconfiguration or architectural gap (e.g. over-privileged cloud IAM roles, exposed ingress routes, unpatched CVEs, or unsegmented lateral movement paths), TIDIR synthesises actionable remediation tickets and triggers **automated Infrastructure-as-Code (IaC) hardening pull requests** (Terraform, OpenTofu, Kubernetes network policies) for Green Teams to eliminate root vulnerabilities and deepen enterprise defense-in-depth.
 
 ---
 

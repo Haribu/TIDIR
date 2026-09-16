@@ -81,10 +81,14 @@ In the Layer 3 Risk Lens (ADR 0009) and Bipartite Entity-Finding Graph (ADR 0011
 
 ---
 
-### 3. Unlocking Autonomous Tier 1 Containment in Layer 4
+### 3. Unlocking Autonomous Tier 1 Containment with Crown-Jewel Anti-Inversion Safeguards
 
-The operational bottleneck to automated response is the fear of isolating a legitimate production server. Canary triggers eliminate this ambiguity:
-- **Zero-Hesitation Autonomous Containment:** Interaction with a high-fidelity canary immediately licenses automated Tier 1 containment playbooks (host network isolation, credential revocation, firewall IP blocking).
+The operational bottleneck to automated response is the fear of isolating a legitimate production server. Canary triggers eliminate this ambiguity, but introduce an acute adversarial hazard: **Canary Inversion Attacks**, where adversaries deliberately plant or induce canaries via core servers to trigger automated self-DoS.
+
+- **Zero-Hesitation Autonomous Containment (Standard Workloads):** Interaction with a high-fidelity canary immediately licenses automated Tier 1 containment playbooks (host network isolation, credential revocation, firewall IP blocking) for standard endpoints and non-critical workloads.
+- **The Crown-Jewel Canary Exemption Matrix (Anti-Inversion Filter):** 
+  - If the entity interacting with a canary primitive carries a **Critical Asset Tier** (Tier 0 infrastructure in CMDB/posture: Domain Controllers, identity federation servers, root certificate authorities, production database clusters, or core Kubernetes control planes), **zero-hesitation autonomous isolation is strictly prohibited**.
+  - Instead, the event is routed to an **Immediate Escalation Lane** that triggers an instantaneous high-priority page to the on-duty Incident Commander with a mandatory $<60$-second confirmation SLA. The system executes a non-destructive session freeze rather than hard network decapitation.
 - **Adversary Entanglement:** For sophisticated multi-stage intrusions, the orchestrator can transparently redirect the adversary's network sessions into a sandboxed deception environment, allowing AI agent harnesses to observe tradecraft, log novel TTPs, and extract CTI in real time.
 
 ---
