@@ -61,15 +61,13 @@ bun install
 bun run docs:dev
 
 # Build production static site to docs/.vitepress/dist
-bun run docs:build
+bun ./scripts/build-docs.ts # In sandboxes; or `bun run docs:build` in standard terminal
 
 # Preview built static site locally
 bun run docs:preview
 
 # Validate all Mermaid diagrams for syntax errors
-bun run diagrams:validate
-# Note: In isolated sandboxes (where parent directory traversal is restricted), invoke directly:
-# bun ./scripts/validate-diagrams.ts
+bun ./scripts/validate-diagrams.ts # In sandboxes; or `bun run diagrams:validate`
 
 # Deploy build artifacts to Cloudflare Pages
 bun run deploy
@@ -112,7 +110,7 @@ bun run deploy
 3. **Pre-Push Holistic Verification**:
    - Before pushing changes to `main`:
      1. Run diagram validation: `bun ./scripts/validate-diagrams.ts`
-     2. Run docs build: `bun ./node_modules/.bin/vitepress build docs` (or `bun run docs:build`)
+     2. Run docs build: `bun ./scripts/build-docs.ts` (or `bun ./node_modules/.bin/vitepress build docs`)
      3. Verify working tree is clean: `git status`
    - Never commit speculative fixes piecemeal to `origin/main` to test in CI. Verify local closure first.
 
