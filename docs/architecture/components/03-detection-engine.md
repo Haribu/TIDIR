@@ -7,7 +7,7 @@ The Detection Engine applies threat logic against both streaming and historical 
 ```mermaid
 flowchart TB
   subgraph DaCPipeline ["Detection-as-Code (DaC) & Continuous Purple Team"]
-    GIT["Rule Repository (Declarative YAML / DSL)"]
+    GIT["Polyglot DaC Repository\n(Vendor-Neutral Envelope + Native Dialects)"]
     CI["CI Pipeline: Linting, Unit Testing & Syntax Check"]
     PURPLE["Automated Purple Team Harness\n(Atomic Adversary Emulation)"]
     BACKTEST["30-Day Historical Lakehouse Replay"]
