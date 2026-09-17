@@ -101,7 +101,7 @@ Eliminates proprietary data silos and per-gigabyte licensing penalties, providin
 Replaces manual rule writing with modern software engineering disciplines, continuous testing, and mathematically grounded alert synthesis.
 
 #### Service 3.1: GitOps Detection-as-Code (DaC) & Continuous Testing
-* **Description:** Detection rules are treated as software: authored in declarative, vendor-neutral code, versioned in Git, and continuously regression-tested in CI/CD against atomic attack simulations before reaching production.
+* **Description:** Detection rules are treated as software: authored in Polyglot Detection-as-Code ([ADR-0019](../adr/0019-polyglot-detection-as-code-and-native-engine-adaptation.md)) combining vendor-neutral YAML metadata envelopes with target-optimized query blocks (KQL, SPL, SQL), versioned in Git, and continuously regression-tested in CI/CD against atomic attack simulations before reaching production.
 * **Customer Value:** Prevents rule rot; guarantees detection coverage against evolving attacker tradecraft; eliminates syntax and logic errors in production.
 * **Operational SLAs:** 100% pass rate in CI/CD synthetic test suites; rule deployment cycle $< 10\,\text{minutes}$ from merge.
 * **Underpinning Capabilities:** `DET-01`, `DET-02`, `DET-03`.

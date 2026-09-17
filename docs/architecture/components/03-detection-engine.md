@@ -53,10 +53,10 @@ flowchart TB
      - Low-frequency, high-compute analytics unsuitable for stream processing.
 
 2. **Detection-as-Code (DaC) & Continuous Purple Teaming**:
-   - Rules maintained as declarative code (vendor-neutral YAML specifications).
+   - Rules maintained as declarative code (Polyglot DaC: vendor-neutral YAML metadata envelopes with target-optimized query blocks; see [ADR-0019](../../adr/0019-polyglot-detection-as-code-and-native-engine-adaptation.md)).
    - Pre-deployment CI checks:
      - Rule syntax validation against canonical OCSF schema registries.
-     - Synthetic unit testing (verifying true positives trigger and benign data passes).
+     - Synthetic unit testing (verifying true positives trigger and benign data passes across all target engine implementations).
      - **Continuous Automated Purple Teaming**: Executes non-destructive atomic adversary emulation payloads in an isolated staging environment to verify end-to-end detection latency and telemetry capture.
      - **Historical Lakehouse Backtesting**: Replays candidate rules across 30 days of historical data in pre-prod to calculate Expected Alert Volume (EAV) and reject rules exceeding noise budgets.
    - Immutable version tagging and GitOps rollbacks.
@@ -74,5 +74,5 @@ flowchart TB
 | :--- | :--- | :--- |
 | **Stream Detection** | Distributed event-driven stream processor with sliding-window state storage and microsecond event-time watermarking. | Declarative stream predicates; in-memory state snapshots. |
 | **Batch Analytics Engine** | Distributed SQL query engine supporting columnar object storage pruning and vectorized query execution. | SQL:2016 standard queries; columnar open table format manifests. |
-| **Rule Specification** | Vendor-neutral declarative detection specification decoupled from physical storage schema. | YAML schema mapping directly to OCSF Class attributes. |
+| **Rule Specification** | Polyglot declarative detection specification (vendor-neutral YAML metadata envelope with target-optimized execution blocks). | YAML schema mapping to OCSF Class attributes; native KQL, SPL, and SQL query blocks. |
 | **Adversary Emulation Runner** | Automated test harness executing atomic adversary techniques against staging sensors. | MITRE ATT&CK technique IDs; non-destructive atomic execution manifests. |

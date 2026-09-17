@@ -9,7 +9,7 @@ This directory serves as the immutable registry of **Architectural Decision Reco
 All decisions are recorded as version-controlled markdown documents alongside the architecture specifications. Visual state machines and topologies within ADRs are authored in declarative Mermaid syntax and validated programmatically in CI/CD.
 
 ```
-Total Decisions: 18 | Accepted: 18 | Deprecated: 0 | Superseded: 0
+Total Decisions: 19 | Accepted: 19 | Deprecated: 0 | Superseded: 0
 ```
 
 ---
@@ -42,6 +42,7 @@ Total Decisions: 18 | Accepted: 18 | Deprecated: 0 | Superseded: 0
 | [**0009**](0009-bayesian-multi-signal-risk-scoring.md) | **Bayesian Multi-Signal Risk Scoring** | `accepted` | Detection Engineering | Overcomes the Base Rate Fallacy by compounding orthogonal weak signals (asset, identity, network) into a composite score. |
 | [**0011**](0011-bipartite-entity-finding-graph-consolidation.md) | **Bipartite Entity-Finding Graph Consolidation** | `accepted` | Detection & Graph Leads | Structures detection correlation as a bipartite graph of Entities and Findings with community detection clustering. |
 | [**0013**](0013-ambient-deception-fabric-and-canary-anchors.md) | **Ambient Deception Fabric & Canary Anchors** | `accepted` | SecOps / Red Team | Deploys low-overhead honeytokens and canary assets emitting zero-noise high-confidence alerts with instant triage priority. |
+| [**0019**](0019-polyglot-detection-as-code-and-native-engine-adaptation.md) | **Polyglot Detection-as-Code & Native Engines** | `accepted` | Architecture / Detection Leads | Pairs vendor-neutral YAML metadata envelopes with target-optimized query blocks (KQL, SPL, SQL) and AI-driven parity testing. |
 
 ---
 

@@ -82,7 +82,7 @@ bun run deploy
 1. **Standardized Schemas First**:
    - Telemetry models must map to the Open Cybersecurity Schema Framework (**OCSF**).
    - Threat intelligence structures must align with **STIX 2.1** / **TAXII 2.1**.
-   - Detections must be expressed in vendor-neutral format (**Sigma** / YAML DSL).
+   - Detections must be expressed in Polyglot DaC format (vendor-neutral YAML metadata envelope with target-optimized query blocks; see [ADR-0019](docs/adr/0019-polyglot-detection-as-code-and-native-engine-adaptation.md)).
 
 2. **Diagram Standards**:
    - All architecture diagrams must be written in **Mermaid** and version-controlled.

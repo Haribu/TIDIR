@@ -12,7 +12,7 @@ TIDIR is an open, vendor-neutral research project establishing target technology
 2. **Schema Standards Alignment**:
    - Telemetry models must map to the Open Cybersecurity Schema Framework (**OCSF**).
    - Cyber Threat Intelligence (CTI) must align with **STIX 2.1** / **TAXII 2.1**.
-   - Detections must be expressed in vendor-neutral format (**Sigma** or declarative YAML DSL).
+   - Detections must be expressed in Polyglot DaC format (vendor-neutral YAML metadata envelope with target-optimized query blocks; see [ADR-0019](docs/adr/0019-polyglot-detection-as-code-and-native-engine-adaptation.md)).
 3. **Architectural Decisions (ADR)**: Any non-trivial design change or technology selection must be accompanied by an Architectural Decision Record in `docs/adr/` using the [ADR template](docs/adr/template.md).
 4. **Diagram Standards**: All diagrams must be version-controlled Mermaid (`.mmd` or fenced `mermaid` markdown blocks) and pass `bun run diagrams:validate`.
 

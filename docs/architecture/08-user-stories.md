@@ -161,12 +161,12 @@ All stories adhere to the canonical structure:
 
 ### Story E2: Test-Driven Detection-as-Code (DaC) CI/CD Deployment
 * **As a** Detection Engineer (Layer 3),
-* **I want** to author declarative, vendor-neutral detection rules in Git and validate them against synthetic unit fixtures and recorded adversary simulations in CI/CD,
+* **I want** to author Polyglot Detection-as-Code rules (vendor-neutral metadata envelopes with target-optimized query blocks; [ADR-0019](../adr/0019-polyglot-detection-as-code-and-native-engine-adaptation.md)) in Git and validate them against synthetic unit fixtures and recorded adversary simulations in CI/CD,
 * **So that** I can deploy new detections to production stream and batch runtimes with zero false-positive regressions.
 
 #### Acceptance Criteria
-1. Detection rules are versioned as declarative text files (YAML/DSL) referencing standard OCSF attributes and MITRE ATT&CK tags.
-2. The CI/CD pipeline runs unit tests asserting rule behaviour against synthetic true-positive and benign edge-case payloads.
+1. Detection rules are versioned as declarative text files (YAML) featuring vendor-neutral OCSF metadata envelopes, MITRE ATT&CK mappings, and target-optimized query implementations (KQL, SPL, SQL).
+2. The CI/CD pipeline runs unit tests asserting rule behaviour against synthetic true-positive and benign edge-case payloads across all declared engine implementations.
 3. The pipeline verifies candidate rules against recorded adversary simulation telemetry executed in the `test` environment.
 4. The pipeline replays candidate rules across a 30-day historical lakehouse sample in `pre-prod`, calculating the Expected Alert Volume (EAV) and rejecting rules that exceed noise thresholds.
 

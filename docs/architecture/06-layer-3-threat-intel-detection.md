@@ -23,7 +23,7 @@ flowchart TB
   end
 
   subgraph L3_DaC ["3. Detection-as-Code (DaC) Lifecycle"]
-    DEV["Declarative Rule Authoring\n(Vendor-Neutral DSL / OCSF Targeted)"]
+    DEV["Polyglot Rule Authoring\n(Vendor-Neutral Envelope / Target Engines)"]
     SIM["Adversary Simulation & Test Harness\n(Controlled Execution & Telemetry Recording)"]
     TEST["Unit & Regression Testing Pipeline\n(True-Positive & False-Positive Backtests)"]
     DEPLOY["Staged Automated Deployment\n(Stream Analytics & Scheduled Lakehouse Queries)"]
@@ -178,13 +178,102 @@ flowchart TB
    - **Verification Gates**: Schema validation, continuous purple-team adversary emulation, full 30-day historical lakehouse backtesting, and strict compliance with the **5% monthly SRE noise budget**.
    - **Result**: Ensures zero-day defense is never paralyzed by batch lakehouse latency, while permanently preventing un-backtested rules from rotting production alert queues.
 
-### Declarative Detection Metadata Specification
-Every detection rule is maintained as a structured code artifact containing five mandatory blocks:
-1. **Identification & Lifecycle Metadata**: Unique UUID, rule version, author, creation/update timestamps, and operational status (`experimental`, `shadow`, `production`, `deprecated`).
-2. **Threat Framework Mapping**: Mapped MITRE ATT&CK Tactics, Techniques, and Sub-techniques, along with references to triggering Attack Flow IDs.
-3. **Data Requirements**: Explicit declarations of required OCSF schema classes and mandatory fields (e.g. `process.cmd_line`, `actor.user.name`).
-4. **Detection Logic Expression**: Vendor-neutral declarative query expressions capable of compiling down to both streaming event filters and analytical lakehouse SQL.
-5. **Operational Guidance & Triage Metadata**: Default severity, false-positive scenarios, containment playbooks, and recommended analyst triage pivots.
+### Declarative Detection Specification: Polyglot Detection-as-Code
+
+To avoid the **Lowest Common Denominator Trap** while retaining enterprise-wide governance, TIDIR enforces **Polyglot Detection-as-Code (Hybrid DaC)** (formalised in [ADR-0019](../adr/0019-polyglot-detection-as-code-and-native-engine-adaptation.md)). 
+
+Every detection rule is maintained as a structured code artifact decoupling a **100% vendor-neutral declarative metadata envelope** from **target-optimised query execution blocks**:
+
+1. **Vendor-Neutral Metadata Envelope**:
+   - **Identification & Lifecycle**: UUID, semantic rule version, author, and maturity status (`experimental`, `shadow`, `production`, `deprecated`).
+   - **Threat Framework Mapping**: Mapped MITRE ATT&CK Tactics, Techniques, Sub-techniques, and referenced Attack Flow DAGs.
+   - **Data Requirements**: Target OCSF schema classes (e.g. Class 1007 Process Activity) and required attributes.
+   - **Operational Guidance & SRE Budgets**: Severity, false-positive baselines, quiet windows, triage playbooks, and maximum SRE False Positive Rate (FPR $\le 0.05$).
+2. **Detection Logic Execution Blocks**:
+   - **`detection_universal` (Portable Predicate)**: Optional declarative AST or Sigma-style key-value filter for simple, single-event streaming assertions that transpile cleanly across all engines.
+   - **`detection_implementations` (Target-Optimised Dialects)**: Native query blocks (KQL, SPL, ClickHouse/Snowflake SQL, Flink SQL) that exploit underlying runtime primitives: windowed aggregations, graph joins, timeseries anomaly algorithms (`make-series`, `streamstats`), and table clustering indexes.
+3. **Deterministic Test Fixtures**:
+   - Explicit true-positive and false-positive OCSF JSON payloads executed in CI/CD across all declared query implementations to assert semantic parity.
+
+#### Polyglot DaC Rule Schema Example
+
+```yaml
+id: "8e7c156a-2d44-48e2-b7e1-8899fa1b0201"
+name: "Process Masquerading via Unsigned System Binary Hollow"
+version: 2
+status: "production"
+author: "Detection Engineering"
+date: "2026-09-17"
+
+# 1. 100% Vendor-Neutral Governance & Taxonomy
+threat_intel:
+  mitre_attack:
+    tactics: ["TA0005"]
+    techniques: ["T1055.012", "T1036.005"]
+  attack_flow_ref: "af-2026-proc-hollow-v1"
+
+data_requirements:
+  ocsf_version: "1.1.0"
+  target_classes: [1007] # Process Activity
+  mandatory_attributes:
+    - "process.file.name"
+    - "process.file.signature.is_signed"
+    - "process.parent_process.file.name"
+
+operational:
+  severity: "high"
+  noise_budget_fpr: 0.02
+  quiet_window: "15m"
+  triage_playbook: "docs/playbooks/pb-t1055-investigation.md"
+
+# 2. Portable Predicates (For Simple Stream Event Filters)
+detection_universal:
+  selection:
+    process.file.name|endswith: ".exe"
+    process.file.signature.is_signed: false
+    process.parent_process.file.name: "svchost.exe"
+
+# 3. Target-Optimised Native Implementation Blocks
+detection_implementations:
+  sentinel_kql: |
+    SecurityEvent
+    | where EventID == 4688
+    | where ProcessName endswith ".exe" and SignatureStatus != "Valid"
+    | where ParentProcessName has "svchost.exe"
+    | summarize FirstSeen=min(TimeGenerated), LastSeen=max(TimeGenerated) by Computer, Account, ProcessCommandLine
+  splunk_spl: |
+    index=edr event_id=4688 is_signed=false process_name="*.exe" parent_process_name="*svchost.exe"
+    | streamstats count by host, user, process_name window=5m
+    | where count > 1
+  lakehouse_sql: |
+    SELECT 
+      actor.user.name,
+      device.hostname,
+      process.cmd_line,
+      count(*) OVER (PARTITION BY device.hostname, actor.user.name ORDER BY time RANGE BETWEEN INTERVAL 10 MINUTE PRECEDING AND CURRENT ROW) as frequency
+    FROM ocsf_process_activity
+    WHERE process.file.signature.is_signed = false
+      AND lower(process.parent_process.file.name) = 'svchost.exe'
+    QUALIFY frequency > 1;
+
+# 4. Deterministic Verification Fixtures
+tests:
+  unit_fixtures:
+    - name: "Valid unsigned hollowing attempt"
+      expected_result: true
+      event:
+        class_uid: 1007
+        process:
+          file: { name: "svchost.exe", signature: { is_signed: false } }
+          parent_process: { file: { name: "svchost.exe" } }
+    - name: "Benign signed Windows binary"
+      expected_result: false
+      event:
+        class_uid: 1007
+        process:
+          file: { name: "svchost.exe", signature: { is_signed: true } }
+          parent_process: { file: { name: "services.exe" } }
+```
 
 ---
 
@@ -221,7 +310,7 @@ flowchart TB
 - **Execution Telemetry Recording**: The test runner logs precise execution metadata: start timestamp, end timestamp, executing user context, process ID, parent process ID, and generated network connections. This serves as the ground-truth benchmark for rule verification.
 
 ### 2. Multi-Stage Testing Pipeline
-- **Unit Testing (Synthetic Assertions)**: Tests the raw query logic against mock OCSF JSON fixtures. Validates that true-positive payloads trigger the rule with expected field bindings and benign edge-case payloads pass without firing.
+- **Unit Testing (Synthetic Assertions)**: Tests the raw query logic against mock OCSF JSON fixtures across all declared dialect implementations (`sentinel_kql`, `splunk_spl`, `lakehouse_sql`). Validates that true-positive payloads trigger the rule with expected field bindings and benign edge-case payloads pass without firing.
 - **Simulation Verification**: Ingests the recorded telemetry from live adversary simulations through the pipeline. Asserts that the rule successfully matches the generated telemetry within the defined SLA window (< 5 seconds for streaming rules).
 - **Historical Regression Backtesting**: Replays the candidate rule against a 30-day historical lakehouse telemetry sample in the `pre-prod` environment. The pipeline calculates the **Expected Alert Volume (EAV)** and flags rules that exceed the acceptable noise threshold before deployment.
 
@@ -235,18 +324,18 @@ Artificial intelligence is integrated into Layer 3 not as an unconstrained decis
 flowchart LR
   subgraph AI_Capabilities ["AI Acceleration in Layer 3"]
     FLOW_SYNTH["1. Attack Flow Synthesiser\n(Converts unstructured CTI PDFs into structured DAGs)"]
-    DAC_GEN["2. Detection Rule Copilot\n(Drafts vendor-neutral OCSF logic from Attack Flows)"]
+    DAC_GEN["2. Detection Rule Copilot\n(Synthesises native KQL/SPL/SQL & universal OCSF logic)"]
     SYNTH_LOGS["3. Synthetic Log Generator\n(Generates rare attack telemetry for untestable exploits)"]
-    LLM_JUDGE["4. Quality & Ambiguity Judge\n(Audits rules for schema compliance and logic pitfalls)"]
+    LLM_JUDGE["4. Quality & Parity Judge\n(Audits rules for schema compliance & cross-engine equivalence)"]
   end
 
   FLOW_SYNTH --> DAC_GEN --> SYNTH_LOGS --> LLM_JUDGE
 ```
 
 1. **Attack Flow Synthesis**: Natural language processing models ingest unstructured threat intelligence publications (threat reports, blogs, advisories) and extract structured Attack Flow definitions, mapping entity relationships and temporal sequences.
-2. **Detection Logic Drafting**: Converts Attack Flow requirements into initial declarative Detection-as-Code rule drafts, pre-populating OCSF field references and MITRE ATT&CK metadata for human engineering review.
+2. **Detection Logic Drafting & Dialect Synthesis**: Converts Attack Flow requirements into initial Polyglot Detection-as-Code drafts, populating the vendor-neutral metadata envelope and synthesizing target-optimized native query blocks (KQL, SPL, Lakehouse SQL) that exploit platform-specific indexes and functions for human review.
 3. **Synthetic Telemetry Generation**: For high-risk attack techniques that cannot be safely simulated in live test environments (e.g., ransomware encryption routines, hypervisor escape mechanisms), generative models synthesize forensically accurate OCSF event streams to validate rule logic.
-4. **Automated LLM Judge**: Evaluates proposed detection rules against strict architectural standards: checking for regex performance traps, schema field deprecations, ambiguous logic boundaries, and missing triage documentation.
+4. **Automated LLM Judge & Parity Evaluator**: Evaluates proposed detection rules against strict architectural standards: checking for regex performance traps, schema field deprecations, ambiguous logic boundaries, and asserting semantic parity across heterogeneous query blocks (`sentinel_kql`, `splunk_spl`, `lakehouse_sql`) using synthetic test fixtures.
 
 ---
 

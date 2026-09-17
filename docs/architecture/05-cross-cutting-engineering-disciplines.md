@@ -129,7 +129,7 @@ flowchart LR
   REGRESSION --> DEPLOY
 ```
 
-- **Declarative Rule Authoring**: Rules are written in standardised, vendor-neutral formats against normalized OCSF classes rather than proprietary log fields.
+- **Polyglot Declarative Rule Authoring**: Rules are written using Polyglot Detection-as-Code ([ADR-0019](../adr/0019-polyglot-detection-as-code-and-native-engine-adaptation.md)): encapsulating vendor-neutral governance and OCSF class contracts in a YAML metadata envelope, while housing target-optimized native query implementations (KQL, SPL, SQL) for maximum execution fidelity.
 - **Continuous Automated Purple Teaming**: Beyond static unit tests, candidate rules are evaluated against an active adversary emulation harness in pre-production:
   - *Atomic Adversary Emulation*: The CI/CD runner automatically executes non-destructive adversary techniques (e.g. simulated token theft or DLL search order hijacking).
   - *End-to-End Latency Verification*: Asserts that sensor hooks emit the event (Layer 1), normalization preserves required attributes (Layer 2), stream detection triggers within SLA (Layer 3), and autonomous agent scoping activates (Layer 4).
