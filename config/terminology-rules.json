@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "TIDIR Terminology & Architectural Congruence Rules",
+  "rules": [
+    {
+      "id": "polyglot-dac-shift",
+      "description": "Detection-as-Code must refer to Polyglot DaC (vendor-neutral metadata envelope with native engine query blocks) rather than pure vendor-neutral YAML queries.",
+      "pattern": "vendor-neutral (?:YAML|DSL) (?:specifications?|logic|rules?|code)",
+      "replacement": "Polyglot DaC (vendor-neutral metadata envelope with target-optimized query blocks; see ADR-0019)",
+      "scope": ["prose", "diagrams"],
+      "exemptFiles": [
+        "docs/adr/0019-polyglot-detection-as-code-and-native-engine-adaptation.md"
+      ]
+    },
+    {
+      "id": "banned-playwright-automation",
+      "description": "Playwright is prohibited for browser automation; use Interceptor skill.",
+      "pattern": "\\bplaywright\\b",
+      "replacement": "Interceptor skill",
+      "scope": ["prose", "diagrams"],
+      "exemptFiles": []
+    }
+  ]
+}

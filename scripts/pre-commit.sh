@@ -43,5 +43,21 @@ if ! bun ./scripts/validate-diagrams.ts; then
   exit 1
 fi
 
+# 4. Check Documentation Structure & Navigation Congruence
+echo "🗺️  Checking site structure & navigation parity..."
+if ! bun ./scripts/lint-site-structure.ts; then
+  echo "❌ [CONGRUENCE ERROR] Documentation structure or navigation is out of sync."
+  echo "Please align docs/.vitepress/config.ts and docs/adr/index.md. Commit aborted."
+  exit 1
+fi
+
+# 5. Check Architectural Terminology & Diagram Text
+echo "📝 Checking terminology & diagram text consistency..."
+if ! bun ./scripts/lint-terminology.ts; then
+  echo "❌ [TERMINOLOGY ERROR] Terminology or diagram discrepancies detected."
+  echo "Please resolve architectural vocabulary drift before committing. Commit aborted."
+  exit 1
+fi
+
 echo "✅ All pre-commit checks passed successfully!"
 exit 0

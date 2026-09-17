@@ -8,7 +8,10 @@
     "docs:build": "bun ./scripts/build-docs.ts",
     "docs:preview": "vitepress preview docs",
     "lint:md": "bunx markdownlint-cli \"**/*.md\" --ignore node_modules",
+    "lint:structure": "bun ./scripts/lint-site-structure.ts",
+    "lint:terminology": "bun ./scripts/lint-terminology.ts",
     "diagrams:validate": "bun ./scripts/validate-diagrams.ts",
+    "verify": "bun ./scripts/lint-site-structure.ts && bun ./scripts/lint-terminology.ts && bun ./scripts/validate-diagrams.ts && bun ./scripts/build-docs.ts",
     "pre-commit": "bash ./scripts/pre-commit.sh",
     "deploy": "bun ./scripts/deploy-cf.ts"
   },

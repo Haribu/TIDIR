@@ -69,6 +69,15 @@ bun run docs:preview
 # Validate all Mermaid diagrams for syntax errors
 bun ./scripts/validate-diagrams.ts # In sandboxes; or `bun run diagrams:validate`
 
+# Check site structure, ADR registry parity & zero orphaned docs
+bun ./scripts/lint-site-structure.ts # In sandboxes; or `bun run lint:structure`
+
+# Check architectural terminology and diagram text consistency
+bun ./scripts/lint-terminology.ts # In sandboxes; or `bun run lint:terminology`
+
+# Run full holistic verification suite
+bun run verify # Or run the 4 scripts individually in sandboxes
+
 # Deploy build artifacts to Cloudflare Pages
 bun run deploy
 ```
@@ -110,8 +119,10 @@ bun run deploy
 3. **Pre-Push Holistic Verification**:
    - Before pushing changes to `main`:
      1. Run diagram validation: `bun ./scripts/validate-diagrams.ts`
-     2. Run docs build: `bun ./scripts/build-docs.ts` (or `bun ./node_modules/.bin/vitepress build docs`)
-     3. Verify working tree is clean: `git status`
+     2. Run site structure check: `bun ./scripts/lint-site-structure.ts`
+     3. Run terminology check: `bun ./scripts/lint-terminology.ts`
+     4. Run docs build: `bun ./scripts/build-docs.ts` (or `bun ./node_modules/.bin/vitepress build docs`)
+     5. Verify working tree is clean: `git status`
    - Never commit speculative fixes piecemeal to `origin/main` to test in CI. Verify local closure first.
 
 4. **Runtime Standard (Zero Node/NPM)**:
