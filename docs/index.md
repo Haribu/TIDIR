@@ -126,7 +126,7 @@ $$
 $$
 
 ### 3. Continuous Purple Teaming & SecOps Error Budgets
-Borrowing from Site Reliability Engineering (SRE), detection quality is enforced through quantifiable **Alert Noise Error Budgets** (target: false positive rate $\text{FPR} \le 5\%$). Detection-as-Code (DaC) repositories execute continuous atomic attack emulation in CI/CD pipelines. If a detection rule exhausts its noise budget in production, an automated deployment freeze prevents new rule promotions until the noisy rule is tuned or deprecated.
+Borrowing from Site Reliability Engineering (SRE), detection quality is enforced through quantifiable **Alert Noise Error Budgets** (target: false-positive rate $\le 5\%$). Detection-as-Code (DaC) repositories execute continuous atomic attack emulation in CI/CD pipelines. If a detection rule exhausts its noise budget in production, an automated deployment freeze prevents new rule promotions until the noisy rule is tuned or deprecated.
 
 ### 4. Dual-Plane Defensive AI Runtime & Prompt Injection Firewall
 Autonomous agentic workflows operate within a strictly isolated runtime:
