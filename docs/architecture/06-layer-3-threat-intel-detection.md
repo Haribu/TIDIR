@@ -460,4 +460,4 @@ In Layer 3, autonomous AI and agentic harnesses transform how threat intelligenc
 2. **Continuous Evals-as-Code & DaC Quality Judges**:
    - *Problem*: Brittle detection rules written without broad test coverage cause alert fatigue or severe performance degradation on production streaming buses.
    - *AI Leverage*: Multi-model agent judges audit Detection-as-Code (DaC) pull requests, scoring candidate Sigma/SQL rules for schema deprecation, logic ambiguities, and triage documentation completeness.
-   - *Deterministic Safety Gate*: Rules cannot deploy to production without passing automated 30-day historical lakehouse backtests and synthetic unit test suites in CI/CD, guaranteeing zero syntax errors and bounded False Positive Rates ($\text{FPR} \lt 1\%$).
+   - *Deterministic Safety Gate*: Rules cannot deploy to production without passing automated 30-day historical lakehouse backtests and synthetic unit test suites in CI/CD, guaranteeing zero syntax errors and bounded False Positive Rates (false-positive rate $\lt 1\%$).

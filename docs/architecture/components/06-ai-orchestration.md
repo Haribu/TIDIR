@@ -406,4 +406,4 @@ flowchart LR
   - Continuous automated purple teaming with multi-model consensus evaluating detection rules.
   - Closed-loop attribution feedback auto-calibrating Layer 3 detection models.
 * **Architecture:** Event-driven agent microservices, cryptographic multi-signature consensus queues for Tier 2 actions, audited emergency break-glass protocol.
-* **Exit Milestone:** Mean Time to Contain (MTTC) for Tier 1 incidents $\text{MTTC} \lt 60\,\text{s}$; zero unintended production outages validated in shadow-mode canary execution.
+* **Exit Milestone:** Mean Time to Contain (MTTC) for Tier 1 incidents MTTC $\lt 60\text{s}$; zero unintended production outages validated in shadow-mode canary execution.

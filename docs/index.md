@@ -134,7 +134,7 @@ Autonomous agentic workflows operate within a strictly isolated runtime:
 * **Deterministic Guardrails & Multi-Model Arbitration:** High-consequence triage decisions require consensus between a *Proposer Model* (investigation specialist) and an independent *Challenger Model* (adversarial auditor) to reject unsupported assertions and validate proposed containment actions against deterministic policies.
 
 ### 5. Security-State Monotonicity & Fail-Closed Containment
-Automated containment workflows execute declarative state machines governed by **Security-State Monotonicity**: *no automated compensation may increase attacker reachability beyond the last verified-safe security state*. While forward compensation may safely restore benign services, rolling back security barriers upon downstream timeout is strictly prohibited as an anti-defence vulnerability. Workflows enforce fail-closed boundary freezes and forward escalation to broader network perimeters, with high-impact mutations gated by authenticated Break-Glass Human-in-the-Loop consensus ($\text{MTTC} \lt 5\,\text{min}$).
+Automated containment workflows execute declarative state machines governed by **Security-State Monotonicity**: *no automated compensation may increase attacker reachability beyond the last verified-safe security state*. While forward compensation may safely restore benign services, rolling back security barriers upon downstream timeout is strictly prohibited as an anti-defence vulnerability. Workflows enforce fail-closed boundary freezes and forward escalation to broader network perimeters, with high-impact mutations gated by authenticated Break-Glass Human-in-the-Loop consensus (Mean Time to Contain / MTTC $\lt 5\text{ min}$).
 
 ---
 

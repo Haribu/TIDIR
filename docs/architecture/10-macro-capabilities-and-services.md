@@ -107,9 +107,9 @@ Replaces manual rule writing with modern software engineering disciplines, conti
 * **Underpinning Capabilities:** `DET-01`, `DET-02`, `DET-03`.
 
 #### Service 3.2: SRE Noise Budgeting & Bayesian Risk Scoring
-* **Description:** Enforces Site Reliability Engineering (SRE) Alert Noise Error Budgets ($\text{FPR} \le 5\%$) to prevent analyst burnout. Treats single anomalies as weak graph signals, elevating incidents only after Bayesian multi-signal compounding confirms anomalous behaviour across assets, identities, and network flows.
+* **Description:** Enforces Site Reliability Engineering (SRE) Alert Noise Error Budgets (false-positive rate $\le 5\%$) to prevent analyst burnout. Treats single anomalies as weak graph signals, elevating incidents only after Bayesian multi-signal compounding confirms anomalous behaviour across assets, identities, and network flows.
 * **Customer Value:** Mathematically overcomes the Base Rate Fallacy / False Positive Paradox; eliminates alert fatigue; ensures analysts investigate only high-probability, actionable findings.
-* **Operational SLAs:** Alert False Positive Rate $\text{FPR} \le 5\%$; automated deployment freezes triggered when noise budget is exhausted.
+* **Operational SLAs:** Alert False Positive Rate false-positive rate $\le 5\%$; automated deployment freezes triggered when noise budget is exhausted.
 * **Underpinning Capabilities:** `DET-04`, `DET-05`, `DET-06`.
 
 ---
@@ -151,5 +151,5 @@ The matrix below maps the enterprise outcomes, financial benefits, and operation
 | :--- | :--- | :--- | :--- |
 | **1. Threat Horizon & Intelligence** | Proactive posture adaptation; instantaneous exposure quantification during global zero-day crises. | Eliminates emergency incident response consultancy fees during major threat outbreaks. | Retrospective sweep completion $\lt 15\,\text{min}$ |
 | **2. Telemetry Fabric & Lakehouse** | Complete operational and compliance visibility; elimination of vendor lock-in and data retention penalties. | $\ge 70\%$ reduction in annual storage and indexing licensing expenditure. | Ingestion throughput $\ge 500\text{k EPS}$; Hot search latency $\lt 2\,\text{s}$ |
-| **3. Continuous Detection & Purple Teaming** | Resilient detections that do not rot; predictable alert queues; elimination of operational fatigue. | Multiplies engineering output by $5\times$; eliminates wasted hours investigating false alarms. | Detection MTTD $\lt 5\,\text{s}$ (stream) / $\lt 24\,\text{h}$ (batch); Noise ratio $\text{FPR} \le 5\%$ |
+| **3. Continuous Detection & Purple Teaming** | Resilient detections that do not rot; predictable alert queues; elimination of operational fatigue. | Multiplies engineering output by $5\times$; eliminates wasted hours investigating false alarms. | Detection MTTD $\lt 5\,\text{s}$ (stream) / $\lt 24\,\text{h}$ (batch); Noise ratio false-positive rate $\le 5\%$ |
 | **4. Autonomous Investigation & Containment** | Machine-speed threat neutralisation; zero accidental operational outages; regulatory-grade defensibility. | Protects enterprise revenue by preventing self-inflicted production downtime during incidents. | Investigation MTTI $\lt 60\,\text{s}$; Automated MTTC $\lt 15\,\text{s}$; Human MTTC $\lt 5\,\text{min}$ |
