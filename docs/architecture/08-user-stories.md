@@ -139,7 +139,7 @@ All stories adhere to the canonical structure:
 1. When an event interacts with an ambient deception primitive (honeytoken cloud key, decoy Active Directory SPN, canary filesystem lure), Layer 1 tags the record with `metadata.is_canary: true`.
 2. The agent treats the alert as having an empirical false-positive probability of zero ($P(\text{Benign} \mid \text{Trigger}) \to 0$), immediately promoting the case to a verified intrusion anchor.
 3. The response engine dispatches targeted, low-disruption Tier 1 containment actions (e.g. revoking the compromised credential, isolating the host process, null-routing the interacting external IP) within 5 seconds of event receipt.
-4. Automated compensation and rollback transactions are staged simultaneously in the Saga state store, and verified alerts are broadcast instantly to the incident commander channel.
+4. Workflows enforce monotonic progression: isolation states freeze in place on step failure and escalate forward, while verified alerts broadcast instantly to the incident commander channel.
 
 ---
 
@@ -192,7 +192,7 @@ All stories adhere to the canonical structure:
 #### Acceptance Criteria
 1. Playbooks are defined as configuration files with explicit timeout, retry, backoff, and circuit-breaker thresholds per connector.
 2. Connectors to third-party endpoints (endpoint control planes, cloud identity providers, perimeter firewalls) run continuous synthetic health checks; degraded connectors automatically fall back to human queuing.
-3. Every automated mutation records a corresponding compensation action to guarantee deterministic recovery in the event of partial playbook failure.
+3. Every automated containment sequence enforces monotonic forward progression, freezing barriers on partial failure and triggering forward escalation without regression.
 
 ---
 

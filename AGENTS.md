@@ -104,6 +104,17 @@ bun run deploy
    - **Zero credentials in Git**: Never commit API keys, tokens, or personal identifiers.
    - All external deployment tokens must be read from external local environment stores or CI secrets.
 
+5. **Target Invariants vs. Empirical Guarantees (Discipline of Claims)**:
+   - **No Absolutist Guarantees**: Never claim that the architecture "guarantees zero data loss", "guarantees 100% detection", "eliminates all hallucinations", or "provides strict immunity". Distributed networks partition, OS kernels drop packets under storm conditions, and probabilistic models hallucinate.
+   - **Separate Intent from Demonstrated Properties**: Explicitly articulate what the architecture is *designed to enforce* (declarative invariants, schemas, boundaries) versus what requires empirical testing and measurement.
+   - **The WHAT and WHY over the HOW**: Articulate the capabilities and invariants at the reference architecture tier. Offload runtime parameters, mathematical tuning, and distributed systems recovery mechanics into Tier 3 ADRs.
+
+6. **First-Class Failure & Graceful Degradation**:
+   - Every specification must account for component degradation. When describing a capability, address:
+     1. *Failure Mode*: What happens when the underlying bus, engine, or API fails?
+     2. *Observability ("How We Know")*: What active probe, canary, or metric signals degradation?
+     3. *Continuity Plan B*: What deterministic fallback or manual flight deck maintains operational continuity? (See [ADR-0021](docs/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b.md)).
+
 ---
 
 ## ⚠️ Operational Gotchas & Agent Guidelines (Learned Lessons)

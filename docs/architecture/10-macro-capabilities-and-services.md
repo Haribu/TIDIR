@@ -123,10 +123,10 @@ Compresses investigation and containment timelines from hours to seconds while m
 * **Operational SLAs:** Automated case dossier hydration $< 60\,\text{seconds}$; Proposer/Challenger agreement rate $> 80\%$.
 * **Underpinning Capabilities:** `INV-01`, `INV-02`, `INV-03`, `INV-05`, `INV-06`.
 
-#### Service 4.2: Blast-Radius Gated Containment & Saga Orchestration
-* **Description:** Automated response workflows structured as distributed Saga state machines. Low-risk actions execute autonomously within seconds; disruptive actions (e.g. host isolation) evaluate active network sessions and service criticality before presenting pre-computed impact cards to human commanders.
-* **Customer Value:** Rapid containment of lateral movement; zero self-inflicted business outages; guaranteed recovery via automated compensating rollback transactions if containment fails midway.
-* **Operational SLAs:** Automated Tier 1 containment $< 15\,\text{seconds}$; 100% compensating rollback parity.
+#### Service 4.2: Blast-Radius Gated Containment & Monotonic State Machines
+* **Description:** Automated containment workflows structured as declarative, monotonic state machines. Low-risk actions execute autonomously within seconds; disruptive actions (e.g. host isolation) evaluate active network sessions and service criticality before presenting pre-computed impact cards to human commanders. On partial failure, perimeters freeze in place and escalate forward rather than rolling back.
+* **Customer Value:** Rapid containment of lateral movement; prevents self-inflicted business outages; eliminates the vulnerability of rollback sequences reopening compromised perimeters.
+* **Operational SLAs:** Automated Tier 1 containment $< 15\,\text{seconds}$; 100% fail-closed boundary enforcement.
 * **Underpinning Capabilities:** `RESP-01`, `RESP-02`, `RESP-03`.
 
 #### Service 4.3: Audited Break-Glass & Crisis Containment

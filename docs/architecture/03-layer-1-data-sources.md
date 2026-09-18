@@ -187,7 +187,7 @@ To preserve loose coupling between source emitters and the processing platform, 
 1. **Producer Neutrality**: Data sources emit facts about what occurred, not security judgments. Normalization and enrichment belong exclusively to Layer 2 and Layer 3.
 2. **Authoritative Timestamping**: Every emitted payload must include an RFC 3339 UTC origin timestamp captured at generation, distinct from collection or ingestion timestamps.
 3. **Identity & Origin Provenance**: Events must carry immutable source provenance tags (tenant ID, host identifier, sensor ID, collector version) to ensure traceability and tamper detection.
-4. **Transport Resilience Guarantee**: Transport clients must guarantee at-least-once delivery into Layer 2 through bounded local spooling and acknowledgement handshakes.
+4. **Transport Resilience Invariant**: Transport clients enforce durable at-least-once delivery into Layer 2 through bounded local spooling and acknowledgement handshakes, tracking and alerting on any buffer drop via `TelemetryDropCount`.
 
 ---
 
@@ -217,7 +217,7 @@ flowchart TB
 
   S2 -.->|Drop / Aggregate 90%| T3
   S3 -.->|Dynamic Reservoir Sampling 50%| T2
-  STRESS ==>|Guaranteed Zero Loss| T1
+  STRESS ==>|Prioritised Preservation| T1
 ```
 
 ### Deterministic Shedding & Ring Buffer Drop Policies
