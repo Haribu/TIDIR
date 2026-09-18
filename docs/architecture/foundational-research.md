@@ -121,3 +121,45 @@ TIDIR rejects fully hands-off "lights-out" autonomous defense:
 1. **Incident Replay Simulators ([ADR-0020](/adr/0020-operator-skill-retention-and-incident-replay-simulators))**: Human operators regularly practice manual flight deck drills using replayed historical lakehouse telemetry to maintain verified operational fluency.
 2. **The Incident Decision DAG ([ADR-0010](/adr/0010-sabsa-business-architecture-and-attribute-profiling))**: Every machine recommendation explicitly displays the underlying raw observations and reasoning lineage, ensuring human operators retain complete situation awareness.
 3. **Cryptographic Master E-Stop ([INV-09](/architecture/00-architectural-invariants#i9--human-recoverability--break-glass-flight-decks))**: Human commanders retain physical and cryptographic break-glass controls to instantly halt automated actions.
+
+---
+
+## 4. Research Programme & Ideas Backlog (Future Horizon)
+
+TIDIR maintains a strict epistemic boundary between **normative architectural invariants** (which are formally specified, governed by ADRs, and verified in the current codebase) and **active research explorations** (which test, quantify, or challenge the architecture's foundational assumptions).
+
+Admission to this research programme is deliberately constrained: we do not add architectural features simply because an idea is appealing. Every research track must establish a concrete mechanism to test, falsify, or benchmark how TIDIR properties survive contact with real-world workloads and adversarial conditions.
+
+### Priority Research Tracks
+
+#### 1. Reproducible Attack-to-Containment Benchmark Harness (Priority Experimental Vehicle)
+- **Objective**: Transform the TIDIR assurance case from declarative claims into verifiable, reproducible experimental data.
+- **Mechanism**: Construct an open test harness replaying standardized attack graphs (such as Atomic Red Team and MITRE CALDERA) across parameterized OCSF event streams.
+- **Empirical Measurement**: Quantify Mean Time to Contain (MTTC), Incident Decision DAG reconstructability, and containment safety margins under deliberate failure injections (e.g. split-brain buses, delayed enrichment, and corrupted identity tokens).
+
+#### 2. Invariant Violation & Failure-Boundary Research (Adversarial Self-Evaluation)
+- **Objective**: Determine the minimum set of operational, environmental, and cryptographic assumptions that must fail before each claimed safety property ceases to hold.
+- **Core Research Question**: *Under what combinations of compromised control-plane components, stale policy, identity failure, partial network partition, and adversarial telemetry can a nominally TIDIR-compliant implementation violate `INV-01` through `INV-11`?*
+- **Outcome**: Formal fault trees, property-based testing matrices, and foundations for mechanical verification.
+
+#### 3. Formal Bayesian Evidence Calibration & Lineage Fusion
+- **Objective**: Mature the mathematical machinery underpinning Evidential Independence (`INV-03`).
+- **Core Research Question**: *How far up the provenance DAG must dependencies propagate, and how can co-derived signals sharing common ancestry be discounted without requiring complex full generative models at line rate?*
+- **Direction**: Evaluate whether operational defense requires elaborate Bayesian probability calibration or whether deterministic dependency suppression sufficiently eliminates artificial confidence compounding.
+
+#### 4. Multi-Dimensional Containment Constraints ($R_{\text{attacker}} \mid C_{\text{availability}}$)
+- **Objective**: Model operational continuity without degrading containment safety.
+- **Strict Framing**: Availability and business continuity are investigated exclusively as **deterministic constraints on permissible containment candidates**, never as an optimization trade-off against attacker reachability.
+- **Non-Negotiable Invariant**: Monotonicity remains absolute: $\mathcal{R}(s_{\text{post}}) \subseteq \mathcal{R}(s_{\text{pre}})$. A containment action cannot permit attacker reachability expansion on the pretext of preserving availability.
+
+#### 5. Parameterized Workload Benchmark Models ($W_1, W_2, W_3$)
+- **Objective**: Replace ungrounded latency and throughput targets with explicit, reproducible workload vectors:
+  $$W = \{\text{EPS}, \text{bytes/event}, \text{entities/day}, \text{cardinality}, \text{retention}, \text{hot \%}, \text{query concurrency}, \text{enrichment fanout}\}$$
+- **Status**: Defined strictly as TIDIR reference profiles for benchmark reproducibility, not as universal industry standards: $W_1$ (Mid-Market Reference, 25k EPS), $W_2$ (Enterprise Reference, 250k EPS), and $W_3$ (Hyperscale Reference, 1M EPS).
+
+#### 6. Minimum Viable Architecture (MVA)
+- **Objective**: Specify the leanest provably compliant TIDIR deployment topology: Ingress $\to$ OCSF Normalization $\to$ Dual-Tier Storage $\to$ Polyglot DaC $\to$ Case Dossiers $\to$ Policy-Gated Actuation ([ADR-0012](/adr/0012-ai-orchestration-runtime-mcp-and-mvp-roadmap)).
+
+#### 7. SecOps Unit Economics Framework
+- **Objective**: Model telemetry economics as a first-class architectural dimension:
+  $$\frac{\Delta(\text{Marginal Defensive Value})}{\Delta(\text{Compute} + \text{Storage} + \text{Human Cost})}$$
