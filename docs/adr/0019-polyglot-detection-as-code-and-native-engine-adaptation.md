@@ -94,6 +94,9 @@ threat_intel:
     techniques: ["T1055.012", "T1036.005"]
   mitre_d3fend:
     countermeasures: ["D3-PSA", "D3-EOP"]
+    acf_family: "symbolic_logic" # MITRE D3FEND Analytic Characterization Framework
+  mitre_car:
+    analytics: ["CAR-2013-05-002"] # MITRE Cyber Analytics Repository
   attack_flow_ref: "af-2026-proc-hollow-v1"
 
 data_requirements:
