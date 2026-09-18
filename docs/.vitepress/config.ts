@@ -1,5 +1,16 @@
 import { defineConfig } from "vitepress";
 import { withMermaid } from "vitepress-plugin-mermaid";
+import { execSync } from "node:child_process";
+
+const gitCommit =
+  process.env.CF_PAGES_COMMIT_SHA?.slice(0, 7) ||
+  (() => {
+    try {
+      return execSync("git rev-parse --short HEAD").toString().trim();
+    } catch {
+      return "main";
+    }
+  })();
 
 export default withMermaid(
   defineConfig({
@@ -297,8 +308,8 @@ export default withMermaid(
         { icon: "github", link: "https://github.com/Haribu/TIDIR" }
       ],
       footer: {
-        message: 'TIDIR Architecture — <a href="https://github.com/Haribu/TIDIR" target="_blank" rel="noopener">GitHub Project</a> · Apache 2.0 Licensed',
-        copyright: "Copyright © 2026 Harry McLaren"
+        message: `Human-Led Architecture · AI-Supported · <a href="https://github.com/Haribu/TIDIR/blob/main/LICENSE" target="_blank" rel="noopener">Apache-2.0 Licence</a> · Live Commit: <a href="https://github.com/Haribu/TIDIR/commit/${gitCommit}" target="_blank" rel="noopener"><code>${gitCommit}</code></a>`,
+        copyright: "Copyright © 2026 Harry McLaren · TIDIR v1.0.0"
       },
       search: {
         provider: "local"
