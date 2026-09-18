@@ -624,9 +624,9 @@ flowchart TB
   2. **Mutual TLS with Ephemeral Hardware Attestation:** All edge-to-bus communications require mutual TLS (mTLS) authenticated via TPM/hardware-backed certificates.
   3. **Local Spooling & Line-Rate Backpressure ([ADR-0021](/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b)):** When downstream pipeline buffers saturate, edge collectors spool encrypted events to local disk ring buffers rather than silently dropping telemetry.
 * **Framework Cross-Walk:**
-  - **MITRE ATT&CK:** `T1562.001` (Impair Defenses: Disable or Modify Tools), `T1070` (Indicator Removal on Host).
-  - **MITRE ATLAS:** `AML.T0015` (Evade ML Model / Defensive Visibility Evasion).
-  - **MITRE D3FEND:** `D3-MTC` (Message Authentication), `D3-HPA` (Hardware Platform Authentication), `D3-SFL` (Sensor File Integrity Monitoring).
+  - **MITRE ATT&CK:** [`T1562.001`](https://attack.mitre.org/techniques/T1562/001/) (Impair Defenses: Disable or Modify Tools), [`T1070`](https://attack.mitre.org/techniques/T1070/) (Indicator Removal on Host).
+  - **MITRE ATLAS:** [`AML.T0015`](https://atlas.mitre.org/) (Evade ML Model / Defensive Visibility Evasion).
+  - **MITRE D3FEND:** [`D3-MTC`](https://d3fend.mitre.org/) (Message Authentication), [`D3-HPA`](https://d3fend.mitre.org/) (Hardware Platform Authentication), [`D3-SFL`](https://d3fend.mitre.org/) (Sensor File Integrity Monitoring).
 
 ---
 
@@ -639,9 +639,9 @@ flowchart TB
   2. **Preservation of Raw Payloads in Quarantine ([ADR-0002](/adr/0002-preserve-unmapped-telemetry-in-ocsf)):** Unmapped and malformed fields are quarantined in a raw payload envelope to prevent data loss whilst maintaining pipeline stability.
   3. **Dynamic CTI Confidence Decay & Protected Allow-Lists:** Inbound threat intelligence requires multi-source corroboration and dynamic confidence decay; core infrastructure assets reside on immutable cryptographic allow-lists that override poisoned feeds.
 * **Framework Cross-Walk:**
-  - **MITRE ATT&CK:** `T1565.002` (Data Manipulation: Transmitted Data Manipulation), `T1499` (Endpoint Denial of Service).
-  - **MITRE ATLAS:** `AML.T0020` (Data Poisoning: Malformed Ingestion).
-  - **MITRE D3FEND:** `D3-SVE` (Schema Validation), `D3-DLQ` (Dead-Letter Queue Isolation), `D3-RPL` (Raw Payload Envelope Preservation).
+  - **MITRE ATT&CK:** [`T1565.002`](https://attack.mitre.org/techniques/T1565/002/) (Data Manipulation: Transmitted Data Manipulation), [`T1499`](https://attack.mitre.org/techniques/T1499/) (Endpoint Denial of Service).
+  - **MITRE ATLAS:** [`AML.T0020`](https://atlas.mitre.org/) (Data Poisoning: Malformed Ingestion).
+  - **MITRE D3FEND:** [`D3-SVE`](https://d3fend.mitre.org/) (Schema Validation), [`D3-DLQ`](https://d3fend.mitre.org/) (Dead-Letter Queue Isolation), [`D3-RPL`](https://d3fend.mitre.org/) (Raw Payload Envelope Preservation).
 
 ---
 
@@ -654,9 +654,9 @@ flowchart TB
   2. **Cryptographic RFC 3161 Timestamps:** Case dossiers, pinned evidence artifacts, and timeline reconstructions are sealed with external cryptographic timestamping authorities.
   3. **The Incident Decision DAG ([ADR-0001](/adr/0001-record-architecture-decisions) & [ADR-0010](/adr/0010-sabsa-business-architecture-and-attribute-profiling)):** Every investigative hypothesis, detection finding, and human annotation is committed as an immutable node in an append-only directed acyclic graph with cryptographic parent-hash verification.
 * **Framework Cross-Walk:**
-  - **MITRE ATT&CK:** `T1070.003` (Indicator Removal: Clear Command History), `T1485` (Data Destruction), `T1565.001` (Stored Data Manipulation).
-  - **MITRE ATLAS:** `AML.T0024` (Cyber ML Artifact Manipulation).
-  - **MITRE D3FEND:** `D3-WORM` (Write-Once Media Storage), `D3-CH` (Cryptographic Hash Verification), `D3-TSA` (Timestamp Attestation).
+  - **MITRE ATT&CK:** [`T1070.003`](https://attack.mitre.org/techniques/T1070/003/) (Indicator Removal: Clear Command History), [`T1485`](https://attack.mitre.org/techniques/T1485/) (Data Destruction), [`T1565.001`](https://attack.mitre.org/techniques/T1565/001/) (Stored Data Manipulation).
+  - **MITRE ATLAS:** [`AML.T0024`](https://atlas.mitre.org/) (Cyber ML Artifact Manipulation).
+  - **MITRE D3FEND:** [`D3-WORM`](https://d3fend.mitre.org/) (Write-Once Media Storage), [`D3-CH`](https://d3fend.mitre.org/) (Cryptographic Hash Verification), [`D3-TSA`](https://d3fend.mitre.org/) (Timestamp Attestation).
 
 ---
 
@@ -671,9 +671,9 @@ flowchart TB
   2. **Proposer/Challenger Multi-Model Arbitration ([ADR-0007](/adr/0007-continuous-automated-purple-teaming-and-multi-model-consensus)):** Any proposed finding elevation or incident hypothesis is audited by a separate Challenger model evaluating grounding fidelity against raw telemetry records.
   3. **Continuous Evals-as-Code ([ADR-0006](/adr/0006-agent-evaluation-harness-evals-as-code)):** Automated CI/CD regression testing benchmarks prompts and MCP contracts against known adversarial jailbreak fixtures.
 * **Framework Cross-Walk:**
-  - **MITRE ATT&CK:** `T1059` (Command and Scripting Interpreter), `T1548` (Abuse Elevation Control Mechanism).
-  - **MITRE ATLAS:** `AML.T0051` (LLM Prompt Injection: Direct & Indirect), `AML.T0057` (LLM Jailbreak), `AML.T0054` (LLM Plugin Compromise).
-  - **MITRE D3FEND:** `D3-IT` (Isolated Execution / Dual-Plane Data Isolation), `D3-LAM` (Least-Privilege Access Mechanism), `D3-MDA` (Model Diversity & Dual-Model Arbitration).
+  - **MITRE ATT&CK:** [`T1059`](https://attack.mitre.org/techniques/T1059/) (Command and Scripting Interpreter), [`T1548`](https://attack.mitre.org/techniques/T1548/) (Abuse Elevation Control Mechanism).
+  - **MITRE ATLAS:** [`AML.T0051`](https://atlas.mitre.org/) (LLM Prompt Injection: Direct & Indirect), [`AML.T0057`](https://atlas.mitre.org/) (LLM Jailbreak), [`AML.T0054`](https://atlas.mitre.org/) (LLM Plugin Compromise).
+  - **MITRE D3FEND:** [`D3-IT`](https://d3fend.mitre.org/) (Isolated Execution / Dual-Plane Data Isolation), [`D3-LAM`](https://d3fend.mitre.org/) (Least-Privilege Access Mechanism), [`D3-MDA`](https://d3fend.mitre.org/) (Model Diversity & Dual-Model Arbitration).
 
 ---
 
@@ -687,9 +687,9 @@ flowchart TB
   3. **SRE Alert Noise Error Budgets ([ADR-0008](/adr/0008-secops-error-budgets-and-chaos-security-engineering)):** Rules exceeding their monthly false-positive budget ($\gt 5\%$) trigger automated deployment freezes, preventing noisy rules from reaching production.
   4. **Signed Dual-Party GitOps Enrolment ([ADR-0019](/adr/0019-polyglot-detection-as-code-and-native-engine-adaptation)):** Detection logic changes require cryptographic commit signing and mandatory dual-peer review prior to CI/CD merge.
 * **Framework Cross-Walk:**
-  - **MITRE ATT&CK:** `T1499.003` (Endpoint DoS: Application Exhaustion Flood), `T1562` (Impair Defenses).
-  - **MITRE ATLAS:** `AML.T0040` (Adversarial ML Perturbations to Induce Alert Storms).
-  - **MITRE D3FEND:** `D3-ARA` (Alert Rate Anomaly Detection), `D3-BCA` (Bayesian Correlation Analysis), `D3-SND` (Supernode Degree Dampening).
+  - **MITRE ATT&CK:** [`T1499.003`](https://attack.mitre.org/techniques/T1499/003/) (Endpoint DoS: Application Exhaustion Flood), [`T1562`](https://attack.mitre.org/techniques/T1562/) (Impair Defenses).
+  - **MITRE ATLAS:** [`AML.T0040`](https://atlas.mitre.org/) (Adversarial ML Perturbations to Induce Alert Storms).
+  - **MITRE D3FEND:** [`D3-ARA`](https://d3fend.mitre.org/) (Alert Rate Anomaly Detection), [`D3-BCA`](https://d3fend.mitre.org/) (Bayesian Correlation Analysis), [`D3-SND`](https://d3fend.mitre.org/) (Supernode Degree Dampening).
 
 ---
 
@@ -702,9 +702,9 @@ flowchart TB
   2. **Automated Blast-Radius Circuit Breakers & Tier 0 Asset Immunity:** Automated containment enforces strict execution ceilings and pre-execution impact simulation; core production infrastructure is strictly immune to autonomous destructive isolation.
   3. **Dual-Authorisation Consensus & Audited Break-Glass Human Oversight:** High-impact disruptive actions (Tier 2) mandate multi-signature approval from two authenticated commanders, supported by a cryptographic emergency E-Stop flight deck.
 * **Framework Cross-Walk:**
-  - **MITRE ATT&CK:** `T1489` (Service Stop), `T1562.001` (Disable or Modify Tools).
-  - **MITRE ATLAS:** `AML.T0053` (Excessive Agency: Autonomous Weaponization).
-  - **MITRE D3FEND:** `D3-SMS` (State Machine Security / Reachability Monotonicity), `D3-BRC` (Blast-Radius Constraint & Critical Asset Immunity), `D3-BGO` (Break-Glass Human Override & Master E-Stop).
+  - **MITRE ATT&CK:** [`T1489`](https://attack.mitre.org/techniques/T1489/) (Service Stop), [`T1562.001`](https://attack.mitre.org/techniques/T1562/001/) (Disable or Modify Tools).
+  - **MITRE ATLAS:** [`AML.T0053`](https://atlas.mitre.org/) (Excessive Agency: Autonomous Weaponization).
+  - **MITRE D3FEND:** [`D3-SMS`](https://d3fend.mitre.org/) (State Machine Security / Reachability Monotonicity), [`D3-BRC`](https://d3fend.mitre.org/) (Blast-Radius Constraint & Critical Asset Immunity), [`D3-BGO`](https://d3fend.mitre.org/) (Break-Glass Human Override & Master E-Stop).
 
 ---
 
@@ -717,9 +717,9 @@ flowchart TB
   2. **Line-Rate NHI Behavioral Profiling:** All service accounts, bot tokens, and machine workloads are normalized into OCSF Class 3002/3005 and profiled across rolling 14-day behavioral windows to detect out-of-VPC token replays and dormancy awakening.
   3. **Per-Task Capability Attestation:** SVID claims strictly bound tool permissions at the network mesh layer. A forensic triage agent's SVID cannot establish connections to response containment orchestrators.
 * **Framework Cross-Walk:**
-  - **MITRE ATT&CK:** `T1078.004` (Valid Accounts: Cloud Accounts), `T1550.001` (Use Alternate Authentication Material: Application Access Token).
-  - **MITRE ATLAS:** `AML.T0047` (ML Artifact / Token Theft), `AML.T0054` (LLM Plugin / Tool Compromise).
-  - **MITRE D3FEND:** `D3-LAM` (Least-Privilege Access Mechanism), `D3-MTC` (Message Authentication), `D3-IT` (Isolated Execution).
+  - **MITRE ATT&CK:** [`T1078.004`](https://attack.mitre.org/techniques/T1078/004/) (Valid Accounts: Cloud Accounts), [`T1550.001`](https://attack.mitre.org/techniques/T1550/001/) (Use Alternate Authentication Material: Application Access Token).
+  - **MITRE ATLAS:** [`AML.T0047`](https://atlas.mitre.org/) (ML Artifact / Token Theft), [`AML.T0054`](https://atlas.mitre.org/) (LLM Plugin / Tool Compromise).
+  - **MITRE D3FEND:** [`D3-LAM`](https://d3fend.mitre.org/) (Least-Privilege Access Mechanism), [`D3-MTC`](https://d3fend.mitre.org/) (Message Authentication), [`D3-IT`](https://d3fend.mitre.org/) (Isolated Execution).
 
 ---
 
@@ -732,9 +732,9 @@ flowchart TB
   2. **SLM Judge Grounding Verification ([ADR-0014](/adr/0014-ai-observability-self-learning-and-slm-judges)):** All generated investigation summaries must pass deterministic grounding checks ($\ge 95\%$ grounding fidelity) against raw telemetry before promotion into long-term memory.
   3. **Decoupled Ambient Deception Anchors:** Canary honeytokens, Kerberos SPN decoys, and lure files possess zero identifying platform watermarks, preventing adversary fingerprinting.
 * **Framework Cross-Walk:**
-  - **MITRE ATT&CK:** `T1565.001` (Stored Data Manipulation), `T1562.001` (Disable or Modify Tools).
-  - **MITRE ATLAS:** `AML.T0018` (Data Poisoning: Backdoor Induction), `AML.T0020` (Poison Training / Retrieval Data), `AML.T0015` (Evade ML Model), `AML.T0040` (ML Model Evasion via Adversarial Perturbations).
-  - **MITRE D3FEND:** `D3-CH` (Cryptographic Hash Verification), `D3-BCA` (Bayesian Correlation Analysis), `D3-MDA` (Model Diversity & Dual-Model Arbitration), `D3-DN` (Decoy Network / Environment).
+  - **MITRE ATT&CK:** [`T1565.001`](https://attack.mitre.org/techniques/T1565/001/) (Stored Data Manipulation), [`T1562.001`](https://attack.mitre.org/techniques/T1562/001/) (Disable or Modify Tools).
+  - **MITRE ATLAS:** [`AML.T0018`](https://atlas.mitre.org/) (Data Poisoning: Backdoor Induction), [`AML.T0020`](https://atlas.mitre.org/) (Poison Training / Retrieval Data), [`AML.T0015`](https://atlas.mitre.org/) (Evade ML Model), [`AML.T0040`](https://atlas.mitre.org/) (ML Model Evasion via Adversarial Perturbations).
+  - **MITRE D3FEND:** [`D3-CH`](https://d3fend.mitre.org/) (Cryptographic Hash Verification), [`D3-BCA`](https://d3fend.mitre.org/) (Bayesian Correlation Analysis), [`D3-MDA`](https://d3fend.mitre.org/) (Model Diversity & Dual-Model Arbitration), [`D3-DN`](https://d3fend.mitre.org/) (Decoy Network / Environment).
 
 ---
 
@@ -747,9 +747,9 @@ flowchart TB
   2. **Semantic Loop & Cost Circuit Breakers ([ADR-0017](/adr/0017-agent-fleet-control-plane-and-runtime-observability)):** Sliding-window tool invocation hashing terminates oscillating loops ($> 3$ identical tool calls); hard execution bounds enforce a maximum of 8 tool hops, a 180-second timeout, and a financial ceiling (\$2.50 / 150k tokens per branch).
   3. **Air-Gapped Ingress/Egress Controls:** Agent runtimes operate in isolated VPCs with zero direct public internet egress; situation summaries undergo automated PII/credential redaction before display.
 * **Framework Cross-Walk:**
-  - **MITRE ATT&CK:** `T1005` (Data from Local System), `T1048` (Exfiltration Over Alternative Protocol), `T1499` (Endpoint Denial of Service).
-  - **MITRE ATLAS:** `AML.T0053` (Excessive Agency / Goal Hijacking), `AML.T0024` (Exfiltration via Cyber ML Artifacts), `AML.T0043` (Insecure Output Handling / Summarization Leakage).
-  - **MITRE D3FEND:** `D3-EOP` (Execution Boundary / Sandboxing), `D3-SLB` (Semantic Loop Breaking & Resource Limiting), `D3-IT` (Isolated Execution).
+  - **MITRE ATT&CK:** [`T1005`](https://attack.mitre.org/techniques/T1005/) (Data from Local System), [`T1048`](https://attack.mitre.org/techniques/T1048/) (Exfiltration Over Alternative Protocol), [`T1499`](https://attack.mitre.org/techniques/T1499/) (Endpoint Denial of Service).
+  - **MITRE ATLAS:** [`AML.T0053`](https://atlas.mitre.org/) (Excessive Agency / Goal Hijacking), [`AML.T0024`](https://atlas.mitre.org/) (Exfiltration via Cyber ML Artifacts), [`AML.T0043`](https://atlas.mitre.org/) (Insecure Output Handling / Summarization Leakage).
+  - **MITRE D3FEND:** [`D3-EOP`](https://d3fend.mitre.org/) (Execution Boundary / Sandboxing), [`D3-SLB`](https://d3fend.mitre.org/) (Semantic Loop Breaking & Resource Limiting), [`D3-IT`](https://d3fend.mitre.org/) (Isolated Execution).
 
 ---
 
@@ -765,14 +765,14 @@ The table below synthesises how the TIDIR target architecture neutralises the ke
 
 | Threat ID | Adversarial Threat Category | MITRE ATLAS Technique | OWASP LLM Ref | TIDIR Architectural Defence & Control | Governing Invariant & ADR |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **AI-01** | **Indirect Prompt Injection** | `AML.T0051` (LLM Prompt Injection) | `LLM01` | **Dual-Plane Data Isolation**: Untrusted logs exist exclusively in the Data Plane; agent personas and tool contracts exist in the signed Control Plane. No prompt-sanitization heuristic is trusted. | **INV-04** (Authority Separation)<br>[ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall) |
-| **AI-02** | **Insecure Output Handling** | `AML.T0043` (Insecure Output Handling) | `LLM02` | **Deterministic AST Query Validator**: Output strings from LLMs cannot be executed directly; all generated SQL/KQL passes through an AST compiler validating read-only syntax and temporal constraints. | **INV-04** (Authority Separation)<br>[ADR-0012](/adr/0012-ai-orchestration-runtime-mcp-and-mvp-roadmap) |
-| **AI-03** | **Training / RAG Data Poisoning** | `AML.T0018` / `AML.T0020` (Data Poisoning) | `LLM03` | **WORM-Sealed Incident Decision DAG**: Vector retrieval and RAG context are restricted to cryptographically sealed case dossiers. Ungrounded claims are stripped by the runtime kernel. | **INV-02** (Evidence Traceability)<br>[ADR-0010](/adr/0010-sabsa-business-architecture-and-attribute-profiling) |
-| **AI-04** | **Model Denial of Service** | `AML.T0029` (Denial of Service via Heavy Query) | `LLM04` | **Semantic Loop & Cost Circuit Breakers**: Max 8 tool hops, 180-second timeouts, sliding-window query hashing, and hard financial caps (\$2.50 per branch) prevent resource exhaustion. | **INV-06** (Bounded Autonomy)<br>[ADR-0017](/adr/0017-agent-fleet-control-plane-and-runtime-observability) |
-| **AI-05** | **AI Supply Chain Vulnerabilities** | `AML.T0010` (ML Supply Chain Compromise) | `LLM05` | **Model Diversity & Local SLM Fallback**: Vendor-neutral inference gateway supporting hot-swapping across model providers, with local SLMs running for sensitive/disconnected tiers. | **INV-08** (Degraded Defence)<br>[ADR-0021](/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b) |
-| **AI-06** | **Excessive Agency** | `AML.T0053` (Excessive Agency / Goal Hijacking) | `LLM06` | **Read-Only Capability Boundary**: Triage agents possess zero mutating infrastructure credentials. All containment actions require explicit response safety kernel evaluation. | **INV-05** (Least Capability)<br>[ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall) |
-| **AI-07** | **System Prompt / Data Leakage** | `AML.T0024` (ML Artifact Extraction) | `LLM07` | **Least-Privilege Ephemeral SVIDs**: Agents receive short-lived SPIFFE SVIDs ($\le 15\text{m}$) scoped to specific query tasks; PII/credential redaction runs inline before model ingestion. | **INV-05** (Least Capability)<br>[ADR-0015](/adr/0015-sandboxed-agent-execution-otlp-convergence-and-ephemeral-identity) |
-| **AI-08** | **Autonomous Hallucination Cascade** | `AML.T0040` (Adversarial ML Perturbations) | `LLM09` | **Proposer/Challenger Dual-Model Arbiter**: Incident hypotheses require consensus between two independent model families; groundings must trace to raw telemetry records. | **INV-03** (Evidential Independence)<br>[ADR-0007](/adr/0007-continuous-automated-purple-teaming-and-multi-model-consensus) |
+| **AI-01** | **Indirect Prompt Injection** | [`AML.T0051`](https://atlas.mitre.org/) (LLM Prompt Injection) | [`LLM01`](https://owasp.org/www-project-top-10-for-large-language-model-applications/) | **Dual-Plane Data Isolation**: Untrusted logs exist exclusively in the Data Plane; agent personas and tool contracts exist in the signed Control Plane. No prompt-sanitization heuristic is trusted. | **INV-04** (Authority Separation)<br>[ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall) |
+| **AI-02** | **Insecure Output Handling** | [`AML.T0043`](https://atlas.mitre.org/) (Insecure Output Handling) | [`LLM02`](https://owasp.org/www-project-top-10-for-large-language-model-applications/) | **Deterministic AST Query Validator**: Output strings from LLMs cannot be executed directly; all generated SQL/KQL passes through an AST compiler validating read-only syntax and temporal constraints. | **INV-04** (Authority Separation)<br>[ADR-0012](/adr/0012-ai-orchestration-runtime-mcp-and-mvp-roadmap) |
+| **AI-03** | **Training / RAG Data Poisoning** | [`AML.T0018`](https://atlas.mitre.org/) / [`AML.T0020`](https://atlas.mitre.org/) (Data Poisoning) | [`LLM03`](https://owasp.org/www-project-top-10-for-large-language-model-applications/) | **WORM-Sealed Incident Decision DAG**: Vector retrieval and RAG context are restricted to cryptographically sealed case dossiers. Ungrounded claims are stripped by the runtime kernel. | **INV-02** (Evidence Traceability)<br>[ADR-0010](/adr/0010-sabsa-business-architecture-and-attribute-profiling) |
+| **AI-04** | **Model Denial of Service** | [`AML.T0029`](https://atlas.mitre.org/) (Denial of Service via Heavy Query) | [`LLM04`](https://owasp.org/www-project-top-10-for-large-language-model-applications/) | **Semantic Loop & Cost Circuit Breakers**: Max 8 tool hops, 180-second timeouts, sliding-window query hashing, and hard financial caps (\$2.50 per branch) prevent resource exhaustion. | **INV-06** (Bounded Autonomy)<br>[ADR-0017](/adr/0017-agent-fleet-control-plane-and-runtime-observability) |
+| **AI-05** | **AI Supply Chain Vulnerabilities** | [`AML.T0010`](https://atlas.mitre.org/) (ML Supply Chain Compromise) | [`LLM05`](https://owasp.org/www-project-top-10-for-large-language-model-applications/) | **Model Diversity & Local SLM Fallback**: Vendor-neutral inference gateway supporting hot-swapping across model providers, with local SLMs running for sensitive/disconnected tiers. | **INV-08** (Degraded Defence)<br>[ADR-0021](/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b) |
+| **AI-06** | **Excessive Agency** | [`AML.T0053`](https://atlas.mitre.org/) (Excessive Agency / Goal Hijacking) | [`LLM06`](https://owasp.org/www-project-top-10-for-large-language-model-applications/) | **Read-Only Capability Boundary**: Triage agents possess zero mutating infrastructure credentials. All containment actions require explicit response safety kernel evaluation. | **INV-05** (Least Capability)<br>[ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall) |
+| **AI-07** | **System Prompt / Data Leakage** | [`AML.T0024`](https://atlas.mitre.org/) (ML Artifact Extraction) | [`LLM07`](https://owasp.org/www-project-top-10-for-large-language-model-applications/) | **Least-Privilege Ephemeral SVIDs**: Agents receive short-lived SPIFFE SVIDs ($\le 15\text{m}$) scoped to specific query tasks; PII/credential redaction runs inline before model ingestion. | **INV-05** (Least Capability)<br>[ADR-0015](/adr/0015-sandboxed-agent-execution-otlp-convergence-and-ephemeral-identity) |
+| **AI-08** | **Autonomous Hallucination Cascade** | [`AML.T0040`](https://atlas.mitre.org/) (Adversarial ML Perturbations) | [`LLM09`](https://owasp.org/www-project-top-10-for-large-language-model-applications/) | **Proposer/Challenger Dual-Model Arbiter**: Incident hypotheses require consensus between two independent model families; groundings must trace to raw telemetry records. | **INV-03** (Evidential Independence)<br>[ADR-0007](/adr/0007-continuous-automated-purple-teaming-and-multi-model-consensus) |
 
 ---
 
@@ -782,15 +782,15 @@ To ensure seamless operational cross-referencing across enterprise threat matric
 
 | Threat ID & Name | STRIDE | MITRE ATT&CK (Enterprise) | MITRE ATLAS (AI/ML) | MITRE D3FEND (Countermeasure) | TIDIR Invariant & Primary Architectural Control | Governing ADR |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **THR-T1**: Sensor Evasion / Log Blinding | **S / T** | `T1562.001` (Impair Defenses)<br>`T1070` (Indicator Removal) | `AML.T0015` (Evade ML Model) | `D3-MTC` (Message Authentication)<br>`D3-HPA` (Hardware Platform Auth) | **INV-01** (Telemetry Preservation)<br>Local NVMe ring buffer & mTLS with TPM attestation. | [ADR-0021](/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b) |
-| **THR-T2**: Schema Poisoning / DoS Inundation | **T / D** | `T1565.002` (Transmitted Data Manipulation)<br>`T1499` (Endpoint DoS) | `AML.T0020` (Data Poisoning) | `D3-SVE` (Schema Validation)<br>`D3-DLQ` (Dead-Letter Queue Isolation) | **INV-01** (Telemetry Preservation)<br>Line-rate OCSF compiler validation & raw payload quarantine envelope. | [ADR-0002](/adr/0002-preserve-unmapped-telemetry-in-ocsf) |
-| **THR-T3**: Evidence Tampering / Audit Destruction | **R / T** | `T1070.003` (Clear History)<br>`T1485` (Data Destruction) | `AML.T0024` (ML Artifact Manipulation) | `D3-WORM` (Write-Once Media Storage)<br>`D3-CH` (Cryptographic Hash Verification) | **INV-02** (Evidence Traceability)<br>Immutable WORM lakehouse, RFC 3161 timestamps, Incident Decision DAG. | [ADR-0001](/adr/0001-record-architecture-decisions)<br>[ADR-0010](/adr/0010-sabsa-business-architecture-and-attribute-profiling) |
-| **THR-T4**: Indirect Prompt Injection | **E / T** | `T1059` (Command Interpreter)<br>`T1548` (Abuse Elevation) | `AML.T0051` (LLM Prompt Injection)<br>`AML.T0057` (LLM Jailbreak) | `D3-IT` (Isolated Execution)<br>`D3-LAM` (Least-Privilege Access Mechanism) | **INV-04** (Authority Separation)<br>Agent Trust Boundary (dual-plane isolation) & read-only MCP tooling. | [ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall)<br>[ADR-0015](/adr/0015-sandboxed-agent-execution-otlp-convergence-and-ephemeral-identity) |
-| **THR-T5**: Alert Storm DoS / Desensitisation | **D / T** | `T1499.003` (App Exhaustion Flood)<br>`T1562` (Impair Defenses) | `AML.T0040` (Adversarial ML Perturbations) | `D3-ARA` (Alert Rate Anomaly Detection)<br>`D3-BCA` (Bayesian Correlation Analysis) | **INV-03** (Evidential Independence)<br>Dependency-aware Bayesian risk discounting & monthly SRE noise error budgets. | [ADR-0003](/adr/0003-graph-supernode-pruning-and-clustering-boundaries)<br>[ADR-0008](/adr/0008-secops-error-budgets-and-chaos-security-engineering)<br>[ADR-0009](/adr/0009-bayesian-multi-signal-risk-scoring) |
-| **THR-T6**: Automated Response Sabotage | **D / E** | `T1489` (Service Stop)<br>`T1562.001` (Disable Tools) | `AML.T0053` (Excessive Agency / Goal Hijacking) | `D3-SMS` (State Machine Security)<br>`D3-BRC` (Blast-Radius Constraint) | **INV-07** (Reachability Monotonicity)<br>Monotonic state machine ($s_{n+1} \preceq s_n$), Tier 0 immunity, master E-stop. | [ADR-0005](/adr/0005-saga-pattern-containment-and-break-glass-protocol) |
-| **THR-T7**: Machine Token / SVID Hijacking | **E / S** | `T1078.004` (Cloud Accounts)<br>`T1550.001` (Application Access Token) | `AML.T0047` (ML Artifact / Token Theft)<br>`AML.T0054` (LLM Plugin Compromise) | `D3-LAM` (Least-Privilege Access Mechanism)<br>`D3-MTC` (Message Authentication) | **INV-05** (Least Capability)<br>SPIFFE/SPIRE dynamic task-scoped SVIDs ($\le 15\text{m}$) & line-rate NHI profiling. | [ADR-0015](/adr/0015-sandboxed-agent-execution-otlp-convergence-and-ephemeral-identity)<br>[ADR-0018](/adr/0018-non-human-identity-lifecycle-and-machine-attestation) |
-| **THR-T8**: Model & Knowledge Base Poisoning | **T / I** | `T1565.001` (Stored Data Manipulation)<br>`T1562.001` (Disable Tools) | `AML.T0018` (Data Poisoning)<br>`AML.T0020` (Poison Training/RAG Data) | `D3-CH` (Cryptographic Hash Verification)<br>`D3-DN` (Decoy Network / Environment) | **INV-02** (Evidence Traceability)<br>WORM-sealed RAG context, SLM grounding judges ($\ge 95\%$), ambient canary anchors. | [ADR-0010](/adr/0010-sabsa-business-architecture-and-attribute-profiling)<br>[ADR-0013](/adr/0013-ambient-deception-fabric-and-canary-anchors)<br>[ADR-0014](/adr/0014-ai-observability-self-learning-and-slm-judges) |
-| **THR-T9**: Excessive Agency & Output Leakage | **I / E** | `T1005` (Data from Local System)<br>`T1499` (Endpoint DoS) | `AML.T0053` (Excessive Agency)<br>`AML.T0043` (Insecure Output Handling) | `D3-EOP` (Execution Boundary / Sandbox)<br>`D3-SLB` (Semantic Loop Breaking) | **INV-06** (Bounded Autonomy)<br>Deterministic AST query validator, loop circuit breakers, financial execution caps. | [ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall)<br>[ADR-0012](/adr/0012-ai-orchestration-runtime-mcp-and-mvp-roadmap)<br>[ADR-0017](/adr/0017-agent-fleet-control-plane-and-runtime-observability) |
+| **THR-T1**: Sensor Evasion / Log Blinding | **S / T** | [`T1562.001`](https://attack.mitre.org/techniques/T1562/001/) (Impair Defenses)<br>[`T1070`](https://attack.mitre.org/techniques/T1070/) (Indicator Removal) | [`AML.T0015`](https://atlas.mitre.org/) (Evade ML Model) | [`D3-MTC`](https://d3fend.mitre.org/) (Message Authentication)<br>[`D3-HPA`](https://d3fend.mitre.org/) (Hardware Platform Auth) | **INV-01** (Telemetry Preservation)<br>Local NVMe ring buffer & mTLS with TPM attestation. | [ADR-0021](/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b) |
+| **THR-T2**: Schema Poisoning / DoS Inundation | **T / D** | [`T1565.002`](https://attack.mitre.org/techniques/T1565/002/) (Transmitted Data Manipulation)<br>[`T1499`](https://attack.mitre.org/techniques/T1499/) (Endpoint DoS) | [`AML.T0020`](https://atlas.mitre.org/) (Data Poisoning) | [`D3-SVE`](https://d3fend.mitre.org/) (Schema Validation)<br>[`D3-DLQ`](https://d3fend.mitre.org/) (Dead-Letter Queue Isolation) | **INV-01** (Telemetry Preservation)<br>Line-rate OCSF compiler validation & raw payload quarantine envelope. | [ADR-0002](/adr/0002-preserve-unmapped-telemetry-in-ocsf) |
+| **THR-T3**: Evidence Tampering / Audit Destruction | **R / T** | [`T1070.003`](https://attack.mitre.org/techniques/T1070/003/) (Clear History)<br>[`T1485`](https://attack.mitre.org/techniques/T1485/) (Data Destruction) | [`AML.T0024`](https://atlas.mitre.org/) (ML Artifact Manipulation) | [`D3-WORM`](https://d3fend.mitre.org/) (Write-Once Media Storage)<br>[`D3-CH`](https://d3fend.mitre.org/) (Cryptographic Hash Verification) | **INV-02** (Evidence Traceability)<br>Immutable WORM lakehouse, RFC 3161 timestamps, Incident Decision DAG. | [ADR-0001](/adr/0001-record-architecture-decisions)<br>[ADR-0010](/adr/0010-sabsa-business-architecture-and-attribute-profiling) |
+| **THR-T4**: Indirect Prompt Injection | **E / T** | [`T1059`](https://attack.mitre.org/techniques/T1059/) (Command Interpreter)<br>[`T1548`](https://attack.mitre.org/techniques/T1548/) (Abuse Elevation) | [`AML.T0051`](https://atlas.mitre.org/) (LLM Prompt Injection)<br>[`AML.T0057`](https://atlas.mitre.org/) (LLM Jailbreak) | [`D3-IT`](https://d3fend.mitre.org/) (Isolated Execution)<br>[`D3-LAM`](https://d3fend.mitre.org/) (Least-Privilege Access Mechanism) | **INV-04** (Authority Separation)<br>Agent Trust Boundary (dual-plane isolation) & read-only MCP tooling. | [ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall)<br>[ADR-0015](/adr/0015-sandboxed-agent-execution-otlp-convergence-and-ephemeral-identity) |
+| **THR-T5**: Alert Storm DoS / Desensitisation | **D / T** | [`T1499.003`](https://attack.mitre.org/techniques/T1499/003/) (App Exhaustion Flood)<br>[`T1562`](https://attack.mitre.org/techniques/T1562/) (Impair Defenses) | [`AML.T0040`](https://atlas.mitre.org/) (Adversarial ML Perturbations) | [`D3-ARA`](https://d3fend.mitre.org/) (Alert Rate Anomaly Detection)<br>[`D3-BCA`](https://d3fend.mitre.org/) (Bayesian Correlation Analysis) | **INV-03** (Evidential Independence)<br>Dependency-aware Bayesian risk discounting & monthly SRE noise error budgets. | [ADR-0003](/adr/0003-graph-supernode-pruning-and-clustering-boundaries)<br>[ADR-0008](/adr/0008-secops-error-budgets-and-chaos-security-engineering)<br>[ADR-0009](/adr/0009-bayesian-multi-signal-risk-scoring) |
+| **THR-T6**: Automated Response Sabotage | **D / E** | [`T1489`](https://attack.mitre.org/techniques/T1489/) (Service Stop)<br>[`T1562.001`](https://attack.mitre.org/techniques/T1562/001/) (Disable Tools) | [`AML.T0053`](https://atlas.mitre.org/) (Excessive Agency / Goal Hijacking) | [`D3-SMS`](https://d3fend.mitre.org/) (State Machine Security)<br>[`D3-BRC`](https://d3fend.mitre.org/) (Blast-Radius Constraint) | **INV-07** (Reachability Monotonicity)<br>Monotonic state machine ($s_{n+1} \preceq s_n$), Tier 0 immunity, master E-stop. | [ADR-0005](/adr/0005-saga-pattern-containment-and-break-glass-protocol) |
+| **THR-T7**: Machine Token / SVID Hijacking | **E / S** | [`T1078.004`](https://attack.mitre.org/techniques/T1078/004/) (Cloud Accounts)<br>[`T1550.001`](https://attack.mitre.org/techniques/T1550/001/) (Application Access Token) | [`AML.T0047`](https://atlas.mitre.org/) (ML Artifact / Token Theft)<br>[`AML.T0054`](https://atlas.mitre.org/) (LLM Plugin Compromise) | [`D3-LAM`](https://d3fend.mitre.org/) (Least-Privilege Access Mechanism)<br>[`D3-MTC`](https://d3fend.mitre.org/) (Message Authentication) | **INV-05** (Least Capability)<br>SPIFFE/SPIRE dynamic task-scoped SVIDs ($\le 15\text{m}$) & line-rate NHI behavioral profiling. | [ADR-0015](/adr/0015-sandboxed-agent-execution-otlp-convergence-and-ephemeral-identity)<br>[ADR-0018](/adr/0018-non-human-identity-lifecycle-and-machine-attestation) |
+| **THR-T8**: Model & Knowledge Base Poisoning | **T / I** | [`T1565.001`](https://attack.mitre.org/techniques/T1565/001/) (Stored Data Manipulation)<br>[`T1562.001`](https://attack.mitre.org/techniques/T1562/001/) (Disable Tools) | [`AML.T0018`](https://atlas.mitre.org/) (Data Poisoning)<br>[`AML.T0020`](https://atlas.mitre.org/) (Poison Training/RAG Data) | [`D3-CH`](https://d3fend.mitre.org/) (Cryptographic Hash Verification)<br>[`D3-DN`](https://d3fend.mitre.org/) (Decoy Network / Environment) | **INV-02** (Evidence Traceability)<br>WORM-sealed RAG context, SLM grounding judges ($\ge 95\%$), ambient canary anchors. | [ADR-0010](/adr/0010-sabsa-business-architecture-and-attribute-profiling)<br>[ADR-0013](/adr/0013-ambient-deception-fabric-and-canary-anchors)<br>[ADR-0014](/adr/0014-ai-observability-self-learning-and-slm-judges) |
+| **THR-T9**: Excessive Agency & Output Leakage | **I / E** | [`T1005`](https://attack.mitre.org/techniques/T1005/) (Data from Local System)<br>[`T1499`](https://attack.mitre.org/techniques/T1499/) (Endpoint DoS) | [`AML.T0053`](https://atlas.mitre.org/) (Excessive Agency)<br>[`AML.T0043`](https://atlas.mitre.org/) (Insecure Output Handling) | [`D3-EOP`](https://d3fend.mitre.org/) (Execution Boundary / Sandbox)<br>[`D3-SLB`](https://d3fend.mitre.org/) (Semantic Loop Breaking) | **INV-06** (Bounded Autonomy)<br>Deterministic AST query validator, loop circuit breakers, financial execution caps. | [ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall)<br>[ADR-0012](/adr/0012-ai-orchestration-runtime-mcp-and-mvp-roadmap)<br>[ADR-0017](/adr/0017-agent-fleet-control-plane-and-runtime-observability) |
 
 ---
 
@@ -890,18 +890,18 @@ flowchart TB
 ## 2. Functional Capability Domains
 
 > [!NOTE]
-> **MITRE D3FEND Alignment & Reference Target SLOs**:
-> Each capability is formally mapped to its primary **MITRE D3FEND** defensive technique (e.g. `D3-SVE` Schema Validation, `D3-PSA` Process Spawn Analysis, `D3-SMS` State Machine Security, `D3-LAM` Least-Privilege Access Mechanism). Operational latencies, throughput figures, and comprehension metrics listed below are designated as **Reference Target Service Level Objectives (SLOs)** based on representative enterprise workloads (e.g. 100 TB reference lakehouse tiers).
+> **[MITRE D3FEND](https://d3fend.mitre.org/) Alignment & Reference Target SLOs**:
+> Each capability is formally mapped to its primary [MITRE D3FEND](https://d3fend.mitre.org/) defensive technique (e.g. `D3-SVE` Schema Validation, `D3-PSA` Process Spawn Analysis, `D3-SMS` State Machine Security, `D3-LAM` Least-Privilege Access Mechanism). Operational latencies, throughput figures, and comprehension metrics listed below are designated as **Reference Target Service Level Objectives (SLOs)** based on representative enterprise workloads (e.g. 100 TB reference lakehouse tiers).
 
 ### Domain 1: Cyber Threat Intelligence (CTI)
 
 | Capability ID | Name | Execution Mode | MITRE D3FEND | Description | Reference Target SLO |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **CTI-01** | Feed Aggregation & Ingestion | `[Deterministic Engine]` | `D3-TIE`<br>`D3-IDA` | Ingest commercial, open-source, ISAC, and internal telemetry feeds via STIX/TAXII, REST, and streaming endpoints. | Ingestion latency < 5 min from publication |
-| **CTI-02** | Deduplication & Confidence Scoring | `[Deterministic Engine]` | `D3-IDA`<br>`D3-FEH` | Normalize disparate indicator types, resolve overlapping claims, and compute decay scores over time. | Automated decay curves calculated daily |
-| **CTI-03** | Adversary & TTP Mapping | `[AI/Agent-Augmented]` | `D3-TTPM` | Attribute techniques, tactics, and procedures to MITRE ATT&CK enterprise matrices using LLM advisory parsing. | 100% of validated alerts tagged with ATT&CK TTPs |
-| **CTI-04** | Streaming IOC Dissemination | `[Deterministic Engine]` | `D3-NID` | Publish active, high-confidence indicators to edge detection layers with minimal lookup overhead. | Indicator broadcast to detection tier < 30 sec |
-| **CTI-05** | Retroactive Sweep (Retro-Hunt) | `[Deterministic Engine]` | `D3-HA`<br>`D3-IRA` | Automatically sweep historical lakehouse telemetry upon discovery of novel zero-day IOCs/TTPs. | 90-day sweep executed in < 15 min |
+| **CTI-01** | Feed Aggregation & Ingestion | `[Deterministic Engine]` | [`D3-TIE`](https://d3fend.mitre.org/)<br>[`D3-IDA`](https://d3fend.mitre.org/) | Ingest commercial, open-source, ISAC, and internal telemetry feeds via STIX/TAXII, REST, and streaming endpoints. | Ingestion latency < 5 min from publication |
+| **CTI-02** | Deduplication & Confidence Scoring | `[Deterministic Engine]` | [`D3-IDA`](https://d3fend.mitre.org/)<br>[`D3-FEH`](https://d3fend.mitre.org/) | Normalize disparate indicator types, resolve overlapping claims, and compute decay scores over time. | Automated decay curves calculated daily |
+| **CTI-03** | Adversary & TTP Mapping | `[AI/Agent-Augmented]` | [`D3-TTPM`](https://d3fend.mitre.org/) | Attribute techniques, tactics, and procedures to MITRE ATT&CK enterprise matrices using LLM advisory parsing. | 100% of validated alerts tagged with ATT&CK TTPs |
+| **CTI-04** | Streaming IOC Dissemination | `[Deterministic Engine]` | [`D3-NID`](https://d3fend.mitre.org/) | Publish active, high-confidence indicators to edge detection layers with minimal lookup overhead. | Indicator broadcast to detection tier < 30 sec |
+| **CTI-05** | Retroactive Sweep (Retro-Hunt) | `[Deterministic Engine]` | [`D3-HA`](https://d3fend.mitre.org/)<br>[`D3-IRA`](https://d3fend.mitre.org/) | Automatically sweep historical lakehouse telemetry upon discovery of novel zero-day IOCs/TTPs. | 90-day sweep executed in < 15 min |
 
 ---
 
@@ -909,11 +909,11 @@ flowchart TB
 
 | Capability ID | Name | Execution Mode | MITRE D3FEND | Description | Reference Target SLO |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **DATA-01** | Multi-Source Ingestion | `[Deterministic Engine]` | `D3-HPA`<br>`D3-MTC` | Collect telemetry from host kernel instrumentation, cloud control planes, identity token sessions (OCSF 3002), and network sensors. | Durable acknowledgement; designed for loss-intolerant ingestion with local buffer failover |
-| **DATA-02** | Canonical Schema Normalization | `[Deterministic Engine]` | `D3-SVE`<br>`D3-DLQ` | Coerce raw schema structures into OCSF (Open Cybersecurity Schema Framework) objects at line rate with unmapped data catch-all. | Normalization overhead < 5ms per event |
-| **DATA-03** | Distributed Stream Buffering | `[Deterministic Engine]` | `D3-AL`<br>`D3-DRB` | Decouple collectors from consumers using partitioned, distributed append-only streaming logs. | Sustained ingestion capacity ≥ 500k EPS |
-| **DATA-04** | Hot Analytics Index | `[Deterministic Engine]` | `D3-FA`<br>`D3-IRA` | Provide low-latency search, aggregations, and filtering over recent telemetry (15–30 days). | P95 search latency < 2 sec |
-| **DATA-05** | Historical Security Lakehouse | `[Deterministic Engine]` | `D3-WORM`<br>`D3-FEH` | Store long-term telemetry in open columnar formats with partition pruning and compaction on object storage. | 365+ day retention with sub-linear cost |
+| **DATA-01** | Multi-Source Ingestion | `[Deterministic Engine]` | [`D3-HPA`](https://d3fend.mitre.org/)<br>[`D3-MTC`](https://d3fend.mitre.org/) | Collect telemetry from host kernel instrumentation, cloud control planes, identity token sessions (OCSF 3002), and network sensors. | Durable acknowledgement; designed for loss-intolerant ingestion with local buffer failover |
+| **DATA-02** | Canonical Schema Normalization | `[Deterministic Engine]` | [`D3-SVE`](https://d3fend.mitre.org/)<br>[`D3-DLQ`](https://d3fend.mitre.org/) | Coerce raw schema structures into OCSF (Open Cybersecurity Schema Framework) objects at line rate with unmapped data catch-all. | Normalization overhead < 5ms per event |
+| **DATA-03** | Distributed Stream Buffering | `[Deterministic Engine]` | [`D3-AL`](https://d3fend.mitre.org/)<br>[`D3-DRB`](https://d3fend.mitre.org/) | Decouple collectors from consumers using partitioned, distributed append-only streaming logs. | Sustained ingestion capacity ≥ 500k EPS |
+| **DATA-04** | Hot Analytics Index | `[Deterministic Engine]` | [`D3-FA`](https://d3fend.mitre.org/)<br>[`D3-IRA`](https://d3fend.mitre.org/) | Provide low-latency search, aggregations, and filtering over recent telemetry (15–30 days). | P95 search latency < 2 sec |
+| **DATA-05** | Historical Security Lakehouse | `[Deterministic Engine]` | [`D3-WORM`](https://d3fend.mitre.org/)<br>[`D3-FEH`](https://d3fend.mitre.org/) | Store long-term telemetry in open columnar formats with partition pruning and compaction on object storage. | 365+ day retention with sub-linear cost |
 
 ---
 
@@ -921,13 +921,13 @@ flowchart TB
 
 | Capability ID | Name | Execution Mode | MITRE D3FEND | Description | Reference Target SLO |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **DET-01** | Real-Time Stream Detection | `[Deterministic Engine]` | `D3-PSA`<br>`D3-NTA` | Evaluate sliding-window stateful rules, in-flight token replay, and pattern matches against streaming events. | Time-to-detect (MTTD) < 5 seconds |
-| **DET-02** | Lakehouse Batch Analytics | `[Deterministic Engine]` | `D3-UBA`<br>`D3-AAR` | Execute complex, cross-table SQL analytics, behavioural baselines, and rare event heuristics. | Daily/hourly schedules (MTTD < 24h) |
-| **DET-03** | DaC & Continuous Purple Team | `[AI/Agent-Augmented]` | `D3-ATTE`<br>`D3-DTC` | Manage rules as declarative code validated via continuous automated atomic adversary emulation and multi-model consensus. | 100% rule tests passing prior to production deploy |
-| **DET-04** | Alert Correlation & Aggregation | `[Deterministic Engine]` | `D3-EFA`<br>`D3-SND` | Cluster related alerts across time, host, identity, and network into coherent incident candidates via entity graphs. | Reduction of alert volume to analyst by > 75% |
-| **DET-05** | Bayesian Multi-Signal Risk Lens | `[Deterministic Engine]` | `D3-BCA`<br>`D3-EIC` | Mitigate the operational consequences of the Base Rate Fallacy by compounding orthogonal evidence vectors (asset, identity, network) before elevation. | Dynamic composite score (0–100); false alarms < 5% |
-| **DET-06** | SecOps Error Budgets | `[Deterministic Engine]` | `D3-ARA`<br>`D3-SRE` | Enforce false-positive Noise Budgets per detection class with automated deployment freeze on budget burn. | Pre-deploy CI gate: peak FPR < 1%; Production SLO: rolling 30-day FPR <= 5% |
-| **DET-07** | Deception & Canary Surface Fabric | `[Deterministic Engine]` | `D3-DN`<br>`D3-HT` | Embed lightweight honeytokens, Kerberos SPN decoys, and file lures emitting OCSF canary events for zero-noise detection. | False Positive Rate = 0.00%; MTTD < 1 second |
+| **DET-01** | Real-Time Stream Detection | `[Deterministic Engine]` | [`D3-PSA`](https://d3fend.mitre.org/)<br>[`D3-NTA`](https://d3fend.mitre.org/) | Evaluate sliding-window stateful rules, in-flight token replay, and pattern matches against streaming events. | Time-to-detect (MTTD) < 5 seconds |
+| **DET-02** | Lakehouse Batch Analytics | `[Deterministic Engine]` | [`D3-UBA`](https://d3fend.mitre.org/)<br>[`D3-AAR`](https://d3fend.mitre.org/) | Execute complex, cross-table SQL analytics, behavioural baselines, and rare event heuristics. | Daily/hourly schedules (MTTD < 24h) |
+| **DET-03** | DaC & Continuous Purple Team | `[AI/Agent-Augmented]` | [`D3-ATTE`](https://d3fend.mitre.org/)<br>[`D3-DTC`](https://d3fend.mitre.org/) | Manage rules as declarative code validated via continuous automated atomic adversary emulation and multi-model consensus. | 100% rule tests passing prior to production deploy |
+| **DET-04** | Alert Correlation & Aggregation | `[Deterministic Engine]` | [`D3-EFA`](https://d3fend.mitre.org/)<br>[`D3-SND`](https://d3fend.mitre.org/) | Cluster related alerts across time, host, identity, and network into coherent incident candidates via entity graphs. | Reduction of alert volume to analyst by > 75% |
+| **DET-05** | Bayesian Multi-Signal Risk Lens | `[Deterministic Engine]` | [`D3-BCA`](https://d3fend.mitre.org/)<br>[`D3-EIC`](https://d3fend.mitre.org/) | Mitigate the operational consequences of the Base Rate Fallacy by compounding orthogonal evidence vectors (asset, identity, network) before elevation. | Dynamic composite score (0–100); false alarms < 5% |
+| **DET-06** | SecOps Error Budgets | `[Deterministic Engine]` | [`D3-ARA`](https://d3fend.mitre.org/)<br>[`D3-SRE`](https://d3fend.mitre.org/) | Enforce false-positive Noise Budgets per detection class with automated deployment freeze on budget burn. | Pre-deploy CI gate: peak FPR < 1%; Production SLO: rolling 30-day FPR <= 5% |
+| **DET-07** | Deception & Canary Surface Fabric | `[Deterministic Engine]` | [`D3-DN`](https://d3fend.mitre.org/)<br>[`D3-HT`](https://d3fend.mitre.org/) | Embed lightweight honeytokens, Kerberos SPN decoys, and file lures emitting OCSF canary events for zero-noise detection. | False Positive Rate = 0.00%; MTTD < 1 second |
 
 ---
 
@@ -935,13 +935,13 @@ flowchart TB
 
 | Capability ID | Name | Execution Mode | MITRE D3FEND | Description | Reference Target SLO |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **INV-01** | Entity Resolution | `[Deterministic Engine]` | `D3-IDA` | Disambiguate and cross-reference identities (usernames, email, Kerberos tickets, hostnames, IP addresses). | Unified entity profile generation < 1 sec |
-| **INV-02** | Interactive Timeline Reconstruction | `[Deterministic Engine]` | `D3-OTR`<br>`D3-CS` | Automatically construct a chronological sequence of actor actions, child processes, and auth events. | Multi-source timeline generation < 5 sec |
-| **INV-03** | Relational Graph Exploration | `[Deterministic Engine]` | `D3-GA` | Provide interactive graph visualization showing nodes (hosts, users, files, domains) and edges (relations). | Render graphs with > 10,000 nodes smoothly |
-| **INV-04** | Evidence Dossier & Auditability | `[Deterministic Engine]` | `D3-CH`<br>`D3-TSA` | Maintain immutable records of investigative queries, pinned artifacts, analyst notes, and tags. | Tamper-evident audit logging of analyst actions (RFC 3161) |
-| **INV-05** | Agent Mesh & Multi-Model Consensus | `[AI/Agent-Augmented]` | `D3-MDA`<br>`D3-IT` | Coordinate autonomous specialist subagents with adversarial Proposer/Challenger model arbitration behind the Agent Trust Boundary. | Time-to-investigate (MTTI) < 60s; > 80% consensus |
-| **INV-06** | Progressive Disclosure Workbench | `[Human-in-the-Loop]` | `D3-PDS`<br>`D3-SAR` | Surface structured briefings in a 3-tier hierarchy (Situation Report ➔ Evidence Table ➔ On-Demand Graph Lineage). | Analyst triage comprehension < 60 sec |
-| **INV-07** | Just-in-Time (JIT) Telemetry Elevation | `[AI/Agent-Augmented]` | `D3-SCA`<br>`D3-JIT` | Programmatically command edge sensors to elevate collection fidelity (eBPF, PCAP, memory) for bounded windows (TTL <= 30m). | Elevation command dispatch < 10 sec; 48h auto-eviction |
+| **INV-01** | Entity Resolution | `[Deterministic Engine]` | [`D3-IDA`](https://d3fend.mitre.org/) | Disambiguate and cross-reference identities (usernames, email, Kerberos tickets, hostnames, IP addresses). | Unified entity profile generation < 1 sec |
+| **INV-02** | Interactive Timeline Reconstruction | `[Deterministic Engine]` | [`D3-OTR`](https://d3fend.mitre.org/)<br>[`D3-CS`](https://d3fend.mitre.org/) | Automatically construct a chronological sequence of actor actions, child processes, and auth events. | Multi-source timeline generation < 5 sec |
+| **INV-03** | Relational Graph Exploration | `[Deterministic Engine]` | [`D3-GA`](https://d3fend.mitre.org/) | Provide interactive graph visualization showing nodes (hosts, users, files, domains) and edges (relations). | Render graphs with > 10,000 nodes smoothly |
+| **INV-04** | Evidence Dossier & Auditability | `[Deterministic Engine]` | [`D3-CH`](https://d3fend.mitre.org/)<br>[`D3-TSA`](https://d3fend.mitre.org/) | Maintain immutable records of investigative queries, pinned artifacts, analyst notes, and tags. | Tamper-evident audit logging of analyst actions (RFC 3161) |
+| **INV-05** | Agent Mesh & Multi-Model Consensus | `[AI/Agent-Augmented]` | [`D3-MDA`](https://d3fend.mitre.org/)<br>[`D3-IT`](https://d3fend.mitre.org/) | Coordinate autonomous specialist subagents with adversarial Proposer/Challenger model arbitration behind the Agent Trust Boundary. | Time-to-investigate (MTTI) < 60s; > 80% consensus |
+| **INV-06** | Progressive Disclosure Workbench | `[Human-in-the-Loop]` | [`D3-PDS`](https://d3fend.mitre.org/)<br>[`D3-SAR`](https://d3fend.mitre.org/) | Surface structured briefings in a 3-tier hierarchy (Situation Report ➔ Evidence Table ➔ On-Demand Graph Lineage). | Analyst triage comprehension < 60 sec |
+| **INV-07** | Just-in-Time (JIT) Telemetry Elevation | `[AI/Agent-Augmented]` | [`D3-SCA`](https://d3fend.mitre.org/)<br>[`D3-JIT`](https://d3fend.mitre.org/) | Programmatically command edge sensors to elevate collection fidelity (eBPF, PCAP, memory) for bounded windows (TTL <= 30m). | Elevation command dispatch < 10 sec; 48h auto-eviction |
 
 ---
 
@@ -949,11 +949,11 @@ flowchart TB
 
 | Capability ID | Name | Execution Mode | MITRE D3FEND | Description | Reference Target SLO |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **RESP-01** | Declarative Playbook Orchestration | `[Deterministic Engine]` | `D3-DPO`<br>`D3-TBO` | Execute multi-step containment, enrichment, and recovery workflows across third-party APIs via monotonic state machines. | Execution step dispatch < 500ms |
-| **RESP-02** | Asymmetric Containment & Forward Escalation | `[AI/Agent-Augmented]` | `D3-SMS`<br>`D3-FE` | Fail-secure execution that never rolls back containment on partial failure; executes forward perimeter escalation on error. | Fail-secure posture 100%; MTTR < 60 min |
-| **RESP-03** | Autonomous Rapid Containment | `[Deterministic Engine]` | `D3-HI`<br>`D3-CR`<br>`D3-BRC` | Execute instantaneous containment for low-blast-radius actions (e.g. host isolation in sandbox, token invalidation). | Time-to-contain (MTTC) < 15 seconds |
-| **RESP-04** | Dual-Auth & Break-Glass Protocols | `[Human-in-the-Loop]` | `D3-BGO`<br>`D3-MAC` | Enforce multi-signature consensus for high-impact actions with authenticated single-commander break-glass overrides. | MTTC < 5 min; break-glass audit broadcast < 5 sec |
-| **RESP-05** | Closed-Loop & Green Team Triggers | `[Deterministic Engine]` | `D3-CIR`<br>`D3-IaC` | Extract confirmed indicators for CTI, calibrate DaC rules, and synthesize IaC hardening pull requests for Green Teams to improve defense-in-depth. | Closed-loop & hardening dispatch automated on case closure |
+| **RESP-01** | Declarative Playbook Orchestration | `[Deterministic Engine]` | [`D3-DPO`](https://d3fend.mitre.org/)<br>[`D3-TBO`](https://d3fend.mitre.org/) | Execute multi-step containment, enrichment, and recovery workflows across third-party APIs via monotonic state machines. | Execution step dispatch < 500ms |
+| **RESP-02** | Asymmetric Containment & Forward Escalation | `[AI/Agent-Augmented]` | [`D3-SMS`](https://d3fend.mitre.org/)<br>[`D3-FE`](https://d3fend.mitre.org/) | Fail-secure execution that never rolls back containment on partial failure; executes forward perimeter escalation on error. | Fail-secure posture 100%; MTTR < 60 min |
+| **RESP-03** | Autonomous Rapid Containment | `[Deterministic Engine]` | [`D3-HI`](https://d3fend.mitre.org/)<br>[`D3-CR`](https://d3fend.mitre.org/)<br>[`D3-BRC`](https://d3fend.mitre.org/) | Execute instantaneous containment for low-blast-radius actions (e.g. host isolation in sandbox, token invalidation). | Time-to-contain (MTTC) < 15 seconds |
+| **RESP-04** | Dual-Auth & Break-Glass Protocols | `[Human-in-the-Loop]` | [`D3-BGO`](https://d3fend.mitre.org/)<br>[`D3-MAC`](https://d3fend.mitre.org/) | Enforce multi-signature consensus for high-impact actions with authenticated single-commander break-glass overrides. | MTTC < 5 min; break-glass audit broadcast < 5 sec |
+| **RESP-05** | Closed-Loop & Green Team Triggers | `[Deterministic Engine]` | [`D3-CIR`](https://d3fend.mitre.org/)<br>[`D3-IaC`](https://d3fend.mitre.org/) | Extract confirmed indicators for CTI, calibrate DaC rules, and synthesize IaC hardening pull requests for Green Teams to improve defense-in-depth. | Closed-loop & hardening dispatch automated on case closure |
 
 ---
 
@@ -961,13 +961,13 @@ flowchart TB
 
 | Capability ID | Name | Execution Mode | MITRE D3FEND | Description | Reference Target SLO |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **AIGOV-01** | Continuous Evals-as-Code | `[AI/Agent-Augmented]` | `D3-EAC`<br>`D3-GJB` | Automated CI/CD benchmarking of triage prompts and agent workflows against versioned golden incident datasets. | $\ge 95\%$ grounding fidelity; 100% schema tool validity |
-| **AIGOV-02** | Dual-Plane Data/Control Isolation | `[Deterministic Engine]` | `D3-IT` | Enforces strict boundaries preventing unformatted raw telemetry strings from acting as agent control instructions. | Zero instruction execution from untrusted log payloads |
-| **AIGOV-03** | Cost & Latency Performance Budgets | `[Deterministic Engine]` | `D3-RCB` | Deterministic per-invocation token ceilings, query timeouts, and rate budgeting across model runtimes. | P95 agent triage latency < 5 sec; strict budget compliance |
-| **AIGOV-04** | Agent Fleet Lifecycle & Preemption | `[Deterministic Engine]` | `D3-FLM` | Centralized supervisor tracking agent liveness, heartbeats, zombie task reaping, and priority preemption under Sev-1 crises. | Worker zombie reap < 15 sec; preemption cascade < 1 sec |
-| **AIGOV-05** | MCP Tool Observability & Loop Breakers | `[Deterministic Engine]` | `D3-SLB`<br>`D3-TO` | OTel telemetry across MCP servers, parameter schema drift audits, and semantic query oscillation circuit breakers. | Max 8 recursive tool hops; loop termination < 100ms |
-| **AIGOV-06** | Ephemeral Agent Attestation & SVIDs | `[Deterministic Engine]` | `D3-LAM`<br>`D3-SVID` | Cryptographic SPIFFE/SPIRE attestation issuing task-scoped, short-lived X.509 SVIDs (TTL <= 15m) for every agent worker. | Dynamic SVID minting < 100ms; auto-revocation on task closure |
-| **AIGOV-07** | Non-Human Identity (NHI) Profiling | `[Deterministic Engine]` | `D3-NHI`<br>`D3-TRD` | Line-rate behavioral profiling and anomaly detection for service accounts, API keys, and machine tokens across clouds. | 14-day baseline drift alert; token replay detection < 5 sec |
+| **AIGOV-01** | Continuous Evals-as-Code | `[AI/Agent-Augmented]` | [`D3-EAC`](https://d3fend.mitre.org/)<br>[`D3-GJB`](https://d3fend.mitre.org/) | Automated CI/CD benchmarking of triage prompts and agent workflows against versioned golden incident datasets. | $\ge 95\%$ grounding fidelity; 100% schema tool validity |
+| **AIGOV-02** | Dual-Plane Data/Control Isolation | `[Deterministic Engine]` | [`D3-IT`](https://d3fend.mitre.org/) | Enforces strict boundaries preventing unformatted raw telemetry strings from acting as agent control instructions. | Zero instruction execution from untrusted log payloads |
+| **AIGOV-03** | Cost & Latency Performance Budgets | `[Deterministic Engine]` | [`D3-RCB`](https://d3fend.mitre.org/) | Deterministic per-invocation token ceilings, query timeouts, and rate budgeting across model runtimes. | P95 agent triage latency < 5 sec; strict budget compliance |
+| **AIGOV-04** | Agent Fleet Lifecycle & Preemption | `[Deterministic Engine]` | [`D3-FLM`](https://d3fend.mitre.org/) | Centralized supervisor tracking agent liveness, heartbeats, zombie task reaping, and priority preemption under Sev-1 crises. | Worker zombie reap < 15 sec; preemption cascade < 1 sec |
+| **AIGOV-05** | MCP Tool Observability & Loop Breakers | `[Deterministic Engine]` | [`D3-SLB`](https://d3fend.mitre.org/)<br>[`D3-TO`](https://d3fend.mitre.org/) | OTel telemetry across MCP servers, parameter schema drift audits, and semantic query oscillation circuit breakers. | Max 8 recursive tool hops; loop termination < 100ms |
+| **AIGOV-06** | Ephemeral Agent Attestation & SVIDs | `[Deterministic Engine]` | [`D3-LAM`](https://d3fend.mitre.org/)<br>[`D3-SVID`](https://d3fend.mitre.org/) | Cryptographic SPIFFE/SPIRE attestation issuing task-scoped, short-lived X.509 SVIDs (TTL <= 15m) for every agent worker. | Dynamic SVID minting < 100ms; auto-revocation on task closure |
+| **AIGOV-07** | Non-Human Identity (NHI) Profiling | `[Deterministic Engine]` | [`D3-NHI`](https://d3fend.mitre.org/)<br>[`D3-TRD`](https://d3fend.mitre.org/) | Line-rate behavioral profiling and anomaly detection for service accounts, API keys, and machine tokens across clouds. | 14-day baseline drift alert; token replay detection < 5 sec |
 
 ---
 
@@ -975,11 +975,11 @@ flowchart TB
 
 | Capability ID | Name | Execution Mode | MITRE D3FEND | Description | Reference Target SLO |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **RESIL-01** | Decoupled Edge Spooling | `[Deterministic Engine]` | `D3-DRB`<br>`D3-LSP` | Autonomous local disk ring buffering on forwarders during streaming bus network partitions. | 24–48h lossless buffer; zero forensic drop |
-| **RESIL-02** | Direct-to-Object Ingestion Bypass | `[Deterministic Engine]` | `D3-OBP` | Dynamic failover allowing forwarders to write compressed Parquet micro-batches directly to object lakehouse. | Cutover latency < 60s from bus partition trip |
-| **RESIL-03** | Stream-to-Batch Detection Failover | `[Deterministic Engine]` | `D3-GDF` | Automated transfer of detection rules to scheduled 5-minute columnar SQL batch sweeps on graph engine failure. | Fallback activation < 2 min; 100% rule coverage preserved |
-| **RESIL-04** | Hierarchical Model Fallback & Rule-Based Non-AI Mode | `[Deterministic Engine]` | `D3-HMF` | Deterministic shift from cloud LLMs to local SLMs, with fallback to structured tabular/graph rule-based workbenches. | Circuit breaker trip < 3 errors; zero pipeline block |
-| **RESIL-05** | Master Autonomous E-Stop & OOB Containment | `[Human-in-the-Loop]` | `D3-MES`<br>`D3-OOB` | Cryptographic emergency kill-switch dropping playbooks to advisory mode, backed by air-gapped signed CLI runbooks. | E-Stop broadcast < 500ms; complete execution freeze |
+| **RESIL-01** | Decoupled Edge Spooling | `[Deterministic Engine]` | [`D3-DRB`](https://d3fend.mitre.org/)<br>[`D3-LSP`](https://d3fend.mitre.org/) | Autonomous local disk ring buffering on forwarders during streaming bus network partitions. | 24–48h lossless buffer; zero forensic drop |
+| **RESIL-02** | Direct-to-Object Ingestion Bypass | `[Deterministic Engine]` | [`D3-OBP`](https://d3fend.mitre.org/) | Dynamic failover allowing forwarders to write compressed Parquet micro-batches directly to object lakehouse. | Cutover latency < 60s from bus partition trip |
+| **RESIL-03** | Stream-to-Batch Detection Failover | `[Deterministic Engine]` | [`D3-GDF`](https://d3fend.mitre.org/) | Automated transfer of detection rules to scheduled 5-minute columnar SQL batch sweeps on graph engine failure. | Fallback activation < 2 min; 100% rule coverage preserved |
+| **RESIL-04** | Hierarchical Model Fallback & Rule-Based Non-AI Mode | `[Deterministic Engine]` | [`D3-HMF`](https://d3fend.mitre.org/) | Deterministic shift from cloud LLMs to local SLMs, with fallback to structured tabular/graph rule-based workbenches. | Circuit breaker trip < 3 errors; zero pipeline block |
+| **RESIL-05** | Master Autonomous E-Stop & OOB Containment | `[Human-in-the-Loop]` | [`D3-MES`](https://d3fend.mitre.org/)<br>[`D3-OOB`](https://d3fend.mitre.org/) | Cryptographic emergency kill-switch dropping playbooks to advisory mode, backed by air-gapped signed CLI runbooks. | E-Stop broadcast < 500ms; complete execution freeze |
 
 ================================================================================
 SECTION: CROSS-CUTTING ENGINEERING DISCIPLINES
