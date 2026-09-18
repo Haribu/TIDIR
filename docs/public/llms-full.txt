@@ -515,7 +515,7 @@ Source: docs/architecture/09-threat-model.md
 
 Security platforms are themselves high-value attack surfaces. If an attacker can blind telemetry, poison threat intelligence, inject malicious instructions into autonomous triage agents, or manipulate automated response playbooks, they neutralise enterprise defence at the root.
 
-This document provides a comprehensive, STRIDE-aligned threat model of the TIDIR target architecture. It maps the attack surface across all five functional subsystems, articulates concrete attack vectors, defines trust boundaries, and details architectural mitigations.
+This document provides a STRIDE-aligned threat model of the TIDIR target architecture. It maps the attack surface across all five functional subsystems, articulates concrete attack vectors, defines trust boundaries, and details architectural mitigations.
 
 ---
 
@@ -712,7 +712,7 @@ The integrity of these threat mitigations is maintained through three continuous
 
 To prove internal consistency and demonstrate that architectural invariants directly mitigate identified threats, the matrix below establishes the complete, bi-directional assurance graph:
 
-$$\text{Adversarial Threat} \longrightarrow \text{Invariant} \longrightarrow \text{Capability} \longrightarrow \text{Architectural Control} \longrightarrow \text{ADR} \longrightarrow \text{Validation Evidence}$$
+$$\text{Adversarial Threat} \longrightarrow \text{Invariant} \longrightarrow \text{Capability} \longrightarrow \text{Architectural Control} \longrightarrow \text{ADR} \longrightarrow \text{Validation Criteria}$$
 
 | Adversarial Threat | Invariant Preserved | Underpinning Capability | Architectural Control Mechanism | Governing ADR | Validation Method & Acceptance Criteria |
 | :--- | :--- | :--- | :--- | :--- | :--- |

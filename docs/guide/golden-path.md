@@ -51,7 +51,7 @@ flowchart LR
 * **Reading Time**: 3 minutes.
 
 ### [Step 5: Target Threat Model & Assurance Case](/architecture/09-threat-model)
-* **Core Takeaway**: Threat modelling TIDIR itself (T1–T6) and tracing threats to invariants, capabilities, and concrete validation evidence via the Assurance Case Map.
+* **Core Takeaway**: Threat modelling TIDIR itself (T1–T6) and tracing threats to invariants, capabilities, and prescribed validation criteria via the Assurance Case Map.
 * **Reading Time**: 3 minutes.
 
 ---

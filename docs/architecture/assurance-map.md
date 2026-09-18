@@ -1,7 +1,7 @@
 # The TIDIR Assurance Case Map & Architecture Graph
 
 > **Tier 1: Strategic Architecture** · **Audience**: Security Architects, Regulators, Researchers · **Normative Status**: Normative Reference  
-> **Purpose**: Provides full bi-directional traceability from adversarial threats to constitutional invariants, capabilities, and empirical validation evidence.
+> **Purpose**: Provides full bi-directional traceability from adversarial threats to constitutional invariants, capabilities, and prescribed validation criteria.
 
 ---
 
@@ -9,7 +9,7 @@
 
 In modern security architecture, declaring principles is insufficient without demonstrating how those principles resist active adversary subversion. The **TIDIR Assurance Case** establishes an explicit, machine-traceable relationship between identified threats against the defence system itself and the deterministic controls that preserve system integrity:
 
-$$\text{Adversarial Threat} \longrightarrow \text{Invariant} \longrightarrow \text{Capability} \longrightarrow \text{Architectural Control} \longrightarrow \text{ADR} \longrightarrow \text{Validation Evidence}$$
+$$\text{Adversarial Threat} \longrightarrow \text{Invariant} \longrightarrow \text{Capability} \longrightarrow \text{Architectural Control} \longrightarrow \text{ADR} \longrightarrow \text{Validation Criteria}$$
 
 ```mermaid
 flowchart LR
@@ -17,7 +17,7 @@ flowchart LR
     I --> C["Architectural Capability\n(DATA, DET, INV, RESP)"]
     C --> CTRL["Architectural Control\n(Boundary & Kernel)"]
     CTRL --> ADR["Governing ADR\n(Decision Record)"]
-    ADR --> V["Empirical Evidence\n(Chaos & Benchmark)"]
+    ADR --> V["Validation Criteria\n(Test & Acceptance Spec)"]
 
     classDef nodeStyle fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#f8fafc;
     class T,I,C,CTRL,ADR,V nodeStyle;
@@ -27,7 +27,7 @@ flowchart LR
 
 ## Bi-Directional Assurance Matrix
 
-The table below maps each adversarial threat to its governing invariant, underpinning capabilities, deterministic control mechanism, and concrete empirical verification test:
+The table below maps each adversarial threat to its governing invariant, underpinning capabilities, deterministic control mechanism, and prescribed validation method and acceptance criteria:
 
 | Threat ID & Name | Governing Invariant | Underpinning Capabilities | Architectural Control Mechanism | Governing ADR | Validation Method & Acceptance Criteria |
 | :--- | :--- | :--- | :--- | :--- | :--- |
