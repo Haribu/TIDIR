@@ -71,7 +71,7 @@ The documentation is organized logically across strategy, capability mapping, de
 
 ## 🗺️ Roadmap & Research Wishlist (v0.2+)
 
-TIDIR has established a comprehensive conceptual foundation across 36 capabilities and four operational layers. To ensure the architecture remains falsifiable, grounded, and practically adoptable, the v0.2+ roadmap focuses on mathematical rigor, implementation evidence, and operational economics:
+TIDIR has established a comprehensive conceptual foundation across 41 capabilities and five operational layers (incorporating five Operational Continuity & Resilience capabilities). To ensure the architecture remains falsifiable, grounded, and practically adoptable, the v0.2+ roadmap focuses on mathematical rigor, implementation evidence, and operational economics:
 
 1. **TIDIR Core / Minimum Viable Architecture (MVA)**:
    - Formally specify the leanest TIDIR-compliant system: `Telemetry Ingress ➔ OCSF Normalization ➔ Lakehouse / Hot Storage ➔ Polyglot DaC ➔ Findings ➔ Case Management ➔ Policy-Gated Actuation`.

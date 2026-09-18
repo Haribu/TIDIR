@@ -11,7 +11,7 @@ This document specifies the functional capability taxonomy required across the T
 
 ## 1. Capability Taxonomy Matrix
 
-The TIDIR capability model defines **twenty-nine operational capabilities** organized across five functional domains, underpinned by **seven cross-cutting AI Governance and Verification capabilities** (36 capabilities in total), spanning from raw sensory ingestion to closed-loop response automation:
+The TIDIR capability model defines **twenty-nine operational capabilities** organized across five functional domains, underpinned by **seven cross-cutting AI Governance and Verification capabilities** and **five Operational Continuity & Resilience capabilities** (41 capabilities in total), spanning from raw sensory ingestion to closed-loop response automation:
 
 ```mermaid
 flowchart TB
@@ -84,8 +84,8 @@ flowchart TB
 | **DET-02** | Lakehouse Batch Analytics | `[Deterministic Engine]` | Execute complex, cross-table SQL analytics, behavioural baselines, and rare event heuristics. | Daily/hourly schedules (MTTD < 24h) |
 | **DET-03** | DaC & Continuous Purple Team | `[AI/Agent-Augmented]` | Manage rules as declarative code validated via continuous automated atomic adversary emulation and multi-model consensus. | 100% rule tests passing prior to production deploy |
 | **DET-04** | Alert Correlation & Aggregation | `[Deterministic Engine]` | Cluster related alerts across time, host, identity, and network into coherent incident candidates via entity graphs. | Reduction of alert volume to analyst by > 75% |
-| **DET-05** | Bayesian Multi-Signal Risk Lens | `[Deterministic Engine]` | Neutralise the Base Rate Fallacy by compounding orthogonal evidence vectors (asset, identity, network) before elevation. | Dynamic composite score (0–100); false alarms < 5% |
-| **DET-06** | SecOps Error Budgets | `[Deterministic Engine]` | Enforce monthly false-positive Noise Budgets per detection class in CI/CD; automated deployment freeze on budget burn. | Rolling 30-day Noise Ratio <= 5% per domain |
+| **DET-05** | Bayesian Multi-Signal Risk Lens | `[Deterministic Engine]` | Mitigate the operational consequences of the Base Rate Fallacy by compounding orthogonal evidence vectors (asset, identity, network) before elevation. | Dynamic composite score (0–100); false alarms < 5% |
+| **DET-06** | SecOps Error Budgets | `[Deterministic Engine]` | Enforce false-positive Noise Budgets per detection class with automated deployment freeze on budget burn. | Pre-deploy CI gate: peak FPR < 1%; Production SLO: rolling 30-day FPR <= 5% |
 | **DET-07** | Deception & Canary Surface Fabric | `[Deterministic Engine]` | Embed lightweight honeytokens, Kerberos SPN decoys, and file lures emitting OCSF canary events for zero-noise detection. | False Positive Rate = 0.00%; MTTD < 1 second |
 
 ---

@@ -47,7 +47,7 @@ flowchart LR
 * **Reading Time**: 4 minutes.
 
 ### [Step 4: Capability & Enterprise Service Model](/architecture/02-capability-model)
-* **Core Takeaway**: 36 atomic capabilities across 5 operational domains and 2 cross-cutting disciplines, backed by Reference Target SLOs.
+* **Core Takeaway**: 41 atomic capabilities across 5 operational domains and 2 cross-cutting disciplines, backed by Reference Target SLOs.
 * **Reading Time**: 3 minutes.
 
 ### [Step 5: Target Threat Model & Assurance Case](/architecture/09-threat-model)
