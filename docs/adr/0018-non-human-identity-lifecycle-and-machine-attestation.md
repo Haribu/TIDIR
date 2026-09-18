@@ -130,7 +130,7 @@ flowchart LR
    - The Layer 3 analytics engine constructs rolling 14-day behavioral profiles for every active NHI:
      - **API Surface Profiling**: Alerts on service accounts invoking rarely accessed administration endpoints (e.g. `iam:CreateAccessKey`, `sts:GetFederationToken`).
      - **Origin Geolocation & VPC Deviation**: Flags machine tokens minted in internal cloud VPCs that are suddenly replayed from external public IP ranges or unapproved cloud regions (stolen token replay).
-     - **Dormancy Awakening**: Alerts when a service account inactive for $> 30$ days suddenly generates high-velocity read or export queries.
+     - **Dormancy Awakening**: Alerts when a service account inactive for $\gt 30$ days suddenly generates high-velocity read or export queries.
 
 ---
 

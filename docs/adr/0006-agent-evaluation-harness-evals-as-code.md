@@ -31,14 +31,17 @@ Chosen option: **Continuous Evals-as-Code with Assertion-First Harness and Golde
 - **Evals-as-Code Repository Lifecycle**: Agent prompts, system guidelines, tool definitions, and scoring rubrics are managed as declarative code in version-controlled repositories, tested via automated CI/CD pipelines on every pull request.
 - **Golden Incident Benchmark Dataset**:
   - Maintains a versioned corpus of representative security incidents across system, identity, network, and cloud attack archetypes.
-  - Each benchmark case contains sanitized raw telemetry inputs, pre-resolved entity facts, and authoritative ground-truth annotations (true root cause, verified adversary TTPs, and ideal containment action sequences).
+  - Evaluation targets are explicitly stratified across the **Three-Tier Ground Truth Taxonomy**:
+    1. *Objective Ground Truth*: Programmatically indisputable facts (synthetic atomic adversary emulation flags, canary credential hits, signed provenance attestations).
+    2. *Expert Adjudication*: Consolidated, double-blind human consensus ratings from senior security analysts on hypothesis quality, scoping boundary precision, and investigation narrative coherence.
+    3. *Operational Outcome*: Post-incident production validation (whether containment halted attacker advancement without operational side-effects, verified absence of recurrence over 30 days).
 - **Assertion-First Dual Scoring Architecture**:
   - *Deterministic Assertions*: Programmatic pass/fail checks validating schema conformity (e.g. verifying that generated hypotheses strictly cite valid OCSF event IDs), tool call syntax, parameter validity, and token budget compliance.
   - *Structured Evaluation Judges*: Automated evaluation models evaluate qualitative reasoning against formal rubrics (e.g., hypothesis clarity, absence of unsupported speculation, containment plan completeness).
 - **Regression Gates & Performance Budgets**: An agent prompt or harness modification cannot merge to production unless it meets strict thresholds:
   - $\ge 95\%$ grounding fidelity (zero ungrounded assertions).
   - $100\%$ schema-valid tool invocation syntax.
-  - Enforcement of p95 latency (< 5 seconds for triage synthesis) and strict token spend ceilings.
+  - Enforcement of p95 latency ($\lt 5\text{s}$ for triage synthesis) and strict token spend ceilings.
 
 ### Positive Consequences
 

@@ -121,8 +121,26 @@ bun run verify # Or run the 4 scripts individually in sandboxes
 
 7. **The TIDIR Trust Doctrine & Security-State Monotonicity**:
    - **Trust Doctrine Maxim**: *"Probabilistic components may propose. Deterministic components authorize."* Probabilistic models (LLMs, neural embeddings, clustering heuristics) operate in a strictly read-only analytical capacity. All mutations, containment state transitions, and tool calls are governed by deterministic schemas, policy validators, and human consensus gates.
+   - **No Self-Granting Authority**: No component receives execution authority merely because another component believes it is correct.
    - **Prompt Injection as an Architectural Assumption**: Assume untrusted telemetry can and will influence reasoning; system safety relies entirely on deterministic external boundaries, ephemeral read-only SVIDs, and typed parameters.
-   - **Security-State Monotonicity**: Every automated workflow must satisfy $R(s_{\text{post}}) \subseteq R(s_{\text{pre}})$. No automated compensation, retry, or failure recovery may expand attacker reachability beyond the current verified-safe security posture.
+   - **Security-State Monotonicity ($R(s_{\text{post}}) \subseteq R(s_{\text{pre}})$)**: *Forward compensation is permitted. Security-state regression is not.* A compensating action MUST NOT increase attacker reachability beyond the last verified-safe security state without explicit human authorisation.
+
+8. **Acronym Expansion on First Use (Readability & Narrative Quality)**:
+   - Always spell out and explain acronyms on their first appearance per document (e.g. *Open Cybersecurity Schema Framework (OCSF)*, *Detection-as-Code (DaC)*, *Cyber Threat Intelligence (CTI)*, *Mean Time to Detect (MTTD)*, *Mean Time to Contain (MTTC)*, *Security Operations Center (SOC)*, *Directed Acyclic Graph (DAG)*, *Small Language Model (SLM)*, *SPIFFE Verifiable Identity Document (SVID)*, *Single Point of Failure (SPOF)*).
+   - This ensures the architecture remains clear, educational, and accessible without assuming prior jargon familiarity.
+
+9. **The TIDIR Architectural Constitution (10 Non-Negotiable Invariants)**:
+   All specifications, ADRs, and implementations must strictly preserve:
+   1. *Telemetry Preservation*: Raw forensic evidence is not discarded solely because no current detection consumes it.
+   2. *Evidence Traceability*: Every consequential assertion is traceable to underlying raw observations.
+   3. *Dependency-Aware Confidence*: Correlated derivations sharing common ancestry cannot masquerade as independent evidence.
+   4. *No Self-Granting Authority*: Probabilistic components propose; deterministic components authorise.
+   5. *Least Capability*: Every machine actor receives only task-scoped, ephemeral authority (SPIFFE SVIDs).
+   6. *Fail-Secure Posture*: Component failure cannot silently increase attacker reachability ($R(s_{\text{post}}) \subseteq R(s_{\text{pre}})$).
+   7. *Bounded Autonomy*: Autonomous execution has explicit temporal, financial, computational, and blast-radius limits.
+   8. *Human Recoverability*: Autonomous control planes always preserve independently accessible manual flight decks (master E-stop, break-glass).
+   9. *Degraded Defence*: Loss of an advanced capability reduces sophistication, never total visibility (graceful degradation).
+   10. *Reconstructability*: Consequential decisions and actions can be deterministically reconstructed after the fact via the Incident Decision DAG.
 
 ---
 

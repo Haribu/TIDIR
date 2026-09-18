@@ -35,7 +35,7 @@ Chosen option: **SecOps Error Budgets and Chaos Security Engineering**, because:
 - The target Service Level Objective (SLO) mandates a Noise Ratio of $\le 5\%$ across all elevated incident dossiers.
 - **Automated Deployment Freeze**:
   - The Detection-as-Code CI/CD runner continuously tracks the 30-day rolling Noise Budget per detection category.
-  - If a specific detection domain burns through its monthly Noise Budget ($> 5\%$ false-positive rate), the deployment pipeline automatically places an **Engineering Deployment Freeze** on that domain.
+  - If a specific detection domain burns through its monthly Noise Budget ($\gt 5\%$ false-positive rate), the deployment pipeline automatically places an **Engineering Deployment Freeze** on that domain.
   - No new detection rules can be merged for that category until the noisy rules are tuned, refactored, or decommissioned in Git.
 
 ### 2. Chaos Security Engineering in Continuous Purple Teaming

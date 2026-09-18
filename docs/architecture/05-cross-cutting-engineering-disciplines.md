@@ -201,16 +201,16 @@ flowchart TB
   end
 ```
 
-- **defensive AI Runtime & Prompt Injection Firewall**:
+- **Defensive AI Runtime & Prompt Injection Firewall**:
   - Implements **Dual-Plane Isolation**: untrusted telemetry payloads (command lines, file contents, raw logs, external CTI text) remain strictly within the data plane as typed JSON structures.
-  - Controls, instructions, and tools operate exclusively in the privileged control plane. Prompts never execute instructions contained inside data fields.
+  - Controls, instructions, and tools operate exclusively in the privileged control plane. **TIDIR explicitly assumes adversarial data may influence or compromise model reasoning; security boundaries therefore do not depend on successful prompt-injection detection**. All consequential capabilities remain constrained by deterministic authorisation, typed interfaces, task-scoped machine identity (SPIFFE Verifiable Identity Documents / SVIDs), and independent execution policy.
   - Dynamically retrieves necessary entity state, historical alert patterns, and relevant threat actor context with deterministic privacy redaction.
 - **Hierarchical Agent Mesh Runtime**:
   - Replaces monolithic point-prompts with an orchestrated agent hierarchy: a Lead Triage Orchestrator coordinates specialized subagents (Host Forensic, Identity & Auth, Network & Cloud) to investigate multi-vector threats concurrently.
   - Enforces typed, deterministic tool interfaces (e.g. `query_telemetry`, `lookup_ioc`, `reconstruct_process_tree`). Autonomous agents operate strictly in read-only analysis mode (Tier 0).
 - **Continuous Evals-as-Code Framework**:
   - Prompts, agent guidelines, and tool schemas are maintained in version-controlled repositories tested on every Git pull request.
-  - Evaluates candidate agent configurations against versioned "golden incident datasets" using deterministic assertions and structured evaluation judges, ensuring $\ge 95\%$ grounding fidelity and strict latency and token budget adherence.
+  - Evaluates candidate agent configurations against versioned "golden incident datasets" using deterministic assertions and structured evaluation judges, ensuring grounding fidelity $\ge 95\%$ and strict latency and token budget adherence.
 
 ---
 
@@ -261,8 +261,8 @@ flowchart LR
 
 | Architectural Layer | Monitored Failure Condition | Detection Probe ("How We Know") | Automated Continuity Plan B |
 | :--- | :--- | :--- | :--- |
-| **Layer 1 & 2: Ingestion & Storage** | Streaming event bus partition or schema registry corruption. | Synthetic telemetry canaries fail to arrive in Layer 2 in $\le 60\text{s}$; consumer lag $> 60\text{s}$; DLQ $> 100\text{ events/min}$. | **Edge Spooling & Direct-to-Object Ingestion**: Forwarders spool to local NVMe ring buffers (24–48h capacity); prolonged partitions trigger direct-to-object upload of Parquet micro-batches directly to the columnar lakehouse. |
-| **Layer 3: Threat Intel & Detection** | Graph engine stagnation, memory exhaustion, or Risk Lens stall. | Time-to-Detect (TTD) delta $> 15\text{s}$; zero graph mutation rate despite active ingestion; canary invariant alert failure $> 30\text{s}$. | **Stream-to-Batch Failover & Direct Alerting**: Scheduled 5-minute columnar SQL batch sweeps assume detection coverage; complete graph stalls bypass Bayesian compounding and route raw sensor alerts directly to analyst queues. |
-| **Layer 4: AI & Investigation** | Cloud AI API outages, provider rate throttling, or network timeouts. | AI gateway circuit breakers trip after 3 consecutive HTTP 5xx errors; case hydration queue latency $> 60\text{s}$. | **Local SLM Fallback & Zero-AI Mode**: Traffic shifts to on-premise/VPC Small Language Models; complete model outages drop to Zero-AI mode (rendering deterministic tabular timelines and bipartite graph relationship tables). |
-| **Layer 4: Response & Automation** | Containment state machine lockups, EDR API unresponsiveness, or automation runaway. | Containment retries exceed 3 attempts; isolation lease approaches 45-minute TTL; containment velocity $> 10\text{ hosts/min}$. | **Master E-Stop & Out-of-Band Boundary Containment**: Master cryptographic E-Stop drops playbooks to advisory mode; expired leases auto-escalate to out-of-band network boundary ACLs; operators invoke signed air-gapped CLI runbooks. |
+| **Layer 1 & 2: Ingestion & Storage** | Streaming event bus partition or schema registry corruption. | Synthetic telemetry canaries fail to arrive in Layer 2 in $\le 60\text{s}$; consumer lag $\gt 60\text{s}$; DLQ $\gt 100\text{ events/min}$. | **Edge Spooling & Direct-to-Object Ingestion**: Forwarders spool to local NVMe ring buffers (24–48h capacity); prolonged partitions trigger direct-to-object upload of Parquet micro-batches directly to the columnar lakehouse. |
+| **Layer 3: Threat Intel & Detection** | Graph engine stagnation, memory exhaustion, or Risk Lens stall. | Time-to-Detect (TTD) delta $\gt 15\text{s}$; zero graph mutation rate despite active ingestion; canary invariant alert failure $\gt 30\text{s}$. | **Stream-to-Batch Failover & Direct Alerting**: Scheduled 5-minute columnar SQL batch sweeps assume detection coverage; complete graph stalls bypass Bayesian compounding and route raw sensor alerts directly to analyst queues. |
+| **Layer 4: AI & Investigation** | Cloud AI API outages, provider rate throttling, or network timeouts. | AI gateway circuit breakers trip after 3 consecutive HTTP 5xx errors; case hydration queue latency $\gt 60\text{s}$. | **Local SLM Fallback & Zero-AI Mode**: Traffic shifts to on-premise/VPC Small Language Models; complete model outages drop to Zero-AI mode (rendering deterministic tabular timelines and bipartite graph relationship tables). |
+| **Layer 4: Response & Automation** | Containment state machine lockups, EDR API unresponsiveness, or automation runaway. | Containment retries exceed 3 attempts; isolation lease approaches 45-minute TTL; containment velocity $\gt 10\text{ hosts/min}$. | **Master E-Stop & Out-of-Band Boundary Containment**: Master cryptographic E-Stop drops playbooks to advisory mode; expired leases auto-escalate to out-of-band network boundary ACLs; operators invoke signed air-gapped CLI runbooks. |
 

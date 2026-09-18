@@ -88,7 +88,7 @@ The operational bottleneck to automated response is the fear of isolating a legi
 - **Zero-Hesitation Autonomous Containment (Standard Workloads):** Interaction with a high-fidelity canary immediately licenses automated Tier 1 containment playbooks (host network isolation, credential revocation, firewall IP blocking) for standard endpoints and non-critical workloads.
 - **The Crown-Jewel Canary Exemption Matrix (Anti-Inversion Filter):** 
   - If the entity interacting with a canary primitive carries a **Critical Asset Tier** (Tier 0 infrastructure in CMDB/posture: Domain Controllers, identity federation servers, root certificate authorities, production database clusters, or core Kubernetes control planes), **zero-hesitation autonomous isolation is strictly prohibited**.
-  - Instead, the event is routed to an **Immediate Escalation Lane** that triggers an instantaneous high-priority page to the on-duty Incident Commander with a mandatory $<60$-second confirmation SLA. The system executes a non-destructive session freeze rather than hard network decapitation.
+  - Instead, the event is routed to an **Immediate Escalation Lane** that triggers an instantaneous high-priority page to the on-duty Incident Commander with a mandatory $\lt 60$-second confirmation SLA. The system executes a non-destructive session freeze rather than hard network decapitation.
 - **Adversary Entanglement:** For sophisticated multi-stage intrusions, the orchestrator can transparently redirect the adversary's network sessions into a sandboxed deception environment, allowing AI agent harnesses to observe tradecraft, log novel TTPs, and extract CTI in real time.
 
 ---

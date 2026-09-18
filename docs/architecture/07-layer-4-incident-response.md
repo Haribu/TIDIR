@@ -190,11 +190,11 @@ flowchart LR
 
 ### Blast-Radius Risk Tier Matrix
 
-| Risk Tier | Authorisation Policy | Permitted Actions | Automated Rollback Requirement |
+| Risk Tier | Authorisation Policy | Permitted Actions | Forward Compensation & Recovery Constraint |
 | :--- | :--- | :--- | :--- |
 | **Tier 0: Passive Enrichment** | Fully Autonomous | Read-only threat intel queries, directory lookups, telemetry scoping, lakehouse scans. | Not applicable (no environmental state mutation). |
-| **Tier 1: Targeted Containment** | Autonomous for High-Confidence / Low-Criticality Assets | Host-level process termination, untrusted file quarantine, temporary IP rate-limiting, user session lock. | Mandatory 1-click rollback script verified in advance. |
-| **Tier 2: Disruptive Containment** | Mandatory Dual-Operator or Senior SecOps Approval | Production database network isolation, global firewall rules, tenant-wide account locks, certificate revocation. | Step-by-step verified compensation and recovery procedure. |
+| **Tier 1: Targeted Containment** | Autonomous for High-Confidence / Low-Criticality Assets | Host-level process termination, untrusted file quarantine, temporary IP rate-limiting, user session lock. | Verified 1-click forward compensation procedure (restores benign services; strictly preserves reachability invariant $R(s_{\text{post}}) \subseteq R(s_{\text{pre}})$). |
+| **Tier 2: Disruptive Containment** | Mandatory Dual-Operator or Senior SecOps Approval | Production database network isolation, global firewall rules, tenant-wide account locks, certificate revocation. | Step-by-step verified forward compensation procedure (human attestation mandatory to dismantle containment barriers). |
 
 ### Pre-Execution Blast-Radius Impact Simulator (Anti-Rubber-Stamping Gate)
 In high-stress security incidents, human operators suffer cognitive exhaustion. If an agentic harness presents a compelling narrative recommending host isolation or credential revocation, analysts risk default "rubber-stamping" without verifying topological ramifications.

@@ -141,7 +141,7 @@ flowchart TB
 * **Architectural Mitigations:**
   1. **Signed Dual-Party GitOps Enrolment:** Detection logic changes require cryptographic commit signing and mandatory dual-peer review prior to CI/CD merge.
   2. **Continuous Purple-Team Regression Testing:** The CI pipeline automatically executes atomic attack emulations against modified rules to verify that detection efficacy is maintained before production deployment.
-  3. **SRE Alert Noise Error Budgets ([ADR-0008](/adr/0008-secops-error-budgets-and-chaos-security-engineering)):** If an updated rule causes alert flooding ($> 5\%$ false positive rate), deployment freezes automatically halt further rule promotions until the regression is resolved.
+  3. **SRE Alert Noise Error Budgets ([ADR-0008](/adr/0008-secops-error-budgets-and-chaos-security-engineering)):** If an updated rule causes alert flooding ($\gt 5\%$ false positive rate), deployment freezes automatically halt further rule promotions until the regression is resolved.
 
 ---
 

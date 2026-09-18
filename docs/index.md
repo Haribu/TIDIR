@@ -109,14 +109,14 @@ TIDIR strictly rejects artificial "output-driven" ingestion where logs are disca
 * **Hot Index (Tier 1):** High-value, immediate-retrieval telemetry retained for active operational windows (15–30 days).
 * **Columnar Lakehouse (Tier 2):** Cost-effective, open-format columnar storage (Parquet/metadata catalogue) for complete historical audit retention and petabyte-scale SQL analytics.
 
-### 2. Neutralising the Base Rate Fallacy with Bayesian Compounding
-When processing billions of daily events, even detections with a 99.9% accuracy rate produce thousands of false alarms because malicious actions are rare events (the *False Positive Paradox*). TIDIR solves this by treating single-point anomalies as **weak graph signals** rather than standalone alerts. Detections are only elevated to an active incident once Bayesian compounding correlates multiple independent signals:
+### 2. Suppressing the Base Rate Fallacy with Dependency-Aware Evidence Aggregation
+When processing billions of daily events, even detections with a 99.9% accuracy rate produce thousands of false alarms because malicious actions are rare events (the *False Positive Paradox*). TIDIR solves this by treating single-point anomalies as **weak graph signals** rather than standalone alerts. Detections are only elevated to an active incident once dependency-aware Bayesian risk aggregation correlates signals across orthogonal observation domains, discounting co-derived findings that share common raw telemetry ancestry:
 $$
-\text{Compounded Risk} = f(\text{Telemetry Anomaly}, \text{Asset Criticality}, \text{Identity Privilege}, \text{Network Egress})
+\text{Compounded Risk} = f(\text{Adversary TTP Severity}, \text{Asset Criticality}, \text{Identity Privilege}, \text{Orthogonal Evidence Domains})
 $$
 
 ### 3. Continuous Purple Teaming & SecOps Error Budgets
-Borrowing from Site Reliability Engineering (SRE), detection quality is enforced through quantifiable **Alert Noise Error Budgets** (target: false positive rate $\lt 5\%$). Detection-as-Code (DaC) repositories execute continuous atomic attack emulation in CI/CD pipelines. If a detection rule exhausts its noise budget in production, an automated deployment freeze prevents new rule promotions until the noisy rule is tuned or deprecated.
+Borrowing from Site Reliability Engineering (SRE), detection quality is enforced through quantifiable **Alert Noise Error Budgets** (target: false positive rate $\text{FPR} \le 5\%$). Detection-as-Code (DaC) repositories execute continuous atomic attack emulation in CI/CD pipelines. If a detection rule exhausts its noise budget in production, an automated deployment freeze prevents new rule promotions until the noisy rule is tuned or deprecated.
 
 ### 4. Dual-Plane Defensive AI Runtime & Prompt Injection Firewall
 Autonomous agentic workflows operate within a strictly isolated runtime:
@@ -124,7 +124,7 @@ Autonomous agentic workflows operate within a strictly isolated runtime:
 * **Deterministic Guardrails & Multi-Model Arbitration:** High-consequence triage decisions require consensus between a *Proposer Model* (investigation specialist) and an independent *Challenger Model* (adversarial auditor) to reject unsupported assertions and validate proposed containment actions against deterministic policies.
 
 ### 5. Security-State Monotonicity & Fail-Closed Containment
-Automated containment workflows execute declarative state machines governed by **Security-State Monotonicity**: *no automated compensation may increase attacker reachability beyond the last verified-safe security state*. While forward compensation may safely restore benign services, rolling back security barriers upon downstream timeout is strictly prohibited as an anti-defence vulnerability. Workflows enforce fail-closed boundary freezes and forward escalation to broader network perimeters, with high-impact mutations gated by authenticated Break-Glass Human-in-the-Loop consensus ($\text{MTTC} \lt 5\text{ minutes}$).
+Automated containment workflows execute declarative state machines governed by **Security-State Monotonicity**: *no automated compensation may increase attacker reachability beyond the last verified-safe security state*. While forward compensation may safely restore benign services, rolling back security barriers upon downstream timeout is strictly prohibited as an anti-defence vulnerability. Workflows enforce fail-closed boundary freezes and forward escalation to broader network perimeters, with high-impact mutations gated by authenticated Break-Glass Human-in-the-Loop consensus ($\text{MTTC} \lt 5\,\text{min}$).
 
 ---
 

@@ -171,7 +171,7 @@ flowchart TB
 ### 4.1 Fast-Lane vs. Standard-Lane Operational Contract
 1. **Fast Lane (Emergency TTP / Active Outbreak Response)**:
    - **Trigger**: Active zero-day exploitation, CISA emergency directives, or high-velocity ransomware variants requiring sub-minute detection authoring.
-   - **Verification Gates**: Schema registry compiler linting, synthetic unit assertions, and a rapid 24-hour historical lakehouse replay (SLA: $< 5$ minutes).
+   - **Verification Gates**: Schema registry compiler linting, synthetic unit assertions, and a rapid 24-hour historical lakehouse replay (SLA: $\lt 5$ minutes).
    - **Fail-Safe Constraint**: Fast-lane rules deploy as **ephemeral detections** carrying an enforced **7-day auto-expiry TTL** and quarantine tag. They alert on-duty analysts but automatically expire unless graduated through the Standard Lane.
 2. **Standard Lane (Persistent Detection Corpus)**:
    - **Trigger**: Permanent enterprise detection coverage, behavioral baselines, and complex multi-event heuristics.
@@ -460,5 +460,4 @@ In Layer 3, autonomous AI and agentic harnesses transform how threat intelligenc
 2. **Continuous Evals-as-Code & DaC Quality Judges**:
    - *Problem*: Brittle detection rules written without broad test coverage cause alert fatigue or severe performance degradation on production streaming buses.
    - *AI Leverage*: Multi-model agent judges audit Detection-as-Code (DaC) pull requests, scoring candidate Sigma/SQL rules for schema deprecation, logic ambiguities, and triage documentation completeness.
-   - *Deterministic Safety Gate*: Rules cannot deploy to production without passing automated 30-day historical lakehouse backtests and synthetic unit test suites in CI/CD, guaranteeing zero syntax errors and bounded False Positive Rates ($\text{FPR} < 1\%$).
-
+   - *Deterministic Safety Gate*: Rules cannot deploy to production without passing automated 30-day historical lakehouse backtests and synthetic unit test suites in CI/CD, guaranteeing zero syntax errors and bounded False Positive Rates ($\text{FPR} \lt 1\%$).

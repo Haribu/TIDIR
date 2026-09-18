@@ -35,7 +35,7 @@ All stories adhere to the canonical structure:
 #### Acceptance Criteria
 1. Prior to prompting for human authorisation, the response orchestrator queries Layer 1 CMDB relationships and Layer 2 network flow caches to compute live blast-radius metrics (active TCP sessions, downstream dependent microservices, database replica status).
 2. The authorisation modal explicitly presents the simulation summary: affected hostnames, projected service disruption, and estimated recovery time.
-3. No Tier 2 containment action can be dispatched unless an automated compensation/rollback routine (e.g. reverting network isolation, reinstating API keys) is pre-compiled and verified.
+3. No Tier 2 containment action can be dispatched unless verified forward compensation procedures (e.g. restoring benign service availability while strictly upholding the reachability invariant $R(s_{\text{post}}) \subseteq R(s_{\text{pre}})$) are pre-compiled and verified.
 4. Authorisations are cryptographically logged to the immutable audit register with the authorising commander's digital signature and stated operational rationale.
 
 ---
@@ -59,7 +59,7 @@ All stories adhere to the canonical structure:
 
 #### Acceptance Criteria
 1. The incident commander can trigger break-glass execution only when system telemetry validates an active catastrophic threat signature crossing the automated threshold.
-2. The authorisation instantly executes forward containment across target connectors while automatically staging verified compensating rollback tasks.
+2. The authorisation instantly executes forward containment across target connectors while automatically staging verified reachability-safe forward compensation tasks.
 3. Invocation immediately emits signed cryptographic alerts across real-time executive broadcast streams.
 4. The authorisation event, rationale, and digital signature are permanently committed to the tamper-evident audit ledger.
 
@@ -186,7 +186,7 @@ All stories adhere to the canonical structure:
 
 ### Story E4: Blast-Radius Policy Modelling & SRE Availability Management
 * **As a** SecOps Automation SRE (Layer 4),
-* **I want** to define declarative playbook execution policies with verified rollback logic, rate limits, and health checks,
+* **I want** to define declarative playbook execution policies with verified forward compensation logic, rate limits, and health checks,
 * **So that** automated response workflows execute with five-nines availability and zero unintended cascading failures.
 
 #### Acceptance Criteria

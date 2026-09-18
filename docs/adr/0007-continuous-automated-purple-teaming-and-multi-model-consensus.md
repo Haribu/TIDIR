@@ -37,7 +37,7 @@ Chosen option: **Continuous Automated Purple Teaming, Dual-Model Consensus, and 
 - The pipeline empirically asserts:
   1. *Sensor Visibility*: Kernel/eBPF sensors emit the raw fact.
   2. *Line-Rate Normalisation*: Telemetry arrives and coerces into canonical OCSF classes within SLA.
-  3. *Streaming Detection Latency*: Stream engines trigger detection findings ($< 5\text{s}$).
+  3. *Streaming Detection Latency*: Stream engines trigger detection findings ($\lt 5\text{s}$).
   4. *Autonomous Scoping*: Agent harnesses correctly hydrate the investigative dossier.
 
 ### 2. Dual-Model Consensus Arbiter (Heterogeneous & Symbolic Architecture)
@@ -50,7 +50,7 @@ Chosen option: **Continuous Automated Purple Teaming, Dual-Model Consensus, and 
     - *The Challenge*: Neural transformer models evaluate contextual semantic intent, while heuristic/symbolic engines evaluate boolean AST rules and graph paths. For dual-use Living-off-the-Land (LotL) activity, engines can systematically diverge, risking arbitration thrashing or latency-inducing human escalations.
     - *Triage & Hypothesis Escalation (Pessimistic Quorum)*: For read-only scoping and alert priority escalation, an asymmetric **pessimistic quorum** applies: *if either engine identifies a potential intrusion or unverified anomaly, the finding elevates*.
     - *Automated Destructive Containment (Consensus Requirement)*: For active disruptive containment actions (e.g. host isolation, credential revocation), complete unanimous agreement between neural and symbolic verifiers is strictly mandatory. Any semantic disagreement automatically routes the action to the human operator workbench without stall or automated execution.
-- If the Proposer and Challenger models diverge beyond acceptable confidence thresholds ($< 80\%$ agreement), the incident dossier automatically escalates to a human operator with a comparative analysis of both reasoning paths.
+- If the Proposer and Challenger models diverge beyond acceptable confidence thresholds ($\lt 80\%$ agreement), the incident dossier automatically escalates to a human operator with a comparative analysis of both reasoning paths.
 
 ### 3. Rejection of Output-Driven Ingestion Anti-Pattern
 - The platform firmly rejects restrictive "output-driven ingestion."

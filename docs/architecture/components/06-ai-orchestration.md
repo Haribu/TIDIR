@@ -46,10 +46,18 @@ flowchart TB
 ## 2. Core Functional Requirements
 
 ### 1. Tiered Inference Gateway & Model Routing
-To optimize latency, cost, and data sovereignty, the gateway routes prompts according to task complexity:
-- **Tier 0 (Local SLM / Metal / CPU):** Executes on-premises (e.g. Qwen 2.5 7B/14B, Llama 3.1 8B). Handles high-throughput, latency-sensitive tasks (< 200ms) such as log parsing assistance, regex extraction, PII masking, and preliminary triage classification. Zero external API cost and zero data egress.
-- **Tier 1 (High-Velocity Cloud Models):** Mid-tier fast models (e.g. Gemini 1.5/2.0 Flash, Claude 3.5 Haiku). Handles natural language to OCSF SQL generation, single-turn threat advisory summarization, and triage dossier assembly.
-- **Tier 2 (Cloud Frontier Reasoning Models):** Frontier reasoning models with extended thinking (e.g. Claude 3.7 Sonnet / Opus, Gemini 2.0 Pro). Reserved for complex multi-hop campaign correlation, contradictory evidence arbitration, and root-cause hypothesis debates.
+
+To optimize latency, operational cost, and data sovereignty, the AI Gateway routes prompts according to task complexity and latency constraints. The architecture cleanly separates **normative capability requirements** from **illustrative reference implementations**:
+
+- **Tier 0 (Local Low-Latency Inference / Edge & VPC)**:
+  - *Normative Requirement*: Must support locally hosted, zero-data-egress execution within a sub-200ms latency envelope. Responsible for high-throughput operational tasks: log parsing assistance, regex extraction, Personally Identifiable Information (PII) masking, and preliminary triage classification.
+  - *Illustrative Reference Implementation (Non-Normative)*: Open-weights 8B–14B parameter models (e.g. Qwen 2.5, Llama 3.1) deployed via high-performance runtimes (e.g. vLLM, Triton).
+- **Tier 1 (High-Velocity Structured Query & Triage Models)**:
+  - *Normative Requirement*: High-throughput cloud or VPC-hosted models capable of schema-constrained SQL compilation and single-turn threat advisory extraction within a sub-2-second envelope. Responsible for natural language to OCSF SQL generation, single-turn threat advisory summarization, and triage dossier assembly.
+  - *Illustrative Reference Implementation (Non-Normative)*: Fast commercial cloud APIs (e.g. Gemini Flash, Claude Haiku).
+- **Tier 2 (Frontier Multi-Hop Reasoning Models)**:
+  - *Normative Requirement*: Advanced reasoning engines with extended thinking and multi-step tool reasoning capabilities. Reserved for complex multi-hop campaign correlation, contradictory evidence arbitration, and root-cause hypothesis debates.
+  - *Illustrative Reference Implementation (Non-Normative)*: Cloud frontier models (e.g. Claude Sonnet/Opus, Gemini Pro) or large-scale on-premises sovereign clusters.
 
 #### 1.1 Safety Refusal Circuit Breakers & Sovereign Open-Weights Fallbacks
 In mission-critical security operations, relying exclusively on commercial public LLM APIs introduces two acute operational vulnerabilities:
@@ -57,12 +65,12 @@ In mission-critical security operations, relying exclusively on commercial publi
 1. **The "False-Positive Safety Refusal" Trap**:
    - Commercial frontier models enforce aggressive public alignment guardrails designed to prevent malicious weaponization. During high-severity incidents, these filters frequently trigger false-positive refusals on legitimate defensive tasks—such as decompiling obfuscated PowerShell, analyzing shellcode strings, or explaining exploit primitives.
    - A safety refusal (e.g., *"I cannot assist with analyzing this exploit payload"*) breaks automated triage pipelines and stalls response velocity.
-   - **Refusal-Resistant Fallback Routing**: The AI Gateway monitors incoming token streams for standard refusal semantics and finish reasons (`content_filter`, refusal substrings). Upon detecting a refusal on an authorized SecOps analysis task, the gateway automatically reroutes the prompt with elevated forensic context headers to a specialized, defensively-aligned model endpoint.
+   - **Refusal-Resistant Fallback Routing**: The AI Gateway monitors incoming token streams for standard refusal semantics and finish reasons (`content_filter`, refusal substrings). Upon detecting a refusal on an authorized Security Operations (SecOps) analysis task, the gateway automatically reroutes the prompt with elevated forensic context headers to an internal defensively-aligned model endpoint.
 
-2. **Self-Hosted Open-Weights Sovereign Backup (Air-Gapped Disaster Recovery)**:
-   - To guarantee operational continuity during commercial cloud outages, rate-limit exhaustion, or WAN isolation during major cyber attacks, TIDIR specifies an on-premises or private-cloud **Sovereign Open-Weights Inference Cluster** (e.g. Llama 3.3 70B, Qwen 2.5 72B, DeepSeek-R1 running on vLLM/Triton).
+2. **Self-Hosted Sovereign Backup (Air-Gapped Operational Continuity)**:
+   - To guarantee operational continuity during commercial cloud outages, rate-limit exhaustion, or WAN isolation during major cyber attacks, TIDIR specifies an on-premises or private-cloud **Sovereign Open-Weights Inference Cluster** (e.g. 70B+ parameter models running on vLLM/Triton).
    - **Zero Censorship on Defensive Payloads**: Self-hosted open-weights models operate without third-party public guardrails, enabling uninhibited reverse-engineering of live malware payloads, zero-day shellcode, and forensic dumps.
-   - **Absolute Data Sovereignty**: Critical breach evidence, executive communications, and unredacted customer PII can be safely processed entirely within the enterprise perimeter without third-party cloud data egress.
+   - **Absolute Data Sovereignty**: Critical breach evidence, executive communications, and unredacted customer data can be processed entirely within the enterprise perimeter without third-party cloud data egress.
 
 ### 2. Model Context Protocol (MCP) as the Canonical Tool Bus
 All forensic, contextual, and simulation tools are exposed to agents exclusively via the **Model Context Protocol (MCP)**:
@@ -200,11 +208,17 @@ Security operations cannot tolerate stochastic hallucinations or unverifiable cl
 | **2. Deterministic Guardrails & Firewalls** | Dual-plane prompt firewalls, PII masks, and AST query validators. | Mathematical certainty; prevents query injection and schema destruction; sub-millisecond. | Static rules cannot catch nuanced semantic hallucinations; risk of over-blocking. | Negligible ($0.00 inference; lightweight regex/AST CPU). | Extreme line-rate scale; requires schema-synchronized parser updates. |
 | **3. LLM-as-a-Judge (Multi-Consensus)** | Independent frontier models evaluate output accuracy, grounding fidelity, and tool usage. | Understands complex semantic context; automates subjective grading at scale. | Susceptible to judge model bias, hallucination, and prompt sensitivity. | High (2x–3x token consumption per evaluated prompt). | Bounded by cloud API rate limits and token budgets; requires prompt version locking. |
 | **4. Statistical Sampling & Shadow Mode** | Asynchronously executes candidate models against a 5–10% sample of live production queries. | Measures drift and performance against authentic, chaotic production telemetry without risk. | Feedback is lagging/asynchronous; does not protect against single-event failures. | Moderate (tunable 5–10% inference duplicate overhead). | Highly scalable; requires isolated shadow execution pipelines and telemetry sinks. |
-| **5. Expert Human Validation (A/B Testing)** | Senior SOC analysts and detection engineers grade and compare competing agent outputs. | Ground-truth gold standard; captures institutional nuances and business risk tolerance. | Severe human bottleneck; analyst fatigue; subjective inconsistencies between evaluators. | Very High (expensive senior engineering hours). | Low scalability; confined to pilot stage evaluations and periodic spot-check audits. |
+| **5. Expert Human Validation (A/B Testing)** | Senior SOC analysts and detection engineers grade and compare competing agent outputs. | Expert adjudication; captures institutional nuances and business risk tolerance. | Severe human bottleneck; analyst fatigue; subjective inconsistencies between individual evaluators. | Very High (expensive senior engineering hours). | Low scalability; confined to pilot stage evaluations and periodic spot-check audits. |
+
+#### Three-Tier Ground Truth Taxonomy
+To avoid epistemic contradictions (such as treating subjective human evaluations as an infallible "gold standard"), TIDIR formally distinguishes three tiers of ground truth:
+1. **Objective Ground Truth**: Synthetically generated or replayed telemetry where the exact underlying attack chain, attacker commands, and benign background traffic are mathematically known with 100% certainty. Used for deterministic regression tests.
+2. **Expert Adjudication**: Ambiguous operational investigations graded independently by multiple experienced practitioners to establish qualitative consensus without assuming individual infallibility.
+3. **Operational Outcome**: Empirically measured real-world metrics post-deployment (e.g. verified false-positive rates, triage velocity deltas, and zero unintended containment outages).
 
 #### Repeatability, Grounding & Cryptographic Auditability
 - **Grounding Fidelity Standard ($\ge 95\%$)**: Every claim in an agent dossier must cite a specific, verified telemetry record or graph edge returned by an MCP tool. Uncited assertions are deterministically stripped.
-- **Deterministic Prompt & Temperature Pinning**: Agent harnesses in production enforce `temperature = 0.0` (or minimal top-p with seed pinning) to maximize determinism across identical inputs.
+- **Repeatability Pinning (Temperature = 0)**: Agent harnesses in production enforce `temperature = 0.0` (or minimal top-p with seed pinning) to maximize *repeatability* across identical inputs. Repeatability is not determinism or epistemic correctness; system trustworthiness is enforced through evidence grounding, independent verification, and bounded authority.
 - **Cryptographic Audit Trail (RFC 3161)**: Every agent decision, prompt snapshot, model version, and tool output is sealed with an RFC 3161 cryptographic timestamp and committed to an immutable audit ledger for compliance and forensic reconstruction.
 
 #### SLM-Powered Local Judges & Two-Tier Evaluation Pipeline
@@ -374,7 +388,7 @@ flowchart LR
   - Automated STIX 2.1 threat advisory extraction into ATT&CK DAGs.
   - Single-turn incident triage briefing card generation.
 * **Architecture:** Stateless inference via LiteLLM gateway, single-turn MCP tool calling (`mcp-lakehouse-query`), deterministic AST validator.
-* **Exit Milestone:** $\ge 98\%$ valid SQL generation syntax across 200 standard SOC query evaluation benchmarks.
+* **Exit Milestone:** Valid SQL generation syntax $\ge 98\%$ across 200 standard SOC query evaluation benchmarks.
 
 ### Phase 2: Supervised Agent Mesh (Walk) — Months 3 to 6
 * **Focus:** Deep multi-signal scoping and cognitive fatigue reduction.
@@ -383,13 +397,13 @@ flowchart LR
   - Continuous aggregation to a stateful incident blackboard.
   - Pre-execution blast-radius simulation for suggested containment actions.
 * **Architecture:** Stateful LangGraph/Temporal runtime, Dual-Plane Prompt Injection Firewall, CI/CD Evals-as-Code pipeline running on every Git pull request.
-* **Exit Milestone:** $\ge 95\%$ grounding fidelity (zero hallucinated IOCs) on golden incident benchmark datasets; sub-60-second end-to-end multi-agent triage synthesis.
+* **Exit Milestone:** Grounding fidelity $\ge 95\%$ (zero hallucinated IOCs) on golden incident benchmark datasets; sub-60-second end-to-end multi-agent triage synthesis.
 
 ### Phase 3: Autonomous Closed-Loop (Run) — Months 6+
 * **Focus:** Sub-minute containment velocity and self-healing detection engineering.
 * **Capabilities:**
-  - Autonomous execution of Tier 1 containment playbooks with monotonic fail-closed state machines.
+  - Autonomous execution of Tier 1 containment playbooks with monotonic fail-closed state machines governed by reachability invariants ($R(s_{\text{post}}) \subseteq R(s_{\text{pre}})$). Forward compensation is permitted to safely restore benign availability, but security-state regression is strictly forbidden.
   - Continuous automated purple teaming with multi-model consensus evaluating detection rules.
   - Closed-loop attribution feedback auto-calibrating Layer 3 detection models.
 * **Architecture:** Event-driven agent microservices, cryptographic multi-signature consensus queues for Tier 2 actions, audited emergency break-glass protocol.
-* **Exit Milestone:** Mean Time to Contain (MTTC) for Tier 1 incidents $< 60$ seconds; zero inadvertent production outages caused by containment actions.
+* **Exit Milestone:** Mean Time to Contain (MTTC) for Tier 1 incidents $\text{MTTC} \lt 60\,\text{s}$; zero unintended production outages validated in shadow-mode canary execution.

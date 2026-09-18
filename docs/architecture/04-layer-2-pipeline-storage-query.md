@@ -131,7 +131,7 @@ Layer 2 provides four computational engines designed for distinct temporal and a
    - Evaluates stateful sliding windows (e.g., matching a sequence of failed authentications followed by a successful privileged session within a tight time threshold).
    - **Two-Tier Temporal State Store Architecture**:
      - *Tier $\Delta t_1$ (High-Fidelity Event Window: $\le 5\text{ minutes}$)*: Retains raw, uncompressed OCSF event records in-memory for tight sliding-window sequence detections.
-     - *Tier $\Delta t_2$ (Probabilistic Baseline Window: $5\text{m} \dots 2\text{h}$)*: To prevent embedded state store memory exhaustion and checkpoint stalls during high-volume telemetry spikes ($> 10^6$ EPS), raw event records are evicted to object storage. The in-memory state retains strictly **compact probabilistic sketches and bitsets**:
+     - *Tier $\Delta t_2$ (Probabilistic Baseline Window: $5\text{m} \dots 2\text{h}$)*: To prevent embedded state store memory exhaustion and checkpoint stalls during high-volume telemetry spikes ($\gt 10^6$ EPS), raw event records are evicted to object storage. The in-memory state retains strictly **compact probabilistic sketches and bitsets**:
        - *HyperLogLog (HLL)*: For tracking high-cardinality distinct counts (e.g. distinct destination IPs per host or unique user authentication attempts).
        - *Sliding-Window Bloom Filters*: For fast, sub-microsecond set-membership queries across recent entities.
        - *Dynamic Entity Counters & Half-Life Decays*: Memory-bounded sliding counters for frequency anomaly thresholds.

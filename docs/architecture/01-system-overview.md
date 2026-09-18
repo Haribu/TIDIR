@@ -1,15 +1,18 @@
 # TIDIR Target System Architecture: Cyber Defence Control System
 
-This document defines the target component architecture for **TIDIR** (Threat Intelligence, Detection, Investigation & Response). TIDIR is architected as a closed-loop **Cyber Defence Control System** that unifies:
-* **Observation**: Telemetry & Data Fabric (Layer 1 & 2)
-* **State Estimation**: Canonical OCSF schemas & bipartite entity-finding graphs
-* **Threat Estimation**: Stateful detection & dependency-aware Bayesian risk compounding (Layer 3)
-* **Reasoning**: Bounded hierarchical agent mesh with evidence grounding (Layer 4)
-* **Control Policy**: Deterministic policy safety kernel & blast-radius boundary constraints
-* **Actuation**: Monotonic fail-closed containment state machines
-* **Feedback**: Continuous Red/Blue/Green team calibration loops
-* **Resilience**: Four-tier graceful degradation & air-gapped continuity modes
-* **Audit**: Cryptographic Incident Decision DAGs & tamper-evident evidence lockers
+This document defines the target component architecture for **TIDIR** (Threat Intelligence, Detection, Investigation & Response). TIDIR is architected as a closed-loop **Cyber Defence Control System** that governs the operational progression:
+
+$$\text{Observe} \longrightarrow \text{Normalise} \longrightarrow \text{Infer} \longrightarrow \text{Investigate} \longrightarrow \text{Decide} \longrightarrow \text{Actuate} \longrightarrow \text{Learn}$$
+
+with deterministic controls wrapped around all probabilistic stages:
+* **Observation**: Telemetry & Data Fabric (Layer 1 & 2) collecting raw environmental events.
+* **Normalisation**: Open Cybersecurity Schema Framework (OCSF) validation and schema registry mapping.
+* **Inference & Threat Estimation**: Stateful streaming detection and dependency-aware Bayesian risk compounding (Layer 3).
+* **Investigation**: Bounded hierarchical agent mesh with evidence grounding across entity-finding graphs (Layer 4).
+* **Decision**: Universal Incident Decision Directed Acyclic Graph (DAG) recording causal provenance.
+* **Actuation & Control**: Monotonic fail-closed containment state machines governed by reachability invariants.
+* **Feedback & Learning**: Continuous Red, Blue, and Green Team prevention calibration loops.
+* **Resilience**: Four-tier graceful degradation, local NVMe spooling, and air-gapped continuity modes.
 
 ---
 
@@ -17,7 +20,7 @@ This document defines the target component architecture for **TIDIR** (Threat In
 
 The architecture operates across two orthogonal dimensions:
 1. **The Operational Runtime Plane**: Four horizontal layers governing event ingestion, computation, detection, and mitigation.
-2. **The Engineering Lifecycle Plane**: Five vertical disciplines governing schemas, intelligence curation, Detection-as-Code (DaC), systems automation, and AI harnesses.
+2. **The Engineering Lifecycle Plane**: Six vertical disciplines governing schemas, intelligence curation, Detection-as-Code (DaC), systems automation, Artificial Intelligence (AI) harnesses, and Green Team preventative engineering.
 
 ### 1.1 Operational Runtime Pipeline
 
@@ -114,38 +117,50 @@ flowchart LR
 
 ---
 
-## 2. The 5 Core Architectural Invariants of TIDIR
+## 2. The TIDIR Architectural Constitution (10 Non-Negotiable Invariants)
 
-A reference architecture is defined by its target invariants—the declarative properties that must hold true across normal operation, network partitions, and adversary attacks. TIDIR enforces five fundamental invariants (promoted from [ADR-0021](../adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b.md)):
+A reference architecture is defined by its target invariants—the declarative properties that must hold true across normal operation, network partitions, component degradation, and active adversary attack. TIDIR establishes ten constitutional invariants (promoted from [ADR-0021](../adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b.md) and system doctrine):
 
-1. **No Telemetry Loss Invariant**: Ephemeral network partitions, streaming bus failures, or database degradation must never result in unrecoverable forensic event loss. Forwarders must support edge ring buffering (24–48h NVMe spooling) and direct-to-object ingestion bypasses.
-2. **Continuous Threat Visibility Invariant**: Failure of real-time streaming engines or AI agent planes must degrade to deterministic scheduled batch lakehouse sweeps and direct alert routing. Component failure must never blind the SOC to ongoing adversary campaigns.
-3. **Deterministic Observability Invariant**: Every subsystem must provide active synthetic probes, canaries, and latency monitors to detect degradation within bounded windows ($\le 60\text{s}$) rather than relying on silent passive failure.
-4. **Fail-Secure Containment Invariant (Security-State Monotonicity)**: *No automated compensation may increase attacker reachability beyond the last verified-safe security state.* Defensive barriers move in a single forward direction. If a downstream containment step times out, the system freezes the perimeter and executes forward escalation rather than rolling back established containment.
-5. **Human-Accessible Manual Control Invariant**: Automation must always remain subordinate to human incident commanders. The architecture guarantees a master cryptographic E-Stop (downgrading active playbooks to advisory mode) and air-gapped, cryptographically signed manual flight decks for crisis operations.
+1. **Telemetry Preservation Invariant**: Raw forensic evidence is not discarded solely because no existing detection consumes it. Ephemeral network partitions, streaming bus failures, or database degradation must never result in unrecoverable forensic event loss. Edge sensors support local ring buffering (24–48h NVMe spooling) and direct-to-object ingestion bypasses.
+2. **Evidence Traceability Invariant**: Every consequential assertion, finding, and hypothesis must be strictly traceable to underlying raw observations in the data fabric. Uncited or floating claims are deterministically pruned.
+3. **Dependency-Aware Confidence Invariant**: Correlated derivations sharing common upstream ancestry cannot masquerade as independent evidence. Posterior risk elevation discounts co-derived signals using canonical Evidence Lineage Domains.
+4. **No Self-Granting Authority Invariant**: Probabilistic reasoning cannot grant itself execution authority. Generative models and statistical classifiers operate in a proposal-only capacity; all mutations require deterministic policy or human authorization (*"Probabilistic components propose. Deterministic components authorize"*).
+5. **Least Capability Invariant**: Every machine actor and automated agent receives only task-scoped, ephemeral authority. Runtimes issue short-lived SPIFFE Verifiable Identity Documents (SVIDs) with read-only analytical boundaries; forensic agents cannot acquire containment credentials.
+6. **Fail-Secure Security-State Monotonicity Invariant**: Component failure or partial workflow execution cannot silently increase attacker reachability beyond the last verified-safe posture:
+   $$\forall s \in \mathcal{S}, \quad R(s_{\text{post}}) \subseteq R(s_{\text{pre}})$$
+   *Forward compensation is permitted to safely restore benign services, but security-state regression is strictly forbidden.* Defensive boundaries move in a single forward direction.
+7. **Bounded Autonomy Invariant**: Autonomous execution is strictly constrained by explicit temporal Time-To-Live (TTL) leases, rate-limit velocity brakes, financial token budgets, and blast-radius impact tiers.
+8. **Human Recoverability Invariant**: Autonomous control planes always preserve independently accessible, out-of-band manual flight decks. The architecture provides a master cryptographic E-Stop and air-gapped, signed runbooks for human Incident Commanders.
+9. **Degraded Defence Invariant**: The loss or outage of an advanced capability (e.g. streaming buses or cloud language models) reduces operational sophistication to batch lakehouse sweeps or deterministic heuristic dossiers, but never causes total visibility blindness.
+10. **Reconstructability Invariant**: Every consequential decision, containment mutation, and case resolution can be deterministically reconstructed after the fact via an immutable, cryptographically sealed **Incident Decision DAG**.
 
 ---
 
-## 3. The TIDIR Trust Doctrine
+## 3. The TIDIR Trust Doctrine & Explicit Trust Matrix
 
 In modern security operations, components operate under differing security assumptions. TIDIR enforces an explicit capability-based trust model:
 
 | Component | Assume Compromised? | Authority Level | Boundary & Safety Enforcement |
 | :--- | :--- | :--- | :--- |
-| **Telemetry & Sensor Streams** | **Yes** (Attacker-controlled) | Evidence Only | Schema validation, `unmapped_data` dictionary, zero instruction execution. |
-| **Cyber Threat Intelligence (CTI)** | **Yes** (Potentially poisoned) | Advisory Evidence | Confidence decay scoring, human peer review on new PIRs. |
-| **LLM & Agent Reasoning Mesh** | **Yes** (Vulnerable to indirect injection) | Proposal Only | Read-only permissions, deterministic AST validation, task-scoped SVIDs ($\le 15\text{m}$). |
-| **Detection Rules (DaC)** | **Potentially** (Flawed/noisy logic) | Finding Generation | CI/CD 30-day lakehouse backtesting, synthetic unit fixtures, noise error budgets ($\lt 5\%$). |
-| **MCP Query Tools** | **Potentially** (Tool drift / injection) | Bounded Read-Only Query | Strongly typed JSON schemas, SELECT-only enforcement, parameter sanitization. |
-| **Response Orchestrator** | **Highly Trusted** | Policy-Gated Mutation | Monotonic state machines, connector circuit breakers, bounded isolation leases. |
+| **Raw Telemetry & Sensor Feeds** | **Yes** (Attacker-controlled) | Evidence Only | Schema validation, `unmapped_data` dictionary, zero instruction execution. |
+| **Cyber Threat Intelligence (CTI)** | **Yes** (Potentially poisoned) | Advisory Evidence | Confidence decay scoring, human peer review on new Priority Intelligence Requirements (PIRs). |
+| **Detection Rules (DaC)** | **Potentially** (Flawed/noisy logic) | Finding Generation | CI/CD 30-day lakehouse backtesting, synthetic unit fixtures, noise error budgets ($\text{FPR} \le 5\%$). |
+| **LLM Reasoning Agents** | **Yes** (Vulnerable to indirect injection) | Proposal Only | Read-only permissions, deterministic AST validation, task-scoped SVIDs ($\le 15\text{m}$). |
+| **Challenger Models (Audit)** | **Yes** (Adversarial but probabilistic) | Verification Proposal | Independent model lineage, consensus arbitration; cannot execute mutations directly. |
+| **MCP Query Tools** | **Potentially** (Tool drift / injection) | Bounded Read-Only Query | Strongly typed JSON schemas, SELECT-only enforcement, parameter array sanitization. |
+| **Deterministic AST Validator** | **Trusted Computing Base (TCB)** | Query Policy Enforcement | Compiles SQL syntax into abstract syntax trees; rejects non-SELECT AST statements. |
+| **SPIFFE/SPIRE Identity Authority** | **Trusted Computing Base (TCB)** | Machine Identity Authority | Issues short-lived cryptographic X.509 SVIDs bound to attested workload attributes. |
+| **Containment State Machine** | **Highly Trusted** | Policy-Gated Mutation | Monotonic forward state transitions, connector circuit breakers, bounded isolation leases. |
 | **Policy Safety Kernel** | **Trusted Computing Base (TCB)** | Deterministic Authorization | Pre-execution blast-radius scoring, hard invariant gating, immutable rule evaluation. |
-| **Human Incident Commander** | **Privileged** | Break-Glass Override | Multi-signature consensus bypass, out-of-band cryptographic audit broadcast. |
-| **Audit & Evidence Ledger** | **Trusted** | Evidence Integrity | WORM storage, append-only Merkle hash chains, RFC 3161 cryptographic timestamps. |
+| **Human Incident Commander (IC)** | **Privileged Authority** | Break-Glass Override | Multi-signature consensus bypass, out-of-band cryptographic audit broadcast. |
+| **Audit & Evidence Ledger** | **Integrity Root** | Evidence Integrity | Append-only Merkle hash chains, RFC 3161 cryptographic timestamps, WORM storage. |
 
-> ### 🛡️ The Governing Rule of TIDIR
-> **"Probabilistic components may propose. Deterministic components authorize."**
+> ### 🛡️ The Governing Maxim of TIDIR
+> **"Probabilistic components propose. Deterministic components authorize."**
 > 
-> No generative model, probabilistic classifier, or external threat feed possesses the authority to mutate enterprise infrastructure directly. All mutating actions must be authorized by deterministic policy kernels, bounded by blast-radius limits, and executed via monotonic state machines.
+> **"No component receives authority merely because another component believes it is correct."**
+>
+> In TIDIR, model inference settings (e.g. temperature = 0, seed pinning) are employed to maximize *repeatability*, not determinism. Trustworthiness is not derived from model confidence or repeated inference; it is enforced through evidence grounding, independent multi-model arbitration, and deterministic authorization kernels.
 
 ---
 
@@ -187,27 +202,27 @@ In modern security operations, components operate under differing security assum
 | **L1 ➔ L2 Ingress** | Native / Schema Registry Envelope | Bounded transport batch carrying origin metadata and raw event facts. |
 | **L2 Normalization** | OCSF (Open Cybersecurity Schema Framework) | Canonical schema across system, identity, network, cloud, and application domains. |
 | **L3 Detection Target** | OCSF Classes (1001, 1007, 3002, 4001, etc.) & Target Dialects | Vendor-neutral governance metadata envelope with target-optimized query blocks (KQL, SPL, SQL). |
-| **L3 ➔ L4 Handoff** | OCSF Class 2001 & Class 2004 Findings | Standardised security and detection findings carrying evidence, ATT&CK tags, and risk scores. |
+| **L3 ➔ L4 Handoff** | OCSF Class 2001 & Class 2004 Findings with Evidence Lineage | Standardised security and detection findings carrying evidence lineage, ATT&CK tags, and dependency-discounted risk scores. |
 | **L4 Agent Tool Contract** | Model Context Protocol (MCP) & Typed JSON Schema | Parameters for read-only forensic queries; strictly isolates prompts from unformatted raw telemetry. |
-| **L4 Monotonic Containment** | Asymmetric Action Specifications | Parameterized forward action ($T_i$) and forward escalation payloads; strictly fail-closed with zero containment rollback. |
+| **L4 Monotonic Containment** | Asymmetric Action Specifications | Parameterized forward action ($T_i$) and forward escalation payloads; strictly fail-closed with reachability-bounded forward compensation ($R(s_{\text{post}}) \subseteq R(s_{\text{pre}})$). |
 
 ---
 
 ## 6. The Executive AI & Autonomous Agentic Opportunity Matrix (The CISO Lens)
 
-For executive cybersecurity leaders (CISOs and SecOps Directors), integrating Artificial Intelligence into security operations carries dual imperatives: **maximizing defensive velocity while enforcing deterministic safety boundaries**. 
+For executive cybersecurity leaders—including Chief Information Security Officers (CISOs) and Security Operations (SecOps) Directors—integrating Artificial Intelligence (AI) into security operations carries dual imperatives: **maximizing defensive velocity while enforcing deterministic safety boundaries**. 
 
 TIDIR establishes an **AI-First Defence Architecture** that moves beyond single-prompt helpers to an orchestrated agent mesh, while anchoring execution, schema contracts, and disruptive containment behind deterministic engineering gates and evals.
 
-| Architectural Layer | Autonomous AI / Agent Opportunity | Deterministic Safety Gate | Target Engineering Property / Benchmark |
+| Architectural Layer | Autonomous AI / Agent Opportunity | Deterministic Safety Gate | Target Outcome / Validation Hypothesis |
 | :--- | :--- | :--- | :--- |
-| **Layer 1: Data Sources & Ingress** | **Automated Log Parser Synthesis**: Generative models analyze unmapped vendor logs and draft canonical OCSF mapping parsers. | **Schema Registry Validation**: Parsers cannot deploy without passing compiler type-checking and automated regression replay. | **Target: Accelerated Ingestion**: Reduces manual parser drafting from weeks to hours, verified by automated schema test fixtures. |
-| **Layer 1: Data Sources & Ingress** | **Synthetic Telemetry Generation**: Generates high-fidelity attack telemetry for dangerous, untestable techniques (e.g. ransomware encryption loops). | **Isolated Test Sandbox**: Generated telemetry executes strictly within non-production environments. | **Target: Safe Efficacy Testing**: Validates detection sensors against catastrophic exploits without running malware on live systems. |
-| **Layer 2: Pipeline & Storage Fabric** | **Natural Language Data Exploration**: Translates plain-language analyst questions into optimised SQL/streaming queries. | **Read-Only AST Validator**: Enforces strict SELECT-only query constraints and compute timeout budgets. | **Target: Sub-Minute Query Turnaround**: Enables multi-table lakehouse investigations via schema-constrained query synthesis. |
-| **Layer 3: Detection Engineering** | **Threat Advisory to Attack Flow Synthesis**: Ingests unstructured CTI advisories and bulletins and extracts structured ATT&CK DAG flows. | **Human CTI Peer Review**: Analyst ratifies extracted Priority Intelligence Requirements (PIRs). | **Target: Continuous Codification**: Reduces the window between zero-day public disclosure and backlog prioritization. |
-| **Layer 3: Detection Engineering** | **Continuous Evals-as-Code & DaC Quality Judge**: Multi-agent judges and CI benchmark suites audit detection rules and agent prompts against golden incident datasets. | **CI/CD Unit & Regression Suite**: Rules and agent prompts must achieve 100% pass rate on synthetic fixtures and 30-day lakehouse backtests. | **Target: Bounded Noise Ratio**: Enforces alert noise error budget ($\text{FPR} \lt 5\%$) to suppress brittle rules before production. |
-| **Layer 4: Investigation & Cases** | **Hierarchical Agent Mesh (Host/Identity/Network)**: Lead orchestrator dispatches specialist subagents to scope 90-day baselines, process lineages, and lateral movement simultaneously. | **Prompt Injection Firewall & Dual-Plane Isolation**: Telemetry strings are treated as untrusted data planes; agents invoke typed tools without executing raw string commands. | **Target: Single-Dossier Hydration**: Delivers a fully hydrated case dossier containing complete process lineage and host context upon ticket open. |
-| **Layer 4: Incident Response (Automated Containment)** | **Pre-Execution Blast-Radius Simulator & Containment Engine**: Evaluates active network connections, service criticality, and dependency trees; executes monotonic forward containment with forward escalation on error. | **Dual-Authorisation Consensus & Audited Break-Glass**: Tier 2 containment requires multi-signature approval; high-velocity outbreaks support single-commander break-glass with cryptographic broadcast. | **Target: Zero Outages in Production**: Verified during shadow/supervised operation to prevent false-positive recommendations from isolating critical services. |
+| **Layer 1: Data Sources & Ingress** | **Automated Log Parser Synthesis**: Generative models analyze unmapped vendor logs and draft canonical OCSF mapping parsers. | **Schema Registry Validation**: Parsers cannot deploy without passing compiler type-checking and automated regression replay. | **Target Hypothesis: Accelerated Ingestion**: Reduces manual parser drafting from weeks to hours, verified by automated schema test fixtures. |
+| **Layer 1: Data Sources & Ingress** | **Synthetic Telemetry Generation**: Generates high-fidelity attack telemetry for dangerous, untestable techniques (e.g. ransomware encryption loops). | **Isolated Test Sandbox**: Generated telemetry executes strictly within non-production environments. | **Target Hypothesis: Safe Efficacy Testing**: Validates detection sensors against catastrophic exploits without running live malware. |
+| **Layer 2: Pipeline & Storage Fabric** | **Natural Language Data Exploration**: Translates plain-language analyst questions into optimised SQL/streaming queries. | **Read-Only AST (Abstract Syntax Tree) Validator**: Enforces strict SELECT-only query constraints and compute timeout budgets. | **Target Hypothesis: Sub-Minute Query Turnaround**: Enables multi-table lakehouse investigations via schema-constrained query synthesis. |
+| **Layer 3: Detection Engineering** | **Threat Advisory to Attack Flow Synthesis**: Ingests unstructured CTI advisories and bulletins and extracts structured ATT&CK DAG flows. | **Human CTI Peer Review**: Analyst ratifies extracted Priority Intelligence Requirements (PIRs). | **Target Hypothesis: Continuous Codification**: Reduces latency between zero-day public disclosure and backlog prioritization. |
+| **Layer 3: Detection Engineering** | **Continuous Evals-as-Code & DaC Quality Judge**: Multi-agent judges and CI benchmark suites audit detection rules and agent prompts against golden incident datasets. | **CI/CD Unit & Regression Suite**: Rules and agent prompts must achieve 100% pass rate on synthetic fixtures and 30-day lakehouse backtests. | **Target Hypothesis: Bounded Noise Ratio**: Enforces alert noise error budget ($\text{FPR} \le 5\%$) to suppress brittle rules before production. |
+| **Layer 4: Investigation & Cases** | **Hierarchical Agent Mesh (Host/Identity/Network)**: Lead orchestrator dispatches specialist subagents to scope 90-day baselines, process lineages, and lateral movement simultaneously. | **Prompt Injection Firewall & Dual-Plane Isolation**: Telemetry strings are treated as untrusted data planes; agents invoke typed tools without executing raw string commands. | **Target Hypothesis: Sub-60s Case Synthesis**: Delivers a fully hydrated case dossier containing complete process lineage and host context upon ticket open. |
+| **Layer 4: Incident Response (Automated Containment)** | **Pre-Execution Blast-Radius Simulator & Containment Engine**: Evaluates active network connections, service criticality, and dependency trees; executes monotonic forward containment with forward escalation on error. | **Dual-Authorisation Consensus & Audited Break-Glass**: Tier 2 containment requires multi-signature approval; high-velocity outbreaks support single-commander break-glass with cryptographic broadcast. | **Target Hypothesis: Zero Unintended Outages**: Validated through shadow-mode canary execution to prevent false-positive recommendations from isolating critical services. |
 
 ---
 

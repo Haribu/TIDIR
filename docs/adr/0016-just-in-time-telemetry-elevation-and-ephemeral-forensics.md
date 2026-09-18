@@ -104,7 +104,7 @@ To guarantee that deep collection never permanently degrades host performance or
    - Edge sensors enforce the TTL autonomously at the local agent level. Even if the network connection between the central orchestrator and the host drops, the local sensor automatically terminates elevated collection and reverts to baseline upon TTL expiration.
 2. **Quota Ceilings & Blast-Radius Budgeting**:
    - The JIT Controller enforces hard cluster-wide concurrency limits: no more than 5 concurrent endpoints or 2 network interfaces per enterprise subnet may be elevated simultaneously.
-   - Host CPU/memory ceilings for elevated hooks are capped at $< 10\%$ CPU and 512MB RAM with automatic circuit breaker termination if host workload latency degrades.
+   - Host CPU/memory ceilings for elevated hooks are capped at $\lt 10\%$ CPU and 512MB RAM with automatic circuit breaker termination if host workload latency degrades.
 
 ---
 

@@ -38,20 +38,49 @@ Chosen option: **Compound Bayesian Risk Lens with Evidence Lineage Domains over 
   - **Elevated Findings (OCSF Class 2001/2004)**: An incident dossier is only elevated to Layer 4 when the compound Bayesian risk score crosses the elevation threshold ($S \ge 75/100$).
 
 ### 2. Dependency-Aware Probabilistic Evidence Aggregation
-- Rather than naively assuming conditional independence and multiplying raw signal likelihoods, the Risk Lens computes posterior probability using **Evidence Lineage Domains** to discount correlated observables:
-  $$S = f(\text{Adversary TTP Severity}, \text{Asset Criticality}, \text{Identity Privilege}, \text{Corroborating Domains})$$
-  - **Evidence Lineage Tracking**: Every observable carries metadata tracking its provenance:
-    - `source_observation_id`: Root raw telemetry event identifier.
-    - `sensor_family`: Origin agent or sensor (e.g. endpoint agent, network probe, cloud audit collector).
-    - `telemetry_domain`: Observable category (e.g. `PROCESS_EXECUTION`, `NETWORK_FLOW`, `AUTHENTICATION`, `DNS_LOOKUP`).
-    - `derivation_chain`: Downstream rules or analytics that derived this signal from prior signals.
-    - `correlation_group`: Shared environmental boundary (e.g. shared host, subnet, or parent session).
-  - **Common Ancestry Discounting**: When two signals share the same `source_observation_id` or upstream `derivation_chain` (for example, a Sigma rule match and an ML anomaly detector both triggered by the identical process creation event), the second signal's likelihood ratio is discounted to avoid circular evidence compounding:
+
+A primary failure mode of naive Bayesian compounding in security operations is the **Shared Evidence Fallacy**. Consider an adversary launching an obfuscated script:
+
+```
+Sysmon Process Event (Raw Observation)
+    │
+    ├── Sigma Rule Detection (Suspicious PowerShell Flags)
+    ├── Living-off-the-Land Binary (LOLBin) Match
+    ├── MITRE ATT&CK T1059.001 Mapping
+    └── Statistical Command-Line Length Anomaly
+```
+
+While the security stack registers four discrete "findings", they stem from a **single underlying piece of evidence**. Naively assuming conditional independence and multiplying their likelihood ratios causes posterior confidence to explode artificially, generating false-positive escalations.
+
+To prevent this, TIDIR codifies the **Canonical Finding Contract**:
+
+```yaml
+finding_id: "find-8942-uuid"
+source_observation_ids:
+  - "obs-sysmon-98214"
+sensor_domains:
+  - "ENDPOINT_PROCESS"
+derivation_chain:
+  - "sigma-proc-injection-v2"
+  - "anomaly-cmdline-len-v1"
+correlation_group: "host-wkstn-891.internal"
+independence_class: "SAME_OBSERVATION_DERIVATION" # SAME_OBSERVATION_DERIVATION, SAME_SENSOR_FAMILY, or CROSS_DOMAIN_ORTHOGONAL
+```
+
+- **Lineage Metadata Schema**:
+  - `source_observation_ids`: Array of raw telemetry event identifiers serving as the root truth.
+  - `sensor_domains`: Telemetry category (e.g. `ENDPOINT_PROCESS`, `NETWORK_FLOW`, `AUTHENTICATION_LOGS`, `DNS_RESOLVER`).
+  - `derivation_chain`: Downstream detection rules, parsers, and machine learning models that derived signals from the observations.
+  - `correlation_group`: Shared entity or infrastructure boundary (e.g. host UUID, user SID, private subnet).
+  - `independence_class`: Classification of orthogonality (`SAME_OBSERVATION_DERIVATION`, `SAME_SENSOR_FAMILY`, or `CROSS_DOMAIN_ORTHOGONAL`).
+
+- **Common Ancestry Discounting**:
+  - The Risk Lens calculates posterior probability by evaluating **Evidence Lineage Domains**, discounting co-derived observables:
+    $$S = f(\text{Adversary TTP Severity}, \text{Asset Criticality}, \text{Identity Privilege}, \text{Orthogonal Evidence Domains})$$
+  - When two signals share identical `source_observation_ids` or upstream `derivation_chain` steps, the secondary signal's likelihood ratio ($LR$) is discounted to its residual information gain:
     $$LR_{\text{adjusted}}(e_2 \mid e_1) = 1 + (LR(e_2) - 1) \cdot (1 - \text{Overlap}(e_1, e_2))$$
-  - *Asset Criticality Multiplier*: Weights findings based on CMDB crown-jewel status (e.g. Domain Controller / Prod DB vs. Ephemeral Dev VM).
-  - *Identity Privilege Multiplier*: Weights findings based on high-privilege credentials (e.g. Domain Admin or Cloud Root vs. standard user).
-  - *Orthogonal Domain Corroboration*: Requires corroboration across at least two independent telemetry domains (e.g. an unusual parent-child process chain *and* an outbound connection to an unclassified ASN) before elevating risk.
-- Isolated anomalies that fail to accumulate corroborating signals within a configurable time window decay naturally without operator intervention.
+  - *Orthogonal Domain Requirement*: Compound risk elevation ($S \ge 75/100$) requires corroboration across at least two independent `sensor_domains` (e.g. an endpoint parent-child process relationship *and* an outbound connection to an unclassified Autonomous System Number / ASN) sharing `CROSS_DOMAIN_ORTHOGONAL` status.
+  - Isolated anomalies that fail to accumulate corroborating signals within a configurable time window decay naturally without operator intervention.
 
 ### 3. Deterministic Override Circuit (Preventing Single-Event False Negatives & Guarding Against Operational DoS)
 - **The Threat**: Stealthy adversaries intentionally engineer single-action, low-telemetry exploits (e.g. Bring Your Own Vulnerable Driver / BYOVD kernel tampering, LSASS memory injection, or canary token detonation). Mandating multi-signal corroboration for all alerts introduces a **False Negative bias** where an intrusion is suppressed because subsequent detection stages were evaded.

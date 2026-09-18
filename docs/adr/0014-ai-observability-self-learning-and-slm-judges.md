@@ -74,7 +74,7 @@ Rather than routing every evaluation task to expensive cloud frontier APIs, TIDI
 2. **Tier 2 Frontier Model Escalation (Adversarial Arbitration)**:
    - When the local SLM judge detects semantic ambiguity (confidence 70–85%) or when an incident involves Tier 1/2 containment, the evaluation escalates to cloud frontier models for adversarial multi-model consensus (Proposer vs. Challenger).
 3. **Periodic Calibration Loops**:
-   - Golden benchmark suites continuously test alignment between the local SLM judge and cloud frontier verdicts. Disagreement $> 8\%$ automatically schedules an SLM realignment fine-tuning run.
+   - Golden benchmark suites continuously test alignment between the local SLM judge and cloud frontier verdicts. Disagreement $\gt 8\%$ automatically schedules an SLM realignment fine-tuning run.
 
 ---
 
@@ -86,7 +86,7 @@ TIDIR establishes automated feedback loops connecting operational incident outco
 2. **Dynamic Few-Shot Exemplar Injection**: During active triage, the AI Gateway semantically retrieves the top 2–3 most relevant historical incident resolutions and injects them as few-shot exemplars into specialist agent prompts.
 3. **Quarterly Sovereign SLM Fine-Tuning**: On-premises triage and judging models undergo parameter-efficient fine-tuning (LoRA/QLoRA) on the internal incident corpus, enhancing domain accuracy without data leakage.
 4. **Detection Effectiveness Feedback**: True-positive rates from resolved cases dynamically calibrate Layer 3 Detection Opportunity scores, while false positives trigger Green Agent noise-budget tuning pull requests.
-5. **Statistical Drift Circuit Breakers**: A $> 2\sigma$ performance degradation over a rolling 7-day window triggers engineering alerts and temporarily reverts agents to supervised copilot mode.
+5. **Statistical Drift Circuit Breakers**: A $\gt 2\sigma$ performance degradation over a rolling 7-day window triggers engineering alerts and temporarily reverts agents to supervised copilot mode.
 
 ---
 
