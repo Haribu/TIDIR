@@ -75,7 +75,7 @@ TIDIR has established a comprehensive conceptual foundation across 41 capabiliti
 
 1. **TIDIR Core / Minimum Viable Architecture (MVA)**:
    - Formally specify the leanest TIDIR-compliant system: `Telemetry Ingress ➔ OCSF Normalization ➔ Lakehouse / Hot Storage ➔ Polyglot DaC ➔ Findings ➔ Case Management ➔ Policy-Gated Actuation`.
-   - Structure advanced components (streaming graph correlation, autonomous agent mesh, CTI retro-hunting, honeypots/deception) as progressive capability maturity tiers (Levels 1–4).
+   - Structure advanced components (streaming graph correlation, autonomous agent mesh, CTI retro-hunting, honeypots/deception) into a phased maturity progression (see [ADR-0012](docs/adr/0012-ai-orchestration-runtime-mcp-and-mvp-roadmap.md)).
 
 2. **Reference Workload Models (W₁, W₂, W₃)**:
    - Replace ungrounded latency/throughput metrics with parameterized workload models:
@@ -90,9 +90,9 @@ TIDIR has established a comprehensive conceptual foundation across 41 capabiliti
    - Expand the Security-State Monotonicity invariant (`R(s_post) ⊆ R(s_pre)`) into a multi-objective state space balancing attacker reachability reduction against business operability and availability budgets.
    - Define formal boundaries within which automated containment actions are permitted to execute without human intervention.
 
-5. **Threat-to-Assurance Traceability Matrix**:
-   - Connect the STRIDE-aligned platform threat model directly to verification machinery via an assurance chain:
-     `STRIDE Threat ➔ Constitutional Invariant ➔ Architectural Control ➔ Automated Test ➔ Verifiable CI Artifact`
+5. **Threat-to-Assurance Traceability Matrix** *(Completed in v1.2)*:
+   - Connect the STRIDE-aligned platform threat model directly to verification machinery via an assurance chain.
+   - **Delivered**: See the [Assurance Case Map](docs/architecture/assurance-map.md) and machine-readable graph endpoint [`/architecture.json`](docs/public/architecture.json) validated via automated graph linting in CI.
 
 6. **SecOps Unit Economics Framework**:
    - Model telemetry economics as a first-class architectural dimension: `Δ(Marginal Defensive Value) / Δ(Compute + Storage + Human Cost)`.
@@ -101,6 +101,10 @@ TIDIR has established a comprehensive conceptual foundation across 41 capabiliti
 7. **Reproducible Attack-to-Containment Benchmark Harness**:
    - Build an open, reproducible test harness replaying standardized attack chains (e.g. Atomic Red Team, CALDERA) over synthetic OCSF streams.
    - Benchmark end-to-end Mean Time to Contain (MTTC), Incident Decision DAG reconstructability, and fail-secure behavior under induced system failure.
+
+8. **Green Team IaC Trigger Contract & Multi-Sig Escalation (ADR-0022 & ADR-0005)**:
+   - Define the formal schema, rate limiting, and blast-radius bounds for automated Green Team Infrastructure-as-Code PR generation.
+   - Codify the multi-signature authorizer escalation ladder for low-staffing and out-of-band crisis containment.
 
 ---
 
