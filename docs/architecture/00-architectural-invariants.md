@@ -85,16 +85,16 @@ All architectural layers, components, and Architectural Decision Records (ADRs) 
 ### I5 — Least Capability & Ephemeral Identity
 *Machine identities receive only task-scoped, short-lived authority.*
 - **Invariant Property**: Machine authority must be short-lived, workload-bound, and strictly task-scoped. Machine actors never hold permanent ambient API keys or credentials.
-- **Reference Pattern**: Task-scoped cryptographic attestation issuing ephemeral X.509 certificates (e.g., SPIFFE/SPIRE Verifiable Identity Documents / SVIDs) valid for $\le 15\text{ minutes}$, with capability constraints enforced at the network and API layers.
+- **Reference Pattern**: Task-scoped cryptographic attestation issuing ephemeral X.509 certificates (e.g., SPIFFE/SPIRE Verifiable Identity Documents / SVIDs) valid for $\le 15\text{ minutes}$ (valid for a maximum lifetime of 15 minutes), with capability constraints enforced at the network and API layers.
 
 ### I6 — Bounded Autonomy & Blast Radius
 *Autonomous execution is strictly constrained by time, cost, scope, and blast radius.*
-- Automated actions enforce hard ceilings: wall-clock execution timeouts ($\le 180\text{s}$), financial inference limits ($\le \$2.50$), max tool-hops ($\le 8$), and asset criticality boundaries. Critical assets are immune to automated destructive isolation.
+- Automated actions enforce hard ceilings: wall-clock execution timeouts ($\le 180\text{s}$, max 180 seconds), financial inference limits ($\le \$2.50$, max $2.50), max tool-hops ($\le 8$, max 8 tool invocations), and asset criticality boundaries. Critical assets are immune to automated destructive isolation.
 
 ### I7 — Fail-Secure Containment & Reachability Monotonicity
-*Partial failure cannot silently restore attacker reachability ($s_{n+1} \preceq s_n$).*
+*Partial failure cannot silently restore attacker reachability ($s_{n+1} \preceq s_n$, where post-transition reachability is a subset of pre-transition reachability).*
 - **Invariant Property**: Containment workflows execute declarative state machines where forward compensation is permitted, but security barriers never roll back upon downstream API errors. Failures freeze perimeters in place and escalate forward to broader network boundaries.
-- **Formal State Ordering ($\mathcal{S}_{n+1} \preceq \mathcal{S}_n$)**: Attacker reachability is not a simple scalar; a security state is defined as the tuple $\mathcal{S} = \langle \mathcal{R}_{\text{net}}, \mathcal{R}_{\text{id}}, \mathcal{E}_{\text{surface}}, \mathcal{V}_{\text{telemetry}} \rangle$. A state transition $s_n \to s_{n+1}$ is strictly monotonic if and only if:
+- **Formal State Ordering ($\mathcal{S}_{n+1} \preceq \mathcal{S}_n$)**: Attacker reachability is not a simple scalar; a security state is defined as the tuple $\mathcal{S} = \langle \mathcal{R}_{\text{net}}, \mathcal{R}_{\text{id}}, \mathcal{E}_{\text{surface}}, \mathcal{V}_{\text{telemetry}} \rangle$. A state transition $s_n \to s_{n+1}$ is strictly monotonic (i.e. post-transition reachability remains a subset of pre-transition reachability) if and only if:
   $$\mathcal{R}_{\text{net}}(s_{n+1}) \subseteq \mathcal{R}_{\text{net}}(s_n) \quad \land \quad \mathcal{R}_{\text{id}}(s_{n+1}) \subseteq \mathcal{R}_{\text{id}}(s_n) \quad \land \quad \mathcal{E}_{\text{surface}}(s_{n+1}) \subseteq \mathcal{E}_{\text{surface}}(s_n) \quad \land \quad \mathcal{V}_{\text{telemetry}}(s_{n+1}) \supseteq \mathcal{V}_{\text{telemetry}}(s_n)$$
   Any action that would increase reachability or attack surface without explicit human authorization is deterministically rejected.
 

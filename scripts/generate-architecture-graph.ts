@@ -1,7 +1,9 @@
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 console.log("📦 Compiling authoritative machine-readable architecture graph (architecture.json)...");
+
+const pkg = JSON.parse(readFileSync("package.json", "utf-8"));
 
 interface Invariant {
   id: string;
@@ -36,12 +38,16 @@ interface Threat {
   name: string;
   stride: string;
   description: string;
+  underpinning_capabilities: string[];
   mitigated_by_invariants: string[];
   governing_adrs: string[];
 }
 
 interface ArchitecturalModel {
   schema_version: string;
+  architecture_version: string;
+  generated_at: string;
+  canonical_source: string;
   title: string;
   description: string;
   maxim: string;
@@ -60,6 +66,9 @@ interface ArchitecturalModel {
 
 const model: ArchitecturalModel = {
   schema_version: "1.0.0",
+  architecture_version: pkg.version,
+  generated_at: new Date().toISOString(),
+  canonical_source: "https://tidir.harrymclaren.co.uk",
   title: "TIDIR Reference Architecture Graph",
   description: "Machine-readable graph representation of TIDIR invariants, capabilities, services, threats, and governance contracts.",
   maxim: "Probabilistic components propose. Deterministic components authorise.",
@@ -311,6 +320,7 @@ const model: ArchitecturalModel = {
       name: "Sensor Evasion & Telemetry Blinding",
       stride: "Spoofing / Tampering",
       description: "Attacker unloads kernel sensors, disrupts transport forwarders, or exploits network partitions to evade detection.",
+      underpinning_capabilities: ["CAP-DATA-01", "CAP-RESIL-01", "CAP-RESIL-02"],
       mitigated_by_invariants: ["INV-01", "INV-08"],
       governing_adrs: ["ADR-0021"]
     },
@@ -319,6 +329,7 @@ const model: ArchitecturalModel = {
       name: "Schema Poisoning & DoS Inundation",
       stride: "Tampering / Denial of Service",
       description: "Adversary emits malformed payloads or unmapped event floods to exhaust pipeline memory or crash parsers.",
+      underpinning_capabilities: ["CAP-DATA-02", "CAP-DATA-03"],
       mitigated_by_invariants: ["INV-01", "INV-11"],
       governing_adrs: ["ADR-0002"]
     },
@@ -327,6 +338,7 @@ const model: ArchitecturalModel = {
       name: "Evidence Tampering & Audit Destruction",
       stride: "Repudiation",
       description: "Compromised administrator attempts to purge or modify investigative query logs and case dossiers.",
+      underpinning_capabilities: ["CAP-INV-04", "CAP-RESIL-05"],
       mitigated_by_invariants: ["INV-02", "INV-10"],
       governing_adrs: ["ADR-0001", "ADR-0010"]
     },
@@ -335,6 +347,7 @@ const model: ArchitecturalModel = {
       name: "Indirect Prompt Injection & Cognitive Hijack",
       stride: "Elevation of Privilege",
       description: "Adversary embeds malicious control directives inside command line arguments, log files, or CTI reports.",
+      underpinning_capabilities: ["CAP-INV-05", "CAP-AIGOV-02", "CAP-AIGOV-06"],
       mitigated_by_invariants: ["INV-04", "INV-05"],
       governing_adrs: ["ADR-0004", "ADR-0015"]
     },
@@ -343,6 +356,7 @@ const model: ArchitecturalModel = {
       name: "Alert Storm DoS & Analyst Desensitisation",
       stride: "Denial of Service",
       description: "Adversary generates high-volume weak anomalies across enterprise nodes to induce alert fatigue.",
+      underpinning_capabilities: ["CAP-DET-04", "CAP-DET-05", "CAP-DET-06"],
       mitigated_by_invariants: ["INV-03", "INV-06"],
       governing_adrs: ["ADR-0003", "ADR-0008", "ADR-0009"]
     },
@@ -351,6 +365,7 @@ const model: ArchitecturalModel = {
       name: "Automated Response Sabotage & Self-Inflicted Outage",
       stride: "Denial of Service",
       description: "Adversary manipulates defensive playbooks into isolating critical production databases or domain controllers.",
+      underpinning_capabilities: ["CAP-RESP-01", "CAP-RESP-02", "CAP-RESP-04", "CAP-RESIL-05"],
       mitigated_by_invariants: ["INV-06", "INV-07", "INV-09"],
       governing_adrs: ["ADR-0005"]
     }

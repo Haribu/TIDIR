@@ -146,7 +146,7 @@ In modern security operations, components operate under differing security assum
 | **Raw Telemetry & Sensor Feeds** | **Yes** (Attacker-controlled) | Evidence Only | Schema validation, `unmapped_data` dictionary, zero instruction execution. |
 | **Cyber Threat Intelligence (CTI)** | **Yes** (Potentially poisoned) | Advisory Evidence | Confidence decay scoring, human peer review on new Priority Intelligence Requirements (PIRs). |
 | **Detection Rules (DaC)** | **Potentially** (Flawed/noisy logic) | Finding Generation | CI/CD 30-day lakehouse backtesting, synthetic unit fixtures, noise error budgets (false-positive rate $\le 5\%$). |
-| **LLM Reasoning Agents** | **Yes** (Vulnerable to indirect injection) | Proposal Only | Read-only permissions, deterministic AST validation, task-scoped SVIDs ($\le 15\text{m}$). |
+| **LLM Reasoning Agents** | **Yes** (Vulnerable to indirect injection) | Proposal Only | Read-only permissions, deterministic AST validation, task-scoped SVIDs ($\le 15\text{m}$, max 15 minutes). |
 | **Challenger Models (Audit)** | **Yes** (Adversarial but probabilistic) | Verification Proposal | Independent model lineage, consensus arbitration; cannot execute mutations directly. |
 | **MCP Query Tools** | **Potentially** (Tool drift / injection) | Bounded Read-Only Query | Strongly typed JSON schemas, SELECT-only enforcement, parameter array sanitization. |
 | **Deterministic AST Validator** | **Trusted Computing Base (TCB)** | Query Policy Enforcement | Compiles SQL syntax into abstract syntax trees; rejects non-SELECT AST statements. |
@@ -170,7 +170,7 @@ To answer *"what governs the governors?"* and prevent control-plane compromise f
 1. **The Telemetry Data Plane**: Ingestion forwarders, line-rate streaming buses (e.g., Redpanda/Kafka), schema decoders, and storage lakehouses. *Security Posture: Untrusted / Assumed hostile inputs; strongly typed normalization; zero instruction execution.*
 2. **The Analytical Plane**: Streaming detection engines, batch query workers, graph correlation matrices, and probabilistic agent meshes. *Security Posture: Advisory only; proposals emit without inherent operational authority; bounded by deterministic query contracts.*
 3. **The Defence Control Plane (DCP)**: The security kernel of TIDIR. Governs policy evaluation, invariant enforcement, blast-radius validation, non-human identity issuance, connector authorization, and emergency E-Stops. *Security Posture: Hardened Trusted Computing Base (TCB); changes require multi-signature cryptographic GitOps commits; isolated from telemetry and agent prompt paths.*
-4. **The Actuation Plane**: Outbound API connectors, endpoint EDR agents, firewall interfaces, and identity provider session revocations. *Security Posture: Ephemeral execution; task-scoped SVID validation; strictly monotonic state progression ($s_{n+1} \preceq s_n$).*
+4. **The Actuation Plane**: Outbound API connectors, endpoint EDR agents, firewall interfaces, and identity provider session revocations. *Security Posture: Ephemeral execution; task-scoped SVID validation; strictly monotonic state progression ($s_{n+1} \preceq s_n$, where post-transition reachability is a subset of pre-transition reachability).*
 
 ### 3.2 TCB Minimisation: Small Deterministic Kernel, Large Untrusted Ecosystem
 
@@ -223,7 +223,7 @@ $$\text{TCB} = \{\text{Identity Authority (SPIFFE/SPIRE)}, \text{Declarative Pol
 | **L3 Detection Target** | OCSF Classes (1001, 1007, 3002, 4001, etc.) & Target Dialects | Vendor-neutral governance metadata envelope with target-optimized query blocks (KQL, SPL, SQL). |
 | **L3 ➔ L4 Handoff** | OCSF Class 2001 & Class 2004 Findings with Evidence Lineage | Standardised security and detection findings carrying evidence lineage, ATT&CK tags, and dependency-discounted risk scores. |
 | **L4 Agent Tool Contract** | Model Context Protocol (MCP) & Typed JSON Schema | Parameters for read-only forensic queries; strictly isolates prompts from unformatted raw telemetry. |
-| **L4 Monotonic Containment** | Asymmetric Action Specifications | Parameterized forward action ($T_i$) and forward escalation payloads; strictly fail-closed with reachability-bounded forward compensation ($R(s_{\text{post}}) \subseteq R(s_{\text{pre}})$). |
+| **L4 Monotonic Containment** | Asymmetric Action Specifications | Parameterized forward action ($T_i$) and forward escalation payloads; strictly fail-closed with reachability-bounded forward compensation ($R(s_{\text{post}}) \subseteq R(s_{\text{pre}})$: post-action reachability remains a subset of pre-action reachability). |
 
 ---
 

@@ -46,6 +46,18 @@ function checkHtmlFile(filePath: string) {
     console.error(`❌ [Missing Value Regression] in ${relativePath}: target false-positive rate value missing`);
     errorsFound++;
   }
+
+  // Check 4: Empty parameter paren leaks (e.g. ">( )<" or ">()<" in HTML from stripped inline math)
+  if (/>\s*\(\s*\)\s*</.test(content)) {
+    console.error(`❌ [Empty Parameter Paren Leak] in ${relativePath}: contains empty parentheses in text node`);
+    errorsFound++;
+  }
+
+  // Check 5: Unrendered raw math delimiters leaking into HTML
+  if (content.includes("$\\le") || content.includes("$\\lt") || content.includes("$\\ge") || content.includes("$\\gt")) {
+    console.error(`❌ [Unrendered Math Delimiter Leak] in ${relativePath}: contains unrendered raw math dollar expressions`);
+    errorsFound++;
+  }
 }
 
 function traverse(dir: string) {

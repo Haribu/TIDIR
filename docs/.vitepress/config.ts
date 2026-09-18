@@ -301,7 +301,7 @@ export default withMermaid(
           text: "ADRs: AI Runtime & Observability",
           collapsed: true,
           items: [
-            { text: "0004 - Defensive AI & Prompt Firewall", link: "/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall" },
+            { text: "0004 - Defensive AI & Agent Trust Boundary", link: "/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall" },
             { text: "0006 - Agent Evals-as-Code Harness", link: "/adr/0006-agent-evaluation-harness-evals-as-code" },
             { text: "0012 - AI Orchestration & MVP Roadmap", link: "/adr/0012-ai-orchestration-runtime-mcp-and-mvp-roadmap" },
             { text: "0014 - AI Observability & SLM Judges", link: "/adr/0014-ai-observability-self-learning-and-slm-judges" },

@@ -4,7 +4,7 @@ console.log("🔍 Validating machine-readable architectural consistency & assura
 
 let errors: string[] = [];
 
-// 1. Validate the 11 Architectural Invariants
+// 1. Validate the 11 Architectural Invariants across Constitution, llms.txt, and architecture.json
 const invariantsFile = "docs/architecture/00-architectural-invariants.md";
 const invariantsContent = readFileSync(invariantsFile, "utf-8");
 
@@ -18,7 +18,19 @@ if (!invariantMatches) {
   }
 }
 
-// 2. Validate Threat Model Assurance Case Map
+// Check llms.txt invariant count parity
+try {
+  const llmsTxtContent = readFileSync("docs/public/llms.txt", "utf-8");
+  const constitutionSection = llmsTxtContent.split("## The TIDIR Architectural Constitution (11 Invariants)")[1]?.split("##")[0] || "";
+  const llmsInvariantMatches = constitutionSection.match(/^\d+\.\s+\*\*/gm);
+  if (!llmsInvariantMatches || llmsInvariantMatches.length !== 11) {
+    errors.push(`❌ Expected 11 invariants in docs/public/llms.txt, but found ${llmsInvariantMatches?.length || 0}`);
+  }
+} catch (e: any) {
+  errors.push(`❌ Failed to read docs/public/llms.txt: ${e.message}`);
+}
+
+// 2. Validate Threat Model Assurance Case Map & Underpinning Capability Taxonomy
 const threatModelFile = "docs/architecture/09-threat-model.md";
 const threatModelContent = readFileSync(threatModelFile, "utf-8");
 
@@ -32,7 +44,17 @@ for (const num of requiredThreats) {
   }
 }
 
-// 3. Validate architecture.json compilation
+// Check for legacy invariant IDs used erroneously as capability IDs in assurance maps
+const assuranceMapFile = "docs/architecture/assurance-map.md";
+const assuranceMapContent = readFileSync(assuranceMapFile, "utf-8");
+if (assuranceMapContent.includes("`INV-04`") || assuranceMapContent.includes("`INV-05`")) {
+  errors.push("❌ docs/architecture/assurance-map.md contains invariant IDs in the Underpinning Capabilities column (expected CAP-*)");
+}
+if (threatModelContent.includes("`INV-04`") || threatModelContent.includes("`INV-05`")) {
+  errors.push("❌ docs/architecture/09-threat-model.md contains invariant IDs in the Underpinning Capabilities column (expected CAP-*)");
+}
+
+// 3. Validate architecture.json compilation, invariants, metadata, and threat capability prefixes
 try {
   const archJsonContent = JSON.parse(readFileSync("docs/public/architecture.json", "utf-8"));
   if (!archJsonContent.invariants || archJsonContent.invariants.length !== 11) {
@@ -40,6 +62,22 @@ try {
   }
   if (!archJsonContent.four_planes || !archJsonContent.four_planes.defence_control_plane) {
     errors.push("❌ architecture.json is missing the 4-plane specification");
+  }
+  if (!archJsonContent.architecture_version || !archJsonContent.generated_at || !archJsonContent.canonical_source) {
+    errors.push("❌ architecture.json is missing required metadata (architecture_version, generated_at, or canonical_source)");
+  }
+  if (archJsonContent.threats) {
+    for (const threat of archJsonContent.threats) {
+      if (!threat.underpinning_capabilities || threat.underpinning_capabilities.length === 0) {
+        errors.push(`❌ Threat '${threat.id}' in architecture.json is missing underpinning_capabilities`);
+      } else {
+        for (const cap of threat.underpinning_capabilities) {
+          if (!cap.startsWith("CAP-") && !cap.startsWith("RESIL-")) {
+            errors.push(`❌ Threat '${threat.id}' has invalid capability identifier '${cap}' (must start with CAP- or RESIL-)`);
+          }
+        }
+      }
+    }
   }
 } catch (e: any) {
   errors.push(`❌ Failed to read or parse docs/public/architecture.json: ${e.message}`);
@@ -56,9 +94,9 @@ if (errors.length > 0) {
   errors.forEach((e) => console.error(`  ${e}`));
   process.exit(1);
 } else {
-  console.log("✅ Verified 11 Non-Negotiable Architectural Invariants.");
-  console.log("✅ Verified Threat Model Assurance Case Map (T1–T6 bi-directional closure).");
-  console.log("✅ Verified machine-readable architecture.json integrity (11 invariants + 4 planes).");
+  console.log("✅ Verified 11 Non-Negotiable Architectural Invariants across Constitution, llms.txt, and architecture.json.");
+  console.log("✅ Verified Threat Model Assurance Case Map (T1–T6 bi-directional closure & CAP-* taxonomy).");
+  console.log("✅ Verified machine-readable architecture.json integrity (11 invariants + 4 planes + metadata).");
   console.log("✅ Verified Trust Boundary terminology congruence (zero legacy prompt firewalls).");
   console.log("🎉 Machine-readable architectural assurance graph is fully consistent!\n");
 }

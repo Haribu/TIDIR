@@ -1,3 +1,10 @@
+---
+prev: false
+next:
+  text: "Step 1: What is TIDIR?"
+  link: "/guide/what-is-tidir"
+---
+
 # The TIDIR Golden Path: 15-Minute Architectural Orientation
 
 > **Tier 1: Strategic Architecture** · **Audience**: All Audiences · **Normative Status**: Informational / Guided Journey  
