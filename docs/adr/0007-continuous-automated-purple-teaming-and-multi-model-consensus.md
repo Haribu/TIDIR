@@ -60,7 +60,7 @@ Chosen option: **Continuous Automated Purple Teaming, Dual-Model Consensus, and 
 ### Positive Consequences
 
 * Delivers empirical, measurable detection coverage metrics directly aligned with MITRE ATT&CK.
-* Cuts autonomous agent hallucinations and premature case dismissals to near zero through adversarial model arbitration.
+* Reduces unsupported or erroneous agent recommendations and premature case dismissals via adversarial model arbitration and Evals-as-Code grounding validation (target: grounding fidelity ≥ 95% on golden incident benchmarks).
 * Eliminates the risk of historical visibility starvation during novel threat disclosures.
 
 ### Negative Consequences

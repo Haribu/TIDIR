@@ -89,7 +89,7 @@ Eliminates proprietary data silos and per-gigabyte licensing penalties, providin
 
 #### Service 2.1: Universal Ingestion & Line-Rate OCSF Normalisation
 * **Description:** High-throughput collection across host sensors, cloud audit planes, identity providers, and network boundaries—compiling raw payloads into the Open Cybersecurity Schema Framework (OCSF) at line rate.
-* **Customer Value:** Decouples detection logic from proprietary vendor log formats; ensures zero data loss via automated Dead-Letter Queue (DLQ) quarantine envelopes.
+* **Customer Value:** Decouples detection logic from proprietary vendor log formats; designed to prevent telemetry loss via automated Dead-Letter Queue (DLQ) quarantine envelopes and local edge spooling failover.
 * **Operational SLAs:** Line-rate normalisation latency $\lt 5\,\text{ms}$ per event; sustained throughput $\ge 500\text{k EPS}$.
 * **Underpinning Capabilities:** `DATA-01`, `DATA-02`, `DATA-03`.
 
@@ -112,8 +112,8 @@ Replaces manual rule writing with modern software engineering disciplines, conti
 
 #### Service 3.2: SRE Noise Budgeting & Bayesian Risk Scoring
 * **Description:** Enforces Site Reliability Engineering (SRE) Alert Noise Error Budgets (false-positive rate $\le 5\%$) to prevent analyst burnout. Treats single anomalies as weak graph signals, elevating incidents only after Bayesian multi-signal compounding confirms anomalous behaviour across assets, identities, and network flows.
-* **Customer Value:** Mathematically overcomes the Base Rate Fallacy / False Positive Paradox; eliminates alert fatigue; ensures analysts investigate only high-probability, actionable findings.
-* **Operational SLAs:** Alert False Positive Rate false-positive rate $\le 5\%$; automated deployment freezes triggered when noise budget is exhausted.
+* **Customer Value:** Mitigates the operational consequences of the Base Rate Fallacy / False Positive Paradox via dependency-aware evidence aggregation; reduces alert fatigue; ensures analysts investigate only high-probability, actionable findings.
+* **Operational SLAs:** Alert False Positive Rate $\le 5\%$ rolling 30-day per rule class; automated deployment freezes triggered when noise budget is exhausted.
 * **Underpinning Capabilities:** `DET-04`, `DET-05`, `DET-06`.
 
 ---

@@ -11,7 +11,7 @@ This document specifies the functional capability taxonomy required across the T
 
 ## 1. Capability Taxonomy Matrix
 
-The TIDIR capability model defines **twenty-nine operational capabilities** organized across five functional domains, underpinned by **seven cross-cutting AI Governance and Verification capabilities** (36 capabilities in total), spanning from raw sensory ingestion to closed-loop response automation:
+The TIDIR capability model defines **twenty-nine operational capabilities** organized across five functional domains, underpinned by **seven cross-cutting AI Governance and Verification capabilities** and **five Operational Continuity & Resilience capabilities** (41 capabilities in total), spanning from raw sensory ingestion to closed-loop response automation:
 
 ```mermaid
 flowchart TB
