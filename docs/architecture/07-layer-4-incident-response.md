@@ -214,16 +214,17 @@ For Tier 2 actions whose blast-radius score exceeds an enterprise criticality th
 2. **Time-To-Live Expiration**: If the secondary signature is not cryptographically ratified within the configured TTL (e.g. 15 minutes), the staged action safely expires, preventing stale authorisations from executing against an altered operational topology.
 3. **Emergency Break-Glass Override**: For active ransomware encryption in flight, a single authenticated commander can trigger a break-glass override. This executes containment immediately while generating an immutable, priority-1 audit event forwarded to executive stakeholders.
 
-### Monotonic Fail-Closed Containment (Eliminating Rollback Anti-Patterns)
+### Security-State Monotonicity & Fail-Closed Containment
 
 Security containment workflows interact with heterogeneous APIs across host agents, identity providers, and network firewalls. In traditional commercial microservices, distributed workflows execute compensating rollbacks if a subsequent step fails. 
 
 **In cybersecurity, rolling back containment is fundamentally anti-defence.** (Formalised in [ADR-0005](../adr/0005-saga-pattern-containment-and-break-glass-protocol.md)). If an identity revocation step fails after isolating a host and blocking a C2 IP, reversing those actions actively restores adversary footholds and weaponizes transient network faults against the enterprise.
 
-Layer 4 establishes **Monotonic Fail-Closed Containment**:
-- **Monotonic Progression Invariant**: Containment states move strictly in a single forward direction: toward increasing levels of isolation and control. Previously applied containment barriers ($T_1 \dots T_{k-1}$) **never regress or roll back** without explicit, authenticated human attestation.
+To govern distributed containment workflows, Layer 4 establishes **Security-State Monotonicity**:
+- **Governing Invariant**: *No automated compensation may increase attacker reachability beyond the last verified-safe security state.*
+- **Action Monotonicity vs. Security-State Monotonicity**: We distinguish between reversing individual API actions and regressing the security perimeter. Automated compensation is permitted exclusively for *forward-security actions* (e.g. restoring benign services, routing traffic through isolated inspection enclaves) but is strictly prohibited from dismantling established security barriers ($T_1 \dots T_{k-1}$) without explicit, authenticated human attestation.
 - **Fail-Secure Boundary Freezes**: On partial failure or API timeouts, the orchestrator freezes the existing perimeter in place and executes forward escalation (e.g. applying upstream network-tier isolation) rather than reopening endpoints.
-- **Lease-Gated Deadlock Prevention**: As codified in [ADR-0005](../adr/0005-saga-pattern-containment-and-break-glass-protocol.md), partial containment locks are bound to ephemeral isolation leases with bounded TTLs, guaranteeing that network partitions or stalled workflows fail safely to higher-order supervisory alerts without distributed deadlock.
+- **Lease-Gated Deadlock Prevention**: As codified in [ADR-0005](../adr/0005-saga-pattern-containment-and-break-glass-protocol.md), partial containment locks are bound to ephemeral isolation leases with bounded TTLs (e.g. 45 minutes), ensuring that network partitions or stalled workflows fail safely to higher-order supervisory alerts without distributed deadlock.
 
 ### Operator Skill Retention & Incident Replay Flight Deck
 

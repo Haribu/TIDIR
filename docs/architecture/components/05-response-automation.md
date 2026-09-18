@@ -49,10 +49,13 @@ flowchart TB
 
 ## 2. Core Functional Requirements
 
-1. **Monotonic Containment Orchestration & Asymmetric Fail-Secure State Machine**:
-   - Multi-step containment and mitigation workflows are executed as distributed state machines, structured on a **fail-secure asymmetric model**.
-   - Unlike transactional ecommerce workflows, **security containment actions are never symmetrically reversed upon partial failure**. Reversing containment (e.g. un-quarantining a host or un-blocking an IP because a downstream token API timed out) actively restores attacker access.
+1. **Security-State Monotonicity & Asymmetric Fail-Secure State Machine**:
+   - Multi-step containment and mitigation workflows are executed as distributed state machines structured under **Security-State Monotonicity**:
+     $$\forall s \in \mathcal{S}, \quad R(s_{\text{post}}) \subseteq R(s_{\text{pre}})$$
+     *No automated compensation or error recovery may expand attacker reachability beyond the current verified-safe security posture.*
+   - **Action Monotonicity vs. Security-State Monotonicity**: Individual operational actions need not be monotonic (e.g. an egress firewall shunt might be replaced by a switch-port isolation, or a lease may be renewed). However, the *security posture* is strictly monotonic: the system never symmetrically unrolls containment controls upon partial failure. Reversing containment (e.g. un-quarantining a host or un-blocking an IP because a downstream token API timed out) actively restores attacker access.
    - If any downstream API fails during a containment sequence after exponential retries are exhausted, the orchestrator freezes the existing containment boundary and executes **Forward Containment Escalation**: applying broader out-of-band perimeter network fences (e.g. upstream firewall route drops) and triggering high-priority incident commander paging.
+   - Every containment and remediation action is bound to the immutable **Incident Decision DAG** ([ADR-0005](../../adr/0005-saga-pattern-containment-and-break-glass-protocol.md) and [Layer 4](../../architecture/07-layer-4-incident-response.md)), recording the exact causal lineage from Evidence through Authorisation to Action and Outcome.
 
 2. **Blast-Radius Risk Tiering & Emergency Protocols**:
    - **Tier 0 (Passive Enrichment & Querying)**:
@@ -71,7 +74,7 @@ flowchart TB
 
 3. **Connector Resilience & Circuit Breaking**:
    - Downstream integration connectors enforce strict rate limits, exponential backoff, and stateful circuit breakers.
-   - If a third-party control plane experiences elevated error rates ($> 5\%$ 5xx responses or timeouts), the connector trips open, diverting automated actions to an operator escalation queue rather than stalling the pipeline.
+   - If a third-party control plane experiences elevated error rates ($\gt 5\%$ 5xx responses or timeouts), the connector trips open, diverting automated actions to an operator escalation queue rather than stalling the pipeline.
 
 4. **Closed-Loop Intelligence, DaC Tuning & Green Team Prevention**:
    - While TIDIR intentionally focuses on Threat Intelligence, Detection, Investigation & Response (and deliberately avoids duplicating inline prevention appliances), it completes the closed loop by programmatically bridging into **Green Teams** (platform, infrastructure, and cloud security engineering):

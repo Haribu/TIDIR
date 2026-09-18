@@ -108,18 +108,18 @@ flowchart TB
 #### 2. Threat Intelligence & Detection Engineering (Layer 3)
 * **Failure Mode**: In-memory graph correlation cluster runs out of memory, centrality dampening locks up, or the Bayesian Risk Lens engine stalls.
 * **How We Know**:
-  * Time-to-Detection (TTD) delta between event collection timestamp and finding publication timestamp crosses $> 15\,\text{seconds}$.
+  * Time-to-Detection (TTD) delta between event collection timestamp and finding publication timestamp crosses $\gt 15\,\text{seconds}$.
   * Graph edge/node mutation rates drop to zero despite normal upstream ingestion volume.
   * Harmless canary trigger invariants injected in staging/production fail to emit an alert within 30 seconds.
 * **Continuity Plan B (Scheduled Lakehouse Batch Sweeps & Raw Alert Routing)**:
-  1. *Stream-to-Batch Failover*: Scheduled columnar lakehouse analytical queries immediately take over streaming detection rules. Query intervals drop to 5-minute micro-batches. While detection latency degrades from $< 5\text{s}$ to $5\text{m}$, total threat coverage remains 100% active.
+  1. *Stream-to-Batch Failover*: Scheduled columnar lakehouse analytical queries immediately take over streaming detection rules. Query intervals drop to 5-minute micro-batches. While detection latency degrades from $\lt 5\text{s}$ to $5\text{m}$, total threat coverage remains active.
   2. *Primitive Direct-Alert Routing*: In the event of complete graph engine stall, the platform bypasses bipartite graph clustering and Bayesian compounding. Sensor alerts from endpoint, cloud, and network perimeter layers route directly to analyst queues as unclustered, high-priority findings.
 
 #### 3. AI Orchestration & Investigation (Layer 4)
 * **Failure Mode**: Commercial cloud LLM APIs experience regional outages, provider quota exhaustion, or request timeouts exceeding 30 seconds.
 * **How We Know**:
-  * AI Gateway circuit breakers record $> 3$ consecutive HTTP 5xx errors or connection timeouts.
-  * Incident dossier hydration queue dwell time crosses $> 60\,\text{seconds}$.
+  * AI Gateway circuit breakers record $\gt 3$ consecutive HTTP 5xx errors or connection timeouts.
+  * Incident dossier hydration queue dwell time crosses $\gt 60\,\text{seconds}$.
 * **Continuity Plan B (Hierarchical Model Graceful Degradation & Zero-AI Mode)**:
   1. *Local SLM Fallback*: The AI orchestration gateway automatically shifts inference workloads from cloud frontier models to locally hosted or VPC-contained Small Language Models (SLMs, e.g. on-premise 8B parameter models).
   2. *Deterministic Zero-AI Mode*: If local SLMs are also offline, the system drops AI summarization entirely. The analyst workbench renders structured, deterministic dossiers: raw bipartite entity relationships, tabular chronological timelines, and rule-based blast-radius preview cards.
@@ -128,9 +128,9 @@ flowchart TB
 #### 4. Response Automation & State Machines (Layer 4)
 * **Failure Mode**: Downstream host EDR or IAM directory APIs become unresponsive; forward-recovery state machines freeze in partial containment, risking distributed deadlocks.
 * **How We Know**:
-  * Containment action dispatch attempts exceed retry ceilings ($> 3$ attempts with exponential backoff).
+  * Containment action dispatch attempts exceed retry ceilings ($\gt 3$ attempts with exponential backoff).
   * State machines held in forward-recovery approach their 45-minute Idempotent Isolation Lease TTL.
-  * Enterprise-wide containment velocity exceeds the runaway safety threshold (e.g. $> 10$ hosts isolated per minute).
+  * Enterprise-wide containment velocity exceeds the runaway safety threshold (e.g. $\gt 10$ hosts isolated per minute).
 * **Continuity Plan B (Master E-Stop & Out-of-Band Boundary Containment)**:
   1. *Autonomous Master E-Stop (Kill-Switch)*: An authenticated cryptographic kill-switch in the SecOps console instantly revokes automated execution permissions across all response workers, downgrading all active and pending playbooks to advisory-only mode.
   2. *Isolation Lease Auto-Fallback*: Stalled isolation leases that hit their 45-minute TTL without operator resolution deterministically trigger an automated safe-fallback: elevating to an out-of-band boundary network quarantine (upstream VPC route shunt or firewall ACL) and paging the Incident Commander.
@@ -140,15 +140,15 @@ flowchart TB
 
 ## Positive Consequences
 
-* Guarantees zero forensic data loss during streaming bus outages via edge spooling and direct-to-object ingestion bypass.
+* Designed to prevent forensic data loss during streaming bus outages via edge spooling and direct-to-object ingestion bypass.
 * Prevents total SOC blindness by establishing automated failover from streaming detection to lakehouse batch sweeps.
-* Eliminates operational deadlocks and runaway automation through isolation lease TTLs, velocity brakes, and master E-Stops.
+* Guards against operational deadlocks and runaway automation through isolation lease TTLs, velocity brakes, and master E-Stops.
 * Preserves cognitive readiness by providing deterministic Zero-AI investigation workbenches and manual runbooks.
 
 ---
 
 ## Negative Consequences
 
-* Failover to lakehouse batch sweeps increases detection latency from seconds to minutes ($< 5\,\text{min}$).
+* Failover to lakehouse batch sweeps increases detection latency from seconds to minutes ($\lt 5\,\text{min}$).
 * Degrading to Zero-AI mode increases cognitive triage load on human analysts, requiring higher active staffing during extended cloud AI outages.
 * Local edge spooling requires dedicated NVMe storage allocations on forwarder hosts.

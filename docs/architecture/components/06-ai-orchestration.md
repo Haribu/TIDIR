@@ -77,14 +77,23 @@ All forensic, contextual, and simulation tools are exposed to agents exclusively
 
 Every tool input parameter is validated against strict JSON Schema contracts.
 
-### 3. Stateful DAG & Blackboard Engine
-Multi-stage investigations require persistent shared memory across specialist subagents:
+### 3. Stateful Incident Decision DAG & Blackboard Engine
+Multi-stage investigations require persistent shared memory, auditability, and provenance across specialist subagents:
+- **The Incident Decision DAG (Universal Decision Provenance)**:
+  Every analytical step across both autonomous agents and human analysts is committed as an immutable Directed Acyclic Graph (DAG) edge:
+  $$\text{Evidence} \longrightarrow \text{Transformation} \longrightarrow \text{Finding} \longrightarrow \text{Hypothesis} \longrightarrow \text{Decision} \longrightarrow \text{Authorisation} \longrightarrow \text{Action} \longrightarrow \text{Outcome}$$
+  Each edge cryptographically seals the input records, model/parser version, authorizing principal, and resulting state delta (RFC 3161 timestamps and SHA-256 parent hash chains), providing non-repudiation for regulatory audits and post-incident reconstruction.
 - **Shared Incident Blackboard**: Specialists (Host Forensic, Identity, Network) append structured observations, raw evidence pointers, and hypothesis scores to a central, versioned blackboard.
 - **Durable Checkpointing**: State is committed after every subagent tool invocation, ensuring investigations survive network partitions or pod restarts.
 - **Token Quota Budgets**: Each investigation is allocated a maximum token budget (e.g. 150k tokens) and execution timeout (e.g. 180 seconds) to prevent runaway recursive inference loops.
 
-### 4. Deterministic Safety Kernel
-- **Dual-Plane Prompt Injection Firewall**: Untrusted external inputs (log messages, command-line arguments, email bodies, CTI text) are strictly isolated in a sandboxed *Data Plane*. System instructions, agent personas, and tool contracts exist exclusively in a signed *Control Plane*. Prompts never execute instructions contained inside data fields.
+### 4. Deterministic Safety Kernel & Zero Trust AI
+TIDIR rejects the assumption that prompt sanitization can deterministically prevent adversarial manipulation. Instead, it enforces a **Zero Trust AI Architecture**:
+- **Explicit Adversarial Assumption**: The system assumes untrusted evidence can influence model reasoning. Security therefore does not depend upon successful prompt-injection detection. A compromised reasoning agent remains strictly bounded by deterministic controls:
+  1. *Capability-Bounded Permissions*: Agents operate with read-only query capabilities via strongly typed MCP tools. They hold zero administrative or mutating execution credentials.
+  2. *Task-Scoped Ephemeral SVIDs*: SPIFFE/SPIRE mints short-lived X.509 identities ($\le 15\text{m}$) enforcing least-privilege tool contracts at the network layer.
+  3. *Independent Response Authority*: Mutating containment actions are evaluated and authorized exclusively by the deterministic response safety kernel and human incident commanders.
+- **Dual-Plane Data Isolation**: Untrusted external inputs (log messages, command-line arguments, email bodies, CTI text) are strictly isolated in a sandboxed *Data Plane*. System instructions, agent personas, and tool contracts exist exclusively in a signed *Control Plane*.
 - **Deterministic AST Query Validator**: Generated queries pass through an Abstract Syntax Tree (AST) parser before hitting Lakehouse engines. The validator enforces:
   1. Strict read-only syntax (`SELECT` only; all `DROP`, `UPDATE`, `DELETE`, `INSERT` commands throw fatal errors).
   2. Mandatory temporal boundaries (queries without `time >= NOW() - INTERVAL` constraints are rejected to prevent table-scan resource exhaustion).

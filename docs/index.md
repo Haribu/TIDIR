@@ -28,7 +28,7 @@ features:
     details: Stateful streaming pattern detection paired with lakehouse SQL analytics, governed by GitOps Detection-as-Code (DaC), continuous purple teaming, and SecOps error budgets.
   - icon: 🧠
     title: Hierarchical Agent Mesh
-    details: Specialised autonomous agents with dual-plane prompt injection firewalls and Proposer/Challenger multi-model arbitration for hallucination-free investigations.
+    details: Specialised autonomous agents with dual-plane prompt injection firewalls and Proposer/Challenger multi-model arbitration for evidence-grounded investigations with deterministic rejection of unsupported assertions.
   - icon: ⚡
     title: Automated Response & Containment
     details: Blast-radius risk-tiered state machines executing monotonic fail-closed containment with forward escalation, circuit breakers, and break-glass human-in-the-loop controls.
@@ -116,15 +116,15 @@ $$
 $$
 
 ### 3. Continuous Purple Teaming & SecOps Error Budgets
-Borrowing from Site Reliability Engineering (SRE), detection quality is enforced through quantifiable **Alert Noise Error Budgets** (target: false positive rate $< 5\%$). Detection-as-Code (DaC) repositories execute continuous atomic attack emulation in CI/CD pipelines. If a detection rule exhausts its noise budget in production, an automated deployment freeze prevents new rule promotions until the noisy rule is tuned or deprecated.
+Borrowing from Site Reliability Engineering (SRE), detection quality is enforced through quantifiable **Alert Noise Error Budgets** (target: false positive rate $\lt 5\%$). Detection-as-Code (DaC) repositories execute continuous atomic attack emulation in CI/CD pipelines. If a detection rule exhausts its noise budget in production, an automated deployment freeze prevents new rule promotions until the noisy rule is tuned or deprecated.
 
 ### 4. Dual-Plane Defensive AI Runtime & Prompt Injection Firewall
 Autonomous agentic workflows operate within a strictly isolated runtime:
 * **Control Plane vs. Data Plane Separation:** Untrusted external telemetry (email bodies, web payloads, obfuscated command strings) is strictly compartmentalised as raw data and never injected directly into agent execution prompts.
-* **Deterministic Guardrails & Multi-Model Arbitration:** High-consequence triage decisions require consensus between a *Proposer Model* (investigation specialist) and an independent *Challenger Model* (adversarial auditor) to eliminate hallucinated response actions.
+* **Deterministic Guardrails & Multi-Model Arbitration:** High-consequence triage decisions require consensus between a *Proposer Model* (investigation specialist) and an independent *Challenger Model* (adversarial auditor) to reject unsupported assertions and validate proposed containment actions against deterministic policies.
 
-### 5. Monotonic Fail-Closed Containment & Break-Glass Governance
-Automated containment workflows execute declarative, monotonic state machines where defensive barriers move in a single forward direction: toward increasing isolation and control. Reversing or rolling back containment transactions upon partial failure is strictly rejected as an anti-defence vulnerability. Instead, workflows enforce **fail-closed boundary freezes** and forward escalation to broader network fences. High-risk actions enforce strict **Break-Glass Human-in-the-Loop** verification gates with a maximum response latency (MTTC $< 5$ minutes).
+### 5. Security-State Monotonicity & Fail-Closed Containment
+Automated containment workflows execute declarative state machines governed by **Security-State Monotonicity**: *no automated compensation may increase attacker reachability beyond the last verified-safe security state*. While forward compensation may safely restore benign services, rolling back security barriers upon downstream timeout is strictly prohibited as an anti-defence vulnerability. Workflows enforce fail-closed boundary freezes and forward escalation to broader network perimeters, with high-impact mutations gated by authenticated Break-Glass Human-in-the-Loop consensus ($\text{MTTC} \lt 5\text{ minutes}$).
 
 ---
 
