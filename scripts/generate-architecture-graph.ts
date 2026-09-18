@@ -155,7 +155,7 @@ const model: ArchitecturalModel = {
       normative: true,
       maxim: "Failure of an advanced capability reduces sophistication, never total visibility.",
       property: "Loss of an advanced capability reduces sophistication, never total visibility (graceful degradation and Plan B fallbacks).",
-      reference_pattern: "4-tier degradation: local edge spooling, scheduled batch lakehouse sweeps, and Zero-AI tabular timelines."
+      reference_pattern: "4-tier degradation: local edge spooling, scheduled batch lakehouse sweeps, and rule-based tabular timelines."
     },
     {
       id: "INV-09",
@@ -344,7 +344,7 @@ const model: ArchitecturalModel = {
     },
     {
       id: "THR-T4",
-      name: "Indirect Prompt Injection & Cognitive Hijack",
+      name: "Indirect Prompt Injection & Instruction Manipulation",
       stride: "Elevation of Privilege",
       description: "Adversary embeds malicious control directives inside command line arguments, log files, or CTI reports.",
       underpinning_capabilities: ["CAP-INV-05", "CAP-AIGOV-02", "CAP-AIGOV-06"],

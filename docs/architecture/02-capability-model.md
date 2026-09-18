@@ -137,7 +137,7 @@ flowchart TB
 | **RESIL-01** | Decoupled Edge Spooling | `[Deterministic Engine]` | Autonomous local disk ring buffering on forwarders during streaming bus network partitions. | 24–48h lossless buffer; zero forensic drop |
 | **RESIL-02** | Direct-to-Object Ingestion Bypass | `[Deterministic Engine]` | Dynamic failover allowing forwarders to write compressed Parquet micro-batches directly to object lakehouse. | Cutover latency < 60s from bus partition trip |
 | **RESIL-03** | Stream-to-Batch Detection Failover | `[Deterministic Engine]` | Automated transfer of detection rules to scheduled 5-minute columnar SQL batch sweeps on graph engine failure. | Fallback activation < 2 min; 100% rule coverage preserved |
-| **RESIL-04** | Hierarchical Model Fallback & Zero-AI Mode | `[Deterministic Engine]` | Deterministic shift from cloud LLMs to local SLMs, with fallback to structured tabular/graph Zero-AI workbenches. | Circuit breaker trip < 3 errors; zero pipeline block |
+| **RESIL-04** | Hierarchical Model Fallback & Rule-Based Non-AI Mode | `[Deterministic Engine]` | Deterministic shift from cloud LLMs to local SLMs, with fallback to structured tabular/graph rule-based workbenches. | Circuit breaker trip < 3 errors; zero pipeline block |
 | **RESIL-05** | Master Autonomous E-Stop & OOB Containment | `[Human-in-the-Loop]` | Cryptographic emergency kill-switch dropping playbooks to advisory mode, backed by air-gapped signed CLI runbooks. | E-Stop broadcast < 500ms; complete execution freeze |
 
 

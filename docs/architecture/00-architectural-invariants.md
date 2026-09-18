@@ -21,7 +21,7 @@ The central thesis of the TIDIR architecture is the strict decoupling of analyti
 
 A probabilistic reasoning model or Bayesian correlation engine may compute a $99.9\%$ confidence score that a database cluster is compromised. That confidence provides **zero self-granting authority** to sever network links or isolate the host. 
 
-Conversely, interaction with a high-fidelity canary credential produces mathematically indisputable evidence, yet the response policy still constrains the blast radius to non-destructive session freezing if the entity is designated as Tier 0 critical infrastructure.
+Conversely, interaction with a high-fidelity canary credential produces high-confidence, directly attributable evidence, yet the response policy still constrains the blast radius to non-destructive session freezing if the entity is designated as Tier 0 critical infrastructure.
 
 ### The Hierarchy of Defence Reasoning
 
@@ -124,7 +124,7 @@ All architectural layers, components, and Architectural Decision Records (ADRs) 
 
 - **Plain-English Meaning**: If an advanced feature like an AI model or a real-time streaming pipeline fails, security operations do not stop. The system automatically drops down to simpler, reliable backup mechanisms.
 - **Concrete Example**: If a cloud AI service goes offline during an active incident, the security console does not fail. It automatically switches to standard chronological timelines sorted by timestamp, running local rule-based searches to ensure analysts retain full situational awareness.
-- **Invariant Property**: The architecture implements four continuous operational tiers. If streaming buses, graph stores, or cloud AI gateways experience outages, systems automatically degrade to local edge spooling, scheduled batch sweeps, and deterministic Zero-AI tabular timelines.
+- **Invariant Property**: The architecture implements four continuous operational tiers. If streaming buses, graph stores, or cloud AI gateways experience outages, systems automatically degrade to local edge spooling, scheduled batch sweeps, and deterministic rule-based tabular timelines.
 
 ### I9 — Human Recoverability & Break-Glass Flight Decks
 *Autonomous control planes always preserve independently accessible manual flight decks.*

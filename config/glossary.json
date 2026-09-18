@@ -79,9 +79,9 @@
       "term": "Graceful Degradation & Plan B",
       "classification": "Established",
       "plain_english": "If an advanced feature like AI reasoning, a graph database, or a streaming pipeline goes down, the security operations center does not go blind. The system automatically steps down to simpler, deterministic fallbacks.",
-      "technical_definition": "A distributed systems resilience architecture (INV-08, ADR-0021) defining four tiered operational postures (Tier 1 Full Streaming to Tier 4 Zero-AI Edge Spooling). Loss of upstream services triggers automatic degradation to local queues, batch database queries, and static rule sets.",
+      "technical_definition": "A distributed systems resilience architecture (INV-08, ADR-0021) defining four tiered operational postures (Tier 1 Full Streaming to Tier 4 Non-AI Edge Spooling). Loss of upstream services triggers automatic degradation to local queues, batch database queries, and static rule sets.",
       "why_tidir_uses_it": "Security operations cannot stop when cloud APIs or complex machine-learning pipelines fail during an incident. The SOC must maintain continuous visibility and containment capability under all conditions.",
-      "concrete_example": "If the cloud AI provider suffers a global outage during a major incident, the triage dashboard automatically activates Tier 3 Zero-AI mode, displaying standard tabular timelines sorted by OCSF timestamp and executing deterministic regex and threshold rules.",
+      "concrete_example": "If the cloud AI provider suffers a global outage during a major incident, the triage dashboard automatically activates Tier 3 Rule-Based Non-AI mode, displaying standard tabular timelines sorted by OCSF timestamp and executing deterministic regex and threshold rules.",
       "related_identifiers": ["INV-08", "ADR-0021", "CAP-RESIL-001"]
     },
     {

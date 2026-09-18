@@ -251,7 +251,7 @@ flowchart LR
 
   subgraph InvestigationContinuity ["3. Investigation Continuity"]
     A_CLOUD["Cloud Frontier Models"] -->|API Timeout / Outage| A_SLM["Local / VPC SLM Judges"]
-    A_SLM -->|Complete Model Outage| A_ZERO["Zero-AI Workbench\n(Raw graph & tabular timeline)"]
+    A_SLM -->|Complete Model Outage| A_ZERO["Rule-Based Workbench\n(Raw graph & tabular timeline)"]
   end
 
   subgraph ResponseContinuity ["4. Response Continuity"]
@@ -266,6 +266,6 @@ flowchart LR
 | :--- | :--- | :--- | :--- |
 | **Layer 1 & 2: Ingestion & Storage** | Streaming event bus partition or schema registry corruption. | Synthetic telemetry canaries fail to arrive in Layer 2 in $\le 60\text{s}$; consumer lag $\gt 60\text{s}$; DLQ $\gt 100\text{ events/min}$. | **Edge Spooling & Direct-to-Object Ingestion**: Forwarders spool to local NVMe ring buffers (24–48h capacity); prolonged partitions trigger direct-to-object upload of Parquet micro-batches directly to the columnar lakehouse. |
 | **Layer 3: Threat Intel & Detection** | Graph engine stagnation, memory exhaustion, or Risk Lens stall. | Time-to-Detect (TTD) delta $\gt 15\text{s}$; zero graph mutation rate despite active ingestion; canary invariant alert failure $\gt 30\text{s}$. | **Stream-to-Batch Failover & Direct Alerting**: Scheduled 5-minute columnar SQL batch sweeps assume detection coverage; complete graph stalls bypass Bayesian compounding and route raw sensor alerts directly to analyst queues. |
-| **Layer 4: AI & Investigation** | Cloud AI API outages, provider rate throttling, or network timeouts. | AI gateway circuit breakers trip after 3 consecutive HTTP 5xx errors; case hydration queue latency $\gt 60\text{s}$. | **Local SLM Fallback & Zero-AI Mode**: Traffic shifts to on-premise/VPC Small Language Models; complete model outages drop to Zero-AI mode (rendering deterministic tabular timelines and bipartite graph relationship tables). |
+| **Layer 4: AI & Investigation** | Cloud AI API outages, provider rate throttling, or network timeouts. | AI gateway circuit breakers trip after 3 consecutive HTTP 5xx errors; case hydration queue latency $\gt 60\text{s}$. | **Local SLM Fallback & Rule-Based Non-AI Mode**: Traffic shifts to on-premise/VPC Small Language Models; complete model outages drop to rule-based non-AI mode (rendering deterministic tabular timelines and bipartite graph relationship tables). |
 | **Layer 4: Response & Automation** | Containment state machine lockups, EDR API unresponsiveness, or automation runaway. | Containment retries exceed 3 attempts; isolation lease approaches 45-minute TTL; containment velocity $\gt 10\text{ hosts/min}$. | **Master E-Stop & Out-of-Band Boundary Containment**: Master cryptographic E-Stop drops playbooks to advisory mode; expired leases auto-escalate to out-of-band network boundary ACLs; operators invoke signed air-gapped CLI runbooks. |
 

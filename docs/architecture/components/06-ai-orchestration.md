@@ -7,7 +7,7 @@
 
 The **AI & Agentic Orchestration Plane** provides the runtime execution, model routing, safety guardrails, and tool-calling interfaces required to operate autonomous and collaborative AI agents across the security lifecycle.
 
-Rather than treating AI as an isolated conversational chatbot or a collection of brittle point scripts, this component establishes an enterprise-grade orchestration layer. It exposes standardized **Model Context Protocol (MCP)** tool contracts, dynamically routes inferences across local Small Language Models (Tier 0) and cloud frontier models (Tier 1/2), and enforces deterministic safety boundaries through an **Agent Trust Boundary (Dual-Plane Untrusted Content Isolator)** and **Abstract Syntax Tree (AST) query validation**.
+Rather than treating AI as an isolated conversational chatbot or a collection of brittle point scripts, this component establishes a structured orchestration layer. It exposes standardized **Model Context Protocol (MCP)** tool contracts, dynamically routes inferences across local Small Language Models (Tier 0) and cloud frontier models (Tier 1/2), and enforces deterministic safety boundaries through an **Agent Trust Boundary (Dual-Plane Untrusted Content Isolator)** and **Abstract Syntax Tree (AST) query validation**.
 
 ```mermaid
 flowchart TB
@@ -62,18 +62,18 @@ To optimize latency, operational cost, and data sovereignty, the AI Gateway rout
   - *Normative Requirement*: Advanced reasoning engines with extended thinking and multi-step tool reasoning capabilities. Reserved for complex multi-hop campaign correlation, contradictory evidence arbitration, and root-cause hypothesis debates.
   - *Illustrative Reference Implementation (Non-Normative)*: Cloud frontier models (e.g. Claude Sonnet/Opus, Gemini Pro) or large-scale on-premises sovereign clusters.
 
-#### 1.1 Safety Refusal Circuit Breakers & Sovereign Open-Weights Fallbacks
-In mission-critical security operations, relying exclusively on commercial public LLM APIs introduces two acute operational vulnerabilities:
+#### 1.1 Model Refusal Circuit Breakers & Self-Hosted Fallbacks
+In mission-critical security operations, relying exclusively on commercial public LLM APIs introduces two operational dependencies:
 
-1. **The "False-Positive Safety Refusal" Trap**:
-   - Commercial frontier models enforce aggressive public alignment guardrails designed to prevent malicious weaponization. During high-severity incidents, these filters frequently trigger false-positive refusals on legitimate defensive tasks—such as decompiling obfuscated PowerShell, analyzing shellcode strings, or explaining exploit primitives.
-   - A safety refusal (e.g., *"I cannot assist with analyzing this exploit payload"*) breaks automated triage pipelines and stalls response velocity.
-   - **Refusal-Resistant Fallback Routing**: The AI Gateway monitors incoming token streams for standard refusal semantics and finish reasons (`content_filter`, refusal substrings). Upon detecting a refusal on an authorized Security Operations (SecOps) analysis task, the gateway automatically reroutes the prompt with elevated forensic context headers to an internal defensively-aligned model endpoint.
+1. **Third-Party Content Policy Refusals**:
+   - Commercial model providers enforce alignment guardrails designed to prevent malicious weaponization. During high-severity incidents, these guardrails can refuse legitimate defensive analysis requests—such as decompiling obfuscated PowerShell, analyzing shellcode strings, or explaining exploit primitives.
+   - A model refusal breaks automated triage pipelines and stalls response velocity.
+   - **Provider-Independent Fallback Routing**: Commercial model providers may refuse some legitimate defensive analysis requests. TIDIR therefore does not make continued availability of a particular external model a prerequisite for core investigative capability. Upon detecting refusal semantics (`content_filter`, refusal finish reasons), the AI Gateway automatically reroutes the prompt to an internal, defensively tuned fallback endpoint.
 
-2. **Self-Hosted Sovereign Backup (Air-Gapped Operational Continuity)**:
-   - To guarantee operational continuity during commercial cloud outages, rate-limit exhaustion, or WAN isolation during major cyber attacks, TIDIR specifies an on-premises or private-cloud **Sovereign Open-Weights Inference Cluster** (e.g. 70B+ parameter models running on vLLM/Triton).
-   - **Zero Censorship on Defensive Payloads**: Self-hosted open-weights models operate without third-party public guardrails, enabling uninhibited reverse-engineering of live malware payloads, zero-day shellcode, and forensic dumps.
-   - **On-Premises Data Boundary Enforcement**: Critical breach evidence, executive communications, and unredacted customer data can be processed entirely within the enterprise perimeter without third-party cloud data egress.
+2. **Self-Hosted Open-Weights Backup (Operational Continuity)**:
+   - To preserve analytical capability during commercial cloud outages, provider rate throttling, or WAN isolation during major cyber attacks, TIDIR specifies an on-premises or private-cloud **Self-Hosted Open-Weights Inference Cluster** (e.g. 70B+ parameter models running on vLLM/Triton).
+   - **Provider-Independent Defensive Analysis**: Self-hosted models allow sensitive forensic material to be analyzed within the enterprise boundary and avoid dependence on a third-party model provider's availability or policy decisions.
+   - **On-Premises Data Boundary Enforcement**: Critical breach evidence, executive communications, and unredacted customer telemetry can be processed entirely within the enterprise perimeter without third-party cloud data egress.
 
 ### 2. Model Context Protocol (MCP) as the Canonical Tool Bus
 All forensic, contextual, and simulation tools are exposed to agents exclusively via the **Model Context Protocol (MCP)**:
@@ -134,8 +134,8 @@ To prevent credential theft, lateral impersonation, and non-repudiation failure 
 - **Per-Task Capability Attestation**: SVID claims strictly bound agent access. A Host Forensic subagent cannot access network containment endpoints; containment playbooks require dynamically minted SVIDs signed by both the orchestrator and an approving human operator.
 - **Line-Rate NHI Behavioral Profiling**: Service accounts, workload tokens, and automated CI/CD machines are normalized into OCSF Class 3002/3005 and profiled across 14-day rolling windows to detect token theft, out-of-VPC token replays, and dormancy awakening at line rate.
 
-### 9. Tri-Color Agent Fleet & Green Self-Healing Remediation
-Rather than treating AI agents as undifferentiated assistants, TIDIR partitions agentic workloads into three specialized operational colors:
+### 9. Operational Agent Roles & Feedback Responsibilities
+TIDIR separates agent workloads into three distinct operational responsibilities, designated by Red, Blue, and Green functional roles:
 
 ```mermaid
 flowchart TB
@@ -215,7 +215,7 @@ Security operations cannot tolerate stochastic hallucinations or unverifiable cl
 
 #### Three-Tier Ground Truth Taxonomy
 To avoid epistemic contradictions (such as treating subjective human evaluations as an infallible "gold standard"), TIDIR formally distinguishes three tiers of ground truth:
-1. **Objective Ground Truth**: Synthetically generated or replayed telemetry where the exact underlying attack chain, attacker commands, and benign background traffic are mathematically known with 100% certainty. Used for deterministic regression tests.
+1. **Objective Ground Truth**: Synthetic or replayed telemetry where the intended attack sequence, attacker commands, and ground-truth labels are known by construction. Used for deterministic regression tests.
 2. **Expert Adjudication**: Ambiguous operational investigations graded independently by multiple experienced practitioners to establish qualitative consensus without assuming individual infallibility.
 3. **Operational Outcome**: Empirically measured real-world metrics post-deployment (e.g. verified false-positive rates, triage velocity deltas, and zero unintended containment outages).
 

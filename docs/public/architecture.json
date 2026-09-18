@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "architecture_version": "1.2.8",
-  "generated_at": "2026-09-18T19:58:26.878Z",
+  "architecture_version": "1.2.9",
+  "generated_at": "2026-09-18T20:06:50.986Z",
   "canonical_source": "https://tidir.harrymclaren.co.uk",
   "title": "TIDIR Reference Architecture Graph",
   "description": "Machine-readable graph representation of TIDIR invariants, capabilities, services, threats, and governance contracts.",
@@ -89,7 +89,7 @@
       "normative": true,
       "maxim": "Failure of an advanced capability reduces sophistication, never total visibility.",
       "property": "Loss of an advanced capability reduces sophistication, never total visibility (graceful degradation and Plan B fallbacks).",
-      "reference_pattern": "4-tier degradation: local edge spooling, scheduled batch lakehouse sweeps, and Zero-AI tabular timelines."
+      "reference_pattern": "4-tier degradation: local edge spooling, scheduled batch lakehouse sweeps, and rule-based tabular timelines."
     },
     {
       "id": "INV-09",
@@ -349,7 +349,7 @@
     },
     {
       "id": "THR-T4",
-      "name": "Indirect Prompt Injection & Cognitive Hijack",
+      "name": "Indirect Prompt Injection & Instruction Manipulation",
       "stride": "Elevation of Privilege",
       "description": "Adversary embeds malicious control directives inside command line arguments, log files, or CTI reports.",
       "underpinning_capabilities": [

@@ -72,7 +72,7 @@ flowchart TB
 
     subgraph L4_AI_Fail ["AI Runtime & Model Outage"]
       LOCAL_SLM["Local/VPC Model Fallback\n(On-premise small language model judge)"]
-      DETERM_TRIAGE["Deterministic Heuristic Dossiers\n(Zero-AI mode: raw graph & tabular timelines)"]
+      DETERM_TRIAGE["Deterministic Heuristic Dossiers\n(Rule-based mode: raw graph & tabular timelines)"]
       LOCAL_SLM --> DETERM_TRIAGE
     end
 
@@ -120,9 +120,9 @@ flowchart TB
 * **How We Know**:
   * AI Gateway circuit breakers record $\gt 3$ consecutive HTTP 5xx errors or connection timeouts.
   * Incident dossier hydration queue dwell time crosses $\gt 60\,\text{seconds}$.
-* **Continuity Plan B (Hierarchical Model Graceful Degradation & Zero-AI Mode)**:
+* **Continuity Plan B (Hierarchical Model Graceful Degradation & Rule-Based Non-AI Mode)**:
   1. *Local SLM Fallback*: The AI orchestration gateway automatically shifts inference workloads from cloud frontier models to locally hosted or VPC-contained Small Language Models (SLMs, e.g. on-premise 8B parameter models).
-  2. *Deterministic Zero-AI Mode*: If local SLMs are also offline, the system drops AI summarization entirely. The analyst workbench renders structured, deterministic dossiers: raw bipartite entity relationships, tabular chronological timelines, and rule-based blast-radius preview cards.
+  2. *Deterministic Rule-Based Non-AI Mode*: If local SLMs are also offline, the system drops AI summarization entirely. The analyst workbench renders structured, deterministic dossiers: raw bipartite entity relationships, tabular chronological timelines, and rule-based blast-radius preview cards.
   3. *Manual Flight Deck Activation*: Human operators trained under [ADR-0020](0020-operator-skill-retention-and-incident-replay-simulators.md) assume manual investigative control, leveraging existing muscle memory to query the lakehouse directly.
 
 #### 4. Response Automation & State Machines (Layer 4)
@@ -143,12 +143,12 @@ flowchart TB
 * Designed to prevent forensic data loss during streaming bus outages via edge spooling and direct-to-object ingestion bypass.
 * Prevents total SOC blindness by establishing automated failover from streaming detection to lakehouse batch sweeps.
 * Guards against operational deadlocks and runaway automation through isolation lease TTLs, velocity brakes, and master E-Stops.
-* Preserves cognitive readiness by providing deterministic Zero-AI investigation workbenches and manual runbooks.
+* Preserves cognitive readiness by providing deterministic rule-based investigation workbenches and manual runbooks.
 
 ---
 
 ## Negative Consequences
 
 * Failover to lakehouse batch sweeps increases detection latency from seconds to minutes ($\lt 5\,\text{min}$).
-* Degrading to Zero-AI mode increases cognitive triage load on human analysts, requiring higher active staffing during extended cloud AI outages.
+* Degrading to rule-based non-AI mode increases cognitive triage load on human analysts, requiring higher active staffing during extended cloud AI outages.
 * Local edge spooling requires dedicated NVMe storage allocations on forwarder hosts.

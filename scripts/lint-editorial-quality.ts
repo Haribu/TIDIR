@@ -6,7 +6,7 @@ console.log("🔍 Running TIDIR Editorial & Information-Quality Audit...\n");
 let warnings: string[] = [];
 let errors: string[] = [];
 
-// 1. Prohibited Marketing Absolutes & Claims Discipline
+// 1. Prohibited Marketing Absolutes & Claims Discipline (Hard Errors)
 const claimsRules = [
   {
     regex: /\b(eliminates?|eliminating)\s+hallucinations?\b/gi,
@@ -31,7 +31,30 @@ const claimsRules = [
   {
     regex: /\b(guarantees?|guaranteeing)\s+100%\s+detection\b/gi,
     message: "Claims 100% detection guarantee"
+  },
+  {
+    regex: /\bmathematically\s+indisputable\b/gi,
+    message: "Rhetorical claim 'mathematically indisputable' (prefer: 'high-confidence, directly attributable' or 'cryptographically verifiable')"
+  },
+  {
+    regex: /\bzero\s+censorship\b/gi,
+    message: "Provocative/rhetorical phrasing 'zero censorship' (prefer: 'provider-independent defensive analysis')"
+  },
+  {
+    regex: /\bguarantee\s+operational\s+continuity\b/gi,
+    message: "Overstrong claim 'guarantee operational continuity' (prefer: 'preserve analytical capability' or 'improve operational continuity')"
+  },
+  {
+    regex: /\bmathematical\s+non-repudiation\b/gi,
+    message: "Overstrong claim 'mathematical non-repudiation' (prefer: 'cryptographic tamper evidence' or 'integrity & reconstructability')"
   }
+];
+
+// Lexical Warnings (Informational Review)
+const lexicalWarningRules = [
+  { regex: /\benterprise-grade\b/gi, message: "Vague corporate adjective 'enterprise-grade'" },
+  { regex: /\bworld-class\b/gi, message: "Marketing fluff 'world-class'" },
+  { regex: /\brevolutionary\b/gi, message: "Marketing fluff 'revolutionary'" }
 ];
 
 // 2. High-density hyphenated noun stacks (4+ words linked with hyphens)
@@ -73,6 +96,13 @@ for (const file of targetFiles) {
     for (const rule of claimsRules) {
       if (rule.regex.test(line)) {
         errors.push(`❌ [Claims] ${file}:${lineNum} — ${rule.message}`);
+      }
+    }
+
+    // Check lexical warnings (informational)
+    for (const rule of lexicalWarningRules) {
+      if (rule.regex.test(line)) {
+        warnings.push(`⚠️ [Lexical Review] ${file}:${lineNum} — ${rule.message}`);
       }
     }
 

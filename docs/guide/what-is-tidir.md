@@ -41,7 +41,7 @@ Rather than treating AI agents or statistical classifiers as autonomous decision
 2. **Evidence Requires Provenance and Independence**: Every assertion must link to immutable raw telemetry. Correlated derivations sharing common upstream ancestry are discounted rather than double-counted.
 3. **Probabilistic Reasoning Must Remain Bounded**: Generative models and autonomous triage agents operate behind the **Agent Trust Boundary**, consuming typed schemas rather than raw executable text strings.
 4. **Defensive Actuation Must Respect Security-State Monotonicity**: Partial failure during containment cannot silently regress security posture ($s_{n+1} \preceq s_n$). Forward compensation is permitted; reopening compromised perimeters is not.
-5. **Complex Defence Must Degrade Gracefully**: If streaming event buses or cloud AI gateways fail, defence does not disappear—it degrades gracefully to local edge spooling, scheduled batch lakehouse sweeps, and Zero-AI tabular timelines.
+5. **Complex Defence Must Degrade Gracefully**: If streaming event buses or cloud AI gateways fail, defence does not disappear—it degrades gracefully to local edge spooling, scheduled batch lakehouse sweeps, and rule-based tabular timelines.
 
 ---
 

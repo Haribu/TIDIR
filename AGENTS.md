@@ -158,6 +158,9 @@ bun ./scripts/lint-terminology.ts # In sandboxes; or `bun run lint:terminology`
     - Specific concrete technologies (e.g. Kafka, Redpanda, ClickHouse, Apache Iceberg, Falco, DuckDB) are designated as **REFERENCE IMPLEMENTATION** or **EXAMPLE** to maintain pure vendor-neutrality.
 
 11. **Editorial & Information-Quality Doctrine ("Explain First, Name Second")**:
+    - **Core Axiom**: *TIDIR prose must be understandable before it is impressive. Use technical terminology because it increases precision, not because it signals sophistication.*
+    - *If a concept can be expressed accurately using established engineering terminology, do not create a TIDIR-specific name for it.*
+    - *Every architectural claim should be defensible by asking: "What engineering problem does this solve, what assumption does it rely upon, and what would falsify it?"*
     - **Progression Sequence**: Whenever introducing a complex or TIDIR-specific concept, follow this sequence:
       1. *Plain-English statement*: State the intuition without jargon.
       2. *Concrete engineering example*: Show the operational problem or failure mode.

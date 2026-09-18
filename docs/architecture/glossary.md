@@ -107,8 +107,8 @@ Before examining specialized terms, it is essential to state what TIDIR does **n
 <span style="background: #064e3b; color: #34d399; padding: 2px 8px; border-radius: 4px; font-size: 0.85rem; font-weight: 600;">ESTABLISHED</span> · **Invariants**: `INV-08` · **ADRs**: `ADR-0021` · **Capabilities**: `CAP-RESIL-001`
 
 - **Plain-English Definition**: If an advanced feature like AI reasoning, a graph database, or a streaming pipeline goes down, the security operations center does not go blind. The system automatically steps down to simpler, deterministic fallbacks.
-- **Concrete Engineering Example**: If the cloud AI provider suffers an outage during a major incident, the triage dashboard automatically activates Tier 3 Zero-AI mode, displaying standard tabular timelines sorted by OCSF timestamp and executing deterministic regex and threshold rules.
-- **Technical Explanation**: A distributed systems resilience architecture defining four tiered operational postures (Tier 1 Full Streaming to Tier 4 Zero-AI Edge Spooling). Loss of upstream services triggers automatic degradation to local queues, batch database queries, and static rule sets.
+- **Concrete Engineering Example**: If the cloud AI provider suffers an outage during a major incident, the triage dashboard automatically activates Tier 3 Rule-Based Non-AI mode, displaying standard tabular timelines sorted by OCSF timestamp and executing deterministic regex and threshold rules.
+- **Technical Explanation**: A distributed systems resilience architecture defining four tiered operational postures (Tier 1 Full Streaming to Tier 4 Non-AI Edge Spooling). Loss of upstream services triggers automatic degradation to local queues, batch database queries, and static rule sets.
 - **Why TIDIR Uses It**: Security operations cannot stop when cloud APIs or complex machine-learning pipelines fail during an incident. The SOC must maintain continuous visibility and containment capability under all conditions.
 
 ---
