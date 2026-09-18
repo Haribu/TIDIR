@@ -31,14 +31,14 @@ flowchart TB
 
   subgraph Consumers ["Operational Consumers (Layer 4)"]
     WORKBENCH["Analyst Progressive Workbench\n(Real-Time SSE Streaming Briefings)"]
-    SAGA_RESP["Saga Containment Engine\n(Pre-Execution Blast-Radius Simulation)"]
+    RESP_ENGINE["Monotonic Containment Engine\n(Pre-Execution Blast-Radius Simulation)"]
   end
 
   DataContext <-->|Read-Only Queries| MCP_ROUTER
   GATEWAY <--> RuntimeKernel
   RuntimeKernel <--> EVAL_CI
   RuntimeKernel <--> WORKBENCH
-  RuntimeKernel <--> SAGA_RESP
+  RuntimeKernel <--> RESP_ENGINE
 ```
 
 ---
@@ -130,7 +130,7 @@ flowchart TB
 
   subgraph BLUE_PLANE ["BLUE AGENTS (Active Defense & Triage)"]
     B1["OCSF Stream Correlation & Lakehouse Queries"]:::blue
-    B2["Specialist Forensic Mesh & Saga Containment"]:::blue
+    B2["Specialist Forensic Mesh & Monotonic Containment"]:::blue
   end
 
   subgraph GREEN_PLANE ["GREEN AGENTS (Self-Healing Remediation & Governance)"]
@@ -147,7 +147,7 @@ flowchart TB
 ```
 
 - **Red Agents (Continuous Adversary Emulation):** Simulate attacks in staging environments, probe detection rules for evasive bypasses, and fuzz the Prompt Injection Firewall with malicious payloads embedded in telemetry fields.
-- **Blue Agents (Detection & Incident Resolution):** Operate the runtime defense—correlating events across the Bipartite Entity Graph, executing parallel specialist investigations (Host, Identity, Network), simulating blast radius, and executing policy-gated Saga containment.
+- **Blue Agents (Detection & Incident Resolution):** Operate the runtime defense—correlating events across the Bipartite Entity Graph, executing parallel specialist investigations (Host, Identity, Network), simulating blast radius, and executing policy-gated monotonic containment.
 - **Green Agents (Self-Healing Remediation & Governance):** The active maintenance and repair engine of the architecture. Green agents do not simply flag problems; they **programmatically fix defects and hygiene gaps discovered across TIDIR**:
   1. *Detection-as-Code (DaC) Self-Healing:* When Red simulations expose a detection bypass or missed technique, Green agents analyze the missed telemetry and draft a GitHub Pull Request with the corrected declarative Sigma/SQL rule logic and synthetic regression unit tests.
   2. *Noise Budget Tuning & False-Positive Pruning:* When a detection rule breaches its 5% SRE noise budget, Green agents cluster the false-positive evidence, identify benign service accounts or batch jobs, and submit pull requests with hardened exclusion filters.
@@ -352,7 +352,7 @@ flowchart LR
 
   P1["<b>Phase 1: MVP (Crawl)</b><br>• NL-to-OCSF SQL Querying<br>• CTI Bulletin Summarization<br>• AST SELECT-Only Validator<br>• 100% Read-Only Copilot"]:::crawl
   P2["<b>Phase 2: Mesh (Walk)</b><br>• Specialist Subagent Mesh<br>• Shared Incident Blackboard<br>• Blast-Radius Simulator<br>• Evals-as-Code in CI/CD"]:::walk
-  P3["<b>Phase 3: Closed-Loop (Run)</b><br>• Autonomous Tier 1 Saga<br>• Purple Team Multi-Consensus<br>• Closed-Loop CTI Calibration<br>• Dual-Auth Consensus Gates"]:::run
+  P3["<b>Phase 3: Closed-Loop (Run)</b><br>• Autonomous Tier 1 Containment<br>• Purple Team Multi-Consensus<br>• Closed-Loop CTI Calibration<br>• Dual-Auth Consensus Gates"]:::run
 
   P1 ==>|Milestone: 98% Query Accuracy| P2
   P2 ==>|Milestone: 95% Grounding Fidelity| P3
@@ -379,7 +379,7 @@ flowchart LR
 ### Phase 3: Autonomous Closed-Loop (Run) — Months 6+
 * **Focus:** Sub-minute containment velocity and self-healing detection engineering.
 * **Capabilities:**
-  - Autonomous execution of Tier 1 containment playbooks with compensating Saga rollback transactions.
+  - Autonomous execution of Tier 1 containment playbooks with monotonic fail-closed state machines.
   - Continuous automated purple teaming with multi-model consensus evaluating detection rules.
   - Closed-loop attribution feedback auto-calibrating Layer 3 detection models.
 * **Architecture:** Event-driven agent microservices, cryptographic multi-signature consensus queues for Tier 2 actions, audited emergency break-glass protocol.

@@ -25,7 +25,7 @@ How does the architecture guarantee reliable, consistent automated containment w
 
 1. **Best-Effort Sequential Execution**: Fire API calls in sequence without compensation or state tracking; alert human operators on failure.
 2. **Synchronous Two-Phase Commit (2PC)**: Attempt distributed locking across all target APIs before committing state changes.
-3. **Saga Orchestration Pattern with Automated Compensating Transactions and Audited Break-Glass Override (Selected)**.
+3. **Monotonic Containment State Machine with Asymmetric Forward Escalation and Audited Break-Glass Override (Selected)**.
 
 ## Decision Outcome
 
@@ -46,7 +46,7 @@ Chosen option: **Saga Orchestration Pattern with Asymmetric Fail-Secure Forward 
 ### Positive Consequences
 
 * Eliminates the catastrophic risk of automated rollbacks dismantling containment perimeters during active attacks.
-* Guarantees fail-secure posture across hybrid enterprise environments.
+* Enforces fail-secure posture across hybrid enterprise environments.
 * Eliminates containment dwell time during existential, high-velocity intrusions without sacrificing authorization auditability.
 
 ### Negative Consequences

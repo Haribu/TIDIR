@@ -252,7 +252,7 @@ flowchart LR
   end
 
   subgraph ResponseContinuity ["4. Response Continuity"]
-    R_AUTO["Automated Forward Sagas"] -->|Runaway / API Failure| R_ESTOP["Master Autonomous E-Stop\n(Instant advisory freeze)"]
+    R_AUTO["Automated Containment State Machines"] -->|Runaway / API Failure| R_ESTOP["Master Autonomous E-Stop\n(Instant advisory freeze)"]
     R_ESTOP -->|Control Plane Collapse| R_OOB["Out-of-Band Signed Runbooks\n(Air-gapped manual execution)"]
   end
 ```

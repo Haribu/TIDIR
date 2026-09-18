@@ -12,8 +12,8 @@ flowchart TB
     T3["Emergency Outbreak Indicator\n(High-velocity ransomware pattern)"]
   end
 
-  subgraph SagaEngine ["Saga Orchestration & Blast-Radius Engine"]
-    SAGA["Saga Workflow Coordinator\n(Forward actions Ti, compensation actions Ci)"]
+  subgraph ContainmentEngine ["Containment Orchestration & Blast-Radius Engine"]
+    COORD["Containment Coordinator\n(Monotonic forward actions Ti, forward escalation Ei)"]
     EVAL{"Blast-Radius & Criticality\nEvaluation"}
     CIRCUIT["Connector Circuit Breaker\n(Decoupling failing APIs)"]
   end
@@ -30,10 +30,10 @@ flowchart TB
     AUDIT_LOG["Cryptographic Audit Ledger\n(RFC 3161 signed state transition trail)"]
   end
 
-  T1 & T2 --> SAGA
+  T1 & T2 --> COORD
   T3 --> BREAK_GLASS
 
-  SAGA --> EVAL
+  COORD --> EVAL
   EVAL -->|Low Blast Radius| TIER1
   EVAL -->|High Blast Radius| TIER2_GATE
 
@@ -49,8 +49,8 @@ flowchart TB
 
 ## 2. Core Functional Requirements
 
-1. **Saga Orchestration & Asymmetric Fail-Secure State Machine**:
-   - Multi-step containment and mitigation workflows are executed as distributed **Sagas**, structured on a **fail-secure asymmetric model**.
+1. **Monotonic Containment Orchestration & Asymmetric Fail-Secure State Machine**:
+   - Multi-step containment and mitigation workflows are executed as distributed state machines, structured on a **fail-secure asymmetric model**.
    - Unlike transactional ecommerce workflows, **security containment actions are never symmetrically reversed upon partial failure**. Reversing containment (e.g. un-quarantining a host or un-blocking an IP because a downstream token API timed out) actively restores attacker access.
    - If any downstream API fails during a containment sequence after exponential retries are exhausted, the orchestrator freezes the existing containment boundary and executes **Forward Containment Escalation**: applying broader out-of-band perimeter network fences (e.g. upstream firewall route drops) and triggering high-priority incident commander paging.
 
@@ -85,7 +85,7 @@ flowchart TB
 
 | Subsystem Component | Functional Architecture Pattern | Data Model & Protocol Standards |
 | :--- | :--- | :--- |
-| **Saga Orchestrator** | Distributed state machine with forward recovery, backward compensation, and idempotent retry semantics. | Declarative workflow DAG (JSON/YAML specification); stateful execution tokens. |
+| **Containment Orchestrator** | Monotonic state machine with forward recovery, fail-closed escalation, and idempotent retry semantics. | Declarative workflow DAG (JSON/YAML specification); stateful execution tokens. |
 | **Connector Integration Bus** | Asynchronous message bus with circuit breaker patterns, backpressure management, and dead-letter routing. | CloudEvents specification; REST/gRPC bi-directional streaming interfaces. |
 | **Consensus & Gating Engine** | Cryptographic multi-signature consensus workflow with timeout escalations and webhook-based interactive authorisation. | Public key signatures; out-of-band push notifications with ephemeral verification tokens. |
-| **Execution Audit Ledger** | Append-only event stream with tamper-evident cryptographic sealing for every forward and compensating mutation. | RFC 3161 timestamps; immutable signed transaction log. |
+| **Execution Audit Ledger** | Append-only event stream with tamper-evident cryptographic sealing for every forward containment and escalation mutation. | RFC 3161 timestamps; immutable signed transaction log. |

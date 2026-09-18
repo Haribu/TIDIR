@@ -166,7 +166,7 @@ The following matrix synthesises the TIDIR target architecture against the STRID
 | **Streaming Bus** | **I**nformation Disclosure | Unauthorised microservice taps high-throughput telemetry stream. | High | Topic-level SASL/SCRAM authentication, field-level encryption for PII. |
 | **Detection Engine** | **D**enial of Service | Complex ReDoS regex queries exhaust streaming CPU and memory. | High | AST-level query complexity analysis, bounded runtime execution ceilings. |
 | **Autonomous Mesh** | **E**levation of Privilege | Indirect prompt injection triggers unauthorised administrative containment. | Critical | Dual-plane Prompt Injection Firewall, read-only permissions, dual-model consensus. |
-| **Response Actuators** | **D**enial of Service | Runaway automation isolates enterprise infrastructure. | Critical | Saga state machines, blast-radius circuit breakers, Break-Glass human approval. |
+| **Response Actuators** | **D**enial of Service | Runaway automation isolates enterprise infrastructure. | Critical | Monotonic state machines, blast-radius circuit breakers, Break-Glass human approval. |
 
 ---
 
@@ -178,7 +178,7 @@ TIDIR enforces five explicit security perimeters:
 2. **Boundary 2: Pipeline to Data Fabric (Storage Perimeter):** Distributed streaming topics enforce role-based access control. Ingestion pipelines hold write-only access to streaming queues; analytics engines hold read-only consumer tokens.
 3. **Boundary 3: Analytics to Detection (Query Perimeter):** Detection engines run in sandboxed worker environments with strict CPU, memory, and query execution timeouts.
 4. **Boundary 4: Detection to AI Reasoning (Inference Perimeter):** Telemetry data passes through the Prompt Injection Firewall before model context injection. Agent runtimes have no direct external internet egress.
-5. **Boundary 5: AI Reasoning to Response Actuators (Action Perimeter):** The autonomous mesh cannot directly invoke infrastructure APIs. All action requests must be emitted as declarative Saga intents evaluated by the privileged response orchestrator.
+5. **Boundary 5: AI Reasoning to Response Actuators (Action Perimeter):** The autonomous mesh cannot directly invoke infrastructure APIs. All action requests must be emitted as declarative containment intents evaluated by the privileged response orchestrator.
 
 ---
 

@@ -58,7 +58,7 @@ flowchart TB
         T2["<b>Tier 1: Strategic Architecture</b><br>• Closed-loop SecOps<br>• Run-Watch-Adapt paradigm<br>• Dual-plane AI runtime"]
         T3["<b>Tier 2: Capabilities & Taxonomy</b><br>• CTI-01..05, DET-01..06<br>• INV-01..06, RESP-01..05<br>• Quantitative MTTx service levels"]
         T4["<b>Tier 3: Technical Specifications</b><br>• Line-rate OCSF schemas<br>• Distributed event streams<br>• Columnar Lakehouse Parquet storage"]
-        T5["<b>Subsystem Components & ADRs</b><br>• Prompt Injection Firewall (ADR-0004)<br>• Saga State Machine (ADR-0005)<br>• Bayesian Risk Engine (ADR-0009)"]
+        T5["<b>Subsystem Components & ADRs</b><br>• Prompt Injection Firewall (ADR-0004)<br>• Containment State Machine (ADR-0005)<br>• Bayesian Risk Engine (ADR-0009)"]
         T6["<b>Cross-Cutting Engineering Disciplines</b><br>• SRE Noise Error Budgets (&lt; 5% FPR)<br>• Continuous Purple Teaming CI/CD<br>• Audited Break-Glass protocols"]
     end
 
@@ -83,7 +83,7 @@ The Business Attributes Profile translates executive risk appetite into concrete
 
 | Business Attribute | Definition & Business Value | Primary Metric & Service Level Target | Supporting TIDIR Capability | Concrete Architectural Mechanism |
 | :--- | :--- | :--- | :--- | :--- |
-| **Timely** | Threats are detected and contained before adversary objectives or data exfiltration occur. | Streaming MTTD $< 5\,\text{s}$<br>Automated MTTC $< 15\,\text{s}$ | `DET-01`<br>`RESP-01` | In-memory stream pattern detection and low-latency Saga playbooks ([ADR-0005](/adr/0005-saga-pattern-containment-and-break-glass-protocol)). |
+| **Timely** | Threats are detected and contained before adversary objectives or data exfiltration occur. | Streaming MTTD $< 5\,\text{s}$<br>Automated MTTC $< 15\,\text{s}$ | `DET-01`<br>`RESP-01` | In-memory stream pattern detection and low-latency containment playbooks ([ADR-0005](/adr/0005-saga-pattern-containment-and-break-glass-protocol)). |
 | **Defensible** | Investigation evidence and incident timelines withstand regulatory scrutiny and court proceedings. | Evidence integrity verification: $100\%$ tamper-evident | `INV-04`<br>`CTI-05` | Cryptographically signed evidence lockers, immutable append-only storage, and 30-day historical replay ([ADR-0007](/adr/0007-continuous-automated-purple-teaming-and-multi-model-consensus)). |
 | **Controllable** | Automated containment operates with strictly bounded blast radius and human-in-the-loop governance. | Runaway automation incidents: $0$<br>Break-glass response latency $< 5\,\text{m}$ | `RESP-04`<br>`AIGOV-01` | Dual-plane Prompt Injection Firewall ([ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall)), connector circuit breakers, and audited Break-Glass overrides. |
 | **Cost-Efficient** | Infrastructure expenditure scales sub-linearly with telemetry volume growth. | Storage cost reduction $\ge 70\%$ vs traditional hot indexing | `DATA-01`<br>`DATA-04` | Decoupled lakehouse architecture routing raw telemetry to low-cost columnar storage (Parquet) and rejecting restrictive log filtering. |
@@ -117,7 +117,7 @@ flowchart LR
     subgraph GOVERNANCE["Privileged Control Zone"]
         ARB["Multi-Model Arbiter"]
         CIRCUIT["Circuit Breaker & Blast-Radius Engine"]
-        SAGA["Saga Orchestration Engine"]
+        RESP_ENGINE["Containment Orchestration Engine"]
         COMMANDER["Human Incident Commander<br>(Break-Glass Override)"]
     end
 
@@ -127,13 +127,13 @@ flowchart LR
 
     classDef default fill:#1e293b,stroke:#475569,stroke-width:1px,color:#f8fafc;
     classDef highlight fill:#0f766e,stroke:#14b8a6,stroke-width:1.5px,color:#ffffff;
-    class RAW_LOGS,EXT_FEED,PIF,AGENT_MESH,PROPOSER,CHALLENGER,ARB,CIRCUIT,SAGA,COMMANDER default;
+    class RAW_LOGS,EXT_FEED,PIF,AGENT_MESH,PROPOSER,CHALLENGER,ARB,CIRCUIT,RESP_ENGINE,COMMANDER default;
 ```
 
 1. **Untrusted Zone:** External events, email bodies, HTTP headers, and third-party threat feeds are classified as untrusted data inputs.
 2. **Inspection Zone:** The Prompt Injection Firewall strips command delimiters, inspects tokens for adversarial framing, and parses raw text into strongly typed schema parameters before model invocation ([ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall)).
 3. **Bounded Reasoning Zone:** Agents operate with read-only query capabilities across the data fabric. Autonomous agents possess zero direct execution credentials for mutating enterprise infrastructure.
-4. **Privileged Control Zone:** Response actions are generated as formal Saga intent requests. Actions must pass deterministic circuit breakers, automated blast-radius scoring, and dual-model consensus before the Saga orchestrator or on-duty commander dispatches mutating API calls ([ADR-0005](/adr/0005-saga-pattern-containment-and-break-glass-protocol)).
+4. **Privileged Control Zone:** Response actions are generated as formal containment intent requests. Actions must pass deterministic circuit breakers, automated blast-radius scoring, and dual-model consensus before the containment orchestrator or on-duty commander dispatches mutating API calls ([ADR-0005](/adr/0005-saga-pattern-containment-and-break-glass-protocol)).
 
 ---
 
@@ -141,7 +141,7 @@ flowchart LR
 
 * **Executive Defensibility:** Provides enterprise architecture review boards (EARBs), CISOs, and risk committees with clear, bi-directional traceability from high-level business goals to technical engineering decisions.
 * **Objective Investment Justification:** Non-functional requirements (such as data lakehouse retention or prompt injection firewalls) are defended in terms of concrete business attributes (*Cost-Efficient*, *Defensible*, *Controllable*).
-* **Clear Autonomous Boundaries:** Solves the AI governance challenge by integrating SABSA trust boundaries with the dual-plane prompt firewall and Saga state machines.
+* **Clear Autonomous Boundaries:** Solves the AI governance challenge by integrating SABSA trust boundaries with the dual-plane prompt firewall and monotonic containment state machines.
 * **Audit Readiness:** Directly prepares modern security operations for regulatory audits (such as NIS2, DORA, and ISO/IEC 27001) that mandate documented risk-to-control traceability.
 
 ## Negative Consequences

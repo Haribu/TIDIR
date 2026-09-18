@@ -26,7 +26,7 @@ flowchart TB
 
   D4["<b>Domain 4: Investigation & Case Management (INV)</b><br/>• INV-01: Unified Entity Resolution 360<br/>• INV-02: Chronological Multi-Source Timeline<br/>• INV-03: Relational Execution & Process Graph<br/>• INV-04: Sealed Evidence Locker & RFC 3161<br/>• INV-05: Hierarchical Agent Mesh & Prompt Firewall<br/>• INV-06: Progressive Disclosure Analyst Workbench<br/>• INV-07: Just-in-Time (JIT) Telemetry Elevation"]:::inv
 
-  D5["<b>Domain 5: Automated Response & Containment (RESP)</b><br/>• RESP-01: Declarative Playbook Orchestration<br/>• RESP-02: Blast-Radius & Saga Compensation Modelling<br/>• RESP-03: Autonomous Tier 1 Containment<br/>• RESP-04: Dual-Auth Consensus & Break-Glass Override<br/>• RESP-05: Closed-Loop & Green Team Triggers"]:::resp
+  D5["<b>Domain 5: Automated Response & Containment (RESP)</b><br/>• RESP-01: Declarative Playbook Orchestration<br/>• RESP-02: Monotonic Containment & Forward Escalation<br/>• RESP-03: Autonomous Tier 1 Containment<br/>• RESP-04: Dual-Auth Consensus & Break-Glass Override<br/>• RESP-05: Closed-Loop & Green Team Triggers"]:::resp
 
   GOV["<b>Cross-Cutting: AI Governance & Verification (AIGOV)</b><br/>• AIGOV-01: Continuous Evals-as-Code & Grounding<br/>• AIGOV-02: Dual-Plane Data/Control Isolation<br/>• AIGOV-03: Cost & Latency Performance Budgets<br/>• AIGOV-04: Agent Fleet Lifecycle & Preemption<br/>• AIGOV-05: MCP Tool Observability & Loop Breakers<br/>• AIGOV-06: Ephemeral Attestation & SVIDs<br/>• AIGOV-07: Non-Human Identity (NHI) Profiling"]:::aigov
 
@@ -99,7 +99,7 @@ flowchart TB
 
 | Capability ID | Name | Execution Mode | Description | Key Metric / SLA |
 | :--- | :--- | :--- | :--- | :--- |
-| **RESP-01** | Declarative Playbook Orchestration | `[Deterministic Engine]` | Execute multi-step containment, enrichment, and recovery workflows across third-party APIs via distributed Sagas. | Execution step dispatch < 500ms |
+| **RESP-01** | Declarative Playbook Orchestration | `[Deterministic Engine]` | Execute multi-step containment, enrichment, and recovery workflows across third-party APIs via monotonic state machines. | Execution step dispatch < 500ms |
 | **RESP-02** | Asymmetric Containment & Forward Escalation | `[AI/Agent-Augmented]` | Fail-secure execution that never rolls back containment on partial failure; executes forward perimeter escalation on error. | Fail-secure posture 100%; MTTR < 60 min |
 | **RESP-03** | Autonomous Rapid Containment | `[Deterministic Engine]` | Execute instantaneous containment for low-blast-radius actions (e.g. host isolation in sandbox, token invalidation). | Time-to-contain (MTTC) < 15 seconds |
 | **RESP-04** | Dual-Auth & Break-Glass Protocols | `[Human-in-the-Loop]` | Enforce multi-signature consensus for high-impact actions with authenticated single-commander break-glass overrides. | MTTC < 5 min; break-glass audit broadcast < 5 sec |

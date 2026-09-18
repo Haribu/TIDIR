@@ -8,14 +8,14 @@
 
 In high-throughput security operations, the relationship between detection engineering velocity and front-line analyst cognitive sustainability is often unmanaged. Detection engineers deploy rules that appear functional in isolation but generate excessive false-positive volume under live operational conditions, externalising the cost of noisy logic onto tier-1 analysts and driving severe alert fatigue.
 
-Furthermore, automated response playbooks and Saga containment workflows interact with complex distributed APIs (endpoint control planes, cloud identity providers, perimeter firewalls). Under real-world intrusion conditions, these APIs experience network latency, throttling ($429$), and partial downtime. If automated containment workflows are only tested under ideal laboratory conditions, their resilience under catastrophic attack conditions remains unverified.
+Furthermore, automated response playbooks and distributed containment workflows interact with complex distributed APIs (endpoint control planes, cloud identity providers, perimeter firewalls). Under real-world intrusion conditions, these APIs experience network latency, throttling ($429$), and partial downtime. If automated containment workflows are only tested under ideal laboratory conditions, their resilience under catastrophic attack conditions remains unverified.
 
 How does the architecture balance detection deployment velocity with analyst cognitive sustainability, while ensuring that automated containment workflows withstand distributed network faults?
 
 ## Decision Drivers
 
 * Elimination of alert fatigue by holding detection engineering accountable for false-positive operational load.
-* Continuous resilience verification of distributed containment connectors and Saga rollback state machines.
+* Continuous resilience verification of distributed containment connectors and monotonic fail-closed state machines.
 * Alignment of security operations with established Site Reliability Engineering (SRE) principles.
 * Strict adherence to capability-oriented paradigms and British English conventions.
 
@@ -43,7 +43,7 @@ Chosen option: **SecOps Error Budgets and Chaos Security Engineering**, because:
 - During pre-production validation, the test harness injects synthetic faults while adversary techniques are executing:
   - *Telemetry Partitions*: Artificially drops or delays streaming log partitions to test late-arrival watermarking.
   - *Connector Faults*: Simulates HTTP 429 rate limits, socket timeouts, and intermittent 5xx responses from third-party enforcement APIs.
-- The pipeline asserts that the **Saga Orchestrator** ([ADR-0005](0005-saga-pattern-containment-and-break-glass-protocol.md)) detects the failure, trips the circuit breaker, and executes compensating rollback transactions without leaving half-contained assets.
+- The pipeline asserts that the **Containment Orchestrator** ([ADR-0005](0005-saga-pattern-containment-and-break-glass-protocol.md)) detects the failure, trips the circuit breaker, and executes asymmetric forward escalation without rolling back security barriers.
 
 ### Positive Consequences
 

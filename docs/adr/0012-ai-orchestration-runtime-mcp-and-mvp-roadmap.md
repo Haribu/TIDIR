@@ -62,14 +62,14 @@ flowchart TB
 
   subgraph L4_Plane ["Resolution Plane (Layer 4)"]
     WORKBENCH["Analyst Progressive Workbench\n(Real-Time SSE Streaming Briefings)"]
-    SAGA_EXEC["Saga Containment Engine\n(Pre-Execution Blast-Radius Simulation)"]
+    RESP_EXEC["Monotonic Containment Engine\n(Pre-Execution Blast-Radius Simulation)"]
   end
 
   L1_L3 <-->|Read-Only Ingestion| MCP_BUS
   ROUTER <--> CoreRuntime
   CoreRuntime <--> EVAL_HARNESS
   CoreRuntime <--> WORKBENCH
-  CoreRuntime <--> SAGA_EXEC
+  CoreRuntime <--> RESP_EXEC
 ```
 
 ---
@@ -124,7 +124,7 @@ To guarantee immediate operational return on investment without exposing enterpr
 | :--- | :--- | :--- | :--- |
 | **Phase 1: MVP (Assisted Copilot)**<br>*(Crawl: Weeks 1–8)* | **Analyst Investigation Acceleration** | • Natural Language to OCSF SQL query synthesis.<br/>• Automated CTI bulletin summarization & ATT&CK DAG extraction.<br/>• Standardized Incident Briefing Dossier generation.<br/>• Single-agent execution with stateless tool calls. | • 100% Read-Only execution.<br/>• Deterministic AST query validator.<br/>• 100% human-in-the-loop review.<br/>• Golden benchmark suite for query syntax validity ($\ge 98\%$). |
 | **Phase 2: Supervised Agent Mesh**<br>*(Walk: Months 3–6)* | **Fatigue Elimination & Deep Correlation** | • Lead Triage Orchestrator coordinates specialized subagents (Host, Identity, Network).<br/>• Stateful incident blackboard with durable execution checkpoints.<br/>• Automated pre-execution blast-radius simulation.<br/>• Streaming SSE updates to progressive analyst workbench. | • Dual-Plane Prompt Injection Firewall active.<br/>• Continuous CI/CD Evals-as-Code gating model/prompt pull requests.<br/>• Human authorization mandatory for all containment actions.<br/>• Grounding fidelity $\ge 95\%$ on golden incident sets. |
-| **Phase 3: Autonomous Closed-Loop**<br>*(Run: Months 6+)* | **Sub-Minute Mitigation & Continuous Hardening** | • Autonomous execution of Tier 1 containment playbooks via Saga engine.<br/>• Automated continuous purple teaming & multi-model consensus.<br/>• Closed-loop attribution feedback refining Layer 3 detection models. | • Dual-authorization multi-signature consensus on all Tier 2 actions.<br/>• Audited cryptographic Break-Glass emergency protocol.<br/>• Continuous SecOps error budget tracking. |
+| **Phase 3: Autonomous Closed-Loop**<br>*(Run: Months 6+)* | **Sub-Minute Mitigation & Continuous Hardening** | • Autonomous execution of Tier 1 containment playbooks via monotonic state machine.<br/>• Automated continuous purple teaming & multi-model consensus.<br/>• Closed-loop attribution feedback refining Layer 3 detection models. | • Dual-authorization multi-signature consensus on all Tier 2 actions.<br/>• Audited cryptographic Break-Glass emergency protocol.<br/>• Continuous SecOps error budget tracking. |
 
 ---
 

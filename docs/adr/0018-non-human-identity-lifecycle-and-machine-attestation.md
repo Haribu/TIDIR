@@ -65,14 +65,14 @@ flowchart TB
   subgraph MCP_SERVERS ["Target MCP Tool Connectors"]
     LAKE["Lakehouse Query Service\n(Validates SVID mTLS & Claims)"]:::sink
     GRAPH["Entity Graph Service\n(Validates SVID mTLS & Claims)"]:::sink
-    SAGA["Containment Gateway\n(Requires Elevated SVID + Dual-Auth)"]:::sink
+    RESP_GATEWAY["Containment Gateway\n(Requires Elevated SVID + Dual-Auth)"]:::sink
   end
 
   TASK -->|Dispatches Agent with Task Brief| SPIRE_CONTROL
   CA -->|Mints Ephemeral SVID| SVID
   SVID -->|mTLS Handshake with SVID| LAKE
   SVID -->|mTLS Handshake with SVID| GRAPH
-  SVID -.->|Denied: Unauthorized Capability| SAGA
+  SVID -.->|Denied: Unauthorized Capability| RESP_GATEWAY
 ```
 
 1. **Hardware & Workload Attestation**:
@@ -140,7 +140,7 @@ To prevent credential leakage during incident containment or automated remediati
 
 1. **Zero Standing Privileges for SOAR and Playbooks**:
    - Response connectors (AWS, Azure, Okta, CrowdStrike) do not store permanent administrative API keys.
-   - When a containment playbook or Saga transaction executes, the orchestration engine negotiates an ephemeral token via OpenID Connect (OIDC) federation or Cloud STS AssumeRole with a 5-minute lifespan.
+   - When a containment playbook or automated workflow executes, the orchestration engine negotiates an ephemeral token via OpenID Connect (OIDC) federation or Cloud STS AssumeRole with a 5-minute lifespan.
 2. **Cryptographic Token Lineage Tracking**:
    - When an ephemeral token is minted for an automated action, its metadata carries an immutable parentage chain:
      - `parent_incident_id`: The verified incident driving the action.

@@ -33,7 +33,7 @@ flowchart TB
     subgraph MACRO4 ["4. Autonomous Investigation & Gated Containment"]
         direction TB
         S41["<b>Service 4.1: Agentic Triage & Progressive Disclosure Investigation</b><br>Hierarchical agent mesh, prompt firewall, and Situation Summaries"]
-        S42["<b>Service 4.2: Blast-Radius Gated Containment & Saga Orchestration</b><br>Pre-execution impact simulation, automated compensation rollbacks"]
+        S42["<b>Service 4.2: Blast-Radius Gated Containment & Monotonic State Machines</b><br>Pre-execution impact simulation, fail-closed forward escalation"]
         S43["<b>Service 4.3: Audited Break-Glass & Crisis Containment</b><br>Machine-speed containment override and cryptographic audit trails"]
         S44["<b>Service 4.4: Closed-Loop Feedback & Green Team Prevention</b><br>Indicator back-propagation, Evals calibration, and IaC hardening PRs"]
     end
