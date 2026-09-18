@@ -38,13 +38,13 @@ features:
     details: Stateful streaming rules, scheduled lakehouse SQL, and GitOps Detection-as-Code (DaC) tested continuously against atomic adversary simulations in CI/CD.
   - icon: 🧠
     title: Agent Trust Boundary
-    details: Specialised autonomous triage agents operating within a dual-plane untrusted data isolator, bounded by task-scoped ephemeral SVIDs.
+    details: Specialised triage agents operate behind the Agent Trust Boundary. Untrusted evidence is kept separate from control instructions, and agents receive only short-lived, task-scoped credentials.
   - icon: ⚡
     title: Monotonic Automated Containment
     details: Fail-secure state machines where partial failure cannot silently increase attacker reachability (s_{n+1} ⪯ s_n), gated by human break-glass overrides.
   - icon: 🔄
-    title: Closed-Loop Green Team Prevention
-    details: Attributed threat intelligence feeds back into CTI caches and DaC rules while generating Infrastructure-as-Code (IaC) pull requests to harden defense-in-depth.
+    title: Continuous Defensive Improvement
+    details: Operational incident outcomes continuously tune detections and intelligence caches while triggering automated infrastructure hardening pull requests (Green Team engineering).
 ---
 
 <div class="vp-doc" style="max-width: 1152px; margin: 0 auto; padding: 2rem 1.5rem;">
@@ -110,7 +110,7 @@ Modern security operations struggle with three basic problems:
 2. **Low Base Rates & Alert Amplification (High accuracy still produces alert fatigue)**: In an enterprise generating a billion events each day, an analytical rule with $99.9\%$ accuracy still creates thousands of false alarms because malicious events are exceedingly rare. Correlated alerts amplify this volume, causing analyst overload and degraded triage quality.
 3. **The Unchecked Automation Hazard (Automated fixes can break production or reopen doors)**: Traditional response scripts either crash mid-execution or attempt database-style rollbacks that accidentally restore network access for an active attacker. Meanwhile, connecting generative AI directly to operational tools allows prompt injection attacks to trigger unauthorized actions.
 
-**TIDIR solves these problems by separating the architecture into four distinct planes**—isolating untrusted data and advisory AI models within an open analytical environment, while protecting critical systems behind a lean, deterministic defence control plane.
+**TIDIR addresses these problems by separating the architecture into four distinct planes**—isolating untrusted data and advisory AI models within an open analytical environment, while protecting critical systems behind a lean, deterministic defence control plane.
 
 ---
 
@@ -126,7 +126,7 @@ TIDIR is built on seven core ideas. Each idea pairs an intuitive rule with a tec
 | **Protected AI Boundary** | AI models analyze and suggest; they never hold direct execution keys. | **[Agent Trust Boundary](/architecture/glossary#agent-trust-boundary)**: Operates AI in read-only sandboxes with short-lived credentials ($\le 15\text{m}$); assumes untrusted evidence can influence reasoning, making that influence irrelevant to execution authority. |
 | **Monotonic Safety** | If an automated response fails halfway through, never back out of security barriers. | **[Security-State Monotonicity](/architecture/glossary#security-state-monotonicity)**: Invariant $R(s_{\text{post}}) \subseteq R(s_{\text{pre}})$. Partial failures freeze in place or escalate forward; they never roll back. |
 | **Graceful Degradation** | If advanced services go down, fallback to simpler methods rather than going blind. | **[Graceful Degradation](/architecture/glossary#graceful-degradation)**: Automatically steps down through 4 operational tiers to edge spooling and rule-based timelines if streaming or AI fails. |
-| **Human Command** | People always retain the master override. | **Human Recoverability (`INV-09`)**: Independent out-of-band flight decks with cryptographic master kill-switches and dual-auth emergency bypass. |
+| **Human Command** | Independent human override. | **Human Recoverability (`INV-09`)**: Independent out-of-band flight decks with cryptographically authenticated emergency stops and dual-authorisation bypass. |
 
 ---
 
@@ -140,7 +140,7 @@ TIDIR does **not** claim to have invented data lakes, columnar storage, distribu
 
 **TIDIR's contribution is the specific architectural synthesis and governing safety invariants under which these established techniques interact.** 
 
-By wrapping untrusted telemetry and probabilistic AI agents within deterministic policy gates and monotonic state machines, TIDIR enables modern security operations to automate investigations and containment safely—without risking runaway automation, self-granting authority, or catastrophic blind spots.
+By wrapping untrusted telemetry and probabilistic AI agents within deterministic policy gates and monotonic state machines, TIDIR enables modern security operations to automate investigations and containment safely—while reducing the risk of runaway automation, self-granting authority, and loss of defensive visibility.
 
 For detailed definitions of established, adapted, and TIDIR-specific concepts, explore the **[Architectural Glossary & Concept Taxonomy](/architecture/glossary)**.
 
@@ -165,7 +165,7 @@ flowchart LR
 
 ---
 
-## 5. Explore by Role & Architectural Intent
+## 6. Explore by Role & Architectural Intent
 
 Select an entry point tailored to your focus:
 
@@ -195,7 +195,7 @@ Select an entry point tailored to your focus:
 <h3 style="margin-top: 0; color: #34d399;">⚡ Detection & SecOps Engineers</h3>
 <p style="font-size: 0.95rem; color: #94a3b8;">Dive into Polyglot Detection-as-Code, SRE noise budgeting, OCSF schema normalisation, and incident playbooks.</p>
 <ul style="padding-left: 1.25rem; font-size: 0.9rem;">
-  <li><a href="/architecture/02-capability-model">The 36-Capability Taxonomy</a></li>
+  <li><a href="/architecture/02-capability-model">Capability Taxonomy</a></li>
   <li><a href="/architecture/components/03-detection-engine">Detection Engine Architecture</a></li>
   <li><a href="/adr/0019-polyglot-detection-as-code-and-native-engine-adaptation">ADR-0019: Polyglot Detection-as-Code</a></li>
 </ul>
@@ -215,7 +215,7 @@ Select an entry point tailored to your focus:
 
 ---
 
-## 6. Open Source & Machine Access
+## 7. Open Source & Machine Access
 
 TIDIR is published as an open-source reference standard under the **Apache 2.0 License**:
 

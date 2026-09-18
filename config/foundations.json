@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "title": "TIDIR Canonical Engineering & Scientific Foundations Registry",
+  "description": "Curated primary research literature, open standards, and foundational computer science references underpinning TIDIR architectural invariants and mechanisms.",
+  "foundations": [
+    {
+      "id": "FND-01",
+      "topic": "Base-Rate Fallacy in Intrusion Detection",
+      "classification": "Academic Research",
+      "claim_supported": "High classifier accuracy in environments with low prior probability of intrusion produces overwhelming false-positive alert volumes.",
+      "citation": "Axelsson, S. (2000). The Base-Rate Fallacy and the Difficulty of Intrusion Detection. ACM Transactions on Information and System Security (TISSEC), 3(3), 186-205.",
+      "canonical_url": "https://doi.org/10.1145/357830.357849",
+      "applies_to": ["INV-03", "INV-06", "ADR-0008", "ADR-0009"]
+    },
+    {
+      "id": "FND-02",
+      "topic": "Protection of Information & Least Privilege",
+      "classification": "Academic Research",
+      "claim_supported": "Systems must default to fail-safe access, separate mechanisms from policy, and assign actors only the minimal ephemeral privilege required for the task.",
+      "citation": "Saltzer, J. H., & Schroeder, M. D. (1975). The Protection of Information in Computer Systems. Proceedings of the IEEE, 63(9), 1278-1308.",
+      "canonical_url": "https://doi.org/10.1109/PROC.1975.9939",
+      "applies_to": ["INV-04", "INV-05", "ADR-0004", "ADR-0015", "ADR-0018"]
+    },
+    {
+      "id": "FND-03",
+      "topic": "Zero Trust Architecture",
+      "classification": "Industry Standard",
+      "claim_supported": "No implicit trust is granted to assets based on physical location; authentication and authorization are discrete, dynamic, and continuously evaluated per transaction.",
+      "citation": "National Institute of Standards and Technology (NIST). (2020). Zero Trust Architecture. NIST Special Publication 800-207.",
+      "canonical_url": "https://doi.org/10.6028/NIST.SP.800-207",
+      "applies_to": ["INV-04", "INV-05", "ADR-0015", "ADR-0018"]
+    },
+    {
+      "id": "FND-04",
+      "topic": "Open Cybersecurity Schema Framework (OCSF)",
+      "classification": "Open Specification",
+      "claim_supported": "Vendor-agnostic telemetry normalization enables decoupled analytical pipelines and open-lakehouse storage without proprietary query lock-in.",
+      "citation": "Linux Foundation. (2023). Open Cybersecurity Schema Framework (OCSF) v1.1.0 Specification.",
+      "canonical_url": "https://schema.ocsf.io/",
+      "applies_to": ["INV-01", "INV-11", "ADR-0002", "ADR-0006"]
+    },
+    {
+      "id": "FND-05",
+      "topic": "STIX & TAXII Cyber Threat Intelligence",
+      "classification": "Open Specification",
+      "claim_supported": "Standardized graph serialization of threat observations, actors, and attack patterns enables vendor-neutral retro-hunting and automated intelligence exchange.",
+      "citation": "OASIS Open. (2021). Structured Threat Information Expression (STIX) Version 2.1 / TAXII Version 2.1.",
+      "canonical_url": "https://docs.oasis-open.org/cti/stix/v2.1/stix-v2.1.html",
+      "applies_to": ["INV-01", "INV-11", "ADR-0006", "ADR-0007"]
+    },
+    {
+      "id": "FND-06",
+      "topic": "Workload Attestation & Ephemeral Identity (SPIFFE/SPIRE)",
+      "classification": "Open Specification",
+      "claim_supported": "Machine actors and ephemeral microservices require cryptographically attested, short-lived X.509 documents rather than static secrets.",
+      "citation": "Cloud Native Computing Foundation (CNCF). (2020). Secure Production Identity Framework for Everyone (SPIFFE) Specification.",
+      "canonical_url": "https://spiffe.io/docs/latest/spiffe-about/spiffe-concepts/",
+      "applies_to": ["INV-05", "ADR-0015", "ADR-0018"]
+    },
+    {
+      "id": "FND-07",
+      "topic": "Threat-Informed Defense & Adversary TTP Taxonomy",
+      "classification": "Industry Standard",
+      "claim_supported": "Operational detections and security evaluations must be grounded in empirically observed adversary techniques rather than hypothetical threat models.",
+      "citation": "MITRE Corporation. (2018). MITRE ATT&CK: Design and Philosophy.",
+      "canonical_url": "https://attack.mitre.org/",
+      "applies_to": ["INV-02", "INV-03", "ADR-0019"]
+    },
+    {
+      "id": "FND-08",
+      "topic": "Sagas & Compensating Transactions",
+      "classification": "Distributed Systems Theory",
+      "claim_supported": "Long-lived distributed workflows cannot rely on traditional atomic locks; failure recovery requires forward compensation or state monotonicity.",
+      "citation": "Garcia-Molina, H., & Salem, K. (1987). Sagas. ACM SIGMOD Record, 16(3), 249-259.",
+      "canonical_url": "https://doi.org/10.1145/38714.38742",
+      "applies_to": ["INV-07", "ADR-0005"]
+    },
+    {
+      "id": "FND-09",
+      "topic": "Stability Patterns & Circuit Breakers",
+      "classification": "Distributed Systems Theory",
+      "claim_supported": "Cascading failures in distributed dependency graphs must be prevented through fast failure, circuit breakers, and decoupled bulkhead isolation.",
+      "citation": "Nygard, M. T. (2007). Release It! Design and Deploy Production-Ready Software. Pragmatic Bookshelf.",
+      "canonical_url": "https://pragprog.com/titles/mnee2/release-it-second-edition/",
+      "applies_to": ["INV-08", "ADR-0021"]
+    },
+    {
+      "id": "FND-10",
+      "topic": "Indirect Prompt Injection in Language Models",
+      "classification": "Academic Research",
+      "claim_supported": "Untrusted external data processed by language models can override system instructions; boundary safety requires strict structural separation between data and execution authority.",
+      "citation": "Greshake, K., Abdelnabi, S., Mishra, S., Endres, C., Holz, T., & Fritz, M. (2023). Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection. Proceedings of the 16th ACM Workshop on Artificial Intelligence and Security (AISEC '23).",
+      "canonical_url": "https://doi.org/10.1145/3605764.3623985",
+      "applies_to": ["INV-04", "INV-05", "ADR-0004", "ADR-0015"]
+    },
+    {
+      "id": "FND-11",
+      "topic": "Dual LLM Architecture & Prompt Firewalls",
+      "classification": "Academic Research",
+      "claim_supported": "Treating user/untrusted data as code violates basic security architecture; privileged execution agents must never read untrusted input directly without an intermediate isolating boundary.",
+      "citation": "Willison, S. (2023). The Dual LLM Pattern: A Security Architecture for Language Models Processing Untrusted Input.",
+      "canonical_url": "https://simonwillison.net/2023/Apr/25/dual-llm-pattern/",
+      "applies_to": ["INV-04", "ADR-0004"]
+    },
+    {
+      "id": "FND-12",
+      "topic": "Situation Awareness in Dynamic Automation",
+      "classification": "Human Factors Research",
+      "claim_supported": "Automated reasoning systems risk removing human operators from the decision loop, eroding situational awareness unless raw evidence and decision paths remain continuously inspectable.",
+      "citation": "Endsley, M. R. (1995). Toward a Theory of Situation Awareness in Dynamic Systems. Human Factors, 37(1), 32-64.",
+      "canonical_url": "https://doi.org/10.1518/001872095779049543",
+      "applies_to": ["INV-09", "INV-10", "ADR-0010", "ADR-0020"]
+    },
+    {
+      "id": "FND-13",
+      "topic": "Ironies of Automation & Operator Readiness",
+      "classification": "Human Factors Research",
+      "claim_supported": "The more autonomous a system becomes, the more crucial the human operator's manual skill becomes during rare, catastrophic failure modes.",
+      "citation": "Bainbridge, L. (1983). Ironies of Automation. Automatica, 19(6), 775-779.",
+      "canonical_url": "https://doi.org/10.1016/0005-1098(83)90046-8",
+      "applies_to": ["INV-08", "INV-09", "ADR-0020", "ADR-0021"]
+    },
+    {
+      "id": "FND-14",
+      "topic": "Ordering of Events in Distributed Systems",
+      "classification": "Distributed Systems Theory",
+      "claim_supported": "Consistent causality in asynchronous distributed networks requires logical clock ordering and append-only DAG provenance rather than synchronized wall clocks.",
+      "citation": "Lamport, L. (1978). Time, Clocks, and the Ordering of Events in a Distributed System. Communications of the ACM, 21(7), 558-565.",
+      "canonical_url": "https://doi.org/10.1145/359545.359563",
+      "applies_to": ["INV-02", "INV-10", "ADR-0001", "ADR-0010"]
+    },
+    {
+      "id": "FND-15",
+      "topic": "Cryptographic Time-Stamp Protocol (TSP)",
+      "classification": "Open Specification",
+      "claim_supported": "Forensic reconstructability requires trusted third-party cryptographic timestamp tokens proving evidence existed at a specific time without subsequent alteration.",
+      "citation": "Internet Engineering Task Force (IETF). (2001). Internet X.509 Public Key Infrastructure Time-Stamp Protocol (TSP). RFC 3161.",
+      "canonical_url": "https://www.rfc-editor.org/rfc/rfc3161",
+      "applies_to": ["INV-02", "INV-10", "ADR-0010"]
+    },
+    {
+      "id": "FND-16",
+      "topic": "Open Columnar Lakehouse Table Formats",
+      "classification": "Open Specification",
+      "claim_supported": "Open table formats on commodity object storage provide transactional consistency, schema evolution, and time-travel analytics without proprietary vendor storage engines.",
+      "citation": "Apache Software Foundation. (2021). Apache Iceberg Table Format Specification.",
+      "canonical_url": "https://iceberg.apache.org/spec/",
+      "applies_to": ["INV-01", "INV-11", "ADR-0002"]
+    }
+  ]
+}

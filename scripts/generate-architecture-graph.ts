@@ -369,7 +369,9 @@ const model: ArchitecturalModel = {
       mitigated_by_invariants: ["INV-06", "INV-07", "INV-09"],
       governing_adrs: ["ADR-0005"]
     }
-  ]
+  ],
+  glossary: JSON.parse(readFileSync("config/glossary.json", "utf-8")).terms,
+  foundations: JSON.parse(readFileSync("config/foundations.json", "utf-8")).foundations
 };
 
 const outputPath = resolve("docs/public/architecture.json");

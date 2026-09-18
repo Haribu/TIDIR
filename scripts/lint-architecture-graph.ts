@@ -89,6 +89,12 @@ try {
       }
     }
   }
+  if (!archJsonContent.glossary || archJsonContent.glossary.length < 5) {
+    errors.push("❌ architecture.json is missing or has insufficient glossary terms");
+  }
+  if (!archJsonContent.foundations || archJsonContent.foundations.length < 10) {
+    errors.push("❌ architecture.json is missing or has insufficient foundations entries");
+  }
 } catch (e: any) {
   errors.push(`❌ Failed to read or parse docs/public/architecture.json: ${e.message}`);
 }
