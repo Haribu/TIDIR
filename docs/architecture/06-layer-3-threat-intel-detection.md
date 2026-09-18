@@ -431,12 +431,16 @@ Where:
 - $M_{\text{asset}}$: Asset Criticality Multiplier ($1.0 \dots 5.0$) extracted from Layer 1 CMDB posture (Domain Controllers, production databases, executive credentials).
 - $P_{\text{PIR}}$: Priority Intelligence Requirement Priority Factor ($1.0 \dots 2.5$) for active threat actor campaigns targeting the organisation's specific sector.
 
-### 3. Noise Suppression & Intelligent De-duplication
+### 3. Noise Suppression, Intelligent De-duplication & Deterministic Overrides
 - **Volumetric Consolidation**: Hundreds of individual endpoint or network flow events triggered during a port sweep, password spray, or port scan are collapsed into a single multi-event finding cluster.
 - **Benign Baseline Suppression**: Graph clusters whose total risk score falls below the operational activation threshold are suppressed from real-time alert queues, preventing analyst burnout while preserving the complete graph record in the Layer 2 lakehouse for retrospective auditing.
+- **Deterministic Override Circuit (Zero-FPR Bypass)**:
+  - *The Threat*: Stealthy adversaries and living-off-the-land attacks intentionally avoid secondary telemetry generation (e.g. Bring Your Own Vulnerable Driver / BYOVD kernel tampering, unsigned LSASS memory dumping, or tripwire canary triggers). If the engine strictly mandates multi-signal graph compounding before incident promotion, it introduces a severe **False Negative bias**.
+  - *The Bypass*: Pre-certified high-consequence invariants and zero-FPR triggers ([ADR-0013](/adr/0013-ambient-deception-fabric-and-canary-anchors), [ADR-0009](/adr/0009-bayesian-multi-signal-risk-scoring)) **bypass graph compounding and sliding-window accumulation entirely**.
+  - Triggers immediately receive a maximum risk score ($S = 100$) and elevate directly into an emergency Layer 4 Incident Dossier without waiting for corroborating graph signals.
 
 ### 4. Handoff to Layer 4: The Elevated Incident Dossier
-When a cluster crosses the critical composite risk threshold, Layer 3 does not forward a raw list of alert notifications. It compiles a rich **Incident Dossier**:
+When a cluster crosses the critical composite risk threshold—or when a Deterministic Override Circuit trips—Layer 3 does not forward a raw list of alert notifications. It compiles a rich **Incident Dossier**:
 - **Consolidated Entity Graph**: Pre-mapped relationships between users, assets, processes, and remote IPs.
 - **Chronological Attack Timeline**: Formatted sequence of observed attacker milestones tagged with MITRE ATT&CK techniques.
 - **Automated Triage Summary**: Pre-computed blast-radius assessment and recommended response playbooks.

@@ -45,13 +45,21 @@ Chosen option: **Compound Bayesian Risk Lens over Relational Execution Graphs**,
   - *Orthogonal Domain Corroboration*: Requires corroboration across at least two independent domains (e.g. an unusual parent-child process chain *and* an outbound connection to an unclassified ASN) before elevating risk.
 - Isolated anomalies that fail to accumulate corroborating signals within a configurable time window decay naturally without operator intervention.
 
+### 3. Deterministic Override Circuit (Preventing Single-Event False Negatives)
+- **The Threat**: Stealthy adversaries intentionally engineer single-action, low-telemetry exploits (e.g. Bring Your Own Vulnerable Driver / BYOVD kernel tampering, LSASS memory injection, or canary token detonation). Mandating multi-signal corroboration for all alerts introduces a catastrophic **False Negative bias** where a lethal intrusion is suppressed because subsequent detection stages were evaded.
+- **Dual-Path Elevation Architecture**:
+  - *Probabilistic Path (Weak Signals)*: Heuristics, statistical baselines, and behavioural anomalies continue through graph compounding and decay logic.
+  - *Deterministic Override Circuit (Invariants & Canaries)*: Pre-certified high-consequence triggers—such as [ADR-0013](0013-ambient-deception-fabric-and-canary-anchors.md) canary honeytokens, blocklisted vulnerable kernel driver loads, or rapid cryptographic extension renaming—**bypass graph compounding entirely**.
+  - When an override invariant triggers, the Risk Lens instantly assigns a critical composite score ($S = 100$) and dispatches an emergency OCSF Class 2004 finding directly to Layer 4 with zero correlation delay.
+
 ### Positive Consequences
 
 * Mathematically neutralises the Base Rate Fallacy, dropping false-positive triage load by $> 75\%$.
 * Guarantees that every elevated finding delivered to an analyst carries a multi-signal contextual narrative.
 * Prevents brittle thresholding from blinding the system to slow-and-low multi-stage intrusions.
+* Eliminates the risk of single-event suppression through the Deterministic Override Circuit.
 
 ### Negative Consequences
 
 * Introduces short in-memory graph correlation windows (typically 15–30 minutes) before certain compound findings elevate.
-* Highly sophisticated attacks executing an isolated single-action exploit against non-critical assets must rely on lakehouse batch sweeps (`DET-02`) if real-time corroboration is absent.
+* Highly sophisticated attacks executing an isolated single-action exploit against non-critical assets must rely on lakehouse batch sweeps (`DET-02`) if real-time corroboration is absent and no deterministic invariant rule applies.

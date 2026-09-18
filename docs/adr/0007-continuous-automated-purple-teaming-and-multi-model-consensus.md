@@ -40,10 +40,12 @@ Chosen option: **Continuous Automated Purple Teaming, Dual-Model Consensus, and 
   3. *Streaming Detection Latency*: Stream engines trigger detection findings ($< 5\text{s}$).
   4. *Autonomous Scoping*: Agent harnesses correctly hydrate the investigative dossier.
 
-### 2. Dual-Model Consensus Arbiter (Proposer / Challenger Architecture)
-- High-stakes triage operations implement an adversarial dual-model consensus pattern:
+### 2. Dual-Model Consensus Arbiter (Heterogeneous & Symbolic Architecture)
+- High-stakes triage operations implement an adversarial consensus pattern with strict operational boundaries:
   - **The Proposer Agent**: Generates the primary adversary hypothesis, correlates OCSF event graphs, and drafts the containment recommendation.
   - **The Challenger Agent**: Independently receives the raw evidence ledger and critically audits the hypothesis. It actively seeks benign alternative explanations, checks for missing baseline data, and tests for confirmation bias.
+  - **Out-of-Band Decoupling & Latency Bounding**: Multi-model arbitration operates strictly out-of-band for deep investigative case assembly with hard timeout boundaries ($\le 500\,\text{ms}$). High-velocity streaming containment for machine-speed ransomware never blocks on LLM consensus.
+  - **Eliminating Shared Mode Collapse (Heterogeneous & Symbolic)**: To eliminate uniform prompt-injection vulnerabilities and shared training-set blind spots, the Challenger must be architecturally heterogeneous—combining a separate model family (e.g. specialized on-prem SLM judge, ADR-0014) with **deterministic symbolic validation** (validating chronological timestamp monotonicity, asserting edge existence via Cypher/SQL, and verifying schema types).
 - If the Proposer and Challenger models diverge beyond acceptable confidence thresholds ($< 80\%$ agreement), the incident dossier automatically escalates to a human operator with a comparative analysis of both reasoning paths.
 
 ### 3. Rejection of Output-Driven Ingestion Anti-Pattern

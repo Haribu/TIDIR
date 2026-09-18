@@ -151,6 +151,9 @@ flowchart TB
 - **Dual-Plane Prompt Injection Firewall**: All raw telemetry strings (e.g. command lines, URLs, file contents) are sandboxed within the unprivileged data plane, ensuring malicious payload strings cannot hijack agent execution flow.
 - **Autonomous Scoping Queries**: The agentic mesh immediately dispatches federated queries to the Layer 2 lakehouse without human prompting—determining whether a suspicious indicator has appeared elsewhere in the last 90 days, checking authentication baselines, and enumerating sibling assets.
 - **Hypothesis Formulation**: Evaluates the evidence against established attack patterns and outputs a plain-language hypothesis detailing: *What happened, how access was gained, what assets are affected, and what the attacker is attempting next.*
+- **Adversarial Dual-Model Consensus (Out-of-Band & Heterogeneous)**:
+  - *Out-of-Band Decoupling*: Multi-model arbitration (Proposer vs Challenger) operates strictly out-of-band for deep investigative case framing, bounded by hard timeout budgets ($\le 500\,\text{ms}$). High-velocity containment firewalls never block on multi-model consensus.
+  - *Elimination of Shared Mode Collapse*: To prevent uniform prompt injection bypasses or training-set blind spots, the Challenger agent couples an architecturally distinct model family (e.g. local SLM judge, [ADR-0014](../adr/0014-ai-observability-self-learning-and-slm-judges.md)) with **deterministic symbolic validation** (asserting chronological event monotonicity, verifying graph edge existence via SQL/Cypher, and validating OCSF schema type contracts).
 - **Action Plan Drafting**: Proposes an exact sequence of remediation steps, complete with estimated downtime, user impact, and blast-radius scores.
 
 ### 2. The Human Operator Workbench (The Judgment Anchor)
@@ -208,13 +211,17 @@ For Tier 2 actions whose blast-radius score exceeds an enterprise criticality th
 2. **Time-To-Live Expiration**: If the secondary signature is not cryptographically ratified within the configured TTL (e.g. 15 minutes), the staged action safely expires, preventing stale authorisations from executing against an altered operational topology.
 3. **Emergency Break-Glass Override**: For active ransomware encryption in flight, a single authenticated commander can trigger a break-glass override. This executes containment immediately while generating an immutable, priority-1 audit event forwarded to executive stakeholders.
 
-### Compensating Rollback Transactions (Atomic Containment)
-Containment playbooks often involve multi-step API execution chains (e.g. 1. Terminate user web session $\to$ 2. Revoke OAuth tokens $\to$ 3. Push firewall drop rule $\to$ 4. Isolate host network interface). If Step 4 fails due to a network timeout or third-party API outage, the system enters an inconsistent, half-contained state.
+### Asymmetric Fail-Closed Forward Recovery (Eliminating Rollback Anti-Patterns)
 
-Layer 4 mandates **Saga-Pattern Compensating Transactions**:
-- Every forward containment action $A_i$ must define an exact inverse compensating action $A_i^{-1}$.
-- If any step in a containment pipeline fails, the execution engine halts forward progress and executes the compensating rollback sequence ($A_{k-1}^{-1}, \dots, A_1^{-1}$) in reverse order to restore known-good environmental state, while raising an immediate critical operator alarm.
-- Rollback scripts are verified during CI/CD playbook build time, ensuring zero unrecoverable operational mutations.
+Security containment workflows interact with heterogeneous APIs across host agents, identity providers, and network firewalls that can encounter transient faults or rate limits. In traditional financial microservices, a Saga pattern executes compensating rollback transactions ($C_{i-1} \dots C_1$) if a subsequent step fails. 
+
+**In cybersecurity, rolling back containment is fundamentally anti-defence.** (Formalised in [ADR-0005](../adr/0005-saga-pattern-containment-and-break-glass-protocol.md)). If an Active Directory account revocation ($T_3$) fails after isolating a host ($T_1$) and blocking a C2 IP ($T_2$), un-quarantining the host or reopening the firewall actively restores adversary access and weaponizes transient network faults against the enterprise.
+
+Layer 4 mandates **Asymmetric Fail-Closed Forward Recovery**:
+- **Strict Prohibition of Containment Reversal**: Previously applied isolation barriers ($T_1 \dots T_{k-1}$) remain permanently active. The orchestrator **NEVER** executes reverse compensating undo actions during active incidents.
+- **Idempotent Retries & Circuit Breaking**: Failed API calls retry with exponential backoff and jitter up to a strict timeout window.
+- **Forward Containment Escalation**: If step $T_k$ fails permanently, the orchestrator executes **Forward Escalation**: applying broader out-of-band perimeter fences (e.g. upstream VPC network ACL drops or boundary route shunts) to enforce containment at a higher network tier.
+- **Automated Emergency Break-Glass Escalation**: Halts automated pipeline progression and pages the on-duty Incident Commander with an exact state diff of unexecuted steps.
 
 ### Operator Skill Retention & Incident Replay Flight Deck
 
