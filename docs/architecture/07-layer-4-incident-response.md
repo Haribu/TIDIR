@@ -151,13 +151,12 @@ flowchart TB
 - **Dual-Plane Prompt Injection Firewall**: All raw telemetry strings (e.g. command lines, URLs, file contents) are sandboxed within the unprivileged data plane, ensuring malicious payload strings cannot hijack agent execution flow.
 - **Autonomous Scoping Queries**: The agentic mesh immediately dispatches federated queries to the Layer 2 lakehouse without human prompting—determining whether a suspicious indicator has appeared elsewhere in the last 90 days, checking authentication baselines, and enumerating sibling assets.
 - **Hypothesis Formulation**: Evaluates the evidence against established attack patterns and outputs a plain-language hypothesis detailing: *What happened, how access was gained, what assets are affected, and what the attacker is attempting next.*
-- **Adversarial Dual-Model Consensus (Out-of-Band, Heterogeneous & Asymmetric Voting)**:
-  - *Out-of-Band Decoupling*: Multi-model arbitration (Proposer vs Challenger) operates strictly out-of-band for deep investigative case framing, bounded by hard timeout budgets ($\le 500\,\text{ms}$). High-velocity containment firewalls never block on multi-model consensus.
-  - *Elimination of Shared Mode Collapse*: To prevent uniform prompt injection bypasses or training-set blind spots, the Challenger agent couples an architecturally distinct model family (e.g. local SLM judge, [ADR-0014](../adr/0014-ai-observability-self-learning-and-slm-judges.md)) with **deterministic symbolic validation** (asserting chronological event monotonicity, verifying graph edge existence via SQL/Cypher, and validating OCSF schema type contracts).
-  - *Asymmetric Voting Logic (Pessimistic Quorum Protocol)*:
-    - When evaluating ambiguous Living-off-the-Land (LotL) activity, neural transformer models and symbolic rule engines can diverge. 
-    - For **Triage and Hypothesis Escalation**, a *pessimistic quorum* governs: if either engine indicates elevated threat confidence, the dossier elevates for human awareness.
-    - For **Automated Destructive Containment**, *strict unanimous consensus* is required. Any divergence immediately bypasses automated execution and routes the containment proposal to the human operator workbench, preventing arbitration thrashing.
+- **Adversarial Dual-Model Consensus (Asymmetric Consensus Pattern)**:
+  - *Out-of-Band Decoupling*: Multi-model arbitration (Proposer vs Challenger) operates out-of-band for deep investigative case framing, bounded by strict timeout budgets ($\le 500\,\text{ms}$). High-velocity streaming containment never blocks on multi-model consensus.
+  - *Elimination of Shared Mode Collapse*: The Challenger couples an architecturally distinct model family (e.g. local SLM judge, [ADR-0014](../adr/0014-ai-observability-self-learning-and-slm-judges.md)) with **deterministic symbolic validation** (asserting chronological event monotonicity, verifying graph edge existence via SQL/Cypher, and validating OCSF schema type contracts).
+  - *Asymmetric Arbitration Policy*: 
+    - For **Triage and Hypothesis Escalation**, a *pessimistic quorum* applies: if either engine identifies elevated threat confidence, the dossier elevates for analyst awareness.
+    - For **Automated Destructive Containment**, *unanimous agreement* between neural and symbolic verifiers is strictly mandatory. Any semantic divergence automatically diverts the action to the human operator workbench, preventing both runaway automation and arbitration thrashing.
 - **Action Plan Drafting**: Proposes an exact sequence of remediation steps, complete with estimated downtime, user impact, and blast-radius scores.
 
 ### 2. The Human Operator Workbench (The Judgment Anchor)
@@ -215,21 +214,16 @@ For Tier 2 actions whose blast-radius score exceeds an enterprise criticality th
 2. **Time-To-Live Expiration**: If the secondary signature is not cryptographically ratified within the configured TTL (e.g. 15 minutes), the staged action safely expires, preventing stale authorisations from executing against an altered operational topology.
 3. **Emergency Break-Glass Override**: For active ransomware encryption in flight, a single authenticated commander can trigger a break-glass override. This executes containment immediately while generating an immutable, priority-1 audit event forwarded to executive stakeholders.
 
-### Asymmetric Fail-Closed Forward Recovery (Eliminating Rollback Anti-Patterns)
+### Monotonic Fail-Closed Containment (Eliminating Rollback Anti-Patterns)
 
-Security containment workflows interact with heterogeneous APIs across host agents, identity providers, and network firewalls that can encounter transient faults or rate limits. In traditional financial microservices, a Saga pattern executes compensating rollback transactions ($C_{i-1} \dots C_1$) if a subsequent step fails. 
+Security containment workflows interact with heterogeneous APIs across host agents, identity providers, and network firewalls. In traditional commercial microservices, distributed workflows execute compensating rollbacks if a subsequent step fails. 
 
-**In cybersecurity, rolling back containment is fundamentally anti-defence.** (Formalised in [ADR-0005](../adr/0005-saga-pattern-containment-and-break-glass-protocol.md)). If an Active Directory account revocation ($T_3$) fails after isolating a host ($T_1$) and blocking a C2 IP ($T_2$), un-quarantining the host or reopening the firewall actively restores adversary access and weaponizes transient network faults against the enterprise.
+**In cybersecurity, rolling back containment is fundamentally anti-defence.** (Formalised in [ADR-0005](../adr/0005-saga-pattern-containment-and-break-glass-protocol.md)). If an identity revocation step fails after isolating a host and blocking a C2 IP, reversing those actions actively restores adversary footholds and weaponizes transient network faults against the enterprise.
 
-Layer 4 mandates **Asymmetric Fail-Closed Forward Recovery**:
-- **Strict Prohibition of Containment Reversal**: Previously applied isolation barriers ($T_1 \dots T_{k-1}$) remain permanently active. The orchestrator **NEVER** executes reverse compensating undo actions during active incidents.
-- **Idempotent Retries & Circuit Breaking**: Failed API calls retry with exponential backoff and jitter up to a strict timeout window.
-- **Idempotent Isolation Leases & Time-To-Live (Anti-Deadlock Guard)**:
-  - *Vulnerability*: In automated lateral movement outbreaks spanning dozens of nodes, forward-recovery state machines holding partial containment locks pending operator clearance risk enterprise-wide deadlocks and resource starvation.
-  - *Bounded Isolation Leases*: Every partial containment state held in a forward-recovery lock is bound to an **Idempotent Isolation Lease** with a strict Time-To-Live (TTL, default 45 minutes).
-  - *Safe-Fallback / Escalation Trigger*: If an operator does not clear or reconcile a stalled containment state machine before lease expiration, the orchestrator triggers an automatic deterministic safe-fallback: escalating to an out-of-band network boundary quarantine or invoking the higher-order supervisor alert, permanently preventing indefinite distributed deadlocks.
-- **Forward Containment Escalation**: If step $T_k$ fails permanently, the orchestrator executes **Forward Escalation**: applying broader out-of-band perimeter fences (e.g. upstream VPC network ACL drops or boundary route shunts) to enforce containment at a higher network tier.
-- **Automated Emergency Break-Glass Escalation**: Halts automated pipeline progression and pages the on-duty Incident Commander with an exact state diff of unexecuted steps.
+Layer 4 establishes **Monotonic Fail-Closed Containment**:
+- **Monotonic Progression Invariant**: Containment states move strictly in a single forward direction: toward increasing levels of isolation and control. Previously applied containment barriers ($T_1 \dots T_{k-1}$) **never regress or roll back** without explicit, authenticated human attestation.
+- **Fail-Secure Boundary Freezes**: On partial failure or API timeouts, the orchestrator freezes the existing perimeter in place and executes forward escalation (e.g. applying upstream network-tier isolation) rather than reopening endpoints.
+- **Lease-Gated Deadlock Prevention**: As codified in [ADR-0005](../adr/0005-saga-pattern-containment-and-break-glass-protocol.md), partial containment locks are bound to ephemeral isolation leases with bounded TTLs, guaranteeing that network partitions or stalled workflows fail safely to higher-order supervisory alerts without distributed deadlock.
 
 ### Operator Skill Retention & Incident Replay Flight Deck
 

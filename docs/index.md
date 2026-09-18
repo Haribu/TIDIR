@@ -31,7 +31,7 @@ features:
     details: Specialised autonomous agents with dual-plane prompt injection firewalls and Proposer/Challenger multi-model arbitration for hallucination-free investigations.
   - icon: ⚡
     title: Automated Response & Containment
-    details: Blast-radius risk-tiered Saga state machines executing automated containment with compensating rollbacks, circuit breakers, and break-glass human-in-the-loop controls.
+    details: Blast-radius risk-tiered state machines executing monotonic fail-closed containment with forward escalation, circuit breakers, and break-glass human-in-the-loop controls.
   - icon: 🔄
     title: Closed-Loop Feedback & Green Teams
     details: Incident discoveries feed back into CTI and DaC tuning, while triggering Green Team preventative hardening (IaC pull requests and defense-in-depth improvements).
@@ -123,8 +123,8 @@ Autonomous agentic workflows operate within a strictly isolated runtime:
 * **Control Plane vs. Data Plane Separation:** Untrusted external telemetry (email bodies, web payloads, obfuscated command strings) is strictly compartmentalised as raw data and never injected directly into agent execution prompts.
 * **Deterministic Guardrails & Multi-Model Arbitration:** High-consequence triage decisions require consensus between a *Proposer Model* (investigation specialist) and an independent *Challenger Model* (adversarial auditor) to eliminate hallucinated response actions.
 
-### 5. Saga Pattern Automated Containment & Break-Glass Governance
-Automated response actions follow the **Saga Pattern**, executing sequential compensating transactions if an action fails halfway. Containment workflows feature automated circuit breakers to protect against runaway automation. High-risk actions (such as revoking enterprise credentials or isolating mission-critical domain controllers) enforce strict **Break-Glass Human-in-the-Loop** verification gates with a maximum response latency (MTTC $< 5$ minutes).
+### 5. Monotonic Fail-Closed Containment & Break-Glass Governance
+Automated containment workflows execute declarative, monotonic state machines where defensive barriers move in a single forward direction: toward increasing isolation and control. Reversing or rolling back containment transactions upon partial failure is strictly rejected as an anti-defence vulnerability. Instead, workflows enforce **fail-closed boundary freezes** and forward escalation to broader network fences. High-risk actions enforce strict **Break-Glass Human-in-the-Loop** verification gates with a maximum response latency (MTTC $< 5$ minutes).
 
 ---
 
