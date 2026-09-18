@@ -135,7 +135,8 @@ export default withMermaid(
           collapsed: false,
           items: [
             { text: "0003 - Supernode Pruning & Graph Clustering", link: "/adr/0003-graph-supernode-pruning-and-clustering-boundaries" },
-            { text: "0005 - Asymmetric Containment & Break-Glass", link: "/adr/0005-saga-pattern-containment-and-break-glass-protocol" }
+            { text: "0005 - Asymmetric Containment & Break-Glass", link: "/adr/0005-saga-pattern-containment-and-break-glass-protocol" },
+            { text: "0020 - Operator Skill Retention & Simulators", link: "/adr/0020-operator-skill-retention-and-incident-replay-simulators" }
           ]
         },
         {

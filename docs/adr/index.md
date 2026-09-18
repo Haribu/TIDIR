@@ -9,7 +9,7 @@ This directory serves as the immutable registry of **Architectural Decision Reco
 All decisions are recorded as version-controlled markdown documents alongside the architecture specifications. Visual state machines and topologies within ADRs are authored in declarative Mermaid syntax and validated programmatically in CI/CD.
 
 ```
-Total Decisions: 19 | Accepted: 19 | Deprecated: 0 | Superseded: 0
+Total Decisions: 20 | Accepted: 20 | Deprecated: 0 | Superseded: 0
 ```
 
 ---
@@ -52,6 +52,7 @@ Total Decisions: 19 | Accepted: 19 | Deprecated: 0 | Superseded: 0
 | :--- | :--- | :--- | :--- | :--- |
 | [**0003**](0003-graph-supernode-pruning-and-clustering-boundaries.md) | **Supernode Pruning & Graph Boundaries** | `accepted` | Investigation Leads | Solves graph explosion by pruning high-degree utility nodes (DNS, shared DCs) during automated graph traversal. |
 | [**0005**](0005-saga-pattern-containment-and-break-glass-protocol.md) | **Asymmetric Containment & Break-Glass Protocol** | `accepted` | SecOps Leads | Executes containment as distributed Sagas with forward escalation on failure and audited human-in-the-loop break-glass overrides. |
+| [**0020**](0020-operator-skill-retention-and-incident-replay-simulators.md) | **Operator Skill Retention & Incident Replay** | `accepted` | SecOps / AI Platform | Counteracts the Ironies of Automation via forensic currency quotas, workload throttling, and incident replay simulators. |
 
 ---
 

@@ -216,6 +216,19 @@ Layer 4 mandates **Saga-Pattern Compensating Transactions**:
 - If any step in a containment pipeline fails, the execution engine halts forward progress and executes the compensating rollback sequence ($A_{k-1}^{-1}, \dots, A_1^{-1}$) in reverse order to restore known-good environmental state, while raising an immediate critical operator alarm.
 - Rollback scripts are verified during CI/CD playbook build time, ensuring zero unrecoverable operational mutations.
 
+### Operator Skill Retention & Incident Replay Flight Deck
+
+To permanently eliminate cognitive and forensic atrophy induced by autonomous agent triage (formalised in [ADR-0020](../adr/0020-operator-skill-retention-and-incident-replay-simulators.md)), Layer 4 institutionalises commercial aviation's flight-currency mandates and emergency check-ride models:
+
+1. **Forensic Currency Quotas ("Flight Hours")**:
+   - Responders maintain an active forensic currency profile requiring a monthly quota of unassisted manual investigations across system execution, cloud IAM, and identity domains.
+   - When an operator's currency metric decays, the allocation engine throttles autonomous delegation, routing eligible medium-severity live findings or synthetic canary alerts directly to the **Manual Flight Deck** (with agent copilots placed in passive observation mode).
+2. **The Incident Replay Simulator**:
+   - Leverages Layer 2 lakehouse time-travel partition snapshots to hydrate exact historical incident telemetry into an ephemeral sandbox workbench.
+   - Operators execute blind investigations against historical outbreaks and purple-team attack simulations without knowing whether the scenario is live or synthetic until the dossier is sealed.
+3. **Dual-Blind Mutual Calibration**:
+   - The autonomous agent mesh executes concurrently in a shadow runtime against the same incident.
+   - Post-investigation diff analysis identifies operator blind spots (training opportunities) and surfaces model drift or hallucinations in the agent mesh, using human expert findings as golden ground-truth benchmarks.
 
 ---
 

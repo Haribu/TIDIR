@@ -68,6 +68,11 @@ flowchart TB
    - **Time-Bounded Edge Re-Instrumentation**: Commands edge sensors (Host eBPF, network taps, cloud control planes) to temporarily elevate logging fidelity (e.g. enabling full Script Block Logging, process memory page string dumps, or rolling wire-level PCAP) for a surgical time window ($\text{TTL} \le 30\text{ minutes}$).
    - **Ephemeral Sinks & Auto-Eviction**: Deep forensic data streams into an isolated object storage bucket configured with a 48-hour auto-eviction policy. If confirmed as a true-positive incident, the specific evidence slice is promoted to the permanent Evidence Locker; otherwise, it expires with zero storage waste.
 
+5. **Operator Skill Retention & Manual Flight Deck**:
+   - **Forensic Currency Quotas**: Dynamically tracks operator recency and diverts eligible incidents to the unassisted Manual Flight Deck when currency decays, permanently preventing operator skill atrophy ([ADR-0020](../../adr/0020-operator-skill-retention-and-incident-replay-simulators.md)).
+   - **Incident Replay Simulator**: Hydrates historical lakehouse telemetry partitions and purple-team attack injections into an isolated sandbox for blind operator check-rides.
+   - **Dual-Blind Mutual Calibration**: Benchmarks human dossiers against shadow agent findings, simultaneously surfacing analyst blind spots and generating golden ground truth to prevent AI model drift.
+
 ---
 
 ## 3. Architectural Capability Archetypes & Protocol Standards
