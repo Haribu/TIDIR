@@ -9,7 +9,7 @@ This directory serves as the immutable registry of **Architectural Decision Reco
 All decisions are recorded as version-controlled markdown documents alongside the architecture specifications. Visual state machines and topologies within ADRs are authored in declarative Mermaid syntax and validated programmatically in CI/CD.
 
 ```
-Total Decisions: 20 | Accepted: 20 | Deprecated: 0 | Superseded: 0
+Total Decisions: 21 | Accepted: 21 | Deprecated: 0 | Superseded: 0
 ```
 
 ---
@@ -21,6 +21,7 @@ Total Decisions: 20 | Accepted: 20 | Deprecated: 0 | Superseded: 0
 | [**0001**](0001-record-architecture-decisions.md) | **Record Architecture Decisions** | `accepted` | Architecture Team / Harry | Establishes MADR markdown records with version-controlled Mermaid diagrams as the governance standard. |
 | [**0008**](0008-secops-error-budgets-and-chaos-security-engineering.md) | **SecOps Error Budgets & Chaos Engineering** | `accepted` | SecOps / SRE Team | Adopts SRE Alert Noise Error Budgets ($< 5\%$ FPR) with automated CI/CD deployment freezes on budget exhaustion. |
 | [**0010**](0010-sabsa-business-architecture-and-attribute-profiling.md) | **SABSA Alignment & Attribute Profiling** | `accepted` | Enterprise Architecture | Maps all TIDIR capabilities to the SABSA 6x6 matrix and operational security attribute profiles. |
+| [**0021**](0021-graceful-degradation-automated-fallback-and-continuity-plan-b.md) | **Graceful Degradation & Continuity Plan B** | `accepted` | Architecture / SecOps / SRE | Codifies a 4-tier capabilities-driven degradation model, failure detection probes, and automated Plan B fallbacks across all layers. |
 
 ---
 

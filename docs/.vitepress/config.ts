@@ -107,7 +107,8 @@ export default withMermaid(
             { text: "ADR Registry Overview", link: "/adr/" },
             { text: "0001 - Record Architecture Decisions", link: "/adr/0001-record-architecture-decisions" },
             { text: "0010 - SABSA Alignment & Attribute Profiling", link: "/adr/0010-sabsa-business-architecture-and-attribute-profiling" },
-            { text: "0008 - SecOps Error Budgets & Chaos SRE", link: "/adr/0008-secops-error-budgets-and-chaos-security-engineering" }
+            { text: "0008 - SecOps Error Budgets & Chaos SRE", link: "/adr/0008-secops-error-budgets-and-chaos-security-engineering" },
+            { text: "0021 - Graceful Degradation & Plan B", link: "/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b" }
           ]
         },
         {

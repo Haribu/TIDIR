@@ -227,3 +227,42 @@ To support continuous engineering across all disciplines, the architecture manda
 
 ### The Historical Replay Sandbox
 A key capability enabled by the Lakehouse tier (Layer 2) is the ability for Detection Engineers to **replay historical telemetry through candidate rules in Pre-Production**. By feeding 30 days of actual production events through a new rule in an isolated test harness, engineers measure exact true-positive vs. false-positive ratios before the rule ever touches production alert queues.
+
+---
+
+## 4. Operational Continuity, Failure Modes & Continuity Plan B
+
+Autonomous security architectures must survive component failures without dropping telemetry or blinding operations. Formally established in [ADR-0021](/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b), TIDIR implements a 4-tier capability-driven degradation framework:
+
+```mermaid
+flowchart LR
+  subgraph IngestionContinuity ["1. Ingestion Continuity"]
+    I_NORM["Streaming Bus Normal"] -->|Partition / Freeze| I_SPOOL["Edge Spooling\n(Disk ring buffers: 24-48h)"]
+    I_SPOOL -->|Prolonged Outage| I_OBJ["Direct-to-Object Bypass\n(Direct Parquet to Lakehouse)"]
+  end
+
+  subgraph DetectionContinuity ["2. Detection Continuity"]
+    D_STREAM["Streaming Graph Detection"] -->|Engine Memory / Stall| D_BATCH["Scheduled Lakehouse Sweeps\n(5-minute micro-batch SQL)"]
+    D_BATCH -->|Total Graph Stall| D_RAW["Primitive Direct Alerting\n(Bypass Bayesian Lens)"]
+  end
+
+  subgraph InvestigationContinuity ["3. Investigation Continuity"]
+    A_CLOUD["Cloud Frontier Models"] -->|API Timeout / Outage| A_SLM["Local / VPC SLM Judges"]
+    A_SLM -->|Complete Model Outage| A_ZERO["Zero-AI Workbench\n(Raw graph & tabular timeline)"]
+  end
+
+  subgraph ResponseContinuity ["4. Response Continuity"]
+    R_AUTO["Automated Forward Sagas"] -->|Runaway / API Failure| R_ESTOP["Master Autonomous E-Stop\n(Instant advisory freeze)"]
+    R_ESTOP -->|Control Plane Collapse| R_OOB["Out-of-Band Signed Runbooks\n(Air-gapped manual execution)"]
+  end
+```
+
+### Deterministic Degradation Matrix
+
+| Architectural Layer | Monitored Failure Condition | Detection Probe ("How We Know") | Automated Continuity Plan B |
+| :--- | :--- | :--- | :--- |
+| **Layer 1 & 2: Ingestion & Storage** | Streaming event bus partition or schema registry corruption. | Synthetic telemetry canaries fail to arrive in Layer 2 in $\le 60\text{s}$; consumer lag $> 60\text{s}$; DLQ $> 100\text{ events/min}$. | **Edge Spooling & Direct-to-Object Ingestion**: Forwarders spool to local NVMe ring buffers (24–48h capacity); prolonged partitions trigger direct-to-object upload of Parquet micro-batches directly to the columnar lakehouse. |
+| **Layer 3: Threat Intel & Detection** | Graph engine stagnation, memory exhaustion, or Risk Lens stall. | Time-to-Detect (TTD) delta $> 15\text{s}$; zero graph mutation rate despite active ingestion; canary invariant alert failure $> 30\text{s}$. | **Stream-to-Batch Failover & Direct Alerting**: Scheduled 5-minute columnar SQL batch sweeps assume detection coverage; complete graph stalls bypass Bayesian compounding and route raw sensor alerts directly to analyst queues. |
+| **Layer 4: AI & Investigation** | Cloud AI API outages, provider rate throttling, or network timeouts. | AI gateway circuit breakers trip after 3 consecutive HTTP 5xx errors; case hydration queue latency $> 60\text{s}$. | **Local SLM Fallback & Zero-AI Mode**: Traffic shifts to on-premise/VPC Small Language Models; complete model outages drop to Zero-AI mode (rendering deterministic tabular timelines and bipartite graph relationship tables). |
+| **Layer 4: Response & Automation** | Containment state machine lockups, EDR API unresponsiveness, or automation runaway. | Containment retries exceed 3 attempts; isolation lease approaches 45-minute TTL; containment velocity $> 10\text{ hosts/min}$. | **Master E-Stop & Out-of-Band Boundary Containment**: Master cryptographic E-Stop drops playbooks to advisory mode; expired leases auto-escalate to out-of-band network boundary ACLs; operators invoke signed air-gapped CLI runbooks. |
+
