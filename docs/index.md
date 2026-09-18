@@ -23,6 +23,9 @@ hero:
       text: Explore System Architecture
       link: /architecture/01-system-overview
     - theme: alt
+      text: Scientific Research Foundations
+      link: /architecture/foundational-research
+    - theme: alt
       text: Assurance Case Map
       link: /architecture/assurance-map
 

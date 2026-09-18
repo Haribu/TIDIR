@@ -195,6 +195,26 @@ All architectural layers, components, and Architectural Decision Records (ADRs) 
 
 ---
 
+### Invariant & Scientific Research Matrix
+
+The table below summarizes the academic papers, standards specifications, and institutional research grounding each of the 11 Constitutional Invariants. For full citation details, DOIs, and empirical analyses, refer to the [Canonical Scientific Research Table](/architecture/foundational-research#scientific-research-table).
+
+| Invariant | Title & Core Principle | Primary Literature & Standards Grounding | Canonical Ref |
+| :--- | :--- | :--- | :--- |
+| **I1** | **Telemetry Preservation** | OCSF Schema (Linux Foundation 2023); Open Table Formats (Apache Iceberg 2021) | [FND-04](/architecture/foundational-research#fnd-04), [FND-16](/architecture/foundational-research#fnd-16) |
+| **I2** | **Evidence Traceability** | Logical Clocks & Event Ordering (Lamport 1978); Cryptographic TSP (RFC 3161) | [FND-14](/architecture/foundational-research#fnd-14), [FND-15](/architecture/foundational-research#fnd-15) |
+| **I3** | **Evidential Independence** | Base-Rate Fallacy in Intrusion Detection (Axelsson 2000); MITRE ATT&CK (2018) | [FND-01](/architecture/foundational-research#fnd-01), [FND-07](/architecture/foundational-research#fnd-07) |
+| **I4** | **Authority Separation** | Separation of Protection & Mechanism (Saltzer & Schroeder 1975); Indirect Prompt Injection (Greshake et al. 2023; Willison 2023); Adversary AI Capabilities (UK NCSC 2024; Fang et al. 2024) | [FND-02](/architecture/foundational-research#fnd-02), [FND-10](/architecture/foundational-research#fnd-10), [FND-11](/architecture/foundational-research#fnd-11), [FND-17](/architecture/foundational-research#fnd-17) |
+| **I5** | **Least Capability** | Least Privilege (Saltzer & Schroeder 1975); Zero Trust (NIST SP 800-207); SPIFFE/SPIRE Workload Identity (CNCF 2020) | [FND-02](/architecture/foundational-research#fnd-02), [FND-03](/architecture/foundational-research#fnd-03), [FND-06](/architecture/foundational-research#fnd-06) |
+| **I6** | **Bounded Autonomy** | SRE Alert Noise Error Budgets (Axelsson 2000); Stability Patterns & Bulkheads (Nygard 2007) | [FND-01](/architecture/foundational-research#fnd-01), [FND-09](/architecture/foundational-research#fnd-09) |
+| **I7** | **Security-State Monotonicity** | Sagas & Compensating Transactions (Garcia-Molina & Salem 1987); Breakout Velocity & Dwell Time (CrowdStrike 2024; Mandiant 2024) | [FND-08](/architecture/foundational-research#fnd-08), [FND-19](/architecture/foundational-research#fnd-19) |
+| **I8** | **Degraded Defence** | Circuit Breakers & Graceful Degradation (Nygard 2007); Ironies of Automation (Bainbridge 1983) | [FND-09](/architecture/foundational-research#fnd-09), [FND-13](/architecture/foundational-research#fnd-13) |
+| **I9** | **Human Recoverability** | Situation Awareness in Dynamic Systems (Endsley 1995); Human Flight Decks & Ironies of Automation (Bainbridge 1983) | [FND-12](/architecture/foundational-research#fnd-12), [FND-13](/architecture/foundational-research#fnd-13) |
+| **I10** | **Reconstructability (Incident DAG)** | Distributed Clocks (Lamport 1978); Cryptographic Time-Stamp Tokens (RFC 3161) | [FND-14](/architecture/foundational-research#fnd-14), [FND-15](/architecture/foundational-research#fnd-15) |
+| **I11** | **Operational Portability & Exit** | OCSF (2023); STIX 2.1 / TAXII 2.1 (OASIS 2021); Apache Iceberg (2021) | [FND-04](/architecture/foundational-research#fnd-04), [FND-05](/architecture/foundational-research#fnd-05), [FND-16](/architecture/foundational-research#fnd-16) |
+
+---
+
 ## 3. Global Claims Discipline & Editorial Standards
 
 To ensure architectural credibility and scientific rigor, TIDIR documentation adheres to strict language discipline:

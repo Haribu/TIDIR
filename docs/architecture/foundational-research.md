@@ -20,9 +20,9 @@ Where speculative threats (such as adversary use of generative AI or automated e
 
 ---
 
-## 2. Canonical Scientific & Literature Registry
+## 2. Canonical Scientific Research & Literature Table {#scientific-research-table}
 
-The table below catalogs the primary academic papers, standards specifications, and institutional assessments underpinning the TIDIR architectural constitution and decision records:
+The **Scientific Research Table** below catalogs the 19 primary academic papers, standards specifications, and institutional assessments underpinning the TIDIR architectural constitution and decision records:
 
 | Ref ID | Topic & Focus Domain | Primary Citation | Canonical Link | Architectural Claim Supported | Governing Invariants & ADRs |
 | :--- | :--- | :--- | :--- | :--- | :--- |
