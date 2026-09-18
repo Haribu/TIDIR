@@ -74,28 +74,28 @@ The documentation is organized logically across strategy, capability mapping, de
 TIDIR has established a comprehensive conceptual foundation across 36 capabilities and four operational layers. To ensure the architecture remains falsifiable, grounded, and practically adoptable, the v0.2+ roadmap focuses on mathematical rigor, implementation evidence, and operational economics:
 
 1. **TIDIR Core / Minimum Viable Architecture (MVA)**:
-   - Formally specify the leanest TIDIR-compliant system: $\text{Telemetry Ingress} \to \text{OCSF Normalization} \to \text{Lakehouse / Hot Storage} \to \text{Polyglot DaC} \to \text{Findings} \to \text{Case Management} \to \text{Policy-Gated Actuation}$.
+   - Formally specify the leanest TIDIR-compliant system: `Telemetry Ingress ➔ OCSF Normalization ➔ Lakehouse / Hot Storage ➔ Polyglot DaC ➔ Findings ➔ Case Management ➔ Policy-Gated Actuation`.
    - Structure advanced components (streaming graph correlation, autonomous agent mesh, CTI retro-hunting, honeypots/deception) as progressive capability maturity tiers (Levels 1–4).
 
-2. **Reference Workload Models ($W_1, W_2, W_3$)**:
+2. **Reference Workload Models (W₁, W₂, W₃)**:
    - Replace ungrounded latency/throughput metrics with parameterized workload models:
-     $$W = \{\text{EPS, bytes/event, entities/day, cardinality, retention, hot \%, query concurrency, enrichment fanout}\}$$
-   - Define reference test profiles: $W_1$ (Mid-Market, $25\text{k}$ EPS), $W_2$ (Enterprise, $250\text{k}$ EPS), and $W_3$ (Hyperscale, $1\text{M}$ EPS).
+     `W = {EPS, bytes/event, entities/day, cardinality, retention, hot %, query concurrency, enrichment fanout}`
+   - Define reference test profiles: `W₁` (Mid-Market, 25k EPS), `W₂` (Enterprise, 250k EPS), and `W₃` (Hyperscale, 1M EPS).
 
 3. **Formal Bayesian Evidence Calibration Math**:
    - Provide concrete mathematical treatment and worked scenarios for dependency-aware evidence aggregation.
-   - Contrast naive conditional independence $P(\text{Compromise} \mid E_1, E_2, E_3)$ with TIDIR DAG-governed lineage fusion, formalizing prior calibration across diverse asset populations, likelihood ratios, and missing observation handling.
+   - Contrast naive conditional independence `P(Compromise | E₁, E₂, E₃)` with TIDIR DAG-governed lineage fusion, formalizing prior calibration across diverse asset populations, likelihood ratios, and missing observation handling.
 
-4. **Multi-Dimensional Containment Monotonicity ($R_{\text{attacker}}, A_{\text{business}}$)**:
-   - Expand the Security-State Monotonicity invariant ($R(s_{\text{post}}) \subseteq R(s_{\text{pre}})$) into a multi-objective state space balancing attacker reachability reduction against business operability and availability budgets.
+4. **Multi-Dimensional Containment Monotonicity (R_attacker, A_business)**:
+   - Expand the Security-State Monotonicity invariant (`R(s_post) ⊆ R(s_pre)`) into a multi-objective state space balancing attacker reachability reduction against business operability and availability budgets.
    - Define formal boundaries within which automated containment actions are permitted to execute without human intervention.
 
 5. **Threat-to-Assurance Traceability Matrix**:
    - Connect the STRIDE-aligned platform threat model directly to verification machinery via an assurance chain:
-     $$\text{STRIDE Threat} \longrightarrow \text{Constitutional Invariant} \longrightarrow \text{Architectural Control} \longrightarrow \text{Automated Test} \longrightarrow \text{Verifiable CI Artifact}$$
+     `STRIDE Threat ➔ Constitutional Invariant ➔ Architectural Control ➔ Automated Test ➔ Verifiable CI Artifact`
 
 6. **SecOps Unit Economics Framework**:
-   - Model telemetry economics as a first-class architectural dimension: $\frac{\Delta \text{Marginal Defensive Value}}{\Delta \text{Compute + Storage + Human Cost}}$.
+   - Model telemetry economics as a first-class architectural dimension: `Δ(Marginal Defensive Value) / Δ(Compute + Storage + Human Cost)`.
    - Provide mathematical decision models for hot/warm retention, streaming vs batch evaluation, model routing, and selective enrichment.
 
 7. **Reproducible Attack-to-Containment Benchmark Harness**:

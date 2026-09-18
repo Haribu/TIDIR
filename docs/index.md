@@ -144,7 +144,7 @@ $$
 $$
 
 ### 3. Continuous Purple Teaming & SecOps Error Budgets
-Borrowing from Site Reliability Engineering (SRE), detection quality is enforced through quantifiable **Alert Noise Error Budgets** (target: false-positive rate $\le 5\%$). Detection-as-Code (DaC) repositories execute continuous atomic attack emulation in CI/CD pipelines. If a detection rule exhausts its noise budget in production, an automated deployment freeze prevents new rule promotions until the noisy rule is tuned or deprecated.
+Borrowing from Site Reliability Engineering (SRE), detection quality is enforced through quantifiable **Alert Noise Error Budgets** (target: false-positive rate ≤ 5%). Detection-as-Code (DaC) repositories execute continuous atomic attack emulation in CI/CD pipelines. If a detection rule exhausts its noise budget in production, an automated deployment freeze prevents new rule promotions until the noisy rule is tuned or deprecated.
 
 ### 4. Dual-Plane Defensive AI Runtime & Agent Trust Boundary
 Autonomous agentic workflows operate within a strictly isolated runtime:
@@ -152,7 +152,7 @@ Autonomous agentic workflows operate within a strictly isolated runtime:
 * **Deterministic Invariant Validation & Advisory Multi-Model Critique:** High-consequence triage decisions are validated by deterministic invariant engines against schema and security policies; independent challenger models provide advisory defense-in-depth critique without self-granting execution authority.
 
 ### 5. Security-State Monotonicity & Fail-Closed Containment
-Automated containment workflows execute declarative state machines governed by **Security-State Monotonicity**: *no automated compensation may increase attacker reachability beyond the last verified-safe security state*. While forward compensation may safely restore benign services, rolling back security barriers upon downstream timeout is strictly prohibited as an anti-defence vulnerability. Workflows enforce fail-closed boundary freezes and forward escalation to broader network perimeters, with high-impact mutations gated by authenticated Break-Glass Human-in-the-Loop consensus (Mean Time to Contain / MTTC $\lt 5\text{ min}$).
+Automated containment workflows execute declarative state machines governed by **Security-State Monotonicity**: *no automated compensation may increase attacker reachability beyond the last verified-safe security state*. While forward compensation may safely restore benign services, rolling back security barriers upon downstream timeout is strictly prohibited as an anti-defence vulnerability. Workflows enforce fail-closed boundary freezes and forward escalation to broader network perimeters, with high-impact mutations gated by authenticated Break-Glass Human-in-the-Loop consensus (Mean Time to Contain / MTTC &lt; 5 min).
 
 ---
 
