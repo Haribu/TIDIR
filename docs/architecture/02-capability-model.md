@@ -1,5 +1,10 @@
 # TIDIR Capability Model
 
+> **Tier 2: Capabilities & Taxonomy** · **Golden Path Step 4 of 5** · **Audience**: Detection Leads, Security Managers · **Normative Status**: Normative Capability Taxonomy  
+> **Prerequisites**: [Step 3: System Overview](/architecture/01-system-overview) · **Next Step**: [Step 5: Target Threat Model & Assurance Case](/architecture/09-threat-model)
+
+---
+
 This document specifies the functional capability taxonomy required across the Threat Intelligence, Detection, Investigation & Response lifecycle.
 
 ---
@@ -24,7 +29,7 @@ flowchart TB
 
   D3["<b>Domain 3: Detection Engineering (DET)</b><br/>• DET-01: Stateful Sliding-Window Streaming<br/>• DET-02: Scheduled Batch Lakehouse SQL<br/>• DET-03: Detection-as-Code (DaC) & CI Testing<br/>• DET-04: Supernode-Dampened Graph Clustering<br/>• DET-05: Multi-Factor Composite Risk Lens<br/>• DET-06: SecOps Alert Noise Error Budgets<br/>• DET-07: Ambient Deception & Canary Fabric"]:::det
 
-  D4["<b>Domain 4: Investigation & Case Management (INV)</b><br/>• INV-01: Unified Entity Resolution 360<br/>• INV-02: Chronological Multi-Source Timeline<br/>• INV-03: Relational Execution & Process Graph<br/>• INV-04: Sealed Evidence Locker & RFC 3161<br/>• INV-05: Hierarchical Agent Mesh & Prompt Firewall<br/>• INV-06: Progressive Disclosure Analyst Workbench<br/>• INV-07: Just-in-Time (JIT) Telemetry Elevation"]:::inv
+  D4["<b>Domain 4: Investigation & Case Management (INV)</b><br/>• INV-01: Unified Entity Resolution 360<br/>• INV-02: Chronological Multi-Source Timeline<br/>• INV-03: Relational Execution & Process Graph<br/>• INV-04: Sealed Evidence Locker & RFC 3161<br/>• INV-05: Hierarchical Agent Mesh & Agent Trust Boundary<br/>• INV-06: Progressive Disclosure Analyst Workbench<br/>• INV-07: Just-in-Time (JIT) Telemetry Elevation"]:::inv
 
   D5["<b>Domain 5: Automated Response & Containment (RESP)</b><br/>• RESP-01: Declarative Playbook Orchestration<br/>• RESP-02: Monotonic Containment & Forward Escalation<br/>• RESP-03: Autonomous Tier 1 Containment<br/>• RESP-04: Dual-Auth Consensus & Break-Glass Override<br/>• RESP-05: Closed-Loop & Green Team Triggers"]:::resp
 
@@ -35,7 +40,7 @@ flowchart TB
   D3 ==>|Elevated Risk-Scored Incident Dossiers| D4
   D4 ==>|Validated Remediation & Containment Tasks| D5
   D5 -.->|Attributed Intel & Blindspot Calibration| D1
-  GOV -.-|Enforces Evals & Prompt Firewalls Across| D4
+  GOV -.-|Enforces Evals & Agent Trust Boundary Across| D4
   GOV -.-|Enforces Blast-Radius & Attestation Across| D5
 ```
 
@@ -43,9 +48,13 @@ flowchart TB
 
 ## 2. Functional Capability Domains
 
+> [!NOTE]
+> **Reference Target SLOs vs. Invariant Conformance Criteria**:
+> Operational latencies, throughput figures, and comprehension metrics listed in the tables below are designated as **Reference Target Service Level Objectives (SLOs)** based on representative enterprise workloads (e.g. 100 TB reference lakehouse tiers). They serve as engineering targets for reference implementations rather than mandatory invariant pass/fail criteria.
+
 ### Domain 1: Cyber Threat Intelligence (CTI)
 
-| Capability ID | Name | Execution Mode | Description | Key Metric / SLA |
+| Capability ID | Name | Execution Mode | Description | Reference Target SLO |
 | :--- | :--- | :--- | :--- | :--- |
 | **CTI-01** | Feed Aggregation & Ingestion | `[Deterministic Engine]` | Ingest commercial, open-source, ISAC, and internal telemetry feeds via STIX/TAXII, REST, and streaming endpoints. | Ingestion latency < 5 min from publication |
 | **CTI-02** | Deduplication & Confidence Scoring | `[Deterministic Engine]` | Normalize disparate indicator types, resolve overlapping claims, and compute decay scores over time. | Automated decay curves calculated daily |
@@ -57,7 +66,7 @@ flowchart TB
 
 ### Domain 2: Telemetry & Data Fabric
 
-| Capability ID | Name | Execution Mode | Description | Key Metric / SLA |
+| Capability ID | Name | Execution Mode | Description | Reference Target SLO |
 | :--- | :--- | :--- | :--- | :--- |
 | **DATA-01** | Multi-Source Ingestion | `[Deterministic Engine]` | Collect telemetry from host kernel instrumentation, cloud control planes, identity token sessions (OCSF 3002), and network sensors. | Zero loss, durable acknowledgement |
 | **DATA-02** | Canonical Schema Normalization | `[Deterministic Engine]` | Coerce raw schema structures into OCSF (Open Cybersecurity Schema Framework) objects at line rate with unmapped data catch-all. | Normalization overhead < 5ms per event |
@@ -69,7 +78,7 @@ flowchart TB
 
 ### Domain 3: Detection Engineering
 
-| Capability ID | Name | Execution Mode | Description | Key Metric / SLA |
+| Capability ID | Name | Execution Mode | Description | Reference Target SLO |
 | :--- | :--- | :--- | :--- | :--- |
 | **DET-01** | Real-Time Stream Detection | `[Deterministic Engine]` | Evaluate sliding-window stateful rules, in-flight token replay, and pattern matches against streaming events. | Time-to-detect (MTTD) < 5 seconds |
 | **DET-02** | Lakehouse Batch Analytics | `[Deterministic Engine]` | Execute complex, cross-table SQL analytics, behavioural baselines, and rare event heuristics. | Daily/hourly schedules (MTTD < 24h) |
@@ -83,13 +92,13 @@ flowchart TB
 
 ### Domain 4: Investigation & Case Management
 
-| Capability ID | Name | Execution Mode | Description | Key Metric / SLA |
+| Capability ID | Name | Execution Mode | Description | Reference Target SLO |
 | :--- | :--- | :--- | :--- | :--- |
 | **INV-01** | Entity Resolution | `[Deterministic Engine]` | Disambiguate and cross-reference identities (usernames, email, Kerberos tickets, hostnames, IP addresses). | Unified entity profile generation < 1 sec |
 | **INV-02** | Interactive Timeline Reconstruction | `[Deterministic Engine]` | Automatically construct a chronological sequence of actor actions, child processes, and auth events. | Multi-source timeline generation < 5 sec |
 | **INV-03** | Relational Graph Exploration | `[Deterministic Engine]` | Provide interactive graph visualization showing nodes (hosts, users, files, domains) and edges (relations). | Render graphs with > 10,000 nodes smoothly |
 | **INV-04** | Evidence Dossier & Auditability | `[Deterministic Engine]` | Maintain immutable records of investigative queries, pinned artifacts, analyst notes, and tags. | Tamper-evident audit logging of analyst actions (RFC 3161) |
-| **INV-05** | Agent Mesh & Multi-Model Consensus | `[AI/Agent-Augmented]` | Coordinate autonomous specialist subagents with adversarial Proposer/Challenger model arbitration behind prompt firewalls. | Time-to-investigate (MTTI) < 60s; > 80% consensus |
+| **INV-05** | Agent Mesh & Multi-Model Consensus | `[AI/Agent-Augmented]` | Coordinate autonomous specialist subagents with adversarial Proposer/Challenger model arbitration behind the Agent Trust Boundary. | Time-to-investigate (MTTI) < 60s; > 80% consensus |
 | **INV-06** | Progressive Disclosure Workbench | `[Human-in-the-Loop]` | Surface structured briefings in a 3-tier hierarchy (Situation Report ➔ Evidence Table ➔ On-Demand Graph Lineage). | Analyst triage comprehension < 60 sec |
 | **INV-07** | Just-in-Time (JIT) Telemetry Elevation | `[AI/Agent-Augmented]` | Programmatically command edge sensors to elevate collection fidelity (eBPF, PCAP, memory) for bounded windows (TTL <= 30m). | Elevation command dispatch < 10 sec; 48h auto-eviction |
 
@@ -97,7 +106,7 @@ flowchart TB
 
 ### Domain 5: Automated Response & Containment
 
-| Capability ID | Name | Execution Mode | Description | Key Metric / SLA |
+| Capability ID | Name | Execution Mode | Description | Reference Target SLO |
 | :--- | :--- | :--- | :--- | :--- |
 | **RESP-01** | Declarative Playbook Orchestration | `[Deterministic Engine]` | Execute multi-step containment, enrichment, and recovery workflows across third-party APIs via monotonic state machines. | Execution step dispatch < 500ms |
 | **RESP-02** | Asymmetric Containment & Forward Escalation | `[AI/Agent-Augmented]` | Fail-secure execution that never rolls back containment on partial failure; executes forward perimeter escalation on error. | Fail-secure posture 100%; MTTR < 60 min |
@@ -109,7 +118,7 @@ flowchart TB
 
 ### Cross-Cutting Domain: AI Governance & Verification (AIGOV)
 
-| Capability ID | Name | Execution Mode | Description | Key Metric / SLA |
+| Capability ID | Name | Execution Mode | Description | Reference Target SLO |
 | :--- | :--- | :--- | :--- | :--- |
 | **AIGOV-01** | Continuous Evals-as-Code | `[AI/Agent-Augmented]` | Automated CI/CD benchmarking of triage prompts and agent workflows against versioned golden incident datasets. | $\ge 95\%$ grounding fidelity; 100% schema tool validity |
 | **AIGOV-02** | Dual-Plane Data/Control Isolation | `[Deterministic Engine]` | Enforces strict boundaries preventing unformatted raw telemetry strings from acting as agent control instructions. | Zero instruction execution from untrusted log payloads |
@@ -123,7 +132,7 @@ flowchart TB
 
 ### Cross-Cutting Domain: Operational Continuity & Resilience (RESIL)
 
-| Capability ID | Name | Execution Mode | Description | Key Metric / SLA |
+| Capability ID | Name | Execution Mode | Description | Reference Target SLO |
 | :--- | :--- | :--- | :--- | :--- |
 | **RESIL-01** | Decoupled Edge Spooling | `[Deterministic Engine]` | Autonomous local disk ring buffering on forwarders during streaming bus network partitions. | 24–48h lossless buffer; zero forensic drop |
 | **RESIL-02** | Direct-to-Object Ingestion Bypass | `[Deterministic Engine]` | Dynamic failover allowing forwarders to write compressed Parquet micro-batches directly to object lakehouse. | Cutover latency < 60s from bus partition trip |

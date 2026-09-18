@@ -141,7 +141,7 @@ flowchart LR
 
 * **Executive Defensibility:** Provides enterprise architecture review boards (EARBs), CISOs, and risk committees with clear, bi-directional traceability from high-level business goals to technical engineering decisions.
 * **Objective Investment Justification:** Non-functional requirements (such as data lakehouse retention or agent trust boundaries) are defended in terms of concrete business attributes (*Cost-Efficient*, *Defensible*, *Controllable*).
-* **Clear Autonomous Boundaries:** Solves the AI governance challenge by integrating SABSA trust boundaries with the dual-plane prompt firewall and monotonic containment state machines.
+* **Clear Autonomous Boundaries:** Solves the AI governance challenge by integrating SABSA trust boundaries with the Agent Trust Boundary and monotonic containment state machines.
 * **Audit Readiness:** Directly prepares modern security operations for regulatory audits (such as NIS2, DORA, and ISO/IEC 27001) that mandate documented risk-to-control traceability.
 
 ## Negative Consequences

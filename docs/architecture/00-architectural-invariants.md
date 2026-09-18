@@ -1,5 +1,10 @@
 # The TIDIR Architectural Constitution: Invariants & Safety Principles
 
+> **Tier 1: Strategic Architecture** · **Golden Path Step 2 of 5** · **Audience**: All Audiences · **Normative Status**: Normative  
+> **Prerequisites**: [Step 1: What is TIDIR?](/guide/what-is-tidir) · **Next Step**: [Step 3: System Overview & 4-Plane Model](/architecture/01-system-overview)
+
+---
+
 Modern security operations cannot rely on monolithic assumptions of correctness. Distributed networks partition, OS kernels drop packets under storm conditions, adversary telemetry can be poisoned, and probabilistic models can hallucinate. 
 
 **TIDIR** (Threat Intelligence, Detection, Investigation & Response) is fundamentally a **safety architecture for autonomous cyber defence**. Rather than merely presenting a collection of technology components, it defines the invariant boundaries and mathematical constraints governing the interaction between uncertain evidence, probabilistic reasoning, deterministic authority, and physical actuation.
@@ -55,13 +60,14 @@ Closed-Loop Feedback & Evals (Continuous Calibration)
 
 ---
 
-## 2. The 10 Non-Negotiable Invariants
+## 2. The 11 Non-Negotiable Invariants
 
-All architectural layers, components, and Architectural Decision Records (ADRs) must strictly preserve these ten foundational invariants:
+All architectural layers, components, and Architectural Decision Records (ADRs) must strictly preserve these eleven foundational invariants:
 
 ### I1 — Telemetry Preservation
 *Absence of current detection value does not justify destruction of forensic evidence.*
-- Telemetry is ingested at line rate into low-cost columnar lakehouses (`L2_STORAGE`) in open formats (Parquet/Iceberg). Telemetry is never dropped at the edge merely because no active detection rule currently queries it.
+- **Invariant Property**: Ingested telemetry must survive and remain queryable in an open, vendor-neutral, schema-agnostic representation. Telemetry is never dropped at the edge merely because no active detection rule currently queries it.
+- **Reference Pattern**: Line-rate stream ingestion into open columnar lakehouses (`L2_STORAGE`) backed by object storage (e.g., Apache Iceberg / Parquet). Governed evidence compaction that provably preserves forensic reconstructability is permitted.
 
 ### I2 — Evidence Provenance & Traceability
 *Every consequential machine assertion is traceable to underlying raw observations.*
@@ -69,7 +75,8 @@ All architectural layers, components, and Architectural Decision Records (ADRs) 
 
 ### I3 — Evidential Independence (Anti-Shared Ancestry)
 *Common ancestry cannot be represented as independent corroboration.*
-- The Risk Lens explicitly models shared evidence ancestry. Findings sharing underlying raw observations are discounted to their residual information gain. Cross-domain corroboration requires evidential independence across orthogonal sensor categories validated empirically.
+- **Invariant Property**: Correlated derivations sharing common ancestry cannot masquerade as independent evidence. Evidence aggregation across orthogonal sensor domains must discount co-derived signals to their residual information gain.
+- **Reference Pattern**: Dependency-aware probabilistic risk compounding (such as Bayesian graph compounding or factor graphs) explicitly penalising shared parent nodes in the entity-finding graph.
 
 ### I4 — Authority Separation (Trust Doctrine Maxim)
 *Probabilistic components propose. Deterministic components authorize.*
@@ -77,15 +84,19 @@ All architectural layers, components, and Architectural Decision Records (ADRs) 
 
 ### I5 — Least Capability & Ephemeral Identity
 *Machine identities receive only task-scoped, short-lived authority.*
-- Machine actors never hold permanent ambient API keys or credentials. Tasks negotiate ephemeral X.509 certificates (SPIFFE Verifiable Identity Documents / SVIDs) valid for $\le 15\text{ minutes}$, encoding strictly verified capability constraints at the network layer.
+- **Invariant Property**: Machine authority must be short-lived, workload-bound, and strictly task-scoped. Machine actors never hold permanent ambient API keys or credentials.
+- **Reference Pattern**: Task-scoped cryptographic attestation issuing ephemeral X.509 certificates (e.g., SPIFFE/SPIRE Verifiable Identity Documents / SVIDs) valid for $\le 15\text{ minutes}$, with capability constraints enforced at the network and API layers.
 
 ### I6 — Bounded Autonomy & Blast Radius
 *Autonomous execution is strictly constrained by time, cost, scope, and blast radius.*
 - Automated actions enforce hard ceilings: wall-clock execution timeouts ($\le 180\text{s}$), financial inference limits ($\le \$2.50$), max tool-hops ($\le 8$), and asset criticality boundaries. Critical assets are immune to automated destructive isolation.
 
 ### I7 — Fail-Secure Containment & Reachability Monotonicity
-*Partial failure cannot silently restore attacker reachability ($R(s_{\text{post}}) \subseteq R(s_{\text{pre}})$).*
-- Containment workflows execute declarative state machines where forward compensation is permitted, but security barriers never roll back upon downstream API errors. Failures freeze perimeters in place and escalate forward to broader network boundaries.
+*Partial failure cannot silently restore attacker reachability ($s_{n+1} \preceq s_n$).*
+- **Invariant Property**: Containment workflows execute declarative state machines where forward compensation is permitted, but security barriers never roll back upon downstream API errors. Failures freeze perimeters in place and escalate forward to broader network boundaries.
+- **Formal State Ordering ($\mathcal{S}_{n+1} \preceq \mathcal{S}_n$)**: Attacker reachability is not a simple scalar; a security state is defined as the tuple $\mathcal{S} = \langle \mathcal{R}_{\text{net}}, \mathcal{R}_{\text{id}}, \mathcal{E}_{\text{surface}}, \mathcal{V}_{\text{telemetry}} \rangle$. A state transition $s_n \to s_{n+1}$ is strictly monotonic if and only if:
+  $$\mathcal{R}_{\text{net}}(s_{n+1}) \subseteq \mathcal{R}_{\text{net}}(s_n) \quad \land \quad \mathcal{R}_{\text{id}}(s_{n+1}) \subseteq \mathcal{R}_{\text{id}}(s_n) \quad \land \quad \mathcal{E}_{\text{surface}}(s_{n+1}) \subseteq \mathcal{E}_{\text{surface}}(s_n) \quad \land \quad \mathcal{V}_{\text{telemetry}}(s_{n+1}) \supseteq \mathcal{V}_{\text{telemetry}}(s_n)$$
+  Any action that would increase reachability or attack surface without explicit human authorization is deterministically rejected.
 
 ### I8 — Graceful Defensive Degradation
 *Failure of an advanced capability reduces sophistication, never total visibility.*
@@ -98,6 +109,11 @@ All architectural layers, components, and Architectural Decision Records (ADRs) 
 ### I10 — Reconstructability (The Incident Decision DAG)
 *Consequential decisions can be deterministically reconstructed from immutable records.*
 - Every investigative finding, hypothesis, decision, and response action is committed as a cryptographically sealed edge in the **Incident Decision DAG**, capturing exact model versions, raw input hashes, authorizing keys, and environmental outcomes.
+
+### I11 — Operational Portability & Non-Lock-In
+*Vendor neutrality is an architectural invariant, not merely a design intention.*
+- **Invariant Property**: No consequential security telemetry, detection logic, investigative case state, policy definition, or audit lineage SHALL be irrecoverably dependent upon a proprietary execution environment or vendor-controlled storage format.
+- **Exit & Interoperability Criteria**: Conformance requires full bi-directional exportability and replayability using open representations: telemetry in OCSF / open columnar formats (Parquet/Iceberg), detections in Polyglot DaC, threat intelligence in STIX 2.1 / TAXII 2.1, and execution lineage in open JSON-LD / DAG structures.
 
 ---
 

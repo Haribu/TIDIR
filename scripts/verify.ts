@@ -5,6 +5,7 @@ console.log("🚀 Starting holistic TIDIR verification suite...\n");
 const steps = [
   { name: "Site Structure & Navigation", script: "./scripts/lint-site-structure.ts" },
   { name: "Controlled Architectural Terminology", script: "./scripts/lint-terminology.ts" },
+  { name: "Architectural Graph & Assurance Mapping", script: "./scripts/lint-architecture-graph.ts" },
   { name: "Mermaid Diagram Syntax Validation", script: "./scripts/validate-diagrams.ts" },
   { name: "VitePress Documentation Build & Sitemap", script: "./scripts/build-docs.ts" },
   { name: "MathJax & Parameter Integrity Audit", script: "./scripts/lint-docs-math.ts" }

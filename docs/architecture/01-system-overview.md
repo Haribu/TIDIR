@@ -1,5 +1,10 @@
 # TIDIR Target System Architecture: Cyber Defence Control System
 
+> **Tier 1: Strategic Architecture** · **Golden Path Step 3 of 5** · **Audience**: Enterprise Architects, SecOps Leaders · **Normative Status**: Normative Architecture  
+> **Prerequisites**: [Step 2: Invariants & Constitution](/architecture/00-architectural-invariants) · **Next Step**: [Step 4: Capability Model](/architecture/02-capability-model)
+
+---
+
 This document defines the target component architecture for **TIDIR** (Threat Intelligence, Detection, Investigation & Response). TIDIR is architected as a closed-loop **Cyber Defence Control System** that governs the operational progression:
 
 $$\text{Observe} \longrightarrow \text{Normalise} \longrightarrow \text{Infer} \longrightarrow \text{Investigate} \longrightarrow \text{Decide} \longrightarrow \text{Actuate} \longrightarrow \text{Learn}$$
@@ -94,7 +99,7 @@ flowchart LR
     E2["Threat Intel Engineering\n(PIRs & Indicator Decay)"]:::eng
     E3["Detection Engineering (DaC)\n(Simulation, Testing & CI/CD)"]:::eng
     E4["Automation SRE\n(Playbooks-as-Code & Fail-Closed Containment)"]:::eng
-    E5["AI Agent Harnesses\n(Evals-as-Code & Prompt Firewall)"]:::eng
+    E5["AI Agent Harnesses\n(Evals-as-Code & Agent Trust Boundary)"]:::eng
     E6["Green Team Engineering\n(IaC Remediation & Defense-in-Depth)"]:::eng
   end
 
@@ -117,22 +122,23 @@ flowchart LR
 
 ---
 
-## 2. The TIDIR Architectural Constitution (10 Non-Negotiable Invariants)
+## 2. The TIDIR Architectural Constitution (11 Non-Negotiable Invariants)
 
-A reference architecture is defined by its target invariants—the declarative properties that must hold true across normal operation, network partitions, component degradation, and active adversary attack. TIDIR establishes ten constitutional invariants (promoted from [ADR-0021](../adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b.md) and system doctrine):
+A reference architecture is defined by its target invariants—the declarative properties that must hold true across normal operation, network partitions, component degradation, and active adversary attack. TIDIR establishes eleven constitutional invariants (promoted from [ADR-0021](../adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b.md) and system doctrine):
 
-1. **Telemetry Preservation Invariant**: Raw forensic evidence is not discarded solely because no existing detection consumes it. Ephemeral network partitions, streaming bus failures, or database degradation must never result in unrecoverable forensic event loss. Edge sensors support local ring buffering (24–48h NVMe spooling) and direct-to-object ingestion bypasses.
+1. **Telemetry Preservation Invariant**: Raw forensic evidence is not discarded solely because no existing detection consumes it. Ephemeral network partitions, streaming bus failures, or database degradation must never result in unrecoverable forensic event loss. Ingested telemetry must survive in an open representation (e.g., Parquet/Iceberg on object storage).
 2. **Evidence Traceability Invariant**: Every consequential assertion, finding, and hypothesis must be strictly traceable to underlying raw observations in the data fabric. Uncited or floating claims are deterministically pruned.
-3. **Dependency-Aware Confidence Invariant**: Correlated derivations sharing common upstream ancestry cannot masquerade as independent evidence. Posterior risk elevation discounts co-derived signals using canonical Evidence Lineage Domains.
+3. **Dependency-Aware Confidence Invariant**: Correlated derivations sharing common upstream ancestry cannot masquerade as independent evidence. Posterior risk elevation discounts co-derived signals using dependency-aware probabilistic compounding.
 4. **No Self-Granting Authority Invariant**: Probabilistic reasoning cannot grant itself execution authority. Generative models and statistical classifiers operate in a proposal-only capacity; all mutations require deterministic policy or human authorization (*"Probabilistic components propose. Deterministic components authorize"*).
-5. **Least Capability Invariant**: Every machine actor and automated agent receives only task-scoped, ephemeral authority. Runtimes issue short-lived SPIFFE Verifiable Identity Documents (SVIDs) with read-only analytical boundaries; forensic agents cannot acquire containment credentials.
-6. **Fail-Secure Security-State Monotonicity Invariant**: Component failure or partial workflow execution cannot silently increase attacker reachability beyond the last verified-safe posture:
-   $$\forall s \in \mathcal{S}, \quad R(s_{\text{post}}) \subseteq R(s_{\text{pre}})$$
+5. **Least Capability Invariant**: Every machine actor and automated agent receives only task-scoped, ephemeral authority. Runtimes issue short-lived identity documents (e.g. SPIFFE SVIDs $\le 15\text{m}$) with read-only analytical boundaries; forensic agents cannot acquire containment credentials.
+6. **Fail-Secure Security-State Monotonicity Invariant**: Component failure or partial workflow execution cannot silently increase attacker reachability beyond the last verified-safe posture ($s_{n+1} \preceq s_n$). Evaluated over the tuple $\mathcal{S} = \langle \mathcal{R}_{\text{net}}, \mathcal{R}_{\text{id}}, \mathcal{E}_{\text{surface}}, \mathcal{V}_{\text{telemetry}} \rangle$, transitions require:
+   $$\mathcal{R}_{\text{net}}(s_{n+1}) \subseteq \mathcal{R}_{\text{net}}(s_n) \quad \land \quad \mathcal{R}_{\text{id}}(s_{n+1}) \subseteq \mathcal{R}_{\text{id}}(s_n) \quad \land \quad \mathcal{E}_{\text{surface}}(s_{n+1}) \subseteq \mathcal{E}_{\text{surface}}(s_n) \quad \land \quad \mathcal{V}_{\text{telemetry}}(s_{n+1}) \supseteq \mathcal{V}_{\text{telemetry}}(s_n)$$
    *Forward compensation is permitted to safely restore benign services, but security-state regression is strictly forbidden.* Defensive boundaries move in a single forward direction.
 7. **Bounded Autonomy Invariant**: Autonomous execution is strictly constrained by explicit temporal Time-To-Live (TTL) leases, rate-limit velocity brakes, financial token budgets, and blast-radius impact tiers.
 8. **Human Recoverability Invariant**: Autonomous control planes always preserve independently accessible, out-of-band manual flight decks. The architecture provides a master cryptographic E-Stop and air-gapped, signed runbooks for human Incident Commanders.
 9. **Degraded Defence Invariant**: The loss or outage of an advanced capability (e.g. streaming buses or cloud language models) reduces operational sophistication to batch lakehouse sweeps or deterministic heuristic dossiers, but never causes total visibility blindness.
 10. **Reconstructability Invariant**: Every consequential decision, containment mutation, and case resolution can be deterministically reconstructed after the fact via an immutable, cryptographically sealed **Incident Decision DAG**.
+11. **Operational Portability & Exit Invariant**: No consequential security telemetry, detection logic, investigative case state, policy definition, or audit lineage SHALL be irrecoverably dependent upon a proprietary execution environment or vendor-controlled storage format. Conformance requires complete bi-directional exportability across open standards (OCSF, Parquet, Polyglot DaC, STIX 2.1).
 
 ---
 
@@ -161,6 +167,24 @@ In modern security operations, components operate under differing security assum
 > **"No component receives authority merely because another component believes it is correct."**
 >
 > In TIDIR, model inference settings (e.g. temperature = 0, seed pinning) are employed to maximize *repeatability*, not determinism. Trustworthiness is not derived from model confidence or repeated inference; it is enforced through evidence grounding, independent multi-model arbitration, and deterministic authorization kernels.
+
+### 3.1 The 4-Plane Model & The Defence Control Plane (DCP)
+
+To answer *"what governs the governors?"* and prevent control-plane compromise from cascading, TIDIR strictly decouples operational systems into four architectural planes:
+
+1. **The Telemetry Data Plane**: Ingestion forwarders, line-rate streaming buses (e.g., Redpanda/Kafka), schema decoders, and storage lakehouses. *Security Posture: Untrusted / Assumed hostile inputs; strongly typed normalization; zero instruction execution.*
+2. **The Analytical Plane**: Streaming detection engines, batch query workers, graph correlation matrices, and probabilistic agent meshes. *Security Posture: Advisory only; proposals emit without inherent operational authority; bounded by deterministic query contracts.*
+3. **The Defence Control Plane (DCP)**: The security kernel of TIDIR. Governs policy evaluation, invariant enforcement, blast-radius validation, non-human identity issuance, connector authorization, and emergency E-Stops. *Security Posture: Hardened Trusted Computing Base (TCB); changes require multi-signature cryptographic GitOps commits; isolated from telemetry and agent prompt paths.*
+4. **The Actuation Plane**: Outbound API connectors, endpoint EDR agents, firewall interfaces, and identity provider session revocations. *Security Posture: Ephemeral execution; task-scoped SVID validation; strictly monotonic state progression ($s_{n+1} \preceq s_n$).*
+
+### 3.2 TCB Minimisation: Small Deterministic Kernel, Large Untrusted Ecosystem
+
+TIDIR achieves defensibility by minimizing the **Trusted Computing Base (TCB)**. An expansive ecosystem of probabilistic models, external threat feeds, and complex query tools is contained within an untrusted envelope, governed by an ultra-lean deterministic kernel:
+
+$$\text{TCB} = \{\text{Identity Authority (SPIFFE/SPIRE)}, \text{Declarative Policy Kernel (OPA/Cedar)}, \text{Containment State Machine}, \text{Cryptographic Evidence DAG}\}$$
+
+* **Immutable Policy Governance**: Policies governing blast-radius limits, Tier 0 asset immunity, and invariant rules cannot be modified via API calls, prompt instructions, or runtime agents. They are compiled via cryptographically signed GitOps workflows requiring dual human sign-off.
+* **Control-Plane Isolation**: The Defence Control Plane maintains an out-of-band communication channel decoupled from the primary telemetry streaming bus, ensuring that telemetry flooding or denial-of-service attacks cannot paralyze defensive authorization or human E-Stop flight decks.
 
 ---
 

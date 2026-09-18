@@ -10,6 +10,10 @@ To ensure that the TIDIR architecture translates into seamless operational execu
 All stories adhere to the canonical structure:
 > **As a** `[Role]`, **I want** `[Capability]`, **so that** `[Outcome]`.
 
+> [!NOTE]
+> **Reference Target SLOs**:
+> Latency thresholds and completion targets defined within Acceptance Criteria (e.g. $\lt 60\text{ seconds}$ blast-radius assessment, $\lt 3\text{ minutes}$ 30-day lakehouse queries) represent **Reference Target Service Level Objectives (SLOs)** for reference hardware and dataset baselines rather than mandatory architectural invariants.
+
 ---
 
 ## 2. Human Operator User Stories

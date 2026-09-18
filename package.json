@@ -1,6 +1,6 @@
 {
   "name": "tidir-architecture",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Threat Intelligence, Detection, Investigation & Response Architecture and Research",
   "type": "module",
   "scripts": {

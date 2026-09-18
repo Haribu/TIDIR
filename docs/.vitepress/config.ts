@@ -147,11 +147,22 @@ export default withMermaid(
     themeConfig: {
       nav: [
         {
+          text: "Start Here",
+          items: [
+            { text: "What is TIDIR?", link: "/guide/what-is-tidir" },
+            { text: "15-Minute Golden Path", link: "/guide/golden-path" },
+            { text: "Architectural Invariants", link: "/architecture/00-architectural-invariants" },
+            { text: "System Overview", link: "/architecture/01-system-overview" },
+            { text: "Assurance Case Map", link: "/architecture/assurance-map" }
+          ]
+        },
+        {
           text: "Architecture",
           items: [
             { text: "Architectural Invariants & Constitution", link: "/architecture/00-architectural-invariants" },
-            { text: "System Overview & Topology", link: "/architecture/01-system-overview" },
+            { text: "System Overview & 4-Plane Model", link: "/architecture/01-system-overview" },
             { text: "Target Threat Model", link: "/architecture/09-threat-model" },
+            { text: "Assurance Case Map", link: "/architecture/assurance-map" },
             { text: "Layer 1: Data Sources & Ingress", link: "/architecture/03-layer-1-data-sources" },
             { text: "Layer 2: Pipeline, Storage & Query", link: "/architecture/04-layer-2-pipeline-storage-query" },
             { text: "Layer 3: Intel & Detection Engineering", link: "/architecture/06-layer-3-threat-intel-detection" },
@@ -179,15 +190,25 @@ export default withMermaid(
           ]
         },
         { text: "ADRs", link: "/adr/" },
+        { text: "Architecture JSON", link: "/architecture.json" },
         { text: "GitHub ↗", link: "https://github.com/Haribu/TIDIR" }
       ],
       sidebar: [
         {
+          text: "Start Here: Guided Journey",
+          items: [
+            { text: "What is TIDIR?", link: "/guide/what-is-tidir" },
+            { text: "15-Minute Golden Path", link: "/guide/golden-path" },
+            { text: "Assurance Case Map", link: "/architecture/assurance-map" }
+          ]
+        },
+        {
           text: "Tier 1: Strategic Architecture",
           items: [
             { text: "Architectural Invariants & Constitution", link: "/architecture/00-architectural-invariants" },
-            { text: "System Overview & Topology", link: "/architecture/01-system-overview" },
-            { text: "Target Threat Model", link: "/architecture/09-threat-model" }
+            { text: "System Overview & 4-Plane Model", link: "/architecture/01-system-overview" },
+            { text: "Target Threat Model", link: "/architecture/09-threat-model" },
+            { text: "Assurance Case Map", link: "/architecture/assurance-map" }
           ]
         },
         {

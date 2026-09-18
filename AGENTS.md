@@ -136,22 +136,23 @@ bun ./scripts/lint-terminology.ts # In sandboxes; or `bun run lint:terminology`
    - Always spell out and explain acronyms on their first appearance per document (e.g. *Open Cybersecurity Schema Framework (OCSF)*, *Detection-as-Code (DaC)*, *Cyber Threat Intelligence (CTI)*, *Mean Time to Detect (MTTD)*, *Mean Time to Contain (MTTC)*, *Security Operations Center (SOC)*, *Directed Acyclic Graph (DAG)*, *Small Language Model (SLM)*, *SPIFFE Verifiable Identity Document (SVID)*, *Single Point of Failure (SPOF)*).
    - This ensures the architecture remains clear, educational, and accessible without assuming prior jargon familiarity.
 
-9. **The TIDIR Architectural Constitution (10 Non-Negotiable Invariants)**:
+9. **The TIDIR Architectural Constitution (11 Non-Negotiable Invariants)**:
    All specifications, ADRs, and implementations must strictly preserve:
-   1. *Telemetry Preservation*: Raw forensic evidence is not discarded solely because no current detection consumes it. Semantic telemetry rejection (dropping events because no rule currently queries them) is strictly prohibited. Governed evidence compaction (policy-driven retention tiering, structural deduplication, or cold lakehouse compaction that provably preserves forensic reconstructability) is permitted.
-   2. *Evidence Traceability*: Every consequential assertion is traceable to underlying raw observations.
-   3. *Dependency-Aware Confidence*: Correlated derivations sharing common ancestry cannot masquerade as independent evidence.
-   4. *No Self-Granting Authority*: Probabilistic components propose; deterministic components authorise.
-   5. *Least Capability*: Every machine actor receives only task-scoped, ephemeral authority (SPIFFE SVIDs).
-   6. *Fail-Secure Posture*: Component failure cannot silently increase attacker reachability ($R(s_{\text{post}}) \subseteq R(s_{\text{pre}})$).
-   7. *Bounded Autonomy*: Autonomous execution has explicit temporal, financial, computational, and blast-radius limits.
-   8. *Human Recoverability*: Autonomous control planes always preserve independently accessible manual flight decks (master E-stop, break-glass).
-   9. *Degraded Defence*: Loss of an advanced capability reduces sophistication, never total visibility (graceful degradation).
-   10. *Reconstructability*: Consequential decisions and actions can be deterministically reconstructed after the fact via the Incident Decision DAG.
+    1. *Telemetry Preservation*: Ingested telemetry must survive and remain queryable in an open, vendor-neutral representation (e.g. Parquet/Iceberg on object storage). Semantic telemetry rejection (dropping events because no rule currently queries them) is strictly prohibited. Governed evidence compaction that provably preserves forensic reconstructability is permitted.
+    2. *Evidence Traceability*: Every consequential assertion is traceable to underlying raw observations.
+    3. *Dependency-Aware Confidence*: Correlated derivations sharing common ancestry cannot masquerade as independent evidence. Co-derived signals are discounted via dependency-aware probabilistic models (e.g. Bayesian graph compounding).
+    4. *No Self-Granting Authority*: Probabilistic components propose; deterministic components authorise.
+    5. *Least Capability*: Every machine actor receives only task-scoped, short-lived, ephemeral authority (e.g. SPIFFE SVIDs with TTL $\le 15\text{m}$).
+    6. *Fail-Secure Posture*: Component failure cannot silently increase attacker reachability ($s_{n+1} \preceq s_n$).
+    7. *Bounded Autonomy*: Autonomous execution has explicit temporal, financial, computational, and blast-radius limits.
+    8. *Human Recoverability*: Autonomous control planes always preserve independently accessible manual flight decks (master E-stop, break-glass).
+    9. *Degraded Defence*: Loss of an advanced capability reduces sophistication, never total visibility (graceful degradation).
+    10. *Reconstructability*: Consequential decisions and actions can be deterministically reconstructed after the fact via the Incident Decision DAG.
+    11. *Operational Portability & Exit*: No consequential security telemetry, detection logic, case state, policy definition, or audit lineage SHALL be irrecoverably dependent upon a proprietary execution environment.
 
 10. **Normative Architecture vs. Reference Implementation (RFC 2119 Discipline)**:
     - All specifications must strictly distinguish architectural invariants from illustrative reference technologies using RFC 2119 keywords (`MUST`, `SHOULD`, `MAY`).
-    - Declarative schemas (OCSF, STIX 2.1, TAXII), workload identities (SPIFFE SVIDs), state-machine contracts, and the 10 Invariants are **MUST**.
+    - Declarative schemas (OCSF, STIX 2.1, TAXII), workload identities (SPIFFE SVIDs), state-machine contracts, and the 11 Invariants are **MUST**.
     - Specific concrete technologies (e.g. Kafka, Redpanda, ClickHouse, Apache Iceberg, Falco, DuckDB) are designated as **REFERENCE IMPLEMENTATION** or **EXAMPLE** to maintain pure vendor-neutrality.
 
 ---

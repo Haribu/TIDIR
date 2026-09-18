@@ -13,174 +13,198 @@ head:
 
 hero:
   name: "TIDIR"
-  text: "Open SecOps Architecture"
-  tagline: "Threat Intelligence, Detection, Investigation & Response — an open, vendor-neutral target technology component architecture for modern autonomous security operations."
+  text: "Open SecOps Reference Architecture"
+  tagline: "A vendor-neutral target technology component architecture and closed-loop control system for modern autonomous security operations."
   actions:
     - theme: brand
-      text: Explore System Overview
+      text: "Start the 15-Min Tour ➔"
+      link: /guide/golden-path
+    - theme: alt
+      text: Explore System Architecture
       link: /architecture/01-system-overview
     - theme: alt
-      text: View Capability Model
-      link: /architecture/02-capability-model
-    - theme: alt
-      text: GitHub Project ↗
-      link: https://github.com/Haribu/TIDIR
+      text: Assurance Case Map
+      link: /architecture/assurance-map
 
 features:
-  - icon: 🛰️
-    title: Threat Intelligence (CTI)
-    details: Standardised ingestion across STIX/TAXII, dynamic confidence decay scoring, low-latency in-memory caching, and automated retro-hunting against cold lakehouse storage.
+  - icon: 🛡️
+    title: The Operating Maxim
+    details: "«Probabilistic components propose. Deterministic components authorise.» Generative models and neural embeddings analyze; deterministic policy kernels govern execution."
   - icon: 🌊
     title: Telemetry & Data Fabric
-    details: Line-rate OCSF schema normalisation, distributed event streaming, and dual-tier decoupled storage balancing hot indexing with high-efficiency columnar lakehouses.
+    details: Line-rate OCSF normalisation, decoupled streaming, and dual-tier storage (hot search vs open columnar lakehouse) ensuring zero forensic discard.
   - icon: 🎯
-    title: Detection Engineering
-    details: Stateful streaming pattern detection paired with lakehouse SQL analytics, governed by GitOps Detection-as-Code (DaC), continuous purple teaming, and SecOps error budgets.
+    title: Continuous Detection Engineering
+    details: Stateful streaming rules, scheduled lakehouse SQL, and GitOps Detection-as-Code (DaC) tested continuously against atomic adversary simulations in CI/CD.
   - icon: 🧠
-    title: Hierarchical Agent Mesh
-    details: Specialised autonomous agents operating within an Agent Trust Boundary (dual-plane untrusted data isolation) and deterministic invariant validation for evidence-grounded investigations.
+    title: Agent Trust Boundary
+    details: Specialised autonomous triage agents operating within a dual-plane untrusted data isolator, bounded by task-scoped ephemeral SVIDs.
   - icon: ⚡
-    title: Automated Response & Containment
-    details: Blast-radius risk-tiered state machines executing monotonic fail-closed containment with forward escalation, circuit breakers, and break-glass human-in-the-loop controls.
+    title: Monotonic Automated Containment
+    details: Fail-secure state machines where partial failure cannot silently increase attacker reachability (s_{n+1} ⪯ s_n), gated by human break-glass overrides.
   - icon: 🔄
-    title: Closed-Loop Feedback & Green Teams
-    details: Incident discoveries feed back into CTI and DaC tuning, while triggering Green Team preventative hardening (IaC pull requests and defense-in-depth improvements).
+    title: Closed-Loop Green Team Prevention
+    details: Attributed threat intelligence feeds back into CTI caches and DaC rules while generating Infrastructure-as-Code (IaC) pull requests to harden defense-in-depth.
 ---
 
 <div class="vp-doc" style="max-width: 1152px; margin: 0 auto; padding: 2rem 1.5rem;">
 
-## Architectural Mission & Scope
+## 1. The Architecture at a Glance
 
-Modern security operations face an asymmetric challenge: attackers operate at machine velocity with automated, multi-stage attack chains, whilst defenders struggle against proprietary silos, alert fatigue, and prohibitive telemetry licensing costs. 
-
-**TIDIR** (Threat Intelligence, Detection, Investigation & Response) provides a vendor-neutral, capability-driven target technology component architecture. It synthesises modern software reliability engineering, continuous purple teaming, and secure agentic AI into an integrated, closed-loop defence ecosystem.
-
-### TIDIR at a Glance
-
-* **What It Is:** An open, vendor-neutral target technology component architecture unifying cyber threat intelligence (CTI), line-rate telemetry pipelines, detection engineering, and incident response into an autonomous closed-loop system.
-* **Core Operating Maxim:** *"Probabilistic components propose; deterministic components authorise."* Probabilistic models (LLMs, neural embeddings, clustering heuristics) operate in a strictly read-only analytical capacity. Mutations and containment actions require deterministic policy evaluation.
-* **Open Standards First:** Built natively on open standards including the **Open Cybersecurity Schema Framework (OCSF)**, **STIX 2.1 / TAXII 2.1**, **Polyglot Detection-as-Code (DaC)**, and **SPIFFE/SPIRE** workload identities.
-* **Who It's For:** Enterprise Security Architects, Detection Engineers, SecOps Leaders, and AI Security Researchers designing next-generation Security Operations Centers (SOC).
-* **Machine-Readable Context for AI Agents:** AI crawlers, retrieval engines, and autonomous research agents can consume our curated context directly via [`/llms.txt`](/llms.txt) and [`/llms-full.txt`](/llms-full.txt).
-
----
-
-## The 3-Tier Architecture Framework
-
-To balance executive clarity with engineering precision, TIDIR is organised across three distinct architectural tiers:
-
-| Tier | Focus | Key Deliverables & Documents | Target Audience |
-| :--- | :--- | :--- | :--- |
-| **Tier 1: Strategic Architecture** | System topology, high-level components, and the closed-loop operating paradigm. | [Architectural Invariants & Constitution](/architecture/00-architectural-invariants), [01. System Overview](/architecture/01-system-overview), [Cross-Cutting Disciplines](/architecture/05-cross-cutting-engineering-disciplines) | CISOs, Heads of SecOps, Lead Enterprise Architects |
-| **Tier 2: Capabilities & Taxonomy** | Functional capability matrix, enterprise service catalogue, MTTx service levels, and error budgets. | [02. Capability Model](/architecture/02-capability-model), [10. Macro Capabilities & Services](/architecture/10-macro-capabilities-and-services), [User Stories](/architecture/08-user-stories) | Security Managers, Detection Engineering Leads, SOC Managers |
-| **Tier 3: Technical Specifications** | Concrete data schemas, pipeline protocols, state machines, and ADRs. | [Component Deep Dives](/architecture/components/01-threat-intelligence), [ADR Registry](/adr/0001-record-architecture-decisions) | Detection Engineers, Security Automation Engineers, SecOps Architects |
-
----
-
-## Core Architectural Paradigms
+TIDIR governs the operational progression from raw environmental observation to automated mitigation within a strict closed loop:
 
 ```mermaid
 flowchart TB
-    subgraph S1["1. INGESTION & DATA FABRIC"]
-        direction TB
-        RAW["Raw Telemetry"] --> NORM["Line-rate OCSF Normalisation"]
-        NORM --> BUS["Distributed Event Stream"]
-        BUS --> HOT["Hot Index (Tier 1)"]
-        BUS --> LAKE["Columnar Lakehouse (Tier 2)"]
+    %% Styling Classes
+    classDef plane fill:#0b1329,stroke:#38bdf8,stroke-width:1.5px,color:#f8fafc;
+    classDef kernel fill:#1e1b4b,stroke:#a855f7,stroke-width:2px,color:#f8fafc;
+    classDef feedback fill:#064e3b,stroke:#34d399,stroke-width:1.5px,color:#f8fafc;
+
+    subgraph DP ["1. TELEMETRY DATA PLANE (Untrusted Input Environment)"]
+        direction LR
+        P1_RAW["Raw Endpoint, Cloud & Network Events"] --> P1_NORM["Line-Rate OCSF Normalisation\n(Catch-All unmapped_data)"]
+        P1_NORM --> P1_LAKE["Decoupled Storage Fabric\n(Hot Index + Columnar Lakehouse)"]
     end
 
-    subgraph S2["2. CONTINUOUS DETECTION & DAC"]
-        direction TB
-        STREAM_DET["Stateful Stream Engine"]
-        BATCH_DET["Lakehouse SQL Engine"]
-        BAYES["Bayesian Compounding"]
-        STREAM_DET --> BAYES
-        BATCH_DET --> BAYES
+    subgraph AP ["2. ANALYTICAL & REASONING PLANE (Advisory Proposals)"]
+        direction LR
+        P2_DET["Streaming & Batch DaC Engines\n(SRE Alert Noise Budgets)"] --> P2_BAYES["Dependency-Aware Risk Lens\n(Anti-Shared Ancestry Compounding)"]
+        P2_BAYES --> P2_AGENT["Hierarchical Agent Mesh\n(Agent Trust Boundary / Dual-Plane)"]
     end
 
-    subgraph S3["3. AGENTIC INVESTIGATION"]
-        direction TB
-        FW["Agent Trust Boundary\n(Dual-Plane Isolator)"]
-        MESH["Hierarchical Agent Mesh"]
-        ARB["Proposer/Challenger Critique"]
-        FW --> MESH --> ARB
+    subgraph DCP ["3. DEFENCE CONTROL PLANE (Trusted Computing Base)"]
+        direction LR
+        P3_POL["Declarative Policy Kernel\n(Immutable Invariant Checkers)"] --- P3_SIM["Pre-Execution Blast-Radius Simulator\n(Tier 0 Critical Immunity)"]
+        P3_SIM --- P3_ESTOP["Cryptographic Master E-Stop\n& Audited Break-Glass Flight Deck"]
     end
 
-    subgraph S4["4. MONOTONIC AUTOMATED RESPONSE"]
-        direction TB
-        RESP["Containment Orchestrator"]
-        CIRCUIT["Circuit Breaker & Guardrails"]
-        BG["Break-Glass Emergency Override"]
-        RESP --> CIRCUIT --> BG
+    subgraph ACT ["4. ACTUATION PLANE (Task-Scoped Execution)"]
+        direction LR
+        P4_SAGA["Monotonic Containment State Machine\n(Forward Escalation: s_{n+1} ⪯ s_n)"] --> P4_EXEC["Infrastructure Connectors & EDR\n(Ephemeral SVIDs <= 15m)"]
     end
 
-    subgraph S5["5. CLOSED-LOOP CONTINUOUS CALIBRATION"]
-        direction TB
-        EVALS["Continuous Evals-as-Code"]
-        TUNING["Noise Budget & Detection Tuning"]
-        FEEDBACK["Attributed CTI & Graph Re-ingest"]
-        EVALS --> TUNING --> FEEDBACK
+    subgraph FB ["5. CLOSED-LOOP CONTINUOUS CALIBRATION"]
+        direction LR
+        FB_FEED["Attributed CTI Re-Cache"] --- FB_EVAL["Evals-as-Code CI/CD"] --- FB_GREEN["Green Team Preventative IaC PRs"]
     end
 
-    S1 ==>|1. Normalized Telemetry| S2
-    S2 ==>|2. Correlated Risk Findings| S3
-    S3 ==>|3. Verified Incident Dossiers| S4
-    S4 ==>|4. Response Telemetry & Efficacy| S5
+    DP ==>|1. Normalized Telemetry| AP
+    AP ==>|2. Investigative Findings & Hypotheses| DCP
+    DCP ==>|3. Authorized Execution Bounds| ACT
+    ACT ==>|4. Environmental Outcomes & DAG Nodes| FB
+    FB -.->|5. Posture Hardening & Telemetry Re-tuning| DP
 
-    classDef default fill:#1e293b,stroke:#475569,stroke-width:1px,color:#f8fafc;
-    classDef highlight fill:#0f766e,stroke:#14b8a6,stroke-width:1.5px,color:#ffffff;
-    class RAW,NORM,BUS,HOT,LAKE,STREAM_DET,BATCH_DET,BAYES,FW,MESH,ARB,RESP,CIRCUIT,BG,EVALS,TUNING,FEEDBACK default;
+    class DP,AP,ACT plane;
+    class DCP kernel;
+    class FB feedback;
 ```
 
-### 1. Decoupled Lakehouse vs Restrictive Ingestion
-TIDIR strictly rejects artificial "output-driven" ingestion where logs are discarded at collection time if they do not match an existing detection rule. Filtering telemetry at the edge blinds security teams to zero-day discoveries and invalidates retrospective threat hunting. Instead, TIDIR establishes a **two-tier decoupled data fabric**:
-* **Hot Index (Tier 1):** High-value, immediate-retrieval telemetry retained for active operational windows (15–30 days).
-* **Columnar Lakehouse (Tier 2):** Cost-effective, open-format columnar storage (Parquet/metadata catalogue) for complete historical audit retention and petabyte-scale SQL analytics.
+---
 
-### 2. Mitigating the Base Rate Fallacy with Dependency-Aware Evidence Aggregation
-When processing billions of daily events, even detections with a 99.9% accuracy rate produce thousands of false alarms because malicious actions are rare events (the *False Positive Paradox*). TIDIR mitigates the operational impact of this phenomenon by treating single-point anomalies as **weak graph signals** rather than standalone alerts. Detections are only elevated to an active incident once dependency-aware Bayesian risk aggregation correlates signals across orthogonal observation domains, discounting co-derived findings that share common raw telemetry ancestry:
-$$
-\text{Compounded Risk} = f(\text{Adversary TTP Severity}, \text{Asset Criticality}, \text{Identity Privilege}, \text{Orthogonal Evidence Domains})
-$$
+## 2. Why TIDIR Exists: The Asymmetric Deficit in SecOps
 
-### 3. Continuous Purple Teaming & SecOps Error Budgets
-Borrowing from Site Reliability Engineering (SRE), detection quality is enforced through quantifiable **Alert Noise Error Budgets** (target: false-positive rate ≤ 5%). Detection-as-Code (DaC) repositories execute continuous atomic attack emulation in CI/CD pipelines. If a detection rule exhausts its noise budget in production, an automated deployment freeze prevents new rule promotions until the noisy rule is tuned or deprecated.
+Modern security operations are constrained by three structural failure modes:
+1. **The Ingestion Dilemma**: Traditional SIEMs force teams to discard security telemetry at the collection boundary due to volume-based licensing penalties, blinding organizations during zero-day retrospectives.
+2. **The Base Rate Fallacy**: In an enterprise generating $10^9$ daily events, even detections with $99.9\%$ accuracy generate thousands of false alarms, causing catastrophic analyst burnout.
+3. **The Unchecked Automation Hazard**: SOAR playbooks that rely on fragile rollback scripts risk reopening compromised perimeters upon partial network failure, while unchecked LLM agents risk prompt injection attacks escalating into unauthorized infrastructure mutations.
 
-### 4. Dual-Plane Defensive AI Runtime & Agent Trust Boundary
-Autonomous agentic workflows operate within a strictly isolated runtime:
-* **Control Plane vs. Data Plane Separation (Agent Trust Boundary):** Prompt injection is assumed possible; the architecture prevents adversarial telemetry from becoming unauthorized authority. Untrusted external telemetry (email bodies, web payloads, command strings) is strictly compartmentalised in the data plane and parsed into typed schemas before model invocation.
-* **Deterministic Invariant Validation & Advisory Multi-Model Critique:** High-consequence triage decisions are validated by deterministic invariant engines against schema and security policies; independent challenger models provide advisory defense-in-depth critique without self-granting execution authority.
-
-### 5. Security-State Monotonicity & Fail-Closed Containment
-Automated containment workflows execute declarative state machines governed by **Security-State Monotonicity**: *no automated compensation may increase attacker reachability beyond the last verified-safe security state*. While forward compensation may safely restore benign services, rolling back security barriers upon downstream timeout is strictly prohibited as an anti-defence vulnerability. Workflows enforce fail-closed boundary freezes and forward escalation to broader network perimeters, with high-impact mutations gated by authenticated Break-Glass Human-in-the-Loop consensus (Mean Time to Contain / MTTC &lt; 5 min).
+**TIDIR solves this by decoupling the architecture into four distinct planes**—enveloping an expansive, untrusted analytical ecosystem within an ultra-lean, deterministic defence control plane.
 
 ---
 
-## Document Navigation Matrix
+## 3. The Core Architectural Thesis
 
-Explore the complete architecture and engineering specifications across the platform:
+TIDIR is founded upon seven non-negotiable architectural ideas:
 
-| Section | Description | Direct Links |
+| Architectural Principle | What It Means | Why It Matters |
 | :--- | :--- | :--- |
-| **System Overview** | High-level topology, interaction flows, and operating principles. | [System Architecture](/architecture/01-system-overview) · [Target Threat Model](/architecture/09-threat-model) |
-| **Capability Model** | 35+ atomic capabilities, 4 macro capabilities & 10 enterprise operational services. | [Capability Matrix](/architecture/02-capability-model) · [Macro Capabilities & Services](/architecture/10-macro-capabilities-and-services) |
-| **Layer Specifications** | Detailed layer-by-layer architectural contracts and data pipelines. | [L1: Data Sources](/architecture/03-layer-1-data-sources) · [L2: Pipeline & Storage](/architecture/04-layer-2-pipeline-storage-query) · [L3: Threat Intel & Detection](/architecture/06-layer-3-threat-intel-detection) · [L4: Incident Response](/architecture/07-layer-4-incident-response) |
-| **Component Deep Dives** | Deep technical specifications for each functional subsystem. | [Threat Intelligence](/architecture/components/01-threat-intelligence) · [Data Fabric](/architecture/components/02-data-fabric-telemetry) · [Detection Engine](/architecture/components/03-detection-engine) · [Investigation & Cases](/architecture/components/04-investigation-cases) · [Response & Automation](/architecture/components/05-response-automation) · [AI & Agent Orchestration](/architecture/components/06-ai-orchestration) |
-| **Engineering Disciplines** | Cross-cutting disciplines: SRE budgets, Purple Teaming, DaC & Evals. | [Engineering Disciplines](/architecture/05-cross-cutting-engineering-disciplines) |
-| **Operational Scenarios** | End-to-end user stories and automated response workflows. | [User Stories & Scenarios](/architecture/08-user-stories) |
-| **Architectural Decisions** | Formal Architectural Decision Records (ADRs 0001–0021) in MADR format. | [ADR Registry](/adr/) · [ADR-0004 (Prompt Firewall)](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall) · [ADR-0005 (Saga Containment)](/adr/0005-saga-pattern-containment-and-break-glass-protocol) · [ADR-0009 (Bayesian Scoring)](/adr/0009-bayesian-multi-signal-risk-scoring) · [ADR-0015 (OTLP Convergence)](/adr/0015-sandboxed-agent-execution-otlp-convergence-and-ephemeral-identity) · [ADR-0020 (Skill Retention)](/adr/0020-operator-skill-retention-and-incident-replay-simulators) · [ADR-0021 (Continuity Plan B)](/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b) |
+| **Confidence $\neq$ Authority** | Epistemic likelihood ($99.9\%$ confidence) confers **zero** operational authority to isolate hosts or sever connections. | Eliminates self-granting authority; all mutations require independent policy validation. |
+| **Evidence Provenance** | Every consequential finding and hypothesis must cite immutable raw observation IDs (`source_observation_ids`). | Prevents floating or ungrounded machine hallucinations from driving incident triage. |
+| **Evidential Independence** | Correlated detections sharing common upstream ancestry cannot masquerade as independent corroboration. | Mathematically discounts co-derived signals to resolve the Base Rate Fallacy. |
+| **Bounded Probabilistic Reasoning** | Autonomous agents operate strictly in read-only mode behind the **Agent Trust Boundary**. | Assumes prompt injection is permanent; prevents adversarial telemetry from becoming execution authority. |
+| **Security-State Monotonicity** | Partial containment failure cannot increase attacker reachability ($s_{n+1} \preceq s_n$). | Replaces fragile transaction rollbacks with forward perimeter escalation. |
+| **Graceful Degradation** | Failure of an advanced capability reduces sophistication, never total visibility. | Automatically falls back to edge spooling, scheduled batch lakehouse sweeps, and Zero-AI timelines. |
+| **Human Recoverability** | Control planes always preserve out-of-band manual flight decks. | Retains permanent human command via cryptographic master kill-switches. |
 
 ---
 
-## 🌐 Open Source & Machine-Readable Context
+## 4. The 3-Tier Architectural Model
 
-TIDIR is hosted as an open-source research initiative under the **Apache 2.0 License**:
+To serve executive leaders, enterprise architects, and engineering practitioners simultaneously, TIDIR organizes its specifications across three increasing levels of technical specificity:
 
-- 💻 **GitHub Project**: [github.com/Haribu/TIDIR](https://github.com/Haribu/TIDIR)
-- 🤝 **Contribute**: Check out the [Contribution Guide](https://github.com/Haribu/TIDIR/blob/main/CONTRIBUTING.md) to propose RFCs or component additions.
-- 🐛 **Issues & Feedback**: Report broken diagrams, links, or architectural proposals on [GitHub Issues](https://github.com/Haribu/TIDIR/issues).
-- 🛡️ **Security Advisories**: Report vulnerabilities privately via [GitHub Security Advisories](https://github.com/Haribu/TIDIR/security/advisories) or directly to `info@harrymclaren.co.uk`.
-- 🤖 **AI & LLM Context**: Ingest the canonical architecture summary via [`/llms.txt`](/llms.txt) or the complete single-file corpus via [`/llms-full.txt`](/llms-full.txt).
-- 🗺️ **Search Engine Index**: View the complete URL manifest at [`/sitemap.xml`](/sitemap.xml).
+```mermaid
+flowchart LR
+    T1["<b>Tier 1: Strategic Architecture</b><br>11 Invariants, 4-Plane Model, Threat Model, Assurance Map"] --> T2["<b>Tier 2: Capabilities & Services</b><br>36 Capabilities, 10 Services, User Stories, Reference SLOs"]
+    T2 --> T3["<b>Tier 3: Technical Specifications</b><br>Schemas (OCSF), Protocols (STIX/SPIFFE), State Machines, 21 ADRs"]
+
+    classDef tierStyle fill:#0f172a,stroke:#38bdf8,stroke-width:1.5px,color:#f8fafc;
+    class T1,T2,T3 tierStyle;
+```
+
+* **[Tier 1: Strategic Architecture](/architecture/00-architectural-invariants)**: System topology, the 11 constitutional invariants, and the formal threat model. Target audience: CISOs, Heads of SecOps, Lead Enterprise Architects.
+* **[Tier 2: Capabilities & Taxonomy](/architecture/02-capability-model)**: Functional capability taxonomy, enterprise service catalogue, and operational user stories. Target audience: Security Managers, Detection Leads, SecOps SREs.
+* **[Tier 3: Technical Specifications](/architecture/components/01-threat-intelligence)**: Concrete data schemas (OCSF), workload identity contracts (SPIFFE), monotonic state machines, and the [ADR Registry](/adr/). Target audience: Detection Engineers, Automation Engineers, SecOps Architects.
+
+---
+
+## 5. Explore by Role & Architectural Intent
+
+Select an entry point tailored to your focus:
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 1.5rem;">
+
+<div style="border: 1px solid #334155; border-radius: 8px; padding: 1.25rem; background: #0b0f19;">
+<h3 style="margin-top: 0; color: #38bdf8;">👔 Security Leaders (CISO / SecOps Heads)</h3>
+<p style="font-size: 0.95rem; color: #94a3b8;">Understand the strategic business defensibility, operational cost reduction, and executive risk governance of TIDIR.</p>
+<ul style="padding-left: 1.25rem; font-size: 0.9rem;">
+  <li><a href="/guide/what-is-tidir">What is TIDIR? (Executive Summary)</a></li>
+  <li><a href="/architecture/10-macro-capabilities-and-services">Enterprise Service Delivery Model</a></li>
+  <li><a href="/architecture/00-architectural-invariants">The Architectural Constitution</a></li>
+</ul>
+</div>
+
+<div style="border: 1px solid #334155; border-radius: 8px; padding: 1.25rem; background: #0b0f19;">
+<h3 style="margin-top: 0; color: #a855f7;">📐 Enterprise Security Architects</h3>
+<p style="font-size: 0.95rem; color: #94a3b8;">Examine the 4-plane control model, trusted computing base boundaries, and vendor-neutral open standards.</p>
+<ul style="padding-left: 1.25rem; font-size: 0.9rem;">
+  <li><a href="/architecture/01-system-overview">System Overview & 4-Plane Model</a></li>
+  <li><a href="/architecture/assurance-map">The Assurance Case Map</a></li>
+  <li><a href="/architecture/09-threat-model">Target Architecture Threat Model</a></li>
+</ul>
+</div>
+
+<div style="border: 1px solid #334155; border-radius: 8px; padding: 1.25rem; background: #0b0f19;">
+<h3 style="margin-top: 0; color: #34d399;">⚡ Detection & SecOps Engineers</h3>
+<p style="font-size: 0.95rem; color: #94a3b8;">Dive into Polyglot Detection-as-Code, SRE noise budgeting, OCSF schema normalisation, and incident playbooks.</p>
+<ul style="padding-left: 1.25rem; font-size: 0.9rem;">
+  <li><a href="/architecture/02-capability-model">The 36-Capability Taxonomy</a></li>
+  <li><a href="/architecture/components/03-detection-engine">Detection Engine Architecture</a></li>
+  <li><a href="/adr/0019-polyglot-detection-as-code-and-native-engine-adaptation">ADR-0019: Polyglot Detection-as-Code</a></li>
+</ul>
+</div>
+
+<div style="border: 1px solid #334155; border-radius: 8px; padding: 1.25rem; background: #0b0f19;">
+<h3 style="margin-top: 0; color: #f59e0b;">🤖 AI & Automation Researchers</h3>
+<p style="font-size: 0.95rem; color: #94a3b8;">Interrogate the Agent Trust Boundary, ephemeral SPIFFE SVIDs, SLM judges, and continuous Evals-as-Code.</p>
+<ul style="padding-left: 1.25rem; font-size: 0.9rem;">
+  <li><a href="/architecture/components/06-ai-orchestration">AI & Agent Orchestration Plane</a></li>
+  <li><a href="/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall">ADR-0004: Agent Trust Boundary</a></li>
+  <li><a href="/adr/0015-sandboxed-agent-execution-otlp-convergence-and-ephemeral-identity">ADR-0015: Sandboxed Agent Execution</a></li>
+</ul>
+</div>
+
+</div>
+
+---
+
+## 6. Open Source & Machine Access
+
+TIDIR is published as an open-source reference standard under the **Apache 2.0 License**:
+
+* 💻 **GitHub Repository**: [github.com/Haribu/TIDIR](https://github.com/Haribu/TIDIR)
+* 📡 **Machine-Readable Graph**: [`/architecture.json`](/architecture.json)
+* 🤖 **AI / LLM Ingestion Summary**: [`/llms.txt`](/llms.txt)
+* 📚 **Complete Single-File Corpus**: [`/llms-full.txt`](/llms-full.txt)
+* 🗺️ **Sitemap**: [`/sitemap.xml`](/sitemap.xml)
 
 </div>

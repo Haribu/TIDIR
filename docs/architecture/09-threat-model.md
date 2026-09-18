@@ -1,5 +1,10 @@
 # TIDIR Target Architecture Threat Model & Attack Surface Analysis
 
+> **Tier 1: Strategic Architecture** · **Golden Path Step 5 of 5** · **Audience**: Security Architects, Adversarial Researchers · **Normative Status**: Normative Threat Model  
+> **Prerequisites**: [Step 4: Capability Model](/architecture/02-capability-model) · **Next Step**: [Assurance Case Map](/architecture/assurance-map)
+
+---
+
 Modern security platforms are themselves prime targets for sophisticated adversaries. If an attacker can blind telemetry, poison threat intelligence, inject malicious instructions into autonomous triage agents, or manipulate automated response playbooks, they neutralise enterprise defence at the root.
 
 This document provides a comprehensive, STRIDE-aligned threat model of the TIDIR target architecture. It maps the attack surface across all five functional subsystems, articulates concrete attack vectors, defines trust boundaries, and details architectural mitigations.
@@ -190,3 +195,20 @@ The integrity of these threat mitigations is maintained through three continuous
 * **Chaos Security Engineering:** Regular injection of simulated pipeline latency, corrupted OCSF payloads, and dead-letter queue flooding to verify backpressure resilience ([ADR-0008](/adr/0008-secops-error-budgets-and-chaos-security-engineering)).
 * **Automated Injection Benchmarking:** CI/CD execution of prompt injection test suites evaluating agent boundary containment ([ADR-0006](/adr/0006-agent-evaluation-harness-evals-as-code)).
 * **Continuous Atomic Emulation:** Synthetic adversary playbooks continuously testing detection logic and alert generation paths without human intervention ([ADR-0007](/adr/0007-continuous-automated-purple-teaming-and-multi-model-consensus)).
+
+---
+
+## 6. The TIDIR Assurance Case Map
+
+To prove internal consistency and demonstrate that architectural invariants directly mitigate identified threats, the matrix below establishes the complete, bi-directional assurance graph:
+
+$$\text{Adversarial Threat} \longrightarrow \text{Invariant} \longrightarrow \text{Capability} \longrightarrow \text{Architectural Control} \longrightarrow \text{ADR} \longrightarrow \text{Validation Evidence}$$
+
+| Adversarial Threat | Invariant Preserved | Underpinning Capability | Architectural Control Mechanism | Governing ADR | Concrete Validation Evidence |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **T1: Sensor Evasion / Log Blinding** | **I1** (Telemetry Preservation) & **I8** (Degraded Defence) | `DATA-01`, `RESIL-01`, `RESIL-02` | Local NVMe ring buffering, direct-to-object lakehouse bypass, out-of-band audit beats. | [ADR-0021](/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b) | Bus partition chaos test: zero dropped records during 24h simulated network isolation. |
+| **T2: Schema Poisoning / DoS Inundation** | **I1** (Telemetry Preservation) & **I11** (Operational Portability) | `DATA-02`, `DATA-03` | Line-rate OCSF compiler validation, structured `unmapped_data` catch-all, isolated DLQ quarantine. | [ADR-0002](/adr/0002-preserve-unmapped-telemetry-in-ocsf) | Synthetic fuzzing suite: malformed JSON and corrupted payloads diverted to DLQ with zero parser crashes. |
+| **T3: Evidence Tampering / Audit Destruction** | **I2** (Evidence Traceability) & **I10** (Reconstructability) | `INV-04`, `RESIL-05` | Immutable WORM object storage, RFC 3161 cryptographic timestamps, append-only Incident Decision DAG. | [ADR-0001](/adr/0001-record-architecture-decisions), [ADR-0010](/adr/0010-sabsa-business-architecture-and-attribute-profiling) | Cryptographic verification audit: mathematical non-repudiation and Merkle root verification over sealed dossiers. |
+| **T4: Indirect Prompt Injection / Cognitive Hijack** | **I4** (Authority Separation) & **I5** (Least Capability) | `INV-05`, `AIGOV-02`, `AIGOV-06` | Agent Trust Boundary (dual-plane data/control isolator), read-only tools, ephemeral SPIFFE SVIDs ($\le 15\text{m}$). | [ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall), [ADR-0015](/adr/0015-sandboxed-agent-execution-otlp-convergence-and-ephemeral-identity) | Continuous Evals-as-Code: prompt injection benchmark achieving zero unauthorised tool invocations across test corpus. |
+| **T5: Alert Storm Denial of Service / Desensitisation** | **I3** (Evidential Independence) & **I6** (Bounded Autonomy) | `DET-04`, `DET-05`, `DET-06` | Dependency-aware risk compounding, supernode graph dampening, monthly SRE Alert Noise Error Budgets. | [ADR-0003](/adr/0003-graph-supernode-pruning-and-clustering-boundaries), [ADR-0008](/adr/0008-secops-error-budgets-and-chaos-security-engineering), [ADR-0009](/adr/0009-bayesian-multi-signal-risk-scoring) | Historical lakehouse backtesting: $\ge 75\%$ reduction in alert volume with noise budget false-positive rate $\le 5\%$. |
+| **T6: Automated Response Sabotage / Outage Trigger** | **I7** (Security-State Monotonicity) & **I9** (Human Recoverability) | `RESP-01`, `RESP-02`, `RESP-04`, `RESIL-05` | Monotonic state machine ($s_{n+1} \preceq s_n$), pre-execution blast-radius scoring, master cryptographic E-Stop. | [ADR-0005](/adr/0005-saga-pattern-containment-and-break-glass-protocol) | Containment failure fault injection: verified forward perimeter escalation with zero security-state rollback. |

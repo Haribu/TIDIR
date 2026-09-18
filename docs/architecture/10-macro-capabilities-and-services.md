@@ -32,7 +32,7 @@ flowchart TB
 
     subgraph MACRO4 ["4. Autonomous Investigation & Gated Containment"]
         direction TB
-        S41["<b>Service 4.1: Agentic Triage & Progressive Disclosure Investigation</b><br>Hierarchical agent mesh, prompt firewall, and Situation Summaries"]
+        S41["<b>Service 4.1: Agentic Triage & Progressive Disclosure Investigation</b><br>Hierarchical agent mesh, Agent Trust Boundary, and Situation Summaries"]
         S42["<b>Service 4.2: Blast-Radius Gated Containment & Monotonic State Machines</b><br>Pre-execution impact simulation, fail-closed forward escalation"]
         S43["<b>Service 4.3: Audited Break-Glass & Crisis Containment</b><br>Machine-speed containment override and cryptographic audit trails"]
         S44["<b>Service 4.4: Closed-Loop Feedback & Green Team Prevention</b><br>Indicator back-propagation, Evals calibration, and IaC hardening PRs"]
@@ -62,6 +62,10 @@ flowchart TB
 ---
 
 ## 2. Detailed Service Catalogue
+
+> [!NOTE]
+> **Reference Target SLOs vs. Mandatory Conformance Criteria**:
+> Operational metrics listed under each service (e.g. $\lt 15\text{ min}$ retro-hunt, $\lt 2\text{s}$ P95 search) represent **Reference Target Service Level Objectives (SLOs)** evaluated against standard reference baselines (e.g. 100 TB lakehouse tiers), not absolute universal conformance criteria.
 
 ### Macro Capability 1: Threat Horizon & Continuous Intelligence Management
 Transforms raw threat data from passive reference lists into an active, machine-speed driver of detection and proactive hunting.

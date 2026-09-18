@@ -53,7 +53,7 @@ flowchart TB
     subgraph CoreRuntime ["Stateful Agent Runtime & Safety Kernel"]
       MCP_BUS["Model Context Protocol (MCP) Bus\n(Standardized SecOps Tool Catalog)"]
       STATE_DAG["Stateful DAG & Blackboard Engine\n(Checkpointed Investigation State)"]
-      PROMPT_FW["Dual-Plane Prompt Firewall\n(Strict Data vs. Control Isolation)"]
+      PROMPT_FW["Dual-Plane Agent Trust Boundary\n(Strict Data vs. Control Isolation)"]
       AST_VAL["Deterministic AST Validator\n(SELECT-Only SQL / Read-Only Enforcement)"]
     end
     

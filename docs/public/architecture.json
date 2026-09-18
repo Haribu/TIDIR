@@ -1,0 +1,378 @@
+{
+  "schema_version": "1.0.0",
+  "title": "TIDIR Reference Architecture Graph",
+  "description": "Machine-readable graph representation of TIDIR invariants, capabilities, services, threats, and governance contracts.",
+  "maxim": "Probabilistic components propose. Deterministic components authorise.",
+  "four_planes": {
+    "data_plane": "Line-rate ingestion, streaming buses, and raw lakehouse storage. Untrusted telemetry inputs.",
+    "analytical_plane": "Detection engines, graph correlators, and probabilistic agent meshes. Advisory analysis without inherent authority.",
+    "defence_control_plane": "Security kernel governing policy evaluation, invariant enforcement, blast-radius validation, identity issuance, and emergency E-Stops.",
+    "actuation_plane": "Outbound API connectors, endpoint EDR agents, and identity providers. Task-scoped execution with monotonic reachability guarantees."
+  },
+  "tcb_components": [
+    "Identity Authority (SPIFFE/SPIRE)",
+    "Declarative Policy Kernel (OPA/Cedar)",
+    "Containment State Machine",
+    "Cryptographic Evidence DAG"
+  ],
+  "invariants": [
+    {
+      "id": "INV-01",
+      "name": "Telemetry Preservation",
+      "title": "Absence of current detection value does not justify destruction of forensic evidence",
+      "normative": true,
+      "maxim": "Absence of current detection value does not justify destruction of forensic evidence.",
+      "property": "Ingested telemetry must survive and remain queryable in an open, vendor-neutral, schema-agnostic representation.",
+      "reference_pattern": "Line-rate stream ingestion into open columnar lakehouses (e.g. Apache Iceberg / Parquet) on object storage."
+    },
+    {
+      "id": "INV-02",
+      "name": "Evidence Traceability",
+      "title": "Every consequential machine assertion is traceable to underlying raw observations",
+      "normative": true,
+      "maxim": "Every consequential machine assertion is traceable to underlying raw observations.",
+      "property": "No detection finding, hypothesis, or containment recommendation exists without citation to immutable observation identifiers.",
+      "reference_pattern": "source_observation_ids and derivation_chain lineage committed to the Incident Decision DAG."
+    },
+    {
+      "id": "INV-03",
+      "name": "Evidential Independence",
+      "title": "Common ancestry cannot be represented as independent corroboration",
+      "normative": true,
+      "maxim": "Common ancestry cannot be represented as independent corroboration.",
+      "property": "Correlated derivations sharing common upstream ancestry cannot masquerade as independent evidence; co-derived signals must be discounted.",
+      "reference_pattern": "Dependency-aware probabilistic risk compounding (Bayesian graph compounding or factor graphs)."
+    },
+    {
+      "id": "INV-04",
+      "name": "Authority Separation",
+      "title": "Probabilistic components propose. Deterministic components authorize",
+      "normative": true,
+      "maxim": "Probabilistic components propose. Deterministic components authorize.",
+      "property": "Probabilistic models (LLMs, neural embeddings, clustering heuristics) operate strictly in read-only analysis mode.",
+      "reference_pattern": "Agent Trust Boundary isolating data plane from control plane; deterministic schema AST validation."
+    },
+    {
+      "id": "INV-05",
+      "name": "Least Capability & Ephemeral Identity",
+      "title": "Machine identities receive only task-scoped, short-lived authority",
+      "normative": true,
+      "maxim": "Machine identities receive only task-scoped, short-lived authority.",
+      "property": "Machine authority must be short-lived, workload-bound, and strictly task-scoped without ambient API credentials.",
+      "reference_pattern": "SPIFFE/SPIRE Verifiable Identity Documents (SVIDs) valid for <= 15 minutes."
+    },
+    {
+      "id": "INV-06",
+      "name": "Bounded Autonomy & Blast Radius",
+      "title": "Autonomous execution is strictly constrained by time, cost, scope, and blast radius",
+      "normative": true,
+      "maxim": "Autonomous execution is strictly constrained by time, cost, scope, and blast radius.",
+      "property": "Automated actions enforce hard ceilings: wall-clock execution timeouts, financial inference limits, max tool-hops, and asset criticality boundaries.",
+      "reference_pattern": "Pre-execution impact simulation with Tier 0 critical asset immunity."
+    },
+    {
+      "id": "INV-07",
+      "name": "Reachability Monotonicity",
+      "title": "Partial failure cannot silently restore attacker reachability (s_{n+1} <= s_n)",
+      "normative": true,
+      "maxim": "Partial failure cannot silently restore attacker reachability.",
+      "property": "Attacker reachability tuple <R_net, R_id, E_surface, V_telemetry> must not expand upon component or API failure.",
+      "reference_pattern": "Monotonic state machines executing forward perimeter escalation rather than rolling back security barriers."
+    },
+    {
+      "id": "INV-08",
+      "name": "Graceful Defensive Degradation",
+      "title": "Failure of an advanced capability reduces sophistication, never total visibility",
+      "normative": true,
+      "maxim": "Failure of an advanced capability reduces sophistication, never total visibility.",
+      "property": "Outages in advanced streaming or generative AI gates automatically fall back to deterministic and local modes.",
+      "reference_pattern": "4-tier degradation: local edge spooling, scheduled batch lakehouse sweeps, and Zero-AI tabular timelines."
+    },
+    {
+      "id": "INV-09",
+      "name": "Human Recoverability & Flight Decks",
+      "title": "Autonomous control planes always preserve independently accessible manual flight decks",
+      "normative": true,
+      "maxim": "Autonomous control planes always preserve independently accessible manual flight decks.",
+      "property": "Humans retain permanent out-of-band operational authority via cryptographic master kill-switches.",
+      "reference_pattern": "Cryptographic Master E-Stop and authenticated dual-authorization break-glass protocols."
+    },
+    {
+      "id": "INV-10",
+      "name": "Reconstructability",
+      "title": "Consequential decisions can be deterministically reconstructed from immutable records",
+      "normative": true,
+      "maxim": "Consequential decisions can be deterministically reconstructed from immutable records.",
+      "property": "All triage findings, model inputs, and containment actions are committed to an immutable ledger.",
+      "reference_pattern": "Incident Decision DAG sealed with RFC 3161 cryptographic timestamps and WORM storage."
+    },
+    {
+      "id": "INV-11",
+      "name": "Operational Portability & Exit",
+      "title": "Vendor neutrality is an architectural invariant, not merely a design intention",
+      "normative": true,
+      "maxim": "Vendor neutrality is an architectural invariant, not merely a design intention.",
+      "property": "No consequential security telemetry, detection logic, case state, policy definition, or audit lineage SHALL be irrecoverably dependent upon a proprietary environment.",
+      "reference_pattern": "Open standards: OCSF schema, Parquet/Iceberg storage, Polyglot DaC, STIX/TAXII 2.1, and open JSON-LD DAGs."
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "CAP-CTI-01",
+      "name": "Feed Aggregation & Ingestion",
+      "domain": "Cyber Threat Intelligence",
+      "execution_mode": "Deterministic Engine",
+      "description": "Ingest commercial, open-source, ISAC, and internal telemetry feeds via STIX/TAXII and streaming endpoints.",
+      "target_slo": "Ingestion latency < 5 min from publication",
+      "invariants_enforced": [
+        "INV-01",
+        "INV-11"
+      ]
+    },
+    {
+      "id": "CAP-CTI-02",
+      "name": "Deduplication & Confidence Scoring",
+      "domain": "Cyber Threat Intelligence",
+      "execution_mode": "Deterministic Engine",
+      "description": "Normalize disparate indicator types, resolve overlapping claims, and compute half-life decay curves.",
+      "target_slo": "Automated decay curves calculated daily",
+      "invariants_enforced": [
+        "INV-02",
+        "INV-03"
+      ]
+    },
+    {
+      "id": "CAP-CTI-05",
+      "name": "Retroactive Sweep (Retro-Hunt)",
+      "domain": "Cyber Threat Intelligence",
+      "execution_mode": "Deterministic Engine",
+      "description": "Automatically sweep historical lakehouse telemetry upon discovery of novel zero-day IOCs/TTPs.",
+      "target_slo": "90-day sweep executed in < 15 min",
+      "invariants_enforced": [
+        "INV-01",
+        "INV-10"
+      ]
+    },
+    {
+      "id": "CAP-DATA-01",
+      "name": "Multi-Source Ingestion",
+      "domain": "Telemetry & Data Fabric",
+      "execution_mode": "Deterministic Engine",
+      "description": "Collect telemetry from host kernel instrumentation, cloud control planes, identity tokens, and network sensors.",
+      "target_slo": "Zero loss, durable acknowledgement",
+      "invariants_enforced": [
+        "INV-01",
+        "INV-08"
+      ]
+    },
+    {
+      "id": "CAP-DATA-02",
+      "name": "Canonical Schema Normalization",
+      "domain": "Telemetry & Data Fabric",
+      "execution_mode": "Deterministic Engine",
+      "description": "Coerce raw schema structures into OCSF objects at line rate with structured unmapped_data catch-all.",
+      "target_slo": "Normalization overhead < 5ms per event",
+      "invariants_enforced": [
+        "INV-01",
+        "INV-11"
+      ]
+    },
+    {
+      "id": "CAP-DATA-05",
+      "name": "Historical Security Lakehouse",
+      "domain": "Telemetry & Data Fabric",
+      "execution_mode": "Deterministic Engine",
+      "description": "Store long-term telemetry in open columnar formats with partition pruning on object storage.",
+      "target_slo": "365+ day retention with sub-linear cost",
+      "invariants_enforced": [
+        "INV-01",
+        "INV-11"
+      ]
+    },
+    {
+      "id": "CAP-DET-01",
+      "name": "Real-Time Stream Detection",
+      "domain": "Detection Engineering",
+      "execution_mode": "Deterministic Engine",
+      "description": "Evaluate sliding-window stateful rules and pattern matches against line-rate event streams.",
+      "target_slo": "Time-to-detect (MTTD) < 5 seconds",
+      "invariants_enforced": [
+        "INV-04",
+        "INV-08"
+      ]
+    },
+    {
+      "id": "CAP-DET-05",
+      "name": "Bayesian Multi-Signal Risk Lens",
+      "domain": "Detection Engineering",
+      "execution_mode": "Deterministic Engine",
+      "description": "Compound orthogonal evidence vectors (asset, identity, network) while discounting co-derived signals.",
+      "target_slo": "Dynamic composite score (0-100); false alarms < 5%",
+      "invariants_enforced": [
+        "INV-03",
+        "INV-04"
+      ]
+    },
+    {
+      "id": "CAP-INV-05",
+      "name": "Agent Mesh & Multi-Model Consensus",
+      "domain": "Investigation & Cases",
+      "execution_mode": "AI/Agent-Augmented",
+      "description": "Coordinate specialist subagents with adversarial Proposer/Challenger critique behind the Agent Trust Boundary.",
+      "target_slo": "MTTI < 60s; > 80% consensus",
+      "invariants_enforced": [
+        "INV-02",
+        "INV-04",
+        "INV-05"
+      ]
+    },
+    {
+      "id": "CAP-RESP-02",
+      "name": "Monotonic Containment & Forward Escalation",
+      "domain": "Automated Response",
+      "execution_mode": "Deterministic Engine",
+      "description": "Fail-secure execution preventing security regression on error; escalates perimeter forward.",
+      "target_slo": "100% fail-secure posture; MTTR < 60 min",
+      "invariants_enforced": [
+        "INV-06",
+        "INV-07",
+        "INV-09"
+      ]
+    }
+  ],
+  "services": [
+    {
+      "id": "SVC-1.1",
+      "name": "Dynamic Threat Intelligence & Indicator Cache",
+      "macro_capability": "Threat Horizon & Continuous Intelligence",
+      "description": "Continuous ingestion, normalisation, and automated confidence-decay scoring with in-memory edge matching.",
+      "underpinning_capabilities": [
+        "CAP-CTI-01",
+        "CAP-CTI-02"
+      ]
+    },
+    {
+      "id": "SVC-1.2",
+      "name": "Automated Retrospective Hunting Sweeps",
+      "macro_capability": "Threat Horizon & Continuous Intelligence",
+      "description": "Asynchronous 365+ day historical lakehouse scans upon zero-day emergence.",
+      "underpinning_capabilities": [
+        "CAP-CTI-05",
+        "CAP-DATA-05"
+      ]
+    },
+    {
+      "id": "SVC-2.1",
+      "name": "Universal Ingestion & Line-Rate OCSF Normalisation",
+      "macro_capability": "Universal Telemetry Fabric & Open Lakehouse",
+      "description": "High-throughput collection across host, cloud, and network sensors compiled into canonical OCSF.",
+      "underpinning_capabilities": [
+        "CAP-DATA-01",
+        "CAP-DATA-02"
+      ]
+    },
+    {
+      "id": "SVC-4.1",
+      "name": "Agentic Triage & Progressive Disclosure Investigation",
+      "macro_capability": "Autonomous Investigation & Gated Containment",
+      "description": "Hierarchical agent mesh, Agent Trust Boundary, and progressive Situation Summaries.",
+      "underpinning_capabilities": [
+        "CAP-INV-05"
+      ]
+    },
+    {
+      "id": "SVC-4.2",
+      "name": "Blast-Radius Gated Containment & Monotonic State Machines",
+      "macro_capability": "Autonomous Investigation & Gated Containment",
+      "description": "Pre-execution impact simulation, fail-closed forward escalation, and reachability monotonicity.",
+      "underpinning_capabilities": [
+        "CAP-RESP-02"
+      ]
+    }
+  ],
+  "threats": [
+    {
+      "id": "THR-T1",
+      "name": "Sensor Evasion & Telemetry Blinding",
+      "stride": "Spoofing / Tampering",
+      "description": "Attacker unloads kernel sensors, disrupts transport forwarders, or exploits network partitions to evade detection.",
+      "mitigated_by_invariants": [
+        "INV-01",
+        "INV-08"
+      ],
+      "governing_adrs": [
+        "ADR-0021"
+      ]
+    },
+    {
+      "id": "THR-T2",
+      "name": "Schema Poisoning & DoS Inundation",
+      "stride": "Tampering / Denial of Service",
+      "description": "Adversary emits malformed payloads or unmapped event floods to exhaust pipeline memory or crash parsers.",
+      "mitigated_by_invariants": [
+        "INV-01",
+        "INV-11"
+      ],
+      "governing_adrs": [
+        "ADR-0002"
+      ]
+    },
+    {
+      "id": "THR-T3",
+      "name": "Evidence Tampering & Audit Destruction",
+      "stride": "Repudiation",
+      "description": "Compromised administrator attempts to purge or modify investigative query logs and case dossiers.",
+      "mitigated_by_invariants": [
+        "INV-02",
+        "INV-10"
+      ],
+      "governing_adrs": [
+        "ADR-0001",
+        "ADR-0010"
+      ]
+    },
+    {
+      "id": "THR-T4",
+      "name": "Indirect Prompt Injection & Cognitive Hijack",
+      "stride": "Elevation of Privilege",
+      "description": "Adversary embeds malicious control directives inside command line arguments, log files, or CTI reports.",
+      "mitigated_by_invariants": [
+        "INV-04",
+        "INV-05"
+      ],
+      "governing_adrs": [
+        "ADR-0004",
+        "ADR-0015"
+      ]
+    },
+    {
+      "id": "THR-T5",
+      "name": "Alert Storm DoS & Analyst Desensitisation",
+      "stride": "Denial of Service",
+      "description": "Adversary generates high-volume weak anomalies across enterprise nodes to induce alert fatigue.",
+      "mitigated_by_invariants": [
+        "INV-03",
+        "INV-06"
+      ],
+      "governing_adrs": [
+        "ADR-0003",
+        "ADR-0008",
+        "ADR-0009"
+      ]
+    },
+    {
+      "id": "THR-T6",
+      "name": "Automated Response Sabotage & Self-Inflicted Outage",
+      "stride": "Denial of Service",
+      "description": "Adversary manipulates defensive playbooks into isolating critical production databases or domain controllers.",
+      "mitigated_by_invariants": [
+        "INV-06",
+        "INV-07",
+        "INV-09"
+      ],
+      "governing_adrs": [
+        "ADR-0005"
+      ]
+    }
+  ]
+}
