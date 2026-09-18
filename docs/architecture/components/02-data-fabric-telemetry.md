@@ -1,6 +1,9 @@
 # Component Specification: Telemetry & Data Fabric
 
-## 1. Overview & Objectives
+> **Tier 3: Technical Specifications** · **Audience**: Data Engineers, SecOps Infrastructure Leads · **Normative Status**: Reference Component  
+> **Prerequisites**: [Cyber Threat Intelligence](01-threat-intelligence.md) · **Next Step**: [Detection Engine](03-detection-engine.md)
+
+---
 
 The Telemetry & Data Fabric provides the foundational data infrastructure for TIDIR. It guarantees reliable, high-throughput ingestion from heterogeneous security data sources, real-time normalisation into the Open Cybersecurity Schema Framework (OCSF), and tier-optimised storage across hot analytical indices and durable lakehouse repositories.
 

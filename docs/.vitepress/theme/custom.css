@@ -130,3 +130,100 @@ mjx-container:not([display="true"]) {
   width: 100% !important;
   box-sizing: border-box !important;
 }
+
+/* ==========================================================================
+   TIDIR Restrained Visual Semantic Design System
+   Provides immediate cognitive hierarchy without rainbow clutter:
+   - Invariant: cyan / deep blue
+   - Normative: purple / deep slate
+   - Reference: slate / neutral
+   - Threat: amber-rose / muted dark
+   - Assurance: emerald / dark forest
+   - Degraded: indigo / subdued dark
+   ========================================================================== */
+
+.tidir-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  line-height: 1.3;
+  vertical-align: middle;
+}
+
+.tidir-badge-invariant {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.tidir-badge-normative {
+  background: rgba(168, 85, 247, 0.12);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.35);
+}
+
+.tidir-badge-reference {
+  background: rgba(148, 163, 184, 0.1);
+  color: #94a3b8;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.tidir-badge-threat {
+  background: rgba(251, 113, 133, 0.12);
+  color: #fb7185;
+  border: 1px solid rgba(251, 113, 133, 0.35);
+}
+
+.tidir-badge-assurance {
+  background: rgba(52, 211, 153, 0.12);
+  color: #34d399;
+  border: 1px solid rgba(52, 211, 153, 0.35);
+}
+
+.tidir-badge-degraded {
+  background: rgba(129, 140, 248, 0.12);
+  color: #818cf8;
+  border: 1px solid rgba(129, 140, 248, 0.35);
+}
+
+/* Semantic Block Callouts / Cards */
+.tidir-callout {
+  margin: 1.5rem 0;
+  padding: 1.15rem 1.25rem;
+  border-radius: 8px;
+  background: #0b0f19;
+  border-left: 3px solid #64748b;
+  border-top: 1px solid #1e293b;
+  border-right: 1px solid #1e293b;
+  border-bottom: 1px solid #1e293b;
+}
+
+.tidir-callout-invariant {
+  border-left-color: #38bdf8;
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.04) 0%, #0b0f19 100%);
+}
+
+.tidir-callout-normative {
+  border-left-color: #a855f7;
+  background: linear-gradient(90deg, rgba(168, 85, 247, 0.04) 0%, #0b0f19 100%);
+}
+
+.tidir-callout-threat {
+  border-left-color: #fb7185;
+  background: linear-gradient(90deg, rgba(251, 113, 133, 0.04) 0%, #0b0f19 100%);
+}
+
+.tidir-callout-assurance {
+  border-left-color: #34d399;
+  background: linear-gradient(90deg, rgba(52, 211, 153, 0.04) 0%, #0b0f19 100%);
+}
+
+.tidir-callout-degraded {
+  border-left-color: #818cf8;
+  background: linear-gradient(90deg, rgba(129, 140, 248, 0.04) 0%, #0b0f19 100%);
+}
+

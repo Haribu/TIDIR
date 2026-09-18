@@ -301,23 +301,18 @@ flowchart LR
 
 ---
 
-## 2. The TIDIR Architectural Constitution (11 Non-Negotiable Invariants)
+## 2. Governing Invariants & Runtime Topological Implications
 
-A reference architecture is defined by its target invariants—the declarative properties that must hold true across normal operation, network partitions, component degradation, and active adversary attack. TIDIR establishes eleven constitutional invariants (promoted from [ADR-0021](../adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b.md) and system doctrine):
+TIDIR is governed by eleven non-negotiable architectural invariants defined canonically in **[The TIDIR Architectural Constitution](00-architectural-invariants.md)**. Rather than treating invariants as abstract aspirations, the operational runtime topology is directly shaped by their constraints. 
 
-1. **Telemetry Preservation Invariant**: Raw forensic evidence is not discarded solely because no existing detection consumes it. Ephemeral network partitions, streaming bus failures, or database degradation must never result in unrecoverable forensic event loss. Ingested telemetry must survive in an open representation (e.g., Parquet/Iceberg on object storage).
-2. **Evidence Traceability Invariant**: Every consequential assertion, finding, and hypothesis must be strictly traceable to underlying raw observations in the data fabric. Uncited or floating claims are deterministically pruned.
-3. **Dependency-Aware Confidence Invariant**: Correlated derivations sharing common upstream ancestry cannot masquerade as independent evidence. Posterior risk elevation discounts co-derived signals using dependency-aware probabilistic compounding.
-4. **No Self-Granting Authority Invariant**: Probabilistic reasoning cannot grant itself execution authority. Generative models and statistical classifiers operate in a proposal-only capacity; all mutations require deterministic policy or human authorization (*"Probabilistic components propose. Deterministic components authorize"*).
-5. **Least Capability Invariant**: Every machine actor and automated agent receives only task-scoped, ephemeral authority. Runtimes issue short-lived identity documents (e.g. SPIFFE SVIDs $\le 15\text{m}$) with read-only analytical boundaries; forensic agents cannot acquire containment credentials.
-6. **Fail-Secure Security-State Monotonicity Invariant**: Component failure or partial workflow execution cannot silently increase attacker reachability beyond the last verified-safe posture ($s_{n+1} \preceq s_n$). Evaluated over the tuple $\mathcal{S} = \langle \mathcal{R}_{\text{net}}, \mathcal{R}_{\text{id}}, \mathcal{E}_{\text{surface}}, \mathcal{V}_{\text{telemetry}} \rangle$, transitions require:
-   $$\mathcal{R}_{\text{net}}(s_{n+1}) \subseteq \mathcal{R}_{\text{net}}(s_n) \quad \land \quad \mathcal{R}_{\text{id}}(s_{n+1}) \subseteq \mathcal{R}_{\text{id}}(s_n) \quad \land \quad \mathcal{E}_{\text{surface}}(s_{n+1}) \subseteq \mathcal{E}_{\text{surface}}(s_n) \quad \land \quad \mathcal{V}_{\text{telemetry}}(s_{n+1}) \supseteq \mathcal{V}_{\text{telemetry}}(s_n)$$
-   *Forward compensation is permitted to safely restore benign services, but security-state regression is strictly forbidden.* Defensive boundaries move in a single forward direction.
-7. **Bounded Autonomy Invariant**: Autonomous execution is strictly constrained by explicit temporal Time-To-Live (TTL) leases, rate-limit velocity brakes, financial token budgets, and blast-radius impact tiers.
-8. **Human Recoverability Invariant**: Autonomous control planes always preserve independently accessible, out-of-band manual flight decks. The architecture provides a master cryptographic E-Stop and air-gapped, signed runbooks for human Incident Commanders.
-9. **Degraded Defence Invariant**: The loss or outage of an advanced capability (e.g. streaming buses or cloud language models) reduces operational sophistication to batch lakehouse sweeps or deterministic heuristic dossiers, but never causes total visibility blindness.
-10. **Reconstructability Invariant**: Every consequential decision, containment mutation, and case resolution can be deterministically reconstructed after the fact via an immutable, cryptographically sealed **Incident Decision DAG**.
-11. **Operational Portability & Exit Invariant**: No consequential security telemetry, detection logic, investigative case state, policy definition, or audit lineage SHALL be irrecoverably dependent upon a proprietary execution environment or vendor-controlled storage format. Conformance requires complete bi-directional exportability across open standards (OCSF, Parquet, Polyglot DaC, STIX 2.1).
+Four invariants in particular dictate the structure of the runtime planes and data contracts:
+
+* **[INV-02: Evidence Traceability](00-architectural-invariants.md#i2--evidence-provenance--traceability)**: Governs the boundary between Detection (Layer 3) and Investigation (Layer 4). Every security finding must cite immutable raw observation identifiers (`source_observation_ids`); ungrounded or floating machine hypotheses are deterministically pruned from the **Incident Decision DAG**.
+* **[INV-04: Authority Separation](00-architectural-invariants.md#i4--authority-separation-trust-doctrine-maxim)**: Dictates the **4-Plane Model** and **Agent Trust Boundary**. Probabilistic components (LLMs, neural classifiers, clustering heuristics) operate strictly in a read-only proposal capacity within the Analytical Plane. Execution authority is held exclusively by deterministic policy kernels in the Defence Control Plane.
+* **[INV-07: Reachability Monotonicity](00-architectural-invariants.md#i7--fail-secure-containment--reachability-monotonicity)**: Dictates the design of the Actuation Plane. Containment workflows are modeled as fail-secure state machines where partial execution or connector timeouts execute forward perimeter escalation ($s_{n+1} \preceq s_n$) rather than rolling back security barriers.
+* **[INV-08: Graceful Defensive Degradation](00-architectural-invariants.md#i8--graceful-defensive-degradation)**: Enforces multi-tier failure survival across the Data and Analytical Planes. If streaming buses, vector stores, or cloud AI endpoints degrade, the runtime automatically falls back to local edge spooling, scheduled batch lakehouse sweeps, and deterministic Zero-AI tabular timelines without total visibility blindness.
+
+For the complete formal definitions, mathematical state bounds, and compliance criteria across all eleven principles, refer directly to **[The TIDIR Architectural Constitution](00-architectural-invariants.md)**.
 
 ---
 
@@ -676,12 +671,12 @@ $$\text{Adversarial Threat} \longrightarrow \text{Invariant} \longrightarrow \te
 
 | Adversarial Threat | Invariant Preserved | Underpinning Capability | Architectural Control Mechanism | Governing ADR | Concrete Validation Evidence |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **T1: Sensor Evasion / Log Blinding** | **I1** (Telemetry Preservation) & **I8** (Degraded Defence) | `DATA-01`, `RESIL-01`, `RESIL-02` | Local NVMe ring buffering, direct-to-object lakehouse bypass, out-of-band audit beats. | [ADR-0021](/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b) | Bus partition chaos test: zero dropped records during 24h simulated network isolation. |
-| **T2: Schema Poisoning / DoS Inundation** | **I1** (Telemetry Preservation) & **I11** (Operational Portability) | `DATA-02`, `DATA-03` | Line-rate OCSF compiler validation, structured `unmapped_data` catch-all, isolated DLQ quarantine. | [ADR-0002](/adr/0002-preserve-unmapped-telemetry-in-ocsf) | Synthetic fuzzing suite: malformed JSON and corrupted payloads diverted to DLQ with zero parser crashes. |
-| **T3: Evidence Tampering / Audit Destruction** | **I2** (Evidence Traceability) & **I10** (Reconstructability) | `INV-04`, `RESIL-05` | Immutable WORM object storage, RFC 3161 cryptographic timestamps, append-only Incident Decision DAG. | [ADR-0001](/adr/0001-record-architecture-decisions), [ADR-0010](/adr/0010-sabsa-business-architecture-and-attribute-profiling) | Cryptographic verification audit: mathematical non-repudiation and Merkle root verification over sealed dossiers. |
-| **T4: Indirect Prompt Injection / Cognitive Hijack** | **I4** (Authority Separation) & **I5** (Least Capability) | `INV-05`, `AIGOV-02`, `AIGOV-06` | Agent Trust Boundary (dual-plane data/control isolator), read-only tools, ephemeral SPIFFE SVIDs ($\le 15\text{m}$). | [ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall), [ADR-0015](/adr/0015-sandboxed-agent-execution-otlp-convergence-and-ephemeral-identity) | Continuous Evals-as-Code: prompt injection benchmark achieving zero unauthorised tool invocations across test corpus. |
-| **T5: Alert Storm Denial of Service / Desensitisation** | **I3** (Evidential Independence) & **I6** (Bounded Autonomy) | `DET-04`, `DET-05`, `DET-06` | Dependency-aware risk compounding, supernode graph dampening, monthly SRE Alert Noise Error Budgets. | [ADR-0003](/adr/0003-graph-supernode-pruning-and-clustering-boundaries), [ADR-0008](/adr/0008-secops-error-budgets-and-chaos-security-engineering), [ADR-0009](/adr/0009-bayesian-multi-signal-risk-scoring) | Historical lakehouse backtesting: $\ge 75\%$ reduction in alert volume with noise budget false-positive rate $\le 5\%$. |
-| **T6: Automated Response Sabotage / Outage Trigger** | **I7** (Security-State Monotonicity) & **I9** (Human Recoverability) | `RESP-01`, `RESP-02`, `RESP-04`, `RESIL-05` | Monotonic state machine ($s_{n+1} \preceq s_n$), pre-execution blast-radius scoring, master cryptographic E-Stop. | [ADR-0005](/adr/0005-saga-pattern-containment-and-break-glass-protocol) | Containment failure fault injection: verified forward perimeter escalation with zero security-state rollback. |
+| **THR-T1: Sensor Evasion / Log Blinding** | **INV-01** (Telemetry Preservation) & **INV-08** (Degraded Defence) | `DATA-01`, `RESIL-01`, `RESIL-02` | Local NVMe ring buffering, direct-to-object lakehouse bypass, out-of-band audit beats. | [ADR-0021](/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b) | Bus partition chaos test: zero dropped records during 24h simulated network isolation. |
+| **THR-T2: Schema Poisoning / DoS Inundation** | **INV-01** (Telemetry Preservation) & **INV-11** (Operational Portability) | `DATA-02`, `DATA-03` | Line-rate OCSF compiler validation, structured `unmapped_data` catch-all, isolated DLQ quarantine. | [ADR-0002](/adr/0002-preserve-unmapped-telemetry-in-ocsf) | Synthetic fuzzing suite: malformed JSON and corrupted payloads diverted to DLQ with zero parser crashes. |
+| **THR-T3: Evidence Tampering / Audit Destruction** | **INV-02** (Evidence Traceability) & **INV-10** (Reconstructability) | `INV-04`, `RESIL-05` | Immutable WORM object storage, RFC 3161 cryptographic timestamps, append-only Incident Decision DAG. | [ADR-0001](/adr/0001-record-architecture-decisions), [ADR-0010](/adr/0010-sabsa-business-architecture-and-attribute-profiling) | Cryptographic verification audit: mathematical non-repudiation and Merkle root verification over sealed dossiers. |
+| **THR-T4: Indirect Prompt Injection / Cognitive Hijack** | **INV-04** (Authority Separation) & **INV-05** (Least Capability) | `INV-05`, `AIGOV-02`, `AIGOV-06` | Agent Trust Boundary (dual-plane data/control isolator), read-only tools, ephemeral SPIFFE SVIDs ($\le 15\text{m}$). | [ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall), [ADR-0015](/adr/0015-sandboxed-agent-execution-otlp-convergence-and-ephemeral-identity) | Continuous Evals-as-Code: prompt injection benchmark achieving zero unauthorised tool invocations across test corpus. |
+| **THR-T5: Alert Storm Denial of Service / Desensitisation** | **INV-03** (Evidential Independence) & **INV-06** (Bounded Autonomy) | `DET-04`, `DET-05`, `DET-06` | Dependency-aware risk compounding, supernode graph dampening, monthly SRE Alert Noise Error Budgets. | [ADR-0003](/adr/0003-graph-supernode-pruning-and-clustering-boundaries), [ADR-0008](/adr/0008-secops-error-budgets-and-chaos-security-engineering), [ADR-0009](/adr/0009-bayesian-multi-signal-risk-scoring) | Historical lakehouse backtesting: $\ge 75\%$ reduction in alert volume with noise budget false-positive rate $\le 5\%$. |
+| **THR-T6: Automated Response Sabotage / Outage Trigger** | **INV-07** (Security-State Monotonicity) & **INV-09** (Human Recoverability) | `RESP-01`, `RESP-02`, `RESP-04`, `RESIL-05` | Monotonic state machine ($s_{n+1} \preceq s_n$), pre-execution blast-radius scoring, master cryptographic E-Stop. | [ADR-0005](/adr/0005-saga-pattern-containment-and-break-glass-protocol) | Containment failure fault injection: verified forward perimeter escalation with zero security-state rollback. |
 
 ================================================================================
 SECTION: CAPABILITY MODEL & TAXONOMY
@@ -758,7 +753,7 @@ flowchart TB
 
 | Capability ID | Name | Execution Mode | Description | Reference Target SLO |
 | :--- | :--- | :--- | :--- | :--- |
-| **DATA-01** | Multi-Source Ingestion | `[Deterministic Engine]` | Collect telemetry from host kernel instrumentation, cloud control planes, identity token sessions (OCSF 3002), and network sensors. | Zero loss, durable acknowledgement |
+| **DATA-01** | Multi-Source Ingestion | `[Deterministic Engine]` | Collect telemetry from host kernel instrumentation, cloud control planes, identity token sessions (OCSF 3002), and network sensors. | Durable acknowledgement; designed for loss-intolerant ingestion with local buffer failover |
 | **DATA-02** | Canonical Schema Normalization | `[Deterministic Engine]` | Coerce raw schema structures into OCSF (Open Cybersecurity Schema Framework) objects at line rate with unmapped data catch-all. | Normalization overhead < 5ms per event |
 | **DATA-03** | Distributed Stream Buffering | `[Deterministic Engine]` | Decouple collectors from consumers using partitioned, distributed append-only streaming logs. | Sustained ingestion capacity ≥ 500k EPS |
 | **DATA-04** | Hot Analytics Index | `[Deterministic Engine]` | Provide low-latency search, aggregations, and filtering over recent telemetry (15–30 days). | P95 search latency < 2 sec |
@@ -837,7 +832,10 @@ Source: docs/architecture/05-cross-cutting-engineering-disciplines.md
 
 # Cross-Cutting Engineering Disciplines & AI Harnesses
 
-## 1. Overview: The Dual-Plane Architecture
+> **Tier 3: Technical Specifications** · **Audience**: SecOps SREs, Detection Leads, AI Platform Engineers · **Normative Status**: Normative Architecture  
+> **Prerequisites**: [Layer 4: Incident Response](07-layer-4-incident-response.md) · **Next Step**: [Subsystem Deep Dives: Threat Intel](components/01-threat-intelligence.md)
+
+---
 
 A complete security architecture must account for two orthogonal planes of reality:
 
@@ -1110,7 +1108,10 @@ Source: docs/architecture/components/06-ai-orchestration.md
 
 # Component Specification: AI & Agentic Orchestration Plane
 
-## 1. Overview & Objectives
+> **Tier 3: Technical Specifications** · **Audience**: AI Platform Engineers, SecOps Architects · **Normative Status**: Reference Component  
+> **Prerequisites**: [Automated Response & Containment](05-response-automation.md) · **Next Step**: [ADR Registry](/adr/)
+
+---
 
 The **AI & Agentic Orchestration Plane** provides the runtime execution, model routing, safety guardrails, and tool-calling interfaces required to operate autonomous and collaborative AI agents across the security lifecycle.
 

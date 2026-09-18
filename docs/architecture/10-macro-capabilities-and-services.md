@@ -1,6 +1,9 @@
 # TIDIR Macro Capabilities & Operational Services Delivery Model
 
-Implementing the TIDIR target architecture elevates enterprise security operations from a fragmented, tool-centric cost centre into a **high-throughput, closed-loop software and reliability engineering discipline**. 
+> **Tier 2: Capabilities & Taxonomy** · **Audience**: CISOs, Heads of SecOps, Service Delivery Managers · **Normative Status**: Reference Service Model  
+> **Prerequisites**: [Capability Model](02-capability-model.md) · **Next Step**: [Operational User Stories](08-user-stories.md)
+
+--- 
 
 While the [Capability Model](/architecture/02-capability-model) specifies twenty-nine operational capabilities and seven AI governance disciplines, enterprise stakeholders require a consumable operational service catalogue. This document synthesises TIDIR's technical specifications into **four macro capabilities** delivering **ten core operational services** to the enterprise.
 

@@ -6,32 +6,33 @@ TIDIR is maintained by Harry McLaren under the Apache 2.0 open-source licence at
 
 For full-text ingestion across all core specifications in a single file, see: https://tidir.harrymclaren.co.uk/llms-full.txt
 
-## The TIDIR Architectural Constitution (10 Invariants)
+## The TIDIR Architectural Constitution (11 Invariants)
 
 1. **Telemetry Preservation**: Raw forensic evidence is never discarded solely because no active detection rule consumes it.
 2. **Evidence Traceability**: Every consequential alert or incident assertion must be deterministically traceable to underlying raw observations.
 3. **Dependency-Aware Confidence**: Correlated derivations sharing common raw telemetry ancestry cannot masquerade as independent corroborating evidence.
 4. **No Self-Granting Authority**: Probabilistic models propose; deterministic policies authorise.
-5. **Least Capability**: Every machine actor receives only task-scoped, ephemeral authority (SPIFFE/SPIRE SVIDs).
+5. **Least Capability**: Every machine actor receives only task-scoped, ephemeral authority with cryptographic workload identity (TTL $\le 15\text{m}$).
 6. **Fail-Secure Posture**: Component failure cannot silently increase attacker reachability ($R(s_{\text{post}}) \subseteq R(s_{\text{pre}})$).
 7. **Bounded Autonomy**: Autonomous execution has strict temporal, financial, computational, and blast-radius limits.
 8. **Human Recoverability**: Autonomous control planes always preserve independently accessible manual flight decks and master break-glass emergency stops.
 9. **Degraded Defence**: Loss of an advanced capability reduces sophistication, never total visibility (graceful degradation and Plan B fallbacks).
 10. **Reconstructability**: Consequential decisions and containment actions can be deterministically reconstructed after the fact via the Incident Decision DAG.
+11. **Operational Portability & Exit**: No consequential telemetry, detection logic, case state, policy definition, or audit lineage SHALL be irrecoverably dependent upon a proprietary execution environment.
 
-## Core Open Standards
+## Normative Architectural Contracts & Reference Standards
 
-- **Telemetry Normalisation**: Open Cybersecurity Schema Framework (OCSF)
-- **Threat Intelligence**: STIX 2.1 / TAXII 2.1
-- **Detection-as-Code (DaC)**: Polyglot DaC (vendor-neutral metadata envelopes with target-optimized query blocks)
-- **Workload Identity**: SPIFFE / SPIRE (ephemeral cryptographic SVIDs)
-- **Agentic Observability**: OpenTelemetry (OTLP) tracing across model calls, tool executions, and state transitions
+- **Telemetry Normalisation**: *Normative Property*: Vendor-neutral taxonomy with unmapped field preservation. *Reference Standard*: Open Cybersecurity Schema Framework (OCSF).
+- **Threat Intelligence**: *Normative Property*: Graph-structured adversary flows and confidence decay. *Reference Standard*: STIX 2.1 / TAXII 2.1.
+- **Detection-as-Code (DaC)**: *Normative Property*: Versioned declarative envelope with automated CI/CD adversary emulation. *Reference Standard*: Polyglot DaC (target-optimized query blocks; see ADR-0019).
+- **Machine Identity**: *Normative Property*: Ephemeral, workload-bound, cryptographically attested identity with task-scoped least-privilege (TTL $\le 15\text{m}$). *Reference Standard*: SPIFFE / SPIRE (X.509 SVIDs).
+- **Agentic Observability**: *Normative Property*: Transparent distributed tracing across prompts, model versions, tool invocations, and state machines. *Reference Standard*: OpenTelemetry (OTLP).
 
 ---
 
 ## Strategic Architecture (Tier 1)
 
-- [Architectural Invariants & Constitution](https://tidir.harrymclaren.co.uk/architecture/00-architectural-invariants): The 10 constitutional invariants, the Confidence-Authority Separation Principle, and security-state monotonicity.
+- [Architectural Invariants & Constitution](https://tidir.harrymclaren.co.uk/architecture/00-architectural-invariants): The 11 constitutional invariants, the Confidence-Authority Separation Principle, and security-state monotonicity.
 - [System Overview & Topology](https://tidir.harrymclaren.co.uk/architecture/01-system-overview): End-to-end 4-layer operational pipeline, decoupled data fabrics, and the closed-loop Green Team feedback model.
 - [Target Threat Model](https://tidir.harrymclaren.co.uk/architecture/09-threat-model): Formal threat modelling covering external adversaries, insider threats, supply chain compromise, and prompt injection attacks against SecOps AI runtimes.
 

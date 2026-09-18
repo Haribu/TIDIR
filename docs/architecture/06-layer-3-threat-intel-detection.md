@@ -1,6 +1,9 @@
 # Layer 3: Threat Intelligence & Detection Engineering
 
-## 1. Overview & Architectural Role
+> **Tier 3: Technical Specifications** · **Audience**: Detection Engineers, Threat Intel Analysts · **Normative Status**: Normative Architecture  
+> **Prerequisites**: [Layer 2: Pipeline, Storage & Query](04-layer-2-pipeline-storage-query.md) · **Next Step**: [Layer 4: Incident Response](07-layer-4-incident-response.md)
+
+---
 
 **Layer 3 represents the cognitive and analytical core of the TIDIR architecture.** It synthesises raw, normalised telemetry from Layer 2 with operational adversary context to identify active attacks, policy violations, and anomalous behaviours.
 

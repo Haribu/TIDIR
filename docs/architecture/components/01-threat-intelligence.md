@@ -1,6 +1,9 @@
 # Component Specification: Cyber Threat Intelligence (CTI)
 
-## 1. Overview & Objectives
+> **Tier 3: Technical Specifications** · **Audience**: Threat Intelligence Leads, Detection Engineers · **Normative Status**: Reference Component  
+> **Prerequisites**: [Capability Model](/architecture/02-capability-model) · **Next Step**: [Telemetry & Data Fabric](02-data-fabric-telemetry.md)
+
+---
 
 The Cyber Threat Intelligence (CTI) subsystem in TIDIR aggregates, curates, contextualizes, and disseminates actionable adversary intelligence. Rather than acting as a passive knowledge repository, the CTI component functions as an active participant in detection enrichment, retroactive hunting, and automated case context.
 

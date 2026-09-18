@@ -1,6 +1,9 @@
 # Operational & Engineering User Stories
 
-## 1. Overview & Framework
+> **Tier 2: Capabilities & Taxonomy** · **Audience**: SOC Leads, Detection Engineers, Incident Responders · **Normative Status**: Reference Operational Scenarios  
+> **Prerequisites**: [Macro Capabilities & Services](10-macro-capabilities-and-services.md) · **Next Step**: [Layer 1: Data Sources](03-layer-1-data-sources.md)
+
+---
 
 To ensure that the TIDIR architecture translates into seamless operational execution, this document defines concrete **User Stories** across the three primary actor categories:
 1. **Human Operators**: Triage Analysts, Incident Commanders, and Threat Hunters who exercise ultimate operational authority and forensic judgment.

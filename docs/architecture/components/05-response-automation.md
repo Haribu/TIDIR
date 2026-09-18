@@ -1,6 +1,9 @@
 # Component Specification: Automated Response & Containment
 
-## 1. Overview & Objectives
+> **Tier 3: Technical Specifications** · **Audience**: Automation Engineers, Incident Commanders · **Normative Status**: Reference Component  
+> **Prerequisites**: [Investigation & Cases](04-investigation-cases.md) · **Next Step**: [AI & Agent Orchestration](06-ai-orchestration.md)
+
+---
 
 The Automated Response & Containment capability executes codified playbooks to accelerate incident triage, enrich investigations, and contain active security threats. To protect business operations while achieving high containment velocity, the architecture enforces a **Blast-Radius Risk Tiering** model that cleanly separates automated, low-risk operational steps from disruptive actions requiring human-in-the-loop authorisation.
 

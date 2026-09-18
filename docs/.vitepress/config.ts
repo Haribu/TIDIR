@@ -1,6 +1,7 @@
 import { defineConfig } from "vitepress";
 import { withMermaid } from "vitepress-plugin-mermaid";
 import { execSync } from "node:child_process";
+import pkg from "../../package.json";
 
 const gitCommit =
   process.env.CF_PAGES_COMMIT_SHA?.slice(0, 7) ||
@@ -252,10 +253,15 @@ export default withMermaid(
           ]
         },
         {
-          text: "Architecture Decisions: Governance & Strategy",
-          collapsed: false,
+          text: "Architecture Decisions: Overview",
           items: [
-            { text: "ADR Registry Overview", link: "/adr/" },
+            { text: "ADR Registry Overview", link: "/adr/" }
+          ]
+        },
+        {
+          text: "ADRs: Governance & Strategy",
+          collapsed: true,
+          items: [
             { text: "0001 - Record Architecture Decisions", link: "/adr/0001-record-architecture-decisions" },
             { text: "0010 - SABSA Alignment & Attribute Profiling", link: "/adr/0010-sabsa-business-architecture-and-attribute-profiling" },
             { text: "0008 - SecOps Error Budgets & Chaos SRE", link: "/adr/0008-secops-error-budgets-and-chaos-security-engineering" },
@@ -263,8 +269,8 @@ export default withMermaid(
           ]
         },
         {
-          text: "Architecture Decisions: Data Fabric & Ingress",
-          collapsed: false,
+          text: "ADRs: Data Fabric & Ingress",
+          collapsed: true,
           items: [
             { text: "0002 - Preserve Unmapped OCSF Telemetry", link: "/adr/0002-preserve-unmapped-telemetry-in-ocsf" },
             { text: "0015 - Sandboxed Agents & OTLP Convergence", link: "/adr/0015-sandboxed-agent-execution-otlp-convergence-and-ephemeral-identity" },
@@ -272,8 +278,8 @@ export default withMermaid(
           ]
         },
         {
-          text: "Architecture Decisions: Detection & Intel",
-          collapsed: false,
+          text: "ADRs: Detection & Intel",
+          collapsed: true,
           items: [
             { text: "0007 - Continuous Purple Teaming & Consensus", link: "/adr/0007-continuous-automated-purple-teaming-and-multi-model-consensus" },
             { text: "0009 - Bayesian Multi-Signal Risk Scoring", link: "/adr/0009-bayesian-multi-signal-risk-scoring" },
@@ -283,8 +289,8 @@ export default withMermaid(
           ]
         },
         {
-          text: "Architecture Decisions: Investigation & Response",
-          collapsed: false,
+          text: "ADRs: Investigation & Response",
+          collapsed: true,
           items: [
             { text: "0003 - Supernode Pruning & Graph Clustering", link: "/adr/0003-graph-supernode-pruning-and-clustering-boundaries" },
             { text: "0005 - Asymmetric Containment & Break-Glass", link: "/adr/0005-saga-pattern-containment-and-break-glass-protocol" },
@@ -292,8 +298,8 @@ export default withMermaid(
           ]
         },
         {
-          text: "Architecture Decisions: AI Runtime & Observability",
-          collapsed: false,
+          text: "ADRs: AI Runtime & Observability",
+          collapsed: true,
           items: [
             { text: "0004 - Defensive AI & Prompt Firewall", link: "/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall" },
             { text: "0006 - Agent Evals-as-Code Harness", link: "/adr/0006-agent-evaluation-harness-evals-as-code" },
@@ -309,7 +315,7 @@ export default withMermaid(
       ],
       footer: {
         message: `Human-Led Architecture · AI-Supported · <a href="https://github.com/Haribu/TIDIR/blob/main/LICENSE" target="_blank" rel="noopener">Apache-2.0 Licence</a> · Live Commit: <a href="https://github.com/Haribu/TIDIR/commit/${gitCommit}" target="_blank" rel="noopener"><code>${gitCommit}</code></a>`,
-        copyright: "Copyright © 2026 Harry McLaren · TIDIR v1.0.0"
+        copyright: `Copyright © 2026 Harry McLaren · TIDIR v${pkg.version}`
       },
       search: {
         provider: "local"

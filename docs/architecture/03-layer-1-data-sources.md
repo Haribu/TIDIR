@@ -1,6 +1,9 @@
 # Layer 1: Data Sources & Environmental Inputs
 
-## 1. Overview & Architectural Role
+> **Tier 3: Technical Specifications** · **Audience**: Data Engineers, SecOps Infrastructure Leads · **Normative Status**: Normative Architecture  
+> **Prerequisites**: [Layer 2: Pipeline & Storage](04-layer-2-pipeline-storage-query.md) · **Next Step**: [Layer 2: Pipeline, Storage & Query](04-layer-2-pipeline-storage-query.md)
+
+---
 
 **Layer 1 represents the total sensory boundary of the TIDIR architecture.** It encompasses all information producers feeding into the security operations ecosystem.
 

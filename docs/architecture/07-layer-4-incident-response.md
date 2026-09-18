@@ -1,6 +1,9 @@
 # Layer 4: Investigation, Case Management & Automated Response
 
-## 1. Overview & Architectural Role
+> **Tier 3: Technical Specifications** · **Audience**: Incident Responders, SecOps Automation Leads · **Normative Status**: Normative Architecture  
+> **Prerequisites**: [Layer 3: Intel & Detection Engineering](06-layer-3-threat-intel-detection.md) · **Next Step**: [Cross-Cutting Disciplines](05-cross-cutting-engineering-disciplines.md)
+
+---
 
 **Layer 4 represents the decisive resolution plane of the TIDIR architecture.** While Layer 1 emits telemetry, Layer 2 transports and stores data, and Layer 3 synthesizes detections and risk-scored incident dossiers, Layer 4 executes the critical operational workflows: **investigating root causes, validating attack scope, containing adversary momentum, and restoring trusted operations.**
 

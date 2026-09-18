@@ -1,6 +1,9 @@
 # Component Specification: Investigation & Case Management
 
-## 1. Overview & Objectives
+> **Tier 3: Technical Specifications** · **Audience**: SOC Analysts, Incident Responders · **Normative Status**: Reference Component  
+> **Prerequisites**: [Detection Engine](03-detection-engine.md) · **Next Step**: [Response & Automation](05-response-automation.md)
+
+---
 
 The Investigation & Case Management subsystem empowers security analysts and incident responders to rapidly triage, scope, and document security incidents. It combines automated entity resolution, process and network graph visualisation, unified chronological timeline reconstruction, and tamper-evident case evidence tracking.
 

@@ -1,6 +1,9 @@
 # Layer 2: Pipeline, Storage & Query Capabilities
 
-## 1. Overview & Architectural Role
+> **Tier 3: Technical Specifications** · **Audience**: Data Architects, SecOps Data Engineers · **Normative Status**: Normative Architecture  
+> **Prerequisites**: [Layer 1: Data Sources & Ingress](03-layer-1-data-sources.md) · **Next Step**: [Layer 3: Intel & Detection Engineering](06-layer-3-threat-intel-detection.md)
+
+---
 
 **Layer 2 represents the data fabric and computational core of the TIDIR architecture.** It bridges the sensory boundary of Layer 1 (Data Sources) with the decision intelligence of Layer 3 (Threat Intelligence & Detection) and Layer 4 (Incident Response).
 

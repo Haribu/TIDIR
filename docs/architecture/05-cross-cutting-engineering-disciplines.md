@@ -1,6 +1,9 @@
 # Cross-Cutting Engineering Disciplines & AI Harnesses
 
-## 1. Overview: The Dual-Plane Architecture
+> **Tier 3: Technical Specifications** · **Audience**: SecOps SREs, Detection Leads, AI Platform Engineers · **Normative Status**: Normative Architecture  
+> **Prerequisites**: [Layer 4: Incident Response](07-layer-4-incident-response.md) · **Next Step**: [Subsystem Deep Dives: Threat Intel](components/01-threat-intelligence.md)
+
+---
 
 A complete security architecture must account for two orthogonal planes of reality:
 

@@ -210,7 +210,7 @@ const model: ArchitecturalModel = {
       domain: "Telemetry & Data Fabric",
       execution_mode: "Deterministic Engine",
       description: "Collect telemetry from host kernel instrumentation, cloud control planes, identity tokens, and network sensors.",
-      target_slo: "Zero loss, durable acknowledgement",
+      target_slo: "Durable acknowledgement; designed for loss-intolerant ingestion with local buffer failover",
       invariants_enforced: ["INV-01", "INV-08"]
     },
     {

@@ -122,23 +122,18 @@ flowchart LR
 
 ---
 
-## 2. The TIDIR Architectural Constitution (11 Non-Negotiable Invariants)
+## 2. Governing Invariants & Runtime Topological Implications
 
-A reference architecture is defined by its target invariants—the declarative properties that must hold true across normal operation, network partitions, component degradation, and active adversary attack. TIDIR establishes eleven constitutional invariants (promoted from [ADR-0021](../adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b.md) and system doctrine):
+TIDIR is governed by eleven non-negotiable architectural invariants defined canonically in **[The TIDIR Architectural Constitution](00-architectural-invariants.md)**. Rather than treating invariants as abstract aspirations, the operational runtime topology is directly shaped by their constraints. 
 
-1. **Telemetry Preservation Invariant**: Raw forensic evidence is not discarded solely because no existing detection consumes it. Ephemeral network partitions, streaming bus failures, or database degradation must never result in unrecoverable forensic event loss. Ingested telemetry must survive in an open representation (e.g., Parquet/Iceberg on object storage).
-2. **Evidence Traceability Invariant**: Every consequential assertion, finding, and hypothesis must be strictly traceable to underlying raw observations in the data fabric. Uncited or floating claims are deterministically pruned.
-3. **Dependency-Aware Confidence Invariant**: Correlated derivations sharing common upstream ancestry cannot masquerade as independent evidence. Posterior risk elevation discounts co-derived signals using dependency-aware probabilistic compounding.
-4. **No Self-Granting Authority Invariant**: Probabilistic reasoning cannot grant itself execution authority. Generative models and statistical classifiers operate in a proposal-only capacity; all mutations require deterministic policy or human authorization (*"Probabilistic components propose. Deterministic components authorize"*).
-5. **Least Capability Invariant**: Every machine actor and automated agent receives only task-scoped, ephemeral authority. Runtimes issue short-lived identity documents (e.g. SPIFFE SVIDs $\le 15\text{m}$) with read-only analytical boundaries; forensic agents cannot acquire containment credentials.
-6. **Fail-Secure Security-State Monotonicity Invariant**: Component failure or partial workflow execution cannot silently increase attacker reachability beyond the last verified-safe posture ($s_{n+1} \preceq s_n$). Evaluated over the tuple $\mathcal{S} = \langle \mathcal{R}_{\text{net}}, \mathcal{R}_{\text{id}}, \mathcal{E}_{\text{surface}}, \mathcal{V}_{\text{telemetry}} \rangle$, transitions require:
-   $$\mathcal{R}_{\text{net}}(s_{n+1}) \subseteq \mathcal{R}_{\text{net}}(s_n) \quad \land \quad \mathcal{R}_{\text{id}}(s_{n+1}) \subseteq \mathcal{R}_{\text{id}}(s_n) \quad \land \quad \mathcal{E}_{\text{surface}}(s_{n+1}) \subseteq \mathcal{E}_{\text{surface}}(s_n) \quad \land \quad \mathcal{V}_{\text{telemetry}}(s_{n+1}) \supseteq \mathcal{V}_{\text{telemetry}}(s_n)$$
-   *Forward compensation is permitted to safely restore benign services, but security-state regression is strictly forbidden.* Defensive boundaries move in a single forward direction.
-7. **Bounded Autonomy Invariant**: Autonomous execution is strictly constrained by explicit temporal Time-To-Live (TTL) leases, rate-limit velocity brakes, financial token budgets, and blast-radius impact tiers.
-8. **Human Recoverability Invariant**: Autonomous control planes always preserve independently accessible, out-of-band manual flight decks. The architecture provides a master cryptographic E-Stop and air-gapped, signed runbooks for human Incident Commanders.
-9. **Degraded Defence Invariant**: The loss or outage of an advanced capability (e.g. streaming buses or cloud language models) reduces operational sophistication to batch lakehouse sweeps or deterministic heuristic dossiers, but never causes total visibility blindness.
-10. **Reconstructability Invariant**: Every consequential decision, containment mutation, and case resolution can be deterministically reconstructed after the fact via an immutable, cryptographically sealed **Incident Decision DAG**.
-11. **Operational Portability & Exit Invariant**: No consequential security telemetry, detection logic, investigative case state, policy definition, or audit lineage SHALL be irrecoverably dependent upon a proprietary execution environment or vendor-controlled storage format. Conformance requires complete bi-directional exportability across open standards (OCSF, Parquet, Polyglot DaC, STIX 2.1).
+Four invariants in particular dictate the structure of the runtime planes and data contracts:
+
+* **[INV-02: Evidence Traceability](00-architectural-invariants.md#i2--evidence-provenance--traceability)**: Governs the boundary between Detection (Layer 3) and Investigation (Layer 4). Every security finding must cite immutable raw observation identifiers (`source_observation_ids`); ungrounded or floating machine hypotheses are deterministically pruned from the **Incident Decision DAG**.
+* **[INV-04: Authority Separation](00-architectural-invariants.md#i4--authority-separation-trust-doctrine-maxim)**: Dictates the **4-Plane Model** and **Agent Trust Boundary**. Probabilistic components (LLMs, neural classifiers, clustering heuristics) operate strictly in a read-only proposal capacity within the Analytical Plane. Execution authority is held exclusively by deterministic policy kernels in the Defence Control Plane.
+* **[INV-07: Reachability Monotonicity](00-architectural-invariants.md#i7--fail-secure-containment--reachability-monotonicity)**: Dictates the design of the Actuation Plane. Containment workflows are modeled as fail-secure state machines where partial execution or connector timeouts execute forward perimeter escalation ($s_{n+1} \preceq s_n$) rather than rolling back security barriers.
+* **[INV-08: Graceful Defensive Degradation](00-architectural-invariants.md#i8--graceful-defensive-degradation)**: Enforces multi-tier failure survival across the Data and Analytical Planes. If streaming buses, vector stores, or cloud AI endpoints degrade, the runtime automatically falls back to local edge spooling, scheduled batch lakehouse sweeps, and deterministic Zero-AI tabular timelines without total visibility blindness.
+
+For the complete formal definitions, mathematical state bounds, and compliance criteria across all eleven principles, refer directly to **[The TIDIR Architectural Constitution](00-architectural-invariants.md)**.
 
 ---
 

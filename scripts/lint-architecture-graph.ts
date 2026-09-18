@@ -22,10 +22,13 @@ if (!invariantMatches) {
 const threatModelFile = "docs/architecture/09-threat-model.md";
 const threatModelContent = readFileSync(threatModelFile, "utf-8");
 
-const requiredThreats = ["T1", "T2", "T3", "T4", "T5", "T6"];
-for (const t of requiredThreats) {
-  if (!threatModelContent.includes(`**T${t.replace("T", "")}:`) && !threatModelContent.includes(`**${t}:`)) {
-    errors.push(`❌ Threat Model Assurance Map is missing explicit mapping for threat '${t}'`);
+const requiredThreats = ["1", "2", "3", "4", "5", "6"];
+for (const num of requiredThreats) {
+  const hasThreat =
+    threatModelContent.includes(`**THR-T${num}:`) ||
+    threatModelContent.includes(`**T${num}:`);
+  if (!hasThreat) {
+    errors.push(`❌ Threat Model Assurance Map is missing explicit mapping for threat 'THR-T${num}'`);
   }
 }
 

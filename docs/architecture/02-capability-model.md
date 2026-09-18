@@ -68,7 +68,7 @@ flowchart TB
 
 | Capability ID | Name | Execution Mode | Description | Reference Target SLO |
 | :--- | :--- | :--- | :--- | :--- |
-| **DATA-01** | Multi-Source Ingestion | `[Deterministic Engine]` | Collect telemetry from host kernel instrumentation, cloud control planes, identity token sessions (OCSF 3002), and network sensors. | Zero loss, durable acknowledgement |
+| **DATA-01** | Multi-Source Ingestion | `[Deterministic Engine]` | Collect telemetry from host kernel instrumentation, cloud control planes, identity token sessions (OCSF 3002), and network sensors. | Durable acknowledgement; designed for loss-intolerant ingestion with local buffer failover |
 | **DATA-02** | Canonical Schema Normalization | `[Deterministic Engine]` | Coerce raw schema structures into OCSF (Open Cybersecurity Schema Framework) objects at line rate with unmapped data catch-all. | Normalization overhead < 5ms per event |
 | **DATA-03** | Distributed Stream Buffering | `[Deterministic Engine]` | Decouple collectors from consumers using partitioned, distributed append-only streaming logs. | Sustained ingestion capacity ≥ 500k EPS |
 | **DATA-04** | Hot Analytics Index | `[Deterministic Engine]` | Provide low-latency search, aggregations, and filtering over recent telemetry (15–30 days). | P95 search latency < 2 sec |

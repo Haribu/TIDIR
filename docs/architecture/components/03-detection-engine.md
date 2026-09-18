@@ -1,6 +1,9 @@
 # Component Specification: Detection Engine
 
-## 1. Overview & Objectives
+> **Tier 3: Technical Specifications** · **Audience**: Detection Engineers, SecOps Leads · **Normative Status**: Reference Component  
+> **Prerequisites**: [Telemetry & Data Fabric](02-data-fabric-telemetry.md) · **Next Step**: [Investigation & Cases](04-investigation-cases.md)
+
+---
 
 The Detection Engine applies threat logic against both streaming and historical telemetry. It couples near-real-time streaming pattern recognition with scheduled analytical lakehouse queries, adopting a **Detection-as-Code (DaC)** lifecycle to ensure that detection logic is versioned, unit-tested, and maintainable.
 

@@ -1,6 +1,9 @@
 # Component Specification: AI & Agentic Orchestration Plane
 
-## 1. Overview & Objectives
+> **Tier 3: Technical Specifications** · **Audience**: AI Platform Engineers, SecOps Architects · **Normative Status**: Reference Component  
+> **Prerequisites**: [Automated Response & Containment](05-response-automation.md) · **Next Step**: [ADR Registry](/adr/)
+
+---
 
 The **AI & Agentic Orchestration Plane** provides the runtime execution, model routing, safety guardrails, and tool-calling interfaces required to operate autonomous and collaborative AI agents across the security lifecycle.
 
