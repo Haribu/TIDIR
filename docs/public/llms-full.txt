@@ -350,7 +350,7 @@ In modern security operations, components operate under differing security assum
 
 ### Layer 4: Incident Response (Investigation, Case Management & Automated Containment)
 - **Progressive Disclosure Workbench**: Presents a 3-tier cognitive hierarchy (Situation Summary ➔ Forensic Evidence Table ➔ On-Demand Graph Lineage) to achieve sub-60-second analyst comprehension without visual fatigue.
-- **Hierarchical Agent Mesh**: Dispatches specialized autonomous subagents (host forensic, identity, network, cloud) coordinated by a Lead Triage Orchestrator behind an isolated **Prompt Injection Firewall**, governed by asymmetric consensus arbitration.
+- **Hierarchical Agent Mesh**: Dispatches specialized autonomous subagents (host forensic, identity, network, cloud) coordinated by a Lead Triage Orchestrator behind an isolated **Agent Trust Boundary**, governed by deterministic schema validation and advisory consensus critique.
 - **Tamper-Evident Evidence Dossier**: Records queries, annotations, and artifacts with cryptographic integrity (RFC 3161 timestamps) across the **Incident Decision DAG**.
 - **Monotonic Fail-Closed Containment**: Executes containment as state machines governed by **Security-State Monotonicity** (see [ADR-0005](../adr/0005-saga-pattern-containment-and-break-glass-protocol.md)), separating low-risk actions (Tier 1) from disruptive actions (Tier 2) governed by dual-authorisation consensus and an audited **Break-Glass Emergency Protocol**.
 - **Closed-Loop Feedback & Green Team Prevention**: While TIDIR intentionally scopes its core engine to threat intelligence, detection, investigation, and incident response (deliberately avoiding duplicating inline prevention appliances), it completes the closed loop by programmatically recommending and triggering **Green Teams** (infrastructure, platform, and cloud security engineering). Post-incident findings, exploited misconfigurations, and lateral movement paths automatically synthesize Infrastructure-as-Code (IaC) pull requests, identity boundary tightenings, and preventative control improvements to permanently eradicate root causes and deepen enterprise defense-in-depth.
@@ -384,7 +384,7 @@ TIDIR establishes an **AI-First Defence Architecture** that moves beyond single-
 | **Layer 2: Pipeline & Storage Fabric** | **Natural Language Data Exploration**: Translates plain-language analyst questions into optimised SQL/streaming queries. | **Read-Only AST (Abstract Syntax Tree) Validator**: Enforces strict SELECT-only query constraints and compute timeout budgets. | **Target Hypothesis: Sub-Minute Query Turnaround**: Enables multi-table lakehouse investigations via schema-constrained query synthesis. |
 | **Layer 3: Detection Engineering** | **Threat Advisory to Attack Flow Synthesis**: Ingests unstructured CTI advisories and bulletins and extracts structured ATT&CK DAG flows. | **Human CTI Peer Review**: Analyst ratifies extracted Priority Intelligence Requirements (PIRs). | **Target Hypothesis: Continuous Codification**: Reduces latency between zero-day public disclosure and backlog prioritization. |
 | **Layer 3: Detection Engineering** | **Continuous Evals-as-Code & DaC Quality Judge**: Multi-agent judges and CI benchmark suites audit detection rules and agent prompts against golden incident datasets. | **CI/CD Unit & Regression Suite**: Rules and agent prompts must achieve 100% pass rate on synthetic fixtures and 30-day lakehouse backtests. | **Target Hypothesis: Bounded Noise Ratio**: Enforces alert noise error budget (false-positive rate $\le 5\%$) to suppress brittle rules before production. |
-| **Layer 4: Investigation & Cases** | **Hierarchical Agent Mesh (Host/Identity/Network)**: Lead orchestrator dispatches specialist subagents to scope 90-day baselines, process lineages, and lateral movement simultaneously. | **Prompt Injection Firewall & Dual-Plane Isolation**: Telemetry strings are treated as untrusted data planes; agents invoke typed tools without executing raw string commands. | **Target Hypothesis: Sub-60s Case Synthesis**: Delivers a fully hydrated case dossier containing complete process lineage and host context upon ticket open. |
+| **Layer 4: Investigation & Cases** | **Hierarchical Agent Mesh (Host/Identity/Network)**: Lead orchestrator dispatches specialist subagents to scope 90-day baselines, process lineages, and lateral movement simultaneously. | **Agent Trust Boundary & Dual-Plane Isolation**: Telemetry strings are treated as untrusted data planes; prompt injection is assumed possible while agents invoke typed tools without executing raw string commands. | **Target Hypothesis: Sub-60s Case Synthesis**: Delivers a fully hydrated case dossier containing complete process lineage and host context upon ticket open. |
 | **Layer 4: Incident Response (Automated Containment)** | **Pre-Execution Blast-Radius Simulator & Containment Engine**: Evaluates active network connections, service criticality, and dependency trees; executes monotonic forward containment with forward escalation on error. | **Dual-Authorisation Consensus & Audited Break-Glass**: Tier 2 containment requires multi-signature approval; high-velocity outbreaks support single-commander break-glass with cryptographic broadcast. | **Target Hypothesis: Zero Unintended Outages**: Validated through shadow-mode canary execution to prevent false-positive recommendations from isolating critical services. |
 
 ---
@@ -472,7 +472,7 @@ flowchart TB
 
     subgraph BOUNDARY_AI["Trust Boundary 4: Autonomous Agent Mesh"]
         direction TB
-        FW["Prompt Injection Firewall<br>(Dual-Plane Isolator)"]
+        FW["Agent Trust Boundary<br>(Dual-Plane Isolator)"]
         MESH["Hierarchical Agent Mesh<br>(Read-Only Triage)"]
         ARB["Proposer/Challenger Dual-Model Arbiter"]
     end
@@ -597,7 +597,7 @@ The following matrix synthesises the TIDIR target architecture against the STRID
 | **Evidence Locker** | **R**epudiation | Malicious administrator deletes or alters forensic evidence logs. | Critical | Immutable WORM object storage, append-only Merkle tree cryptographic logs. |
 | **Streaming Bus** | **I**nformation Disclosure | Unauthorised microservice taps high-throughput telemetry stream. | High | Topic-level SASL/SCRAM authentication, field-level encryption for PII. |
 | **Detection Engine** | **D**enial of Service | Complex ReDoS regex queries exhaust streaming CPU and memory. | High | AST-level query complexity analysis, bounded runtime execution ceilings. |
-| **Autonomous Mesh** | **E**levation of Privilege | Indirect prompt injection triggers unauthorised administrative containment. | Critical | Dual-plane Prompt Injection Firewall, read-only permissions, dual-model consensus. |
+| **Autonomous Mesh** | **E**levation of Privilege | Indirect prompt injection triggers unauthorised administrative containment. | Critical | Agent Trust Boundary (dual-plane isolation), read-only permissions, deterministic policy kernel. |
 | **Response Actuators** | **D**enial of Service | Runaway automation isolates enterprise infrastructure. | Critical | Monotonic state machines, blast-radius circuit breakers, Break-Glass human approval. |
 
 ---
@@ -609,7 +609,7 @@ TIDIR enforces five explicit security perimeters:
 1. **Boundary 1: Sensor to Pipeline (Edge Ingestion Perimeter):** Untrusted endpoint and cloud environments communicate exclusively via authenticated, reverse-proxy ingress points.
 2. **Boundary 2: Pipeline to Data Fabric (Storage Perimeter):** Distributed streaming topics enforce role-based access control. Ingestion pipelines hold write-only access to streaming queues; analytics engines hold read-only consumer tokens.
 3. **Boundary 3: Analytics to Detection (Query Perimeter):** Detection engines run in sandboxed worker environments with strict CPU, memory, and query execution timeouts.
-4. **Boundary 4: Detection to AI Reasoning (Inference Perimeter):** Telemetry data passes through the Prompt Injection Firewall before model context injection. Agent runtimes have no direct external internet egress.
+4. **Boundary 4: Detection to AI Reasoning (Inference Perimeter):** Telemetry data passes through the Agent Trust Boundary before model context injection. Agent runtimes have no direct external internet egress.
 5. **Boundary 5: AI Reasoning to Response Actuators (Action Perimeter):** The autonomous mesh cannot directly invoke infrastructure APIs. All action requests must be emitted as declarative containment intents evaluated by the privileged response orchestrator.
 
 ---
@@ -798,7 +798,7 @@ flowchart TB
       direction TB
       DetE["<b>3. Detection Engineering (DaC)</b><br>• Declarative Rule Authoring<br>• CI/CD Synthetic Replay<br>• SRE Noise Error Budgets"]
       AE["<b>4. Automation & Systems (SRE)</b><br>• Playbook-as-Code SDKs<br>• Blast-Radius Simulation<br>• Fail-Closed Containment"]
-      AIH["<b>5. AI & Agentic Harnesses</b><br>• Prompt Injection Firewall<br>• Multi-Model Consensus<br>• Assertion-First Evals-as-Code"]
+      AIH["<b>5. AI & Agentic Harnesses</b><br>• Agent Trust Boundary<br>• Advisory Consensus Critique<br>• Assertion-First Evals-as-Code"]
     end
   end
 
@@ -938,7 +938,7 @@ flowchart TB
   subgraph AI_Harness ["AI & Agentic Harness Architecture"]
     direction TB
     subgraph ContextEngine ["1. Defensive Ingestion & Context Assembly"]
-      FIREWALL["Prompt Injection Firewall\n(Dual-plane data vs. control separation)"]
+      FIREWALL["Agent Trust Boundary\n(Dual-plane data vs. control separation)"]
       GATHER["Entity Aggregator\n(Pulls CMDB, auth history, active alerts)"]
       REDACT["Deterministic Privacy Redaction\n(Masks PII, keys, customer data)"]
     end
@@ -967,7 +967,7 @@ flowchart TB
   end
 ```
 
-- **Defensive AI Runtime & Prompt Injection Firewall**:
+- **Defensive AI Runtime & Agent Trust Boundary**:
   - Implements **Dual-Plane Isolation**: untrusted telemetry payloads (command lines, file contents, raw logs, external CTI text) remain strictly within the data plane as typed JSON structures.
   - Controls, instructions, and tools operate exclusively in the privileged control plane. **TIDIR explicitly assumes adversarial data may influence or compromise model reasoning; security boundaries therefore do not depend on successful prompt-injection detection**. All consequential capabilities remain constrained by deterministic authorisation, typed interfaces, task-scoped machine identity (SPIFFE Verifiable Identity Documents / SVIDs), and independent execution policy.
   - Dynamically retrieves necessary entity state, historical alert patterns, and relevant threat actor context with deterministic privacy redaction.
@@ -1043,7 +1043,7 @@ Source: docs/architecture/components/06-ai-orchestration.md
 
 The **AI & Agentic Orchestration Plane** provides the runtime execution, model routing, safety guardrails, and tool-calling interfaces required to operate autonomous and collaborative AI agents across the security lifecycle.
 
-Rather than treating AI as an isolated conversational chatbot or a collection of brittle point scripts, this component establishes an enterprise-grade orchestration layer. It exposes standardized **Model Context Protocol (MCP)** tool contracts, dynamically routes inferences across local Small Language Models (Tier 0) and cloud frontier models (Tier 1/2), and enforces deterministic safety boundaries through a **Dual-Plane Prompt Injection Firewall** and **Abstract Syntax Tree (AST) query validation**.
+Rather than treating AI as an isolated conversational chatbot or a collection of brittle point scripts, this component establishes an enterprise-grade orchestration layer. It exposes standardized **Model Context Protocol (MCP)** tool contracts, dynamically routes inferences across local Small Language Models (Tier 0) and cloud frontier models (Tier 1/2), and enforces deterministic safety boundaries through an **Agent Trust Boundary (Dual-Plane Untrusted Content Isolator)** and **Abstract Syntax Tree (AST) query validation**.
 
 ```mermaid
 flowchart TB
@@ -1061,7 +1061,7 @@ flowchart TB
       direction TB
       MCP_ROUTER["Model Context Protocol (MCP) Bus\n(Strongly Typed SecOps Tool Catalog)"]
       BLACKBOARD["Stateful Blackboard & DAG Engine\n(Checkpointed Investigation State)"]
-      PROMPT_FW["Dual-Plane Prompt Firewall\n(Strict Data vs. Control Isolation)"]
+      PROMPT_FW["Agent Trust Boundary\n(Dual-Plane Data vs. Control Isolation)"]
       AST_VAL["Deterministic AST Validator\n(SELECT-Only SQL Enforcement)"]
     end
 
@@ -1202,7 +1202,7 @@ flowchart TB
   GREEN_PLANE -->|Drafts IaC Hardening PRs| RED_PLANE
 ```
 
-- **Red Agents (Continuous Adversary Emulation):** Simulate attacks in staging environments, probe detection rules for evasive bypasses, and fuzz the Prompt Injection Firewall with malicious payloads embedded in telemetry fields.
+- **Red Agents (Continuous Adversary Emulation):** Simulate attacks in staging environments, probe detection rules for evasive bypasses, and fuzz the Agent Trust Boundary with malicious payloads embedded in telemetry fields.
 - **Blue Agents (Detection & Incident Resolution):** Operate the runtime defense—correlating events across the Bipartite Entity Graph, executing parallel specialist investigations (Host, Identity, Network), simulating blast radius, and executing policy-gated monotonic containment.
 - **Green Agents (Self-Healing Remediation & Governance):** The active maintenance and repair engine of the architecture. Green agents do not simply flag problems; they **programmatically fix defects and hygiene gaps discovered across TIDIR**:
   1. *Detection-as-Code (DaC) Self-Healing:* When Red simulations expose a detection bypass or missed technique, Green agents analyze the missed telemetry and draft a GitHub Pull Request with the corrected declarative Sigma/SQL rule logic and synthetic regression unit tests.
@@ -1244,8 +1244,8 @@ Security operations cannot tolerate stochastic hallucinations or unverifiable cl
 | Testing Modality | Core Mechanism | Strengths (Pros) | Limitations (Cons) | Cost Profile | Scalability & Operational Challenges |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **1. Golden Benchmark Datasets** | Versioned CI/CD test suites replaying curated attack & benign telemetry corpora. | Fully reproducible; zero latency impact on live ops; regression-proof. | Requires continuous curation; risks synthetic drift from novel attack techniques. | Low execution cost (one-time authoring + CI compute). | High scalability in GitOps; challenges in generating diverse multi-stage attack scenarios. |
-| **2. Deterministic Guardrails & Firewalls** | Dual-plane prompt firewalls, PII masks, and AST query validators. | Mathematical certainty; prevents query injection and schema destruction; sub-millisecond. | Static rules cannot catch nuanced semantic hallucinations; risk of over-blocking. | Negligible ($0.00 inference; lightweight regex/AST CPU). | Extreme line-rate scale; requires schema-synchronized parser updates. |
-| **3. LLM-as-a-Judge (Multi-Consensus)** | Independent frontier models evaluate output accuracy, grounding fidelity, and tool usage. | Understands complex semantic context; automates subjective grading at scale. | Susceptible to judge model bias, hallucination, and prompt sensitivity. | High (2x–3x token consumption per evaluated prompt). | Bounded by cloud API rate limits and token budgets; requires prompt version locking. |
+| **2. Deterministic Guardrails & Trust Boundaries** | Dual-plane untrusted content isolation (Agent Trust Boundary), PII masks, and AST query validators. | Enforces structural boundaries; prevents arbitrary command execution and schema tampering; sub-millisecond. | Cannot eliminate semantic influence on reasoning (prompt injection is assumed possible); requires typed output validation. | Negligible ($0.00 inference; lightweight regex/AST CPU). | Extreme line-rate scale; requires schema-synchronized parser updates. |
+| **3. LLM-as-a-Judge (Advisory Multi-Critique)** | Independent frontier models critique output accuracy, grounding fidelity, and tool usage. | Understands complex semantic context; automates subjective grading at scale. | Susceptible to shared foundation model training biases; cannot provide epistemic proof of correctness. | High (2x–3x token consumption per evaluated prompt). | Bounded by cloud API rate limits and token budgets; requires prompt version locking. |
 | **4. Statistical Sampling & Shadow Mode** | Asynchronously executes candidate models against a 5–10% sample of live production queries. | Measures drift and performance against authentic, chaotic production telemetry without risk. | Feedback is lagging/asynchronous; does not protect against single-event failures. | Moderate (tunable 5–10% inference duplicate overhead). | Highly scalable; requires isolated shadow execution pipelines and telemetry sinks. |
 | **5. Expert Human Validation (A/B Testing)** | Senior SOC analysts and detection engineers grade and compare competing agent outputs. | Expert adjudication; captures institutional nuances and business risk tolerance. | Severe human bottleneck; analyst fatigue; subjective inconsistencies between individual evaluators. | Very High (expensive senior engineering hours). | Low scalability; confined to pilot stage evaluations and periodic spot-check audits. |
 
@@ -1279,8 +1279,9 @@ flowchart LR
    - **Responsibility**: Sub-100ms structural auditing. Verifies schema compliance, extracts entity references, scores grounding citation presence, and detects blatant instruction leakage before any dossier reaches the analyst workbench.
    - **Economic & Operational Value**: $0.00 incremental cloud API cost; absolute data sovereignty; operates under total WAN severance.
 
-2. **Tier 2 Frontier Model Escalation (Semantic Multi-Consensus)**:
-   - When the local SLM judge scores confidence between 70% and 85% (borderline ambiguity) or when triage recommendations involve Tier 1/2 containment, the evaluation escalates to a cloud frontier model for adversarial multi-model consensus (Proposer vs. Challenger).
+2. **Tier 2 Frontier Model Escalation (Advisory Multi-Model Critique)**:
+   - When the local SLM judge scores confidence between 70% and 85% (borderline ambiguity) or when triage recommendations involve Tier 1/2 containment, the evaluation escalates to a cloud frontier model for independent critique and adversarial counter-argumentation (Proposer vs. Challenger).
+   - **Epistemic Limitation of Multi-Model Consensus**: While multi-model arbitration provides valuable heuristic defense-in-depth, foundation models sharing common public pre-training corpora cannot be assumed epistemically independent. Agreement between frontier models is never treated as mathematical proof of safety; deterministic invariant evaluation, AST validation, and human authorization remain the sole basis of execution authority.
 
 3. **Continuous Judge Calibration Loop**:
    - The system periodically replays golden benchmark datasets against both the local SLM judge and the frontier model to measure alignment drift.
@@ -1398,7 +1399,7 @@ TIDIR implements a tiered economic shield:
 | **Sovereign Open-Weights Cluster** | vLLM / Triton (Llama 3.3 70B, Qwen 2.5 72B, DeepSeek-R1) | Private GPU VPC (AWS EC2 g5/p4, Google Cloud A3) | Dedicated Enterprise Bare-Metal GPU Nodes |
 | **Tool Calling Protocol** | Anthropic Model Context Protocol (MCP) SDK | Standardized JSON Schema Tool APIs | Microsoft Semantic Kernel / LangChain |
 | **Stateful DAG & Blackboard** | LangGraph / Temporal / Prefect | AWS Step Functions / Google Workflows | Custom Agent Mesh |
-| **Prompt Injection Firewall** | Lakera Gandalf / NeMo Guardrails / Rebuff | AWS Bedrock Guardrails | Palo Alto Prisma AI Guard |
+| **Agent Trust Boundary / Content Isolator** | Lakera Gandalf / NeMo Guardrails / Rebuff | AWS Bedrock Guardrails | Palo Alto Prisma AI Guard |
 | **AST Query Validator** | `sqlglot` / `pglast` / Calcite AST parser | Athena Workgroup Query Controls | Snowflake Query Guardrails |
 | **Telemetry & Tracing** | OpenTelemetry GenAI Semantic Conventions | CloudWatch / Cloud Trace | Langfuse / Arize Phoenix |
 
@@ -1435,7 +1436,7 @@ flowchart LR
   - Lead Triage Orchestrator dispatches parallel specialist subagents (Host Forensic, Identity & Auth, Network & Cloud).
   - Continuous aggregation to a stateful incident blackboard.
   - Pre-execution blast-radius simulation for suggested containment actions.
-* **Architecture:** Stateful LangGraph/Temporal runtime, Dual-Plane Prompt Injection Firewall, CI/CD Evals-as-Code pipeline running on every Git pull request.
+* **Architecture:** Stateful LangGraph/Temporal runtime, Agent Trust Boundary (Dual-Plane Isolator), CI/CD Evals-as-Code pipeline running on every Git pull request.
 * **Exit Milestone:** Grounding fidelity $\ge 95\%$ (zero hallucinated IOCs) on golden incident benchmark datasets; sub-60-second end-to-end multi-agent triage synthesis.
 
 ### Phase 3: Autonomous Closed-Loop (Run) — Months 6+
@@ -1515,7 +1516,7 @@ Total Decisions: 21 | Accepted: 21 | Deprecated: 0 | Superseded: 0
 
 | ADR | Title | Status | Deciders | Summary |
 | :--- | :--- | :--- | :--- | :--- |
-| [**0004**](0004-defensive-ai-runtime-and-prompt-injection-firewall.md) | **Defensive AI & Prompt Injection Firewall** | `accepted` | AI Platform / SecOps | Isolates untrusted telemetry payloads to a sandboxed Data Plane, preventing indirect prompt injection attacks. |
+| [**0004**](0004-defensive-ai-runtime-and-prompt-injection-firewall.md) | **Defensive AI & Agent Trust Boundary** | `accepted` | AI Platform / SecOps | Isolates untrusted telemetry payloads to a sandboxed Data Plane, preventing indirect prompt injection attacks. |
 | [**0006**](0006-agent-evaluation-harness-evals-as-code.md) | **Agent Evaluation Harness (Evals-as-Code)** | `accepted` | AI Platform Leads | Implements continuous regression testing of agent prompts and triage accuracy against versioned golden datasets. |
 | [**0012**](0012-ai-orchestration-runtime-mcp-and-mvp-roadmap.md) | **AI Orchestration Runtime & MCP Roadmap** | `accepted` | AI Platform / Architecture | Standardises tool interfaces on the Model Context Protocol (MCP) and defines phased MVP milestones. |
 | [**0014**](0014-ai-observability-self-learning-and-slm-judges.md) | **AI Observability & SLM Judges** | `accepted` | AI Platform Leads | Deploys local Small Language Model (SLM) judges for real-time hallucination checks, groundedness audits, and cost tracking. |

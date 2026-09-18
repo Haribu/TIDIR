@@ -84,8 +84,14 @@ Not all telemetry possesses equal analytical value. Storing petabytes of high-vo
 
 1. **Tier A (High Security Value)**: Ingested into the streaming detection engine for sub-second rule evaluation and written concurrently to the **Hot Analytical Index** for rapid analyst investigation.
 2. **Tier B (Forensic / Compliance Bulk)**: Bypasses the indexing tier entirely. Batched directly into open columnar files in object storage for cost-effective retention and scheduled batch query.
-3. **Tier C (Noise & Chatter)**: Filtered, deduplicated, or aggregated into rolling statistical summaries (e.g., rolling connection counts per endpoint) at ingress before storage.
+3. **Tier C (Governed Data Compaction & Noise Pruning)**: Operational chatter (e.g., sensor heartbeats, health-check pings, unmutated status polling) is aggregated into rolling statistical metrics or deduplicated at ingress according to explicit evidence-retention policies.
 4. **Data Redaction & Tokenization**: Sensitive fields (PII, tokens, or credentials captured in command lines) are tokenized or masked prior to persistence.
+
+> [!IMPORTANT]
+> **Constitutional Preservation Boundary (Invariant 1 Compliance)**  
+> To uphold Invariant 1 (*Telemetry Preservation*), Layer 2 strictly enforces a formal boundary between:
+> - **Semantic Telemetry Rejection (Strictly Prohibited)**: Discarding or filtering security event streams merely because no active detection rule or query currently consumes them.
+> - **Governed Evidence Compaction (Permitted)**: Applying explicit, auditable retention policies that summarize non-security operational chatter or compact high-volume streams into cold lakehouse formats without compromising post-incident forensic reconstructability.
 
 ---
 

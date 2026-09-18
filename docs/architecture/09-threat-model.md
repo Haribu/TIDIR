@@ -42,7 +42,7 @@ flowchart TB
 
     subgraph BOUNDARY_AI["Trust Boundary 4: Autonomous Agent Mesh"]
         direction TB
-        FW["Prompt Injection Firewall<br>(Dual-Plane Isolator)"]
+        FW["Agent Trust Boundary<br>(Dual-Plane Isolator)"]
         MESH["Hierarchical Agent Mesh<br>(Read-Only Triage)"]
         ARB["Proposer/Challenger Dual-Model Arbiter"]
     end
@@ -167,7 +167,7 @@ The following matrix synthesises the TIDIR target architecture against the STRID
 | **Evidence Locker** | **R**epudiation | Malicious administrator deletes or alters forensic evidence logs. | Critical | Immutable WORM object storage, append-only Merkle tree cryptographic logs. |
 | **Streaming Bus** | **I**nformation Disclosure | Unauthorised microservice taps high-throughput telemetry stream. | High | Topic-level SASL/SCRAM authentication, field-level encryption for PII. |
 | **Detection Engine** | **D**enial of Service | Complex ReDoS regex queries exhaust streaming CPU and memory. | High | AST-level query complexity analysis, bounded runtime execution ceilings. |
-| **Autonomous Mesh** | **E**levation of Privilege | Indirect prompt injection triggers unauthorised administrative containment. | Critical | Dual-plane Prompt Injection Firewall, read-only permissions, dual-model consensus. |
+| **Autonomous Mesh** | **E**levation of Privilege | Indirect prompt injection triggers unauthorised administrative containment. | Critical | Agent Trust Boundary (dual-plane isolation), read-only permissions, deterministic policy kernel. |
 | **Response Actuators** | **D**enial of Service | Runaway automation isolates enterprise infrastructure. | Critical | Monotonic state machines, blast-radius circuit breakers, Break-Glass human approval. |
 
 ---
@@ -179,7 +179,7 @@ TIDIR enforces five explicit security perimeters:
 1. **Boundary 1: Sensor to Pipeline (Edge Ingestion Perimeter):** Untrusted endpoint and cloud environments communicate exclusively via authenticated, reverse-proxy ingress points.
 2. **Boundary 2: Pipeline to Data Fabric (Storage Perimeter):** Distributed streaming topics enforce role-based access control. Ingestion pipelines hold write-only access to streaming queues; analytics engines hold read-only consumer tokens.
 3. **Boundary 3: Analytics to Detection (Query Perimeter):** Detection engines run in sandboxed worker environments with strict CPU, memory, and query execution timeouts.
-4. **Boundary 4: Detection to AI Reasoning (Inference Perimeter):** Telemetry data passes through the Prompt Injection Firewall before model context injection. Agent runtimes have no direct external internet egress.
+4. **Boundary 4: Detection to AI Reasoning (Inference Perimeter):** Telemetry data passes through the Agent Trust Boundary before model context injection. Agent runtimes have no direct external internet egress.
 5. **Boundary 5: AI Reasoning to Response Actuators (Action Perimeter):** The autonomous mesh cannot directly invoke infrastructure APIs. All action requests must be emitted as declarative containment intents evaluated by the privileged response orchestrator.
 
 ---

@@ -9,7 +9,7 @@ head:
       content: "Open, vendor-neutral target technology component architecture for modern autonomous security operations: CTI, OCSF telemetry fabric, Detection-as-Code, agentic investigation, and monotonic response."
   - - meta
     - name: keywords
-      content: "cybersecurity, SecOps, threat intelligence, detection engineering, incident response, OCSF, STIX, TAXII, SOAR, SIEM, security architecture, agentic AI, prompt injection firewall, continuous purple teaming, detection as code, autonomous SOC"
+      content: "cybersecurity, SecOps, threat intelligence, detection engineering, incident response, OCSF, STIX, TAXII, SOAR, SIEM, security architecture, agentic AI, agent trust boundary, continuous purple teaming, detection as code, autonomous SOC"
 
 hero:
   name: "TIDIR"
@@ -38,7 +38,7 @@ features:
     details: Stateful streaming pattern detection paired with lakehouse SQL analytics, governed by GitOps Detection-as-Code (DaC), continuous purple teaming, and SecOps error budgets.
   - icon: 🧠
     title: Hierarchical Agent Mesh
-    details: Specialised autonomous agents with dual-plane prompt injection firewalls and Proposer/Challenger multi-model arbitration for evidence-grounded investigations with deterministic rejection of unsupported assertions.
+    details: Specialised autonomous agents operating within an Agent Trust Boundary (dual-plane untrusted data isolation) and deterministic invariant validation for evidence-grounded investigations.
   - icon: ⚡
     title: Automated Response & Containment
     details: Blast-radius risk-tiered state machines executing monotonic fail-closed containment with forward escalation, circuit breakers, and break-glass human-in-the-loop controls.
@@ -100,9 +100,9 @@ flowchart TB
 
     subgraph S3["3. AGENTIC INVESTIGATION"]
         direction TB
-        FW["Prompt Injection Firewall"]
+        FW["Agent Trust Boundary\n(Dual-Plane Isolator)"]
         MESH["Hierarchical Agent Mesh"]
-        ARB["Proposer/Challenger Arbiter"]
+        ARB["Proposer/Challenger Critique"]
         FW --> MESH --> ARB
     end
 
@@ -146,10 +146,10 @@ $$
 ### 3. Continuous Purple Teaming & SecOps Error Budgets
 Borrowing from Site Reliability Engineering (SRE), detection quality is enforced through quantifiable **Alert Noise Error Budgets** (target: false-positive rate $\le 5\%$). Detection-as-Code (DaC) repositories execute continuous atomic attack emulation in CI/CD pipelines. If a detection rule exhausts its noise budget in production, an automated deployment freeze prevents new rule promotions until the noisy rule is tuned or deprecated.
 
-### 4. Dual-Plane Defensive AI Runtime & Prompt Injection Firewall
+### 4. Dual-Plane Defensive AI Runtime & Agent Trust Boundary
 Autonomous agentic workflows operate within a strictly isolated runtime:
-* **Control Plane vs. Data Plane Separation:** Untrusted external telemetry (email bodies, web payloads, obfuscated command strings) is strictly compartmentalised as raw data and never injected directly into agent execution prompts.
-* **Deterministic Guardrails & Multi-Model Arbitration:** High-consequence triage decisions require consensus between a *Proposer Model* (investigation specialist) and an independent *Challenger Model* (adversarial auditor) to reject unsupported assertions and validate proposed containment actions against deterministic policies.
+* **Control Plane vs. Data Plane Separation (Agent Trust Boundary):** Prompt injection is assumed possible; the architecture prevents adversarial telemetry from becoming unauthorized authority. Untrusted external telemetry (email bodies, web payloads, command strings) is strictly compartmentalised in the data plane and parsed into typed schemas before model invocation.
+* **Deterministic Invariant Validation & Advisory Multi-Model Critique:** High-consequence triage decisions are validated by deterministic invariant engines against schema and security policies; independent challenger models provide advisory defense-in-depth critique without self-granting execution authority.
 
 ### 5. Security-State Monotonicity & Fail-Closed Containment
 Automated containment workflows execute declarative state machines governed by **Security-State Monotonicity**: *no automated compensation may increase attacker reachability beyond the last verified-safe security state*. While forward compensation may safely restore benign services, rolling back security barriers upon downstream timeout is strictly prohibited as an anti-defence vulnerability. Workflows enforce fail-closed boundary freezes and forward escalation to broader network perimeters, with high-impact mutations gated by authenticated Break-Glass Human-in-the-Loop consensus (Mean Time to Contain / MTTC $\lt 5\text{ min}$).

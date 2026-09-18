@@ -58,7 +58,7 @@ flowchart TB
         T2["<b>Tier 1: Strategic Architecture</b><br>• Closed-loop SecOps<br>• Run-Watch-Adapt paradigm<br>• Dual-plane AI runtime"]
         T3["<b>Tier 2: Capabilities & Taxonomy</b><br>• CTI-01..05, DET-01..06<br>• INV-01..06, RESP-01..05<br>• Quantitative MTTx service levels"]
         T4["<b>Tier 3: Technical Specifications</b><br>• Line-rate OCSF schemas<br>• Distributed event streams<br>• Columnar Lakehouse Parquet storage"]
-        T5["<b>Subsystem Components & ADRs</b><br>• Prompt Injection Firewall (ADR-0004)<br>• Containment State Machine (ADR-0005)<br>• Bayesian Risk Engine (ADR-0009)"]
+        T5["<b>Subsystem Components & ADRs</b><br>• Agent Trust Boundary (ADR-0004)<br>• Containment State Machine (ADR-0005)<br>• Bayesian Risk Engine (ADR-0009)"]
         T6["<b>Cross-Cutting Engineering Disciplines</b><br>• SRE Noise Error Budgets (&lt; 5% FPR)<br>• Continuous Purple Teaming CI/CD<br>• Audited Break-Glass protocols"]
     end
 
@@ -85,7 +85,7 @@ The Business Attributes Profile translates executive risk appetite into concrete
 | :--- | :--- | :--- | :--- | :--- |
 | **Timely** | Threats are detected and contained before adversary objectives or data exfiltration occur. | Streaming MTTD $\lt 5\,\text{s}$<br>Automated MTTC $\lt 15\,\text{s}$ | `DET-01`<br>`RESP-01` | In-memory stream pattern detection and low-latency containment playbooks ([ADR-0005](/adr/0005-saga-pattern-containment-and-break-glass-protocol)). |
 | **Defensible** | Investigation evidence and incident timelines withstand regulatory scrutiny and court proceedings. | Evidence integrity verification: $100\%$ tamper-evident | `INV-04`<br>`CTI-05` | Cryptographically signed evidence lockers, immutable append-only storage, and 30-day historical replay ([ADR-0007](/adr/0007-continuous-automated-purple-teaming-and-multi-model-consensus)). |
-| **Controllable** | Automated containment operates with strictly bounded blast radius and human-in-the-loop governance. | Runaway automation incidents: $0$<br>Break-glass response latency $\lt 5\,\text{m}$ | `RESP-04`<br>`AIGOV-01` | Dual-plane Prompt Injection Firewall ([ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall)), connector circuit breakers, and audited Break-Glass overrides. |
+| **Controllable** | Automated containment operates with strictly bounded blast radius and human-in-the-loop governance. | Runaway automation incidents: $0$<br>Break-glass response latency $\lt 5\,\text{m}$ | `RESP-04`<br>`AIGOV-01` | Agent Trust Boundary ([ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall)), connector circuit breakers, and audited Break-Glass overrides. |
 | **Cost-Efficient** | Infrastructure expenditure scales sub-linearly with telemetry volume growth. | Storage cost reduction $\ge 70\%$ vs traditional hot indexing | `DATA-01`<br>`DATA-04` | Decoupled lakehouse architecture routing raw telemetry to low-cost columnar storage (Parquet) and rejecting restrictive log filtering. |
 | **Reliable** | Detection engineering maintains low operational friction and prevents analyst burnout. | Alert false positive rate false-positive rate $\le 5\%$<br>Error budget burn $\lt 100\%$ | `DET-06`<br>`DET-05` | SRE Alert Noise Error Budgets ([ADR-0008](/adr/0008-secops-error-budgets-and-chaos-security-engineering.md)) and Bayesian multi-signal compounding ([ADR-0009](/adr/0009-bayesian-multi-signal-risk-scoring.md)). |
 | **Auditable** | Autonomous agentic reasoning and decision pathways can be independently reconstructed and validated. | Agent grounding fidelity $\ge 95\%$<br>Prompt regression rate: $0\%$ | `AIGOV-02`<br>`INV-05` | Automated Evals-as-Code CI/CD harness executing against versioned Golden Incident Benchmarks ([ADR-0006](/adr/0006-agent-evaluation-harness-evals-as-code.md)). |
@@ -104,7 +104,7 @@ flowchart LR
     end
 
     subgraph ISOLATION["Inspection & Boundary Zone"]
-        PIF["Prompt Injection Firewall<br>(Dual-Plane Sanitiser)"]
+        PIF["Agent Trust Boundary<br>(Dual-Plane Isolator)"]
     end
 
     subgraph REASONING["Bounded Reasoning Zone (Untrusted Execution)"]
@@ -131,7 +131,7 @@ flowchart LR
 ```
 
 1. **Untrusted Zone:** External events, email bodies, HTTP headers, and third-party threat feeds are classified as untrusted data inputs.
-2. **Inspection Zone:** The Prompt Injection Firewall strips command delimiters, inspects tokens for adversarial framing, and parses raw text into strongly typed schema parameters before model invocation ([ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall)).
+2. **Inspection Zone:** The Agent Trust Boundary isolates unformatted text, checks tokens for structural delimiters, and parses raw text into strongly typed schema parameters before model invocation ([ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall)).
 3. **Bounded Reasoning Zone:** Agents operate with read-only query capabilities across the data fabric. Autonomous agents possess zero direct execution credentials for mutating enterprise infrastructure.
 4. **Privileged Control Zone:** Response actions are generated as formal containment intent requests. Actions must pass deterministic circuit breakers, automated blast-radius scoring, and dual-model consensus before the containment orchestrator or on-duty commander dispatches mutating API calls ([ADR-0005](/adr/0005-saga-pattern-containment-and-break-glass-protocol)).
 
@@ -140,7 +140,7 @@ flowchart LR
 ## Positive Consequences
 
 * **Executive Defensibility:** Provides enterprise architecture review boards (EARBs), CISOs, and risk committees with clear, bi-directional traceability from high-level business goals to technical engineering decisions.
-* **Objective Investment Justification:** Non-functional requirements (such as data lakehouse retention or prompt injection firewalls) are defended in terms of concrete business attributes (*Cost-Efficient*, *Defensible*, *Controllable*).
+* **Objective Investment Justification:** Non-functional requirements (such as data lakehouse retention or agent trust boundaries) are defended in terms of concrete business attributes (*Cost-Efficient*, *Defensible*, *Controllable*).
 * **Clear Autonomous Boundaries:** Solves the AI governance challenge by integrating SABSA trust boundaries with the dual-plane prompt firewall and monotonic containment state machines.
 * **Audit Readiness:** Directly prepares modern security operations for regulatory audits (such as NIS2, DORA, and ISO/IEC 27001) that mandate documented risk-to-control traceability.
 

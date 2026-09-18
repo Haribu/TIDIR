@@ -61,7 +61,7 @@ Total Decisions: 21 | Accepted: 21 | Deprecated: 0 | Superseded: 0
 
 | ADR | Title | Status | Deciders | Summary |
 | :--- | :--- | :--- | :--- | :--- |
-| [**0004**](0004-defensive-ai-runtime-and-prompt-injection-firewall.md) | **Defensive AI & Prompt Injection Firewall** | `accepted` | AI Platform / SecOps | Isolates untrusted telemetry payloads to a sandboxed Data Plane, preventing indirect prompt injection attacks. |
+| [**0004**](0004-defensive-ai-runtime-and-prompt-injection-firewall.md) | **Defensive AI & Agent Trust Boundary** | `accepted` | AI Platform / SecOps | Isolates untrusted telemetry payloads to a sandboxed Data Plane, preventing indirect prompt injection attacks. |
 | [**0006**](0006-agent-evaluation-harness-evals-as-code.md) | **Agent Evaluation Harness (Evals-as-Code)** | `accepted` | AI Platform Leads | Implements continuous regression testing of agent prompts and triage accuracy against versioned golden datasets. |
 | [**0012**](0012-ai-orchestration-runtime-mcp-and-mvp-roadmap.md) | **AI Orchestration Runtime & MCP Roadmap** | `accepted` | AI Platform / Architecture | Standardises tool interfaces on the Model Context Protocol (MCP) and defines phased MVP milestones. |
 | [**0014**](0014-ai-observability-self-learning-and-slm-judges.md) | **AI Observability & SLM Judges** | `accepted` | AI Platform Leads | Deploys local Small Language Model (SLM) judges for real-time hallucination checks, groundedness audits, and cost tracking. |

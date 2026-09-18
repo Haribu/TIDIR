@@ -32,7 +32,7 @@ flowchart TB
       direction TB
       DetE["<b>3. Detection Engineering (DaC)</b><br>• Declarative Rule Authoring<br>• CI/CD Synthetic Replay<br>• SRE Noise Error Budgets"]
       AE["<b>4. Automation & Systems (SRE)</b><br>• Playbook-as-Code SDKs<br>• Blast-Radius Simulation<br>• Fail-Closed Containment"]
-      AIH["<b>5. AI & Agentic Harnesses</b><br>• Prompt Injection Firewall<br>• Multi-Model Consensus<br>• Assertion-First Evals-as-Code"]
+      AIH["<b>5. AI & Agentic Harnesses</b><br>• Agent Trust Boundary<br>• Advisory Consensus Critique<br>• Assertion-First Evals-as-Code"]
     end
   end
 
@@ -172,7 +172,7 @@ flowchart TB
   subgraph AI_Harness ["AI & Agentic Harness Architecture"]
     direction TB
     subgraph ContextEngine ["1. Defensive Ingestion & Context Assembly"]
-      FIREWALL["Prompt Injection Firewall\n(Dual-plane data vs. control separation)"]
+      FIREWALL["Agent Trust Boundary\n(Dual-plane data vs. control separation)"]
       GATHER["Entity Aggregator\n(Pulls CMDB, auth history, active alerts)"]
       REDACT["Deterministic Privacy Redaction\n(Masks PII, keys, customer data)"]
     end
@@ -201,7 +201,7 @@ flowchart TB
   end
 ```
 
-- **Defensive AI Runtime & Prompt Injection Firewall**:
+- **Defensive AI Runtime & Agent Trust Boundary**:
   - Implements **Dual-Plane Isolation**: untrusted telemetry payloads (command lines, file contents, raw logs, external CTI text) remain strictly within the data plane as typed JSON structures.
   - Controls, instructions, and tools operate exclusively in the privileged control plane. **TIDIR explicitly assumes adversarial data may influence or compromise model reasoning; security boundaries therefore do not depend on successful prompt-injection detection**. All consequential capabilities remain constrained by deterministic authorisation, typed interfaces, task-scoped machine identity (SPIFFE Verifiable Identity Documents / SVIDs), and independent execution policy.
   - Dynamically retrieves necessary entity state, historical alert patterns, and relevant threat actor context with deterministic privacy redaction.

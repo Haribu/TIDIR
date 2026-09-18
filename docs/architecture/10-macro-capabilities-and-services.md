@@ -118,8 +118,8 @@ Replaces manual rule writing with modern software engineering disciplines, conti
 Compresses investigation and containment timelines from hours to seconds while maintaining deterministic safety rails and human oversight.
 
 #### Service 4.1: Agentic Triage & Progressive Disclosure Investigation
-* **Description:** Hierarchical autonomous agents (behind dual-plane prompt injection firewalls) assemble complete 90-day baselines, process lineages, and identity graphs upon alert trigger—presenting analysts with a concise Situation Summary rather than raw alert floods.
-* **Customer Value:** Reduces Mean Time to Investigate (MTTI) from hours to under 60 seconds; eliminates pivot fatigue; ensures zero hallucinated containment recommendations via Proposer/Challenger dual-model consensus.
+* **Description:** Hierarchical autonomous agents (behind dual-plane Agent Trust Boundaries) assemble complete 90-day baselines, process lineages, and identity graphs upon alert trigger—presenting analysts with a concise Situation Summary rather than raw alert floods.
+* **Customer Value:** Reduces Mean Time to Investigate (MTTI) from hours to under 60 seconds; eliminates pivot fatigue; ensures zero hallucinated containment recommendations via deterministic invariant validation and advisory Proposer/Challenger critique.
 * **Operational SLAs:** Automated case dossier hydration $\lt 60\,\text{seconds}$; Proposer/Challenger agreement rate $\gt 80\%$.
 * **Underpinning Capabilities:** `INV-01`, `INV-02`, `INV-03`, `INV-05`, `INV-06`.
 

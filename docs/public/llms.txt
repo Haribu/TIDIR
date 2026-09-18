@@ -56,11 +56,11 @@ For full-text ingestion across all core specifications in a single file, see: ht
 - [Detection Engine](https://tidir.harrymclaren.co.uk/architecture/components/03-detection-engine): Streaming pattern detection, lakehouse SQL analytics, and Alert Noise Error Budget enforcement.
 - [Investigation & Cases](https://tidir.harrymclaren.co.uk/architecture/components/04-investigation-cases): Entity resolution, bipartite graphs, supernode pruning, and tamper-evident evidence lockers.
 - [Response & Automation](https://tidir.harrymclaren.co.uk/architecture/components/05-response-automation): Blast-radius risk tiers, monotonic forward compensation, circuit breakers, and break-glass overrides.
-- [AI & Agent Orchestration](https://tidir.harrymclaren.co.uk/architecture/components/06-ai-orchestration): Dual-plane prompt injection firewalls, sandboxed tools, ephemeral SPIFFE identities, and multi-model consensus arbitration.
+- [AI & Agent Orchestration](https://tidir.harrymclaren.co.uk/architecture/components/06-ai-orchestration): Agent Trust Boundaries (dual-plane data isolation), sandboxed tools, ephemeral SPIFFE identities, and deterministic invariant validation.
 
 ## Key Architectural Decision Records (ADRs)
 
-- [ADR-0004: Defensive AI Runtime & Prompt Injection Firewall](https://tidir.harrymclaren.co.uk/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall): Control plane vs data plane separation and untrusted data sanitisation.
+- [ADR-0004: Defensive AI Runtime & Agent Trust Boundary](https://tidir.harrymclaren.co.uk/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall): Control plane vs data plane separation and untrusted data sanitisation.
 - [ADR-0005: Saga Pattern Containment & Break-Glass Protocol](https://tidir.harrymclaren.co.uk/adr/0005-saga-pattern-containment-and-break-glass-protocol): Monotonic fail-closed containment, forward escalation, and human-in-the-loop overrides.
 - [ADR-0007: Continuous Purple Teaming & Multi-Model Consensus](https://tidir.harrymclaren.co.uk/adr/0007-continuous-automated-purple-teaming-and-multi-model-consensus): Attack emulation CI/CD gates and multi-model arbitration.
 - [ADR-0008: SecOps Error Budgets & Chaos Security Engineering](https://tidir.harrymclaren.co.uk/adr/0008-secops-error-budgets-and-chaos-security-engineering): SRE-inspired false-positive budgets and deployment freezes.

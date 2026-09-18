@@ -11,7 +11,7 @@ flowchart TB
   end
 
   subgraph DefensiveFirewall ["Defensive AI Runtime & Data Isolation"]
-    PROMPT_FW["Prompt Injection Firewall\n(Dual-plane data vs. control separation)"]
+    PROMPT_FW["Agent Trust Boundary\n(Dual-plane data vs. control separation)"]
     TYPED_EXTRACT["Typed Schema Extractor\n(Coerces untrusted payloads into verified JSON)"]
   end
 
