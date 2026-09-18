@@ -69,42 +69,52 @@ The documentation is organized logically across strategy, capability mapping, de
 
 ---
 
-## 🗺️ Roadmap & Research Wishlist (v0.2+)
+## 🗺️ Roadmap, Research & Release Milestones
 
-TIDIR has established a comprehensive conceptual foundation across 41 capabilities and five operational layers (incorporating five Operational Continuity & Resilience capabilities). To ensure the architecture remains falsifiable, grounded, and practically adoptable, the v0.2+ roadmap focuses on mathematical rigor, implementation evidence, and operational economics:
+TIDIR maintains strict discipline between what is formally specified and verified in the live architecture versus active research and future exploratory ideas.
 
-1. **TIDIR Core / Minimum Viable Architecture (MVA)**:
-   - Formally specify the leanest TIDIR-compliant system: `Telemetry Ingress ➔ OCSF Normalization ➔ Lakehouse / Hot Storage ➔ Polyglot DaC ➔ Findings ➔ Case Management ➔ Policy-Gated Actuation`.
-   - Structure advanced components (streaming graph correlation, autonomous agent mesh, CTI retro-hunting, honeypots/deception) into a phased maturity progression (see [ADR-0012](docs/adr/0012-ai-orchestration-runtime-mcp-and-mvp-roadmap.md)).
+### ✅ Delivered Milestones
 
-2. **Reference Workload Models (W₁, W₂, W₃)**:
-   - Replace ungrounded latency/throughput metrics with parameterized workload models:
-     `W = {EPS, bytes/event, entities/day, cardinality, retention, hot %, query concurrency, enrichment fanout}`
-   - Define reference test profiles: `W₁` (Mid-Market, 25k EPS), `W₂` (Enterprise, 250k EPS), and `W₃` (Hyperscale, 1M EPS).
+| Version | Milestone & Core Architecture Delivered | Key Specifications & Governing ADRs |
+| :--- | :--- | :--- |
+| **v1.0** | **Foundational 5-Layer Component Architecture**<br>• Core operational domains: CTI, Data Fabric, Detection, Cases, Automation.<br>• Open standards alignment (OCSF, STIX 2.1, Sigma DaC). | • [System Overview](docs/architecture/01-system-overview.md)<br>• [Capability Model](docs/architecture/02-capability-model.md)<br>• [ADR-0001: Architectural Governance](docs/adr/0001-record-architecture-decisions.md) |
+| **v1.1** | **The TIDIR Architectural Constitution & Invariant Discipline**<br>• 11 non-negotiable invariants codified.<br>• Trust Doctrine: probabilistic components propose, deterministic components authorize.<br>• Security-State Monotonicity ($s_{n+1} \preceq s_n$). | • [Constitutional Invariants](docs/architecture/00-architectural-invariants.md)<br>• [ADR-0005: Saga Pattern & Break-Glass](docs/adr/0005-saga-pattern-containment-and-break-glass-protocol.md)<br>• [ADR-0015: Sandboxed Agent Execution](docs/adr/0015-sandboxed-agent-execution-otlp-convergence-and-ephemeral-identity.md) |
+| **v1.2** | **Machine-Readable Graph & Threat-to-Assurance Closure**<br>• Full bi-directional assurance closure ($T_1..T_6 \to I_1..I_{11} \to \text{CAP} \to \text{ADR}$).<br>• Authoritative graph endpoints (`/architecture.json`, `/llms.txt`, `/llms-full.txt`).<br>• AI Orchestration Plane & 3-phase MVA roadmap.<br>• Automated verification suite (62 Mermaid diagrams, graph linting, MathJax audit). | • [Assurance Case Map](docs/architecture/assurance-map.md)<br>• [ADR-0012: AI Plane & MVA Roadmap](docs/adr/0012-ai-orchestration-runtime-mcp-and-mvp-roadmap.md)<br>• [ADR-0021: Graceful Degradation Plan B](docs/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b.md)<br>• Machine Graph: [`/architecture.json`](docs/public/architecture.json) |
 
-3. **Formal Bayesian Evidence Calibration Math**:
-   - Provide concrete mathematical treatment and worked scenarios for dependency-aware evidence aggregation.
-   - Contrast naive conditional independence `P(Compromise | E₁, E₂, E₃)` with TIDIR DAG-governed lineage fusion, formalizing prior calibration across diverse asset populations, likelihood ratios, and missing observation handling.
+---
 
-4. **Multi-Dimensional Containment Monotonicity (R_attacker, A_business)**:
-   - Expand the Security-State Monotonicity invariant (`R(s_post) ⊆ R(s_pre)`) into a multi-objective state space balancing attacker reachability reduction against business operability and availability budgets.
-   - Define formal boundaries within which automated containment actions are permitted to execute without human intervention.
+### 🎯 Active Target Roadmap
 
-5. **Threat-to-Assurance Traceability Matrix** *(Completed in v1.2)*:
-   - Connect the STRIDE-aligned platform threat model directly to verification machinery via an assurance chain.
-   - **Delivered**: See the [Assurance Case Map](docs/architecture/assurance-map.md) and machine-readable graph endpoint [`/architecture.json`](docs/public/architecture.json) validated via automated graph linting in CI.
+These items are actively being scoped into upcoming Architectural Decision Records:
 
-6. **SecOps Unit Economics Framework**:
-   - Model telemetry economics as a first-class architectural dimension: `Δ(Marginal Defensive Value) / Δ(Compute + Storage + Human Cost)`.
-   - Provide mathematical decision models for hot/warm retention, streaming vs batch evaluation, model routing, and selective enrichment.
+1. **Green Team IaC Trigger Contract (`ADR-0022`)**:
+   - Formally specify the trigger schema, rate-limiting envelope, and pull-request synthesis contracts that turn incident root causes into automated Infrastructure-as-Code hardening PRs.
+2. **Tier 2 Secondary Authorizer Escalation Ladder (`ADR-0005` Amendment)**:
+   - Codify the multi-signature authorizer failover and time-decay escalation policy when designated secondary commanders are unavailable during active crises.
+3. **Evals-as-Code Grounding Fidelity Formulation (`ADR-0006` Amendment)**:
+   - Define the mathematical calculation, dataset scoring methodology, and acceptance threshold ($\ge 95\%$) for LLM-as-a-judge grounding validation.
 
-7. **Reproducible Attack-to-Containment Benchmark Harness**:
-   - Build an open, reproducible test harness replaying standardized attack chains (e.g. Atomic Red Team, CALDERA) over synthetic OCSF streams.
-   - Benchmark end-to-end Mean Time to Contain (MTTC), Incident Decision DAG reconstructability, and fail-secure behavior under induced system failure.
+---
 
-8. **Green Team IaC Trigger Contract & Multi-Sig Escalation (ADR-0022 & ADR-0005)**:
-   - Define the formal schema, rate limiting, and blast-radius bounds for automated Green Team Infrastructure-as-Code PR generation.
-   - Codify the multi-signature authorizer escalation ladder for low-staffing and out-of-band crisis containment.
+### 💡 Research & Ideas Backlog (Future Horizon)
+
+Conceptual exploration and mathematical foundations for the post-v1.3 horizon:
+
+* **TIDIR Core / Minimum Viable Architecture (MVA)**:
+  - Formally specify the reference implementation for the leanest TIDIR-compliant deployment: `Telemetry Ingress ➔ OCSF Normalization ➔ Lakehouse / Hot Storage ➔ Polyglot DaC ➔ Findings ➔ Case Management ➔ Policy-Gated Actuation` (see [ADR-0012](docs/adr/0012-ai-orchestration-runtime-mcp-and-mvp-roadmap.md)).
+* **Reference Workload Models ($W_1, W_2, W_3$)**:
+  - Replace ungrounded latency/throughput metrics with parameterized workload models:
+    $$W = \{\text{EPS}, \text{bytes/event}, \text{entities/day}, \text{cardinality}, \text{retention}, \text{hot \%}, \text{query concurrency}, \text{enrichment fanout}\}$$
+  - Define benchmark profiles: $W_1$ (Mid-Market, 25k EPS), $W_2$ (Enterprise, 250k EPS), and $W_3$ (Hyperscale, 1M EPS).
+* **Formal Bayesian Evidence Calibration Math**:
+  - Provide concrete mathematical treatment and worked scenarios for dependency-aware evidence aggregation.
+  - Contrast naive conditional independence $P(\text{Compromise} \mid E_1, E_2, E_3)$ with TIDIR DAG-governed lineage fusion.
+* **Multi-Dimensional Containment Monotonicity ($R_{\text{attacker}}, A_{\text{business}}$)**:
+  - Expand the Security-State Monotonicity invariant into a multi-objective state space balancing attacker reachability reduction against business operability and availability budgets.
+* **SecOps Unit Economics Framework**:
+  - Model telemetry economics as a first-class architectural dimension: $\Delta(\text{Marginal Defensive Value}) / \Delta(\text{Compute} + \text{Storage} + \text{Human Cost})$.
+* **Reproducible Attack-to-Containment Benchmark Harness**:
+  - Build an open, reproducible test harness replaying standardized attack chains (e.g. Atomic Red Team, CALDERA) over synthetic OCSF streams to benchmark MTTC and DAG reconstructability under induced failures.
 
 ---
 
