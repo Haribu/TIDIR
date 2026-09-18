@@ -49,7 +49,7 @@ flowchart TB
 
     subgraph BOUNDARY_RESPONSE["Trust Boundary 5: Privileged Response & Actuation"]
         direction TB
-        SAGA["Saga Orchestration Engine"]
+        RESP["Containment Orchestration Engine"]
         BREAKER["Blast-Radius Circuit Breakers"]
         BREAK_GLASS["Audited Break-Glass Human Gate"]
         ACTUATORS["Infrastructure API Actuators"]
@@ -61,7 +61,7 @@ flowchart TB
     EXT_TI -.->|"T3: CTI Feed Poisoning"| STREAM_ENG
     MAL_PAYLOAD -.->|"T4: Indirect Prompt Injection"| FW
     ADV -.->|"T5: Supply Chain Rule Tampering"| STREAM_ENG
-    ADV -.->|"T6: Cascading Containment Hijack"| SAGA
+    ADV -.->|"T6: Cascading Containment Hijack"| RESP
 
     %% Legitimate Data Flows & Controls
     COLL --> MTLS --> SAN --> BUS
@@ -73,14 +73,14 @@ flowchart TB
     BATCH_ENG --> NOISE_BUDGET
     NOISE_BUDGET --> FW
     FW --> MESH --> ARB
-    ARB --> SAGA
-    SAGA --> BREAKER --> BREAK_GLASS --> ACTUATORS
+    ARB --> RESP
+    RESP --> BREAKER --> BREAK_GLASS --> ACTUATORS
 
     classDef external fill:#450a0a,stroke:#dc2626,stroke-width:1.5px,color:#fef2f2;
     classDef boundary fill:#0f172a,stroke:#3b82f6,stroke-width:1.5px,color:#f8fafc;
     classDef control fill:#0f766e,stroke:#14b8a6,stroke-width:1.5px,color:#ffffff;
     class ADV,EXT_TI,MAL_PAYLOAD external;
-    class COLL,MTLS,SAN,BUS,DLQ,LAKE,STREAM_ENG,BATCH_ENG,NOISE_BUDGET,FW,MESH,ARB,SAGA,BREAKER,BREAK_GLASS,ACTUATORS control;
+    class COLL,MTLS,SAN,BUS,DLQ,LAKE,STREAM_ENG,BATCH_ENG,NOISE_BUDGET,FW,MESH,ARB,RESP,BREAKER,BREAK_GLASS,ACTUATORS control;
 ```
 
 ---
@@ -148,7 +148,7 @@ flowchart TB
 * **Threat Scenario:** An attacker triggers multiple high-severity alerts simultaneously to cause automated playbooks to isolate core database clusters, revoke administrative domain access, or saturate firewall rule tables.
 * **Impact:** Critical business outage caused by defensive automation; exploitation of defensive lag.
 * **Architectural Mitigations:**
-  1. **Saga Pattern Compensating Transactions ([ADR-0005](/adr/0005-saga-pattern-containment-and-break-glass-protocol)):** Every mutating containment action has a pre-compiled compensating rollback transaction. If a multi-step sequence fails, state machines rollback deterministically.
+  1. **Monotonic Fail-Closed Containment ([ADR-0005](/adr/0005-saga-pattern-containment-and-break-glass-protocol)):** Containment actions move strictly forward (increasing isolation) and never execute compensating rollback transactions on partial failure. If a containment step encounters an API timeout, the orchestrator freezes the existing perimeter and executes forward escalation.
   2. **Automated Blast-Radius Circuit Breakers:** Automated response playbooks enforce strict execution ceilings (e.g. max 5 hosts isolated per hour per playbook). Exceeding the threshold trips an automated circuit breaker.
   3. **Break-Glass Human Oversight:** High-impact actions (domain controller isolation, global credential revocation) require cryptographic two-factor sign-off from an authenticated Incident Commander via an audited break-glass protocol.
 

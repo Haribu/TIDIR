@@ -31,7 +31,7 @@ flowchart TB
     subgraph COL2 ["Detection, Response & Agentic Disciplines"]
       direction TB
       DetE["<b>3. Detection Engineering (DaC)</b><br>• Declarative Rule Authoring<br>• CI/CD Synthetic Replay<br>• SRE Noise Error Budgets"]
-      AE["<b>4. Automation & Systems (SRE)</b><br>• Playbook-as-Code SDKs<br>• Blast-Radius Simulation<br>• Saga Compensating Rollbacks"]
+      AE["<b>4. Automation & Systems (SRE)</b><br>• Playbook-as-Code SDKs<br>• Blast-Radius Simulation<br>• Fail-Closed Containment"]
       AIH["<b>5. AI & Agentic Harnesses</b><br>• Prompt Injection Firewall<br>• Multi-Model Consensus<br>• Assertion-First Evals-as-Code"]
     end
   end
@@ -42,7 +42,7 @@ flowchart TB
   IE -.->|Graph Context| L3
   DetE -.->|Lakehouse Queries| L2
   DetE -.->|Detection Rules| L3
-  AE -.->|Saga Containment| L4
+  AE -.->|Fail-Closed Containment| L4
   AIH ==>|Supervises Entire Runtime| RUNTIME
 ```
 
@@ -146,10 +146,10 @@ Automation and Systems Engineering maintains the reliability, execution guarante
 ```mermaid
 flowchart LR
   subgraph AE_Workflow ["Automation & SRE Lifecycle"]
-    PLAYBOOK["Playbook-as-Code Authoring\n(Bidirectional Sagas with compensating actions)"]
+    PLAYBOOK["Playbook-as-Code Authoring\n(Declarative fail-closed state machines)"]
     BLAST_GATE["Blast-Radius & Break-Glass Policy\n(Automated vs. gated vs. emergency overrides)"]
     CONNECTOR["Connector SDK & Circuit Breakers\n(Token lifecycles, exponential backoff, rate limits)"]
-    PLATFORM_SRE["Platform SRE & Telemetry Health\n(SLO tracking, compensation parity, failure reconciliation)"]
+    PLATFORM_SRE["Platform SRE & Telemetry Health\n(SLO tracking, lease heartbeats, failure escalation)"]
   end
 
   PLAYBOOK --> BLAST_GATE
@@ -157,10 +157,10 @@ flowchart LR
   CONNECTOR --> PLATFORM_SRE
 ```
 
-- **Saga-Pattern Playbook Orchestration**: Response and investigation workflows are authored as distributed Sagas. Every mutating action ($T_i$) specifies a deterministic compensating transaction ($C_i$). If a multi-step containment fails midway due to API timeouts or rate limits, compensating actions execute in reverse order to eliminate half-contained states.
+- **Monotonic Fail-Closed Playbook Orchestration**: Response and containment workflows are authored as declarative state machines. Under active attack, defensive perimeters move strictly in a single forward direction (increasing isolation). If a multi-step containment sequence fails midway due to downstream API timeouts, the orchestrator freezes existing barriers and executes forward perimeter escalation rather than rolling back containment.
 - **Blast-Radius Modelling & Break-Glass Overrides**: Defines the boundary between autonomous containment (Tier 1: low-risk actions like workstation file quarantine) and gated containment (Tier 2: high-disruption actions like domain controller network isolation requiring multi-signature sign-off). High-velocity catastrophic threats (e.g. ransomware propagation) provide an audited **Break-Glass Emergency Protocol** permitting single-commander authorisation with out-of-band cryptographic audit broadcast.
 - **Connector Circuit Breakers & API Health**: Standardises downstream integration connectors with automated circuit breakers, decoupling rate limits and preventing cascading failures across security infrastructure.
-- **Platform SRE & Telemetry Health**: Monitors ingestion lag, pipeline consumer offsets, query P95 latencies, compensation parity, and end-to-end time-to-detect (TTD) metrics.
+- **Platform SRE & Telemetry Health**: Monitors ingestion lag, pipeline consumer offsets, query P95 latencies, isolation lease heartbeats, and end-to-end time-to-detect (TTD) metrics.
 
 ---
 

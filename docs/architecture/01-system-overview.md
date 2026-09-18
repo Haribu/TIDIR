@@ -81,7 +81,7 @@ flowchart LR
     E1["Data Engineering\n(Schema Evolution & Contracts)"]:::eng
     E2["Threat Intel Engineering\n(PIRs & Indicator Decay)"]:::eng
     E3["Detection Engineering (DaC)\n(Simulation, Testing & CI/CD)"]:::eng
-    E4["Automation SRE\n(Playbooks-as-Code & Saga Rollback)"]:::eng
+    E4["Automation SRE\n(Playbooks-as-Code & Fail-Closed Containment)"]:::eng
     E5["AI Agent Harnesses\n(Evals-as-Code & Prompt Firewall)"]:::eng
     E6["Green Team Engineering\n(IaC Remediation & Defense-in-Depth)"]:::eng
   end
@@ -90,7 +90,7 @@ flowchart LR
     T_REG["Schema Registry & Ingestion DLQ\n(Layer 1 / Layer 2)"]:::target
     T_GRAPH["Threat Flow & Correlation Graphs\n(Layer 3 Intel)"]:::target
     T_ENG["Streaming & Lakehouse Engines\n(Layer 3 Detection)"]:::target
-    T_RESP["Connector Ecosystem & Saga APIs\n(Layer 4 Containment)"]:::target
+    T_RESP["Connector Ecosystem & Containment APIs\n(Layer 4 Containment)"]:::target
     T_OPS["Hierarchical Agent Mesh & Workbench\n(Layer 4 Investigation)"]:::target
     T_PREV["Enterprise Posture & Cloud IaC\n(Preventative Hardening)"]:::target
   end

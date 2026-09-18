@@ -88,12 +88,12 @@ flowchart TB
         FW --> MESH --> ARB
     end
 
-    subgraph S4["4. SAGA AUTOMATED RESPONSE"]
+    subgraph S4["4. MONOTONIC AUTOMATED RESPONSE"]
         direction TB
-        SAGA["Saga Orchestrator"]
+        RESP["Containment Orchestrator"]
         CIRCUIT["Circuit Breaker & Guardrails"]
         BG["Break-Glass Emergency Override"]
-        SAGA --> CIRCUIT --> BG
+        RESP --> CIRCUIT --> BG
     end
 
     S1 ==> S2 ==> S3 ==> S4
@@ -101,7 +101,7 @@ flowchart TB
 
     classDef default fill:#1e293b,stroke:#475569,stroke-width:1px,color:#f8fafc;
     classDef highlight fill:#0f766e,stroke:#14b8a6,stroke-width:1.5px,color:#ffffff;
-    class RAW,NORM,BUS,HOT,LAKE,STREAM_DET,BATCH_DET,BAYES,FW,MESH,ARB,SAGA,CIRCUIT,BG default;
+    class RAW,NORM,BUS,HOT,LAKE,STREAM_DET,BATCH_DET,BAYES,FW,MESH,ARB,RESP,CIRCUIT,BG default;
 ```
 
 ### 1. Decoupled Lakehouse vs Restrictive Ingestion
