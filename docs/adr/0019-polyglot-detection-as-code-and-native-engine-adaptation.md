@@ -26,7 +26,7 @@ How should TIDIR structure Detection-as-Code to preserve vendor-neutral governan
 * **Expressive Freedom**: Detection engineers must be able to exploit the full analytical depth of specialized engines (KQL, SPL, ClickHouse/Snowflake SQL, Flink SQL).
 * **Vendor-Neutral Governance**: Lifecycles, OCSF class bindings, MITRE ATT&CK taxonomies, SRE noise budgets, and triage playbooks must remain 100% vendor-neutral and portable.
 * **Deterministic Verification**: Detections must be testable via synthetic test fixtures and adversary emulation before reaching production runtimes.
-* **AI-Accelerated Engineering**: Architecture must leverage agentic copilots to draft native queries and LLM judges to enforce cross-platform semantic parity.
+* **Continuous Detection Engineering**: Architecture leverages agentic assistance to draft native query implementations from Attack Flows, with deterministic CI fixtures and human peer review enforcing cross-platform semantic parity.
 
 ---
 

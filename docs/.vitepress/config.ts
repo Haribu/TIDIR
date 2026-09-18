@@ -213,6 +213,7 @@ export default withMermaid(
             items: [
               { text: "Architectural Invariants & Constitution", link: "/architecture/00-architectural-invariants" },
               { text: "System Overview & 4-Plane Model", link: "/architecture/01-system-overview" },
+              { text: "Foundational Research & Literature", link: "/architecture/foundational-research" },
               { text: "Glossary & Concept Taxonomy", link: "/architecture/glossary" },
               { text: "Target Threat Model", link: "/architecture/09-threat-model" },
               { text: "Assurance Case Map", link: "/architecture/assurance-map" }
