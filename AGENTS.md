@@ -41,12 +41,18 @@ TIDIR/
 │   │   └── tidir-target-architecture.mmd
 │   └── .vitepress/                # VitePress theme, config & mermaid integration
 │       └── config.ts
+├── verify                         # Executable CLI: runs full local verification suite
+├── ship                           # Executable CLI: verified pre-push & deployment runner
 └── scripts/                       # Maintenance & verification scripts (TypeScript)
-    ├── validate-diagrams.ts       # Validates Mermaid syntax across .mmd files
+    ├── verify.ts                  # Holistic verification suite orchestrator
+    ├── validate-diagrams.ts       # Validates Mermaid syntax across .mmd and markdown files
     ├── lint-site-structure.ts     # Asserts navigation, ADR registry & document closure
     ├── lint-terminology.ts        # Validates controlled architectural vocabulary
-    ├── build-docs.ts              # Production static site compiler
-    └── setup-dns.ts               # Manages Cloudflare DNS records for custom domains
+    ├── lint-docs-math.ts          # Audits compiled HTML for MathJax rendering errors
+    ├── build-docs.ts              # Production static site compiler with sitemap
+    ├── generate-llms-full.ts      # Compiles single-file corpus for LLMs (llms-full.txt)
+    ├── verify-live.ts             # Asserts production HTTP 200 health via native fetch
+    └── ship.ts                    # Verified release automation pipeline
 ```
 
 ---

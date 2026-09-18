@@ -8,8 +8,8 @@ dist/
 *.tsbuildinfo
 docs/.vitepress/dist/
 docs/.vitepress/cache/
-.wrangler/
-.wrangler_home/
+.wrangler*
+.*_config/
 
 # OS & Environment
 .DS_Store

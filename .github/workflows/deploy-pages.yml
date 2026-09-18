@@ -34,3 +34,8 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy docs/.vitepress/dist --project-name=tidir
+
+      - name: Verify Live Production Endpoints
+        run: |
+          sleep 5
+          bun ./scripts/verify-live.ts
