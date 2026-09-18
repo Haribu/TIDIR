@@ -96,12 +96,22 @@ flowchart TB
         RESP --> CIRCUIT --> BG
     end
 
-    S1 ==> S2 ==> S3 ==> S4
-    S4 -.->|"Closed-Loop Tuning & Evals"| S1
+    subgraph S5["5. CLOSED-LOOP CONTINUOUS CALIBRATION"]
+        direction TB
+        EVALS["Continuous Evals-as-Code"]
+        TUNING["Noise Budget & Detection Tuning"]
+        FEEDBACK["Attributed CTI & Graph Re-ingest"]
+        EVALS --> TUNING --> FEEDBACK
+    end
+
+    S1 ==>|1. Normalized Telemetry| S2
+    S2 ==>|2. Correlated Risk Findings| S3
+    S3 ==>|3. Verified Incident Dossiers| S4
+    S4 ==>|4. Response Telemetry & Efficacy| S5
 
     classDef default fill:#1e293b,stroke:#475569,stroke-width:1px,color:#f8fafc;
     classDef highlight fill:#0f766e,stroke:#14b8a6,stroke-width:1.5px,color:#ffffff;
-    class RAW,NORM,BUS,HOT,LAKE,STREAM_DET,BATCH_DET,BAYES,FW,MESH,ARB,RESP,CIRCUIT,BG default;
+    class RAW,NORM,BUS,HOT,LAKE,STREAM_DET,BATCH_DET,BAYES,FW,MESH,ARB,RESP,CIRCUIT,BG,EVALS,TUNING,FEEDBACK default;
 ```
 
 ### 1. Decoupled Lakehouse vs Restrictive Ingestion
