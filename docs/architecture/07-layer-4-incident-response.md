@@ -151,9 +151,13 @@ flowchart TB
 - **Dual-Plane Prompt Injection Firewall**: All raw telemetry strings (e.g. command lines, URLs, file contents) are sandboxed within the unprivileged data plane, ensuring malicious payload strings cannot hijack agent execution flow.
 - **Autonomous Scoping Queries**: The agentic mesh immediately dispatches federated queries to the Layer 2 lakehouse without human prompting—determining whether a suspicious indicator has appeared elsewhere in the last 90 days, checking authentication baselines, and enumerating sibling assets.
 - **Hypothesis Formulation**: Evaluates the evidence against established attack patterns and outputs a plain-language hypothesis detailing: *What happened, how access was gained, what assets are affected, and what the attacker is attempting next.*
-- **Adversarial Dual-Model Consensus (Out-of-Band & Heterogeneous)**:
+- **Adversarial Dual-Model Consensus (Out-of-Band, Heterogeneous & Asymmetric Voting)**:
   - *Out-of-Band Decoupling*: Multi-model arbitration (Proposer vs Challenger) operates strictly out-of-band for deep investigative case framing, bounded by hard timeout budgets ($\le 500\,\text{ms}$). High-velocity containment firewalls never block on multi-model consensus.
   - *Elimination of Shared Mode Collapse*: To prevent uniform prompt injection bypasses or training-set blind spots, the Challenger agent couples an architecturally distinct model family (e.g. local SLM judge, [ADR-0014](../adr/0014-ai-observability-self-learning-and-slm-judges.md)) with **deterministic symbolic validation** (asserting chronological event monotonicity, verifying graph edge existence via SQL/Cypher, and validating OCSF schema type contracts).
+  - *Asymmetric Voting Logic (Pessimistic Quorum Protocol)*:
+    - When evaluating ambiguous Living-off-the-Land (LotL) activity, neural transformer models and symbolic rule engines can diverge. 
+    - For **Triage and Hypothesis Escalation**, a *pessimistic quorum* governs: if either engine indicates elevated threat confidence, the dossier elevates for human awareness.
+    - For **Automated Destructive Containment**, *strict unanimous consensus* is required. Any divergence immediately bypasses automated execution and routes the containment proposal to the human operator workbench, preventing arbitration thrashing.
 - **Action Plan Drafting**: Proposes an exact sequence of remediation steps, complete with estimated downtime, user impact, and blast-radius scores.
 
 ### 2. The Human Operator Workbench (The Judgment Anchor)
@@ -220,6 +224,10 @@ Security containment workflows interact with heterogeneous APIs across host agen
 Layer 4 mandates **Asymmetric Fail-Closed Forward Recovery**:
 - **Strict Prohibition of Containment Reversal**: Previously applied isolation barriers ($T_1 \dots T_{k-1}$) remain permanently active. The orchestrator **NEVER** executes reverse compensating undo actions during active incidents.
 - **Idempotent Retries & Circuit Breaking**: Failed API calls retry with exponential backoff and jitter up to a strict timeout window.
+- **Idempotent Isolation Leases & Time-To-Live (Anti-Deadlock Guard)**:
+  - *Vulnerability*: In automated lateral movement outbreaks spanning dozens of nodes, forward-recovery state machines holding partial containment locks pending operator clearance risk enterprise-wide deadlocks and resource starvation.
+  - *Bounded Isolation Leases*: Every partial containment state held in a forward-recovery lock is bound to an **Idempotent Isolation Lease** with a strict Time-To-Live (TTL, default 45 minutes).
+  - *Safe-Fallback / Escalation Trigger*: If an operator does not clear or reconcile a stalled containment state machine before lease expiration, the orchestrator triggers an automatic deterministic safe-fallback: escalating to an out-of-band network boundary quarantine or invoking the higher-order supervisor alert, permanently preventing indefinite distributed deadlocks.
 - **Forward Containment Escalation**: If step $T_k$ fails permanently, the orchestrator executes **Forward Escalation**: applying broader out-of-band perimeter fences (e.g. upstream VPC network ACL drops or boundary route shunts) to enforce containment at a higher network tier.
 - **Automated Emergency Break-Glass Escalation**: Halts automated pipeline progression and pages the on-duty Incident Commander with an exact state diff of unexecuted steps.
 

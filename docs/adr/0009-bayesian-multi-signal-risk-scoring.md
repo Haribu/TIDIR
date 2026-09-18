@@ -45,12 +45,16 @@ Chosen option: **Compound Bayesian Risk Lens over Relational Execution Graphs**,
   - *Orthogonal Domain Corroboration*: Requires corroboration across at least two independent domains (e.g. an unusual parent-child process chain *and* an outbound connection to an unclassified ASN) before elevating risk.
 - Isolated anomalies that fail to accumulate corroborating signals within a configurable time window decay naturally without operator intervention.
 
-### 3. Deterministic Override Circuit (Preventing Single-Event False Negatives)
+### 3. Deterministic Override Circuit (Preventing Single-Event False Negatives & Guarding Against Operational DoS)
 - **The Threat**: Stealthy adversaries intentionally engineer single-action, low-telemetry exploits (e.g. Bring Your Own Vulnerable Driver / BYOVD kernel tampering, LSASS memory injection, or canary token detonation). Mandating multi-signal corroboration for all alerts introduces a catastrophic **False Negative bias** where a lethal intrusion is suppressed because subsequent detection stages were evaded.
 - **Dual-Path Elevation Architecture**:
   - *Probabilistic Path (Weak Signals)*: Heuristics, statistical baselines, and behavioural anomalies continue through graph compounding and decay logic.
   - *Deterministic Override Circuit (Invariants & Canaries)*: Pre-certified high-consequence triggers—such as [ADR-0013](0013-ambient-deception-fabric-and-canary-anchors.md) canary honeytokens, blocklisted vulnerable kernel driver loads, or rapid cryptographic extension renaming—**bypass graph compounding entirely**.
   - When an override invariant triggers, the Risk Lens instantly assigns a critical composite score ($S = 100$) and dispatches an emergency OCSF Class 2004 finding directly to Layer 4 with zero correlation delay.
+- **Dynamic Blast-Radius Rate Limiting (Anti-Operational DoS)**:
+  - *Vulnerability*: Adversaries aware of deterministic trigger invariants could weaponize high-fidelity indicators (e.g. spoofing C2 beacons or planting canary hashes in shared volumes) to flood the SOC or force automated operational lockdowns.
+  - *Token-Bucket Rate Limiter*: The deterministic bypass path enforces a strict token-bucket rate limiter constrained by identity context, asset class, and network subnet ($\beta_{\text{override}} \le N_{\max}/\Delta t$, e.g. max 5 override triggers per subnet/hour).
+  - *Graceful Downgrade*: If the frequency of deterministic overrides exceeds the threshold for a given scope, the engine automatically downgrades subsequent triggers to high-priority Bayesian queueing ($S = 85$) with immediate notification to the lead detection engineer, preventing denial-of-service against the control plane while preserving alert visibility.
 
 ### Positive Consequences
 
