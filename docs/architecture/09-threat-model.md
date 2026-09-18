@@ -5,54 +5,61 @@
 
 ---
 
-Security platforms are themselves high-value attack surfaces. If an attacker can blind telemetry, poison threat intelligence, inject malicious instructions into autonomous triage agents, or manipulate automated response playbooks, they neutralise enterprise defence at the root.
+Security platforms are themselves high-value attack surfaces. If an adversary can blind telemetry, poison threat intelligence, inject malicious instructions into autonomous triage agents, subvert non-human machine identities, or manipulate automated response playbooks, they neutralise enterprise defence at the root.
 
-This document provides a STRIDE-aligned threat model of the TIDIR target architecture. It maps the attack surface across all five functional subsystems, articulates concrete attack vectors, defines trust boundaries, and details architectural mitigations.
+This document provides a comprehensive threat model of the TIDIR target architecture. It maps the attack surface across all functional subsystems, articulates concrete attack vectors ($\text{T}_1$ to $\text{T}_9$), defines five explicit trust boundaries, provides a dedicated AI threat model aligned with **MITRE ATLAS** and the **OWASP Top 10 for LLMs**, and establishes a **Tri-Framework Mapping Matrix** spanning **MITRE ATT&CK**, **MITRE ATLAS**, and **MITRE D3FEND**.
 
 ---
 
 ## 1. System Threat Landscape & Attack Surface Diagram
 
-The diagram below maps the primary attack vectors ($\text{T}_1$ to $\text{T}_6$) across TIDIR's trust boundaries and illustrates the defence-in-depth controls enforced at each tier:
+The diagram below maps the primary attack vectors ($\text{T}_1$ to $\text{T}_9$) across TIDIR's trust boundaries and illustrates the defence-in-depth controls enforced at each tier:
 
 ```mermaid
 flowchart TB
-    subgraph ZONE_EXTERNAL["External & Untrusted Territory"]
+    subgraph S1_EXTERNAL["1. External & Untrusted Territory"]
         direction TB
         ADV["Adversary / Threat Actor"]
         EXT_TI["Compromised Third-Party CTI Feed"]
         MAL_PAYLOAD["Malicious Log Payload / Exploits"]
+        CANARY_PROBE["Canary & Deception Prober"]
     end
 
-    subgraph BOUNDARY_INGEST["Trust Boundary 1: Edge Ingestion"]
+    subgraph S2_INGEST["2. Trust Boundary 1: Edge Ingestion & Deception"]
         direction TB
         COLL["Edge Collectors & Sensor Agents"]
-        MTLS["Mutual TLS & Device Attestation"]
+        MTLS["Mutual TLS & TPM Attestation"]
         SAN["Line-Rate OCSF Validator"]
+        DECOY["Ambient Deception Canary Anchors"]
     end
 
-    subgraph BOUNDARY_STREAM["Trust Boundary 2: Event Fabric & Storage"]
+    subgraph S3_STREAM["3. Trust Boundary 2: Event Fabric & Storage"]
         direction TB
         BUS["Distributed Streaming Bus"]
-        DLQ["Dead-Letter Queue & Token Deduplicator"]
-        LAKE["Columnar Lakehouse Storage (WORM / Immutable)"]
+        DLQ["Dead-Letter Queue & Quarantine"]
+        LAKE["Columnar Lakehouse Storage (WORM / S3 Lock)"]
+        RAG_KB["Resolved Incident Knowledge Base"]
     end
 
-    subgraph BOUNDARY_DETECTION["Trust Boundary 3: Detection Runtime"]
+    subgraph S4_DETECTION["4. Trust Boundary 3: Detection Runtime"]
         direction TB
         STREAM_ENG["Stateful Streaming Engine"]
         BATCH_ENG["Lakehouse SQL Engine"]
         NOISE_BUDGET["SRE Error Budget & Circuit Breaker"]
+        BAYES["Bayesian Dependency Discounting"]
     end
 
-    subgraph BOUNDARY_AI["Trust Boundary 4: Autonomous Agent Mesh"]
+    subgraph S5_AI["5. Trust Boundary 4: Autonomous Agent Mesh & NHI Fabric"]
         direction TB
-        FW["Agent Trust Boundary<br>(Dual-Plane Isolator)"]
-        MESH["Hierarchical Agent Mesh<br>(Read-Only Triage)"]
+        FW["Agent Trust Boundary (Dual-Plane Isolator)"]
+        MESH["Hierarchical Agent Mesh (Read-Only Triage)"]
+        SPIFFE_SVID["SPIFFE/SPIRE Ephemeral SVIDs (<= 15m)"]
+        AST_VAL["Deterministic AST Query Validator"]
+        LOOP_BRK["Semantic Loop & Cost Circuit Breakers"]
         ARB["Proposer/Challenger Dual-Model Arbiter"]
     end
 
-    subgraph BOUNDARY_RESPONSE["Trust Boundary 5: Privileged Response & Actuation"]
+    subgraph S6_RESPONSE["6. Trust Boundary 5: Privileged Response & Actuation"]
         direction TB
         RESP["Containment Orchestration Engine"]
         BREAKER["Blast-Radius Circuit Breakers"]
@@ -67,25 +74,33 @@ flowchart TB
     MAL_PAYLOAD -.->|"T4: Indirect Prompt Injection"| FW
     ADV -.->|"T5: Alert Storm DoS / Desensitisation"| STREAM_ENG
     ADV -.->|"T6: Automated Response Sabotage"| RESP
+    ADV -.->|"T7: Machine Token / SVID Hijacking"| SPIFFE_SVID
+    EXT_TI -.->|"T8: RAG Poisoning / Model Evasion"| RAG_KB
+    CANARY_PROBE -.->|"T9: Excessive Agency / Output Leakage"| MESH
 
     %% Legitimate Data Flows & Controls
     COLL --> MTLS --> SAN --> BUS
+    DECOY --> SAN
     BUS --> DLQ
     BUS --> LAKE
     BUS --> STREAM_ENG
     LAKE --> BATCH_ENG
-    STREAM_ENG --> NOISE_BUDGET
+    LAKE --> RAG_KB
+    STREAM_ENG --> BAYES --> NOISE_BUDGET
     BATCH_ENG --> NOISE_BUDGET
     NOISE_BUDGET --> FW
-    FW --> MESH --> ARB
+    FW --> MESH
+    MESH --> AST_VAL
+    MESH --> LOOP_BRK
+    MESH --> ARB
+    SPIFFE_SVID -.->|Ephemeral Auth| MESH
     ARB --> RESP
     RESP --> BREAKER --> BREAK_GLASS --> ACTUATORS
 
-    classDef external fill:#450a0a,stroke:#dc2626,stroke-width:1.5px,color:#fef2f2;
-    classDef boundary fill:#0f172a,stroke:#3b82f6,stroke-width:1.5px,color:#f8fafc;
+    classDef external fill:#450a0a,stroke:#dc2626,stroke-width:1.5px,color:#f8fafc;
     classDef control fill:#0f766e,stroke:#14b8a6,stroke-width:1.5px,color:#ffffff;
-    class ADV,EXT_TI,MAL_PAYLOAD external;
-    class COLL,MTLS,SAN,BUS,DLQ,LAKE,STREAM_ENG,BATCH_ENG,NOISE_BUDGET,FW,MESH,ARB,RESP,BREAKER,BREAK_GLASS,ACTUATORS control;
+    class ADV,EXT_TI,MAL_PAYLOAD,CANARY_PROBE external;
+    class COLL,MTLS,SAN,DECOY,BUS,DLQ,LAKE,RAG_KB,STREAM_ENG,BATCH_ENG,NOISE_BUDGET,BAYES,FW,MESH,SPIFFE_SVID,AST_VAL,LOOP_BRK,ARB,RESP,BREAKER,BREAK_GLASS,ACTUATORS control;
 ```
 
 ---
@@ -98,8 +113,12 @@ flowchart TB
 * **Impact:** Loss of operational visibility; detection evasion; corrupted investigation timelines.
 * **Architectural Mitigations:**
   1. **Kernel-Enforced Sensor Protection:** Telemetry collectors run with kernel-level tamper resistance, anti-kill watchdog processes, and heartbeats.
-  2. **Mutual TLS with Ephemeral Hardware Attestation:** All edge-to-bus communications require mTLS authenticated via TPM/hardware-backed certificates.
-  3. **Local Spooling & Line-Rate Backpressure:** When downstream pipeline buffers saturate, edge collectors spool encrypted events to local disk queues rather than silently dropping telemetry ([ADR-0021](/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b)).
+  2. **Mutual TLS with Ephemeral Hardware Attestation:** All edge-to-bus communications require mutual TLS (mTLS) authenticated via TPM/hardware-backed certificates.
+  3. **Local Spooling & Line-Rate Backpressure ([ADR-0021](/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b)):** When downstream pipeline buffers saturate, edge collectors spool encrypted events to local disk ring buffers rather than silently dropping telemetry.
+* **Framework Cross-Walk:**
+  - **MITRE ATT&CK:** `T1562.001` (Impair Defenses: Disable or Modify Tools), `T1070` (Indicator Removal on Host).
+  - **MITRE ATLAS:** `AML.T0015` (Evade ML Model / Defensive Visibility Evasion).
+  - **MITRE D3FEND:** `D3-MTC` (Message Authentication), `D3-HPA` (Hardware Platform Authentication), `D3-SFL` (Sensor File Integrity Monitoring).
 
 ---
 
@@ -109,9 +128,12 @@ flowchart TB
 * **Impact:** Pipeline downtime, stream consumer failures, high ingestion processing costs, and poisoned threat indicator stores.
 * **Architectural Mitigations:**
   1. **Strict Line-Rate OCSF Validation:** Events failing schema validation are immediately diverted to an isolated Dead-Letter Queue (DLQ) without halting stream processors.
-  2. **Preservation of Raw Payloads in Quarantine:** In accordance with [ADR-0002](/adr/0002-preserve-unmapped-telemetry-in-ocsf), unmapped and malformed fields are quarantined in a raw payload envelope to prevent data loss whilst maintaining pipeline stability.
+  2. **Preservation of Raw Payloads in Quarantine ([ADR-0002](/adr/0002-preserve-unmapped-telemetry-in-ocsf)):** Unmapped and malformed fields are quarantined in a raw payload envelope to prevent data loss whilst maintaining pipeline stability.
   3. **Dynamic CTI Confidence Decay & Protected Allow-Lists:** Inbound threat intelligence requires multi-source corroboration and dynamic confidence decay; core infrastructure assets reside on immutable cryptographic allow-lists that override poisoned feeds.
-  4. **Decoupled Lakehouse Ingestion:** Rejecting restrictive output-driven filtering ensures that poisoned telemetry cannot manipulate which internal observations are preserved in cold storage ([ADR-0007](/adr/0007-continuous-automated-purple-teaming-and-multi-model-consensus)).
+* **Framework Cross-Walk:**
+  - **MITRE ATT&CK:** `T1565.002` (Data Manipulation: Transmitted Data Manipulation), `T1499` (Endpoint Denial of Service).
+  - **MITRE ATLAS:** `AML.T0020` (Data Poisoning: Malformed Ingestion).
+  - **MITRE D3FEND:** `D3-SVE` (Schema Validation), `D3-DLQ` (Dead-Letter Queue Isolation), `D3-RPL` (Raw Payload Envelope Preservation).
 
 ---
 
@@ -123,6 +145,10 @@ flowchart TB
   1. **Immutable WORM Object Storage:** Forensic telemetry written to lakehouse storage is governed by Write-Once-Read-Many (WORM) retention policies and S3 Object Lock in compliance mode, preventing modification or deletion by privileged cloud accounts.
   2. **Cryptographic RFC 3161 Timestamps:** Case dossiers, pinned evidence artifacts, and timeline reconstructions are sealed with external cryptographic timestamping authorities.
   3. **The Incident Decision DAG ([ADR-0001](/adr/0001-record-architecture-decisions) & [ADR-0010](/adr/0010-sabsa-business-architecture-and-attribute-profiling)):** Every investigative hypothesis, detection finding, and human annotation is committed as an immutable node in an append-only directed acyclic graph with cryptographic parent-hash verification.
+* **Framework Cross-Walk:**
+  - **MITRE ATT&CK:** `T1070.003` (Indicator Removal: Clear Command History), `T1485` (Data Destruction), `T1565.001` (Stored Data Manipulation).
+  - **MITRE ATLAS:** `AML.T0024` (Cyber ML Artifact Manipulation).
+  - **MITRE D3FEND:** `D3-WORM` (Write-Once Media Storage), `D3-CH` (Cryptographic Hash Verification), `D3-TSA` (Timestamp Attestation).
 
 ---
 
@@ -136,7 +162,10 @@ flowchart TB
      - *Task-Scoped Ephemeral SVIDs*: Agents authenticate via SPIFFE/SPIRE with short-lived X.509 SVIDs ($\le 15\text{m}$, max 15 minutes) encoding least-privilege capability constraints.
   2. **Proposer/Challenger Multi-Model Arbitration ([ADR-0007](/adr/0007-continuous-automated-purple-teaming-and-multi-model-consensus)):** Any proposed finding elevation or incident hypothesis is audited by a separate Challenger model evaluating grounding fidelity against raw telemetry records.
   3. **Continuous Evals-as-Code ([ADR-0006](/adr/0006-agent-evaluation-harness-evals-as-code)):** Automated CI/CD regression testing benchmarks prompts and MCP contracts against known adversarial jailbreak fixtures.
-  4. **The Incident Decision DAG**: Every agent assertion, hypothesis, and proposal must link to an immutable upstream telemetry record; ungrounded assertions are deterministically stripped by the runtime kernel.
+* **Framework Cross-Walk:**
+  - **MITRE ATT&CK:** `T1059` (Command and Scripting Interpreter), `T1548` (Abuse Elevation Control Mechanism).
+  - **MITRE ATLAS:** `AML.T0051` (LLM Prompt Injection: Direct & Indirect), `AML.T0057` (LLM Jailbreak), `AML.T0054` (LLM Plugin Compromise).
+  - **MITRE D3FEND:** `D3-IT` (Isolated Execution / Dual-Plane Data Isolation), `D3-LAM` (Least-Privilege Access Mechanism), `D3-MDA` (Model Diversity & Dual-Model Arbitration).
 
 ---
 
@@ -148,7 +177,11 @@ flowchart TB
   1. **Dependency-Aware Bayesian Risk Compounding ([ADR-0009](/adr/0009-bayesian-multi-signal-risk-scoring)):** Correlated weak signals sharing common raw telemetry ancestry are mathematically discounted, mitigating the operational consequences of the Base Rate Fallacy.
   2. **Supernode Graph Dampening ([ADR-0003](/adr/0003-graph-supernode-pruning-and-clustering-boundaries)):** High-degree infrastructure nodes (domain controllers, vulnerability scanners) are automatically dampened to prevent explosive graph clustering.
   3. **SRE Alert Noise Error Budgets ([ADR-0008](/adr/0008-secops-error-budgets-and-chaos-security-engineering)):** Rules exceeding their monthly false-positive budget ($\gt 5\%$) trigger automated deployment freezes, preventing noisy rules from reaching production.
-  4. **Signed Dual-Party GitOps Enrolment:** Detection logic changes require cryptographic commit signing and mandatory dual-peer review prior to CI/CD merge.
+  4. **Signed Dual-Party GitOps Enrolment ([ADR-0019](/adr/0019-polyglot-detection-as-code-and-native-engine-adaptation)):** Detection logic changes require cryptographic commit signing and mandatory dual-peer review prior to CI/CD merge.
+* **Framework Cross-Walk:**
+  - **MITRE ATT&CK:** `T1499.003` (Endpoint DoS: Application Exhaustion Flood), `T1562` (Impair Defenses).
+  - **MITRE ATLAS:** `AML.T0040` (Adversarial ML Perturbations to Induce Alert Storms).
+  - **MITRE D3FEND:** `D3-ARA` (Alert Rate Anomaly Detection), `D3-BCA` (Bayesian Correlation Analysis), `D3-SND` (Supernode Degree Dampening).
 
 ---
 
@@ -160,47 +193,122 @@ flowchart TB
   1. **Security-State Monotonicity & Fail-Closed Containment ([ADR-0005](/adr/0005-saga-pattern-containment-and-break-glass-protocol)):** Workflows enforce the governing invariant: *no automated compensation may increase attacker reachability beyond the last verified-safe security state* ($s_{n+1} \preceq s_n$). Defensive barriers move strictly forward; timeouts freeze perimeters in place and escalate forward rather than rolling back security controls.
   2. **Automated Blast-Radius Circuit Breakers & Tier 0 Asset Immunity:** Automated containment enforces strict execution ceilings and pre-execution impact simulation; core production infrastructure is strictly immune to autonomous destructive isolation.
   3. **Dual-Authorisation Consensus & Audited Break-Glass Human Oversight:** High-impact disruptive actions (Tier 2) mandate multi-signature approval from two authenticated commanders, supported by a cryptographic emergency E-Stop flight deck.
+* **Framework Cross-Walk:**
+  - **MITRE ATT&CK:** `T1489` (Service Stop), `T1562.001` (Disable or Modify Tools).
+  - **MITRE ATLAS:** `AML.T0053` (Excessive Agency: Autonomous Weaponization).
+  - **MITRE D3FEND:** `D3-SMS` (State Machine Security / Reachability Monotonicity), `D3-BRC` (Blast-Radius Constraint & Critical Asset Immunity), `D3-BGO` (Break-Glass Human Override & Master E-Stop).
 
 ---
 
-## 3. STRIDE Threat Assessment Matrix
-
-The following matrix synthesises the TIDIR target architecture against the STRIDE threat taxonomy:
-
-| Subsystem Component | STRIDE Category | Primary Threat Description | Impact Level | Architectural Defence & Control |
-| :--- | :--- | :--- | :--- | :--- |
-| **Edge Collectors** | **S**poofing | Attacker injects synthetic telemetry impersonating domain controllers. | High | Hardware-backed mTLS certificates, kernel-level collector attestation. |
-| **Pipeline Ingestion** | **T**ampering | Man-in-the-middle tampering of event fields across distributed networks. | High | Line-rate OCSF schema validation, TLS 1.3 in-transit, payload hashing. |
-| **Evidence Locker** | **R**epudiation | Malicious administrator deletes or alters forensic evidence logs. | Critical | Immutable WORM object storage, append-only Merkle tree cryptographic logs. |
-| **Streaming Bus** | **I**nformation Disclosure | Unauthorised microservice taps high-throughput telemetry stream. | High | Topic-level SASL/SCRAM authentication, field-level encryption for PII. |
-| **Detection Engine** | **D**enial of Service | Complex ReDoS regex queries exhaust streaming CPU and memory. | High | AST-level query complexity analysis, bounded runtime execution ceilings. |
-| **Autonomous Mesh** | **E**levation of Privilege | Indirect prompt injection triggers unauthorised administrative containment. | Critical | Agent Trust Boundary (dual-plane isolation), read-only permissions, deterministic policy kernel. |
-| **Response Actuators** | **D**enial of Service | Runaway automation isolates enterprise infrastructure. | Critical | Monotonic state machines, blast-radius circuit breakers, Break-Glass human approval. |
+### Threat Vector 7: Non-Human Identity Subversion & Machine Token Hijacking ($\text{T}_7$)
+* **STRIDE Category:** Elevation of Privilege / Spoofing.
+* **Threat Scenario:** An attacker extracts ephemeral machine tokens, SPIFFE SVID certificates, or MCP API secrets from a compromised agent container or CI/CD worker, attempting to impersonate an autonomous triage subagent, forge investigation evidence, or pivot across the internal agent mesh.
+* **Impact:** Unauthorised telemetry access; falsified investigation conclusions; lateral movement across internal agent control planes.
+* **Architectural Mitigations:**
+  1. **Dynamic Task-Scoped SVIDs with Micro-TTLs ([ADR-0015](/adr/0015-sandboxed-agent-execution-otlp-convergence-and-ephemeral-identity) & [ADR-0018](/adr/0018-non-human-identity-lifecycle-and-machine-attestation)):** Agent microVMs and containers never hold static credentials. SPIFFE/SPIRE issues task-scoped X.509 SVIDs with a maximum 15-minute TTL ($\le 15\text{m}$), bound to container cryptographic attestation and automatically revoked upon task completion.
+  2. **Line-Rate NHI Behavioral Profiling:** All service accounts, bot tokens, and machine workloads are normalized into OCSF Class 3002/3005 and profiled across rolling 14-day behavioral windows to detect out-of-VPC token replays and dormancy awakening.
+  3. **Per-Task Capability Attestation:** SVID claims strictly bound tool permissions at the network mesh layer. A forensic triage agent's SVID cannot establish connections to response containment orchestrators.
+* **Framework Cross-Walk:**
+  - **MITRE ATT&CK:** `T1078.004` (Valid Accounts: Cloud Accounts), `T1550.001` (Use Alternate Authentication Material: Application Access Token).
+  - **MITRE ATLAS:** `AML.T0047` (ML Artifact / Token Theft), `AML.T0054` (LLM Plugin / Tool Compromise).
+  - **MITRE D3FEND:** `D3-LAM` (Least-Privilege Access Mechanism), `D3-MTC` (Message Authentication), `D3-IT` (Isolated Execution).
 
 ---
 
-## 4. Trust Boundaries & Network Segmentation
+### Threat Vector 8: Model & Knowledge Base Poisoning / Adversarial Evasion ($\text{T}_8$)
+* **STRIDE Category:** Tampering / Information Disclosure.
+* **Threat Scenario:** An adversary injects manipulated incident artifacts into the Resolved Incident Knowledge Base (RAG poisoning), crafts synthetic telemetry to evade Bayesian multi-signal risk lenses or fool SLM judges, or attempts to fingerprint ambient deception canary anchors ([ADR-0013](/adr/0013-ambient-deception-fabric-and-canary-anchors)) to discover detection blind spots.
+* **Impact:** Degraded detection sensitivity; toxic reasoning hallucinations during live incidents; bypass of automated triage gates.
+* **Architectural Mitigations:**
+  1. **WORM-Gated Knowledge Base Retrieval:** RAG retrieval surfaces historical context exclusively from sealed, WORM-locked cases verified via RFC 3161 timestamps and parent-hash integrity in the Incident Decision DAG ([ADR-0010](/adr/0010-sabsa-business-architecture-and-attribute-profiling)).
+  2. **SLM Judge Grounding Verification ([ADR-0014](/adr/0014-ai-observability-self-learning-and-slm-judges)):** All generated investigation summaries must pass deterministic grounding checks ($\ge 95\%$ grounding fidelity) against raw telemetry before promotion into long-term memory.
+  3. **Decoupled Ambient Deception Anchors:** Canary honeytokens, Kerberos SPN decoys, and lure files possess zero identifying platform watermarks, preventing adversary fingerprinting.
+* **Framework Cross-Walk:**
+  - **MITRE ATT&CK:** `T1565.001` (Stored Data Manipulation), `T1562.001` (Disable or Modify Tools).
+  - **MITRE ATLAS:** `AML.T0018` (Data Poisoning: Backdoor Induction), `AML.T0020` (Poison Training / Retrieval Data), `AML.T0015` (Evade ML Model), `AML.T0040` (ML Model Evasion via Adversarial Perturbations).
+  - **MITRE D3FEND:** `D3-CH` (Cryptographic Hash Verification), `D3-BCA` (Bayesian Correlation Analysis), `D3-MDA` (Model Diversity & Dual-Model Arbitration), `D3-DN` (Decoy Network / Environment).
+
+---
+
+### Threat Vector 9: Excessive Agency & Sensitive Data Exfiltration via Model Outputs ($\text{T}_9$)
+* **STRIDE Category:** Information Disclosure / Elevation of Privilege.
+* **Threat Scenario:** An attacker tricks an autonomous agent into recursive tool invocation loops (query flooding/resource exhaustion), or coaxes the model into exfiltrating sensitive forensic artifacts, tenant credentials, or PII via situation briefing summaries or side-channel tool parameters.
+* **Impact:** Tenant data leakage; unexpected cloud compute consumption; internal network scanning via hijacked agent tooling.
+* **Architectural Mitigations:**
+  1. **Deterministic AST Query Validation ([ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall)):** Generated queries are parsed by an Abstract Syntax Tree (AST) validator before execution, enforcing strict read-only syntax (`SELECT` only), mandatory partition filters, and temporal bounds.
+  2. **Semantic Loop & Cost Circuit Breakers ([ADR-0017](/adr/0017-agent-fleet-control-plane-and-runtime-observability)):** Sliding-window tool invocation hashing terminates oscillating loops ($> 3$ identical tool calls); hard execution bounds enforce a maximum of 8 tool hops, a 180-second timeout, and a financial ceiling (\$2.50 / 150k tokens per branch).
+  3. **Air-Gapped Ingress/Egress Controls:** Agent runtimes operate in isolated VPCs with zero direct public internet egress; situation summaries undergo automated PII/credential redaction before display.
+* **Framework Cross-Walk:**
+  - **MITRE ATT&CK:** `T1005` (Data from Local System), `T1048` (Exfiltration Over Alternative Protocol), `T1499` (Endpoint Denial of Service).
+  - **MITRE ATLAS:** `AML.T0053` (Excessive Agency / Goal Hijacking), `AML.T0024` (Exfiltration via Cyber ML Artifacts), `AML.T0043` (Insecure Output Handling / Summarization Leakage).
+  - **MITRE D3FEND:** `D3-EOP` (Execution Boundary / Sandboxing), `D3-SLB` (Semantic Loop Breaking & Resource Limiting), `D3-IT` (Isolated Execution).
+
+---
+
+## 3. Dedicated AI Threat Modeling & Defense-in-Depth
+
+Modern SecOps architectures increasingly integrate Large Language Models (LLMs) and Small Language Models (SLMs) for advisory parsing, query compilation, and triage summarisation. TIDIR treats AI components not as trusted reasoning oracles, but as probabilistic workers operating in a Zero Trust environment governed by the **TIDIR Trust Doctrine Maxim**:
+
+$$\text{“Probabilistic components may propose. Deterministic components authorize.”}$$
+
+### AI Threat Taxonomy Alignment (MITRE ATLAS & OWASP Top 10 for LLMs)
+
+The table below synthesises how the TIDIR target architecture neutralises the key threats defined in the **MITRE ATLAS** (Adversarial Threat Landscape for Artificial-Intelligence Systems) matrix and the **OWASP Top 10 for Large Language Model Applications**:
+
+| Threat ID | Adversarial Threat Category | MITRE ATLAS Technique | OWASP LLM Ref | TIDIR Architectural Defence & Control | Governing Invariant & ADR |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **AI-01** | **Indirect Prompt Injection** | `AML.T0051` (LLM Prompt Injection) | `LLM01` | **Dual-Plane Data Isolation**: Untrusted logs exist exclusively in the Data Plane; agent personas and tool contracts exist in the signed Control Plane. No prompt-sanitization heuristic is trusted. | **INV-04** (Authority Separation)<br>[ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall) |
+| **AI-02** | **Insecure Output Handling** | `AML.T0043` (Insecure Output Handling) | `LLM02` | **Deterministic AST Query Validator**: Output strings from LLMs cannot be executed directly; all generated SQL/KQL passes through an AST compiler validating read-only syntax and temporal constraints. | **INV-04** (Authority Separation)<br>[ADR-0012](/adr/0012-ai-orchestration-runtime-mcp-and-mvp-roadmap) |
+| **AI-03** | **Training / RAG Data Poisoning** | `AML.T0018` / `AML.T0020` (Data Poisoning) | `LLM03` | **WORM-Sealed Incident Decision DAG**: Vector retrieval and RAG context are restricted to cryptographically sealed case dossiers. Ungrounded claims are stripped by the runtime kernel. | **INV-02** (Evidence Traceability)<br>[ADR-0010](/adr/0010-sabsa-business-architecture-and-attribute-profiling) |
+| **AI-04** | **Model Denial of Service** | `AML.T0029` (Denial of Service via Heavy Query) | `LLM04` | **Semantic Loop & Cost Circuit Breakers**: Max 8 tool hops, 180-second timeouts, sliding-window query hashing, and hard financial caps (\$2.50 per branch) prevent resource exhaustion. | **INV-06** (Bounded Autonomy)<br>[ADR-0017](/adr/0017-agent-fleet-control-plane-and-runtime-observability) |
+| **AI-05** | **AI Supply Chain Vulnerabilities** | `AML.T0010` (ML Supply Chain Compromise) | `LLM05` | **Model Diversity & Local SLM Fallback**: Vendor-neutral inference gateway supporting hot-swapping across model providers, with local SLMs running for sensitive/disconnected tiers. | **INV-08** (Degraded Defence)<br>[ADR-0021](/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b) |
+| **AI-06** | **Excessive Agency** | `AML.T0053` (Excessive Agency / Goal Hijacking) | `LLM06` | **Read-Only Capability Boundary**: Triage agents possess zero mutating infrastructure credentials. All containment actions require explicit response safety kernel evaluation. | **INV-05** (Least Capability)<br>[ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall) |
+| **AI-07** | **System Prompt / Data Leakage** | `AML.T0024` (ML Artifact Extraction) | `LLM07` | **Least-Privilege Ephemeral SVIDs**: Agents receive short-lived SPIFFE SVIDs ($\le 15\text{m}$) scoped to specific query tasks; PII/credential redaction runs inline before model ingestion. | **INV-05** (Least Capability)<br>[ADR-0015](/adr/0015-sandboxed-agent-execution-otlp-convergence-and-ephemeral-identity) |
+| **AI-08** | **Autonomous Hallucination Cascade** | `AML.T0040` (Adversarial ML Perturbations) | `LLM09` | **Proposer/Challenger Dual-Model Arbiter**: Incident hypotheses require consensus between two independent model families; groundings must trace to raw telemetry records. | **INV-03** (Evidential Independence)<br>[ADR-0007](/adr/0007-continuous-automated-purple-teaming-and-multi-model-consensus) |
+
+---
+
+## 4. Tri-Framework Mapping Matrix (ATT&CK $\times$ ATLAS $\times$ D3FEND)
+
+To ensure seamless operational cross-referencing across enterprise threat matrices, adversarial AI taxonomies, and formal defensive countermeasures, the matrix below establishes the unified tri-framework relationship graph:
+
+| Threat ID & Name | STRIDE | MITRE ATT&CK (Enterprise) | MITRE ATLAS (AI/ML) | MITRE D3FEND (Countermeasure) | TIDIR Invariant & Primary Architectural Control | Governing ADR |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **THR-T1**: Sensor Evasion / Log Blinding | **S / T** | `T1562.001` (Impair Defenses)<br>`T1070` (Indicator Removal) | `AML.T0015` (Evade ML Model) | `D3-MTC` (Message Authentication)<br>`D3-HPA` (Hardware Platform Auth) | **INV-01** (Telemetry Preservation)<br>Local NVMe ring buffer & mTLS with TPM attestation. | [ADR-0021](/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b) |
+| **THR-T2**: Schema Poisoning / DoS Inundation | **T / D** | `T1565.002` (Transmitted Data Manipulation)<br>`T1499` (Endpoint DoS) | `AML.T0020` (Data Poisoning) | `D3-SVE` (Schema Validation)<br>`D3-DLQ` (Dead-Letter Queue Isolation) | **INV-01** (Telemetry Preservation)<br>Line-rate OCSF compiler validation & raw payload quarantine envelope. | [ADR-0002](/adr/0002-preserve-unmapped-telemetry-in-ocsf) |
+| **THR-T3**: Evidence Tampering / Audit Destruction | **R / T** | `T1070.003` (Clear History)<br>`T1485` (Data Destruction) | `AML.T0024` (ML Artifact Manipulation) | `D3-WORM` (Write-Once Media Storage)<br>`D3-CH` (Cryptographic Hash Verification) | **INV-02** (Evidence Traceability)<br>Immutable WORM lakehouse, RFC 3161 timestamps, Incident Decision DAG. | [ADR-0001](/adr/0001-record-architecture-decisions)<br>[ADR-0010](/adr/0010-sabsa-business-architecture-and-attribute-profiling) |
+| **THR-T4**: Indirect Prompt Injection | **E / T** | `T1059` (Command Interpreter)<br>`T1548` (Abuse Elevation) | `AML.T0051` (LLM Prompt Injection)<br>`AML.T0057` (LLM Jailbreak) | `D3-IT` (Isolated Execution)<br>`D3-LAM` (Least-Privilege Access Mechanism) | **INV-04** (Authority Separation)<br>Agent Trust Boundary (dual-plane isolation) & read-only MCP tooling. | [ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall)<br>[ADR-0015](/adr/0015-sandboxed-agent-execution-otlp-convergence-and-ephemeral-identity) |
+| **THR-T5**: Alert Storm DoS / Desensitisation | **D / T** | `T1499.003` (App Exhaustion Flood)<br>`T1562` (Impair Defenses) | `AML.T0040` (Adversarial ML Perturbations) | `D3-ARA` (Alert Rate Anomaly Detection)<br>`D3-BCA` (Bayesian Correlation Analysis) | **INV-03** (Evidential Independence)<br>Dependency-aware Bayesian risk discounting & monthly SRE noise error budgets. | [ADR-0003](/adr/0003-graph-supernode-pruning-and-clustering-boundaries)<br>[ADR-0008](/adr/0008-secops-error-budgets-and-chaos-security-engineering)<br>[ADR-0009](/adr/0009-bayesian-multi-signal-risk-scoring) |
+| **THR-T6**: Automated Response Sabotage | **D / E** | `T1489` (Service Stop)<br>`T1562.001` (Disable Tools) | `AML.T0053` (Excessive Agency / Goal Hijacking) | `D3-SMS` (State Machine Security)<br>`D3-BRC` (Blast-Radius Constraint) | **INV-07** (Reachability Monotonicity)<br>Monotonic state machine ($s_{n+1} \preceq s_n$), Tier 0 immunity, master E-stop. | [ADR-0005](/adr/0005-saga-pattern-containment-and-break-glass-protocol) |
+| **THR-T7**: Machine Token / SVID Hijacking | **E / S** | `T1078.004` (Cloud Accounts)<br>`T1550.001` (Application Access Token) | `AML.T0047` (ML Artifact / Token Theft)<br>`AML.T0054` (LLM Plugin Compromise) | `D3-LAM` (Least-Privilege Access Mechanism)<br>`D3-MTC` (Message Authentication) | **INV-05** (Least Capability)<br>SPIFFE/SPIRE dynamic task-scoped SVIDs ($\le 15\text{m}$) & line-rate NHI profiling. | [ADR-0015](/adr/0015-sandboxed-agent-execution-otlp-convergence-and-ephemeral-identity)<br>[ADR-0018](/adr/0018-non-human-identity-lifecycle-and-machine-attestation) |
+| **THR-T8**: Model & Knowledge Base Poisoning | **T / I** | `T1565.001` (Stored Data Manipulation)<br>`T1562.001` (Disable Tools) | `AML.T0018` (Data Poisoning)<br>`AML.T0020` (Poison Training/RAG Data) | `D3-CH` (Cryptographic Hash Verification)<br>`D3-DN` (Decoy Network / Environment) | **INV-02** (Evidence Traceability)<br>WORM-sealed RAG context, SLM grounding judges ($\ge 95\%$), ambient canary anchors. | [ADR-0010](/adr/0010-sabsa-business-architecture-and-attribute-profiling)<br>[ADR-0013](/adr/0013-ambient-deception-fabric-and-canary-anchors)<br>[ADR-0014](/adr/0014-ai-observability-self-learning-and-slm-judges) |
+| **THR-T9**: Excessive Agency & Output Leakage | **I / E** | `T1005` (Data from Local System)<br>`T1499` (Endpoint DoS) | `AML.T0053` (Excessive Agency)<br>`AML.T0043` (Insecure Output Handling) | `D3-EOP` (Execution Boundary / Sandbox)<br>`D3-SLB` (Semantic Loop Breaking) | **INV-06** (Bounded Autonomy)<br>Deterministic AST query validator, loop circuit breakers, financial execution caps. | [ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall)<br>[ADR-0012](/adr/0012-ai-orchestration-runtime-mcp-and-mvp-roadmap)<br>[ADR-0017](/adr/0017-agent-fleet-control-plane-and-runtime-observability) |
+
+---
+
+## 5. Trust Boundaries & Network Segmentation
 
 TIDIR enforces five explicit security perimeters:
 
-1. **Boundary 1: Sensor to Pipeline (Edge Ingestion Perimeter):** Untrusted endpoint and cloud environments communicate exclusively via authenticated, reverse-proxy ingress points.
+1. **Boundary 1: Sensor to Pipeline (Edge Ingestion Perimeter):** Untrusted endpoint and cloud environments communicate exclusively via authenticated, reverse-proxy ingress points enforcing mTLS with hardware TPM attestation.
 2. **Boundary 2: Pipeline to Data Fabric (Storage Perimeter):** Distributed streaming topics enforce role-based access control. Ingestion pipelines hold write-only access to streaming queues; analytics engines hold read-only consumer tokens.
 3. **Boundary 3: Analytics to Detection (Query Perimeter):** Detection engines run in sandboxed worker environments with strict CPU, memory, and query execution timeouts.
-4. **Boundary 4: Detection to AI Reasoning (Inference Perimeter):** Telemetry data passes through the Agent Trust Boundary before model context injection. Agent runtimes have no direct external internet egress.
-5. **Boundary 5: AI Reasoning to Response Actuators (Action Perimeter):** The autonomous mesh cannot directly invoke infrastructure APIs. All action requests must be emitted as declarative containment intents evaluated by the privileged response orchestrator.
+4. **Boundary 4: Detection to AI Reasoning & Identity Fabric (Inference Perimeter):** Telemetry data passes through the Agent Trust Boundary (dual-plane isolator) before model context injection. Agent runtimes execute in isolated VPC microVMs with zero direct public egress, authenticated dynamically via short-lived SPIFFE X.509 SVIDs ($\le 15\text{m}$, max 15 minutes).
+5. **Boundary 5: AI Reasoning to Response Actuators (Action Perimeter):** The autonomous mesh cannot directly invoke infrastructure APIs. All action requests must be emitted as declarative containment intents evaluated by the privileged response orchestrator against monotonic reachability constraints ($s_{n+1} \preceq s_n$).
 
 ---
 
-## 5. Security & Verification Strategy
+## 6. Security & Verification Strategy
 
-The integrity of these threat mitigations is maintained through three continuous engineering disciplines:
-* **Chaos Security Engineering:** Regular injection of simulated pipeline latency, corrupted OCSF payloads, and dead-letter queue flooding to verify backpressure resilience ([ADR-0008](/adr/0008-secops-error-budgets-and-chaos-security-engineering)).
-* **Automated Injection Benchmarking:** CI/CD execution of prompt injection test suites evaluating agent boundary containment ([ADR-0006](/adr/0006-agent-evaluation-harness-evals-as-code)).
-* **Continuous Atomic Emulation:** Synthetic adversary playbooks continuously testing detection logic and alert generation paths without human intervention ([ADR-0007](/adr/0007-continuous-automated-purple-teaming-and-multi-model-consensus)).
+The integrity of these threat mitigations is maintained through four continuous engineering disciplines:
+* **Chaos Security Engineering ([ADR-0008](/adr/0008-secops-error-budgets-and-chaos-security-engineering)):** Regular injection of simulated pipeline latency, corrupted OCSF payloads, and dead-letter queue flooding to verify backpressure resilience.
+* **Automated Injection Benchmarking ([ADR-0006](/adr/0006-agent-evaluation-harness-evals-as-code)):** CI/CD execution of prompt injection test suites evaluating agent boundary containment.
+* **Continuous Atomic Emulation ([ADR-0007](/adr/0007-continuous-automated-purple-teaming-and-multi-model-consensus)):** Synthetic adversary playbooks continuously testing detection logic and alert generation paths without human intervention.
+* **Agent Flight Deck & Canary Probing ([ADR-0013](/adr/0013-ambient-deception-fabric-and-canary-anchors) & [ADR-0017](/adr/0017-agent-fleet-control-plane-and-runtime-observability)):** Continuous monitoring of agent heartbeats, semantic tool loop termination, and canary honeytoken triggers across the data fabric.
 
 ---
 
-## 6. The TIDIR Assurance Case Map
+## 7. The TIDIR Assurance Case Map
 
 To prove internal consistency and demonstrate that architectural invariants directly mitigate identified threats, the matrix below establishes the complete, bi-directional assurance graph:
 
@@ -208,9 +316,12 @@ $$\text{Adversarial Threat} \longrightarrow \text{Invariant} \longrightarrow \te
 
 | Adversarial Threat | Invariant Preserved | Underpinning Capability | Architectural Control Mechanism | Governing ADR | Validation Method & Acceptance Criteria |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **THR-T1: Sensor Evasion / Log Blinding** | **INV-01** (Telemetry Preservation) & **INV-08** (Degraded Defence) | `DATA-01`, `RESIL-01`, `RESIL-02` | Local NVMe ring buffering, direct-to-object lakehouse bypass, out-of-band audit beats. | [ADR-0021](/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b) | Bus partition chaos test: zero dropped records during 24h simulated network isolation. |
-| **THR-T2: Schema Poisoning / DoS Inundation** | **INV-01** (Telemetry Preservation) & **INV-11** (Operational Portability) | `DATA-02`, `DATA-03` | Line-rate OCSF compiler validation, structured `unmapped_data` catch-all, isolated DLQ quarantine. | [ADR-0002](/adr/0002-preserve-unmapped-telemetry-in-ocsf) | Synthetic fuzzing suite: malformed JSON and corrupted payloads diverted to DLQ with zero parser crashes. |
+| **THR-T1: Sensor Evasion / Log Blinding** | **INV-01** (Telemetry Preservation) & **INV-08** (Degraded Defence) | `CAP-DATA-01`, `RESIL-01`, `RESIL-02` | Local NVMe ring buffering, direct-to-object lakehouse bypass, out-of-band audit beats. | [ADR-0021](/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b) | Bus partition chaos test: zero dropped records during 24h simulated network isolation. |
+| **THR-T2: Schema Poisoning / DoS Inundation** | **INV-01** (Telemetry Preservation) & **INV-11** (Operational Portability) | `CAP-DATA-02`, `CAP-DATA-03` | Line-rate OCSF compiler validation, structured `unmapped_data` catch-all, isolated DLQ quarantine. | [ADR-0002](/adr/0002-preserve-unmapped-telemetry-in-ocsf) | Synthetic fuzzing suite: malformed JSON and corrupted payloads diverted to DLQ with zero parser crashes. |
 | **THR-T3: Evidence Tampering / Audit Destruction** | **INV-02** (Evidence Traceability) & **INV-10** (Reconstructability) | `CAP-INV-04`, `RESIL-05` | Immutable WORM object storage, RFC 3161 cryptographic timestamps, append-only Incident Decision DAG. | [ADR-0001](/adr/0001-record-architecture-decisions), [ADR-0010](/adr/0010-sabsa-business-architecture-and-attribute-profiling) | Cryptographic verification audit: cryptographic tamper evidence and Merkle root verification over sealed dossiers. |
-| **THR-T4: Indirect Prompt Injection & Instruction Manipulation** | **INV-04** (Authority Separation) & **INV-05** (Least Capability) | `CAP-INV-05`, `AIGOV-02`, `AIGOV-06` | Agent Trust Boundary (dual-plane data/control isolator), read-only tools, ephemeral SPIFFE SVIDs ($\le 15\text{m}$, max 15 minutes). | [ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall), [ADR-0015](/adr/0015-sandboxed-agent-execution-otlp-convergence-and-ephemeral-identity) | Continuous Evals-as-Code: prompt injection benchmark achieving zero unauthorised tool invocations across test corpus. |
-| **THR-T5: Alert Storm Denial of Service / Desensitisation** | **INV-03** (Evidential Independence) & **INV-06** (Bounded Autonomy) | `DET-04`, `DET-05`, `DET-06` | Dependency-aware risk compounding, supernode graph dampening, monthly SRE Alert Noise Error Budgets. | [ADR-0003](/adr/0003-graph-supernode-pruning-and-clustering-boundaries), [ADR-0008](/adr/0008-secops-error-budgets-and-chaos-security-engineering), [ADR-0009](/adr/0009-bayesian-multi-signal-risk-scoring) | Historical lakehouse backtesting: $\ge 75\%$ reduction in alert volume with noise budget false-positive rate $\le 5\%$. |
-| **THR-T6: Automated Response Sabotage / Outage Trigger** | **INV-07** (Security-State Monotonicity) & **INV-09** (Human Recoverability) | `RESP-01`, `RESP-02`, `RESP-04`, `RESIL-05` | Monotonic state machine ($s_{n+1} \preceq s_n$, where post-transition reachability is a subset of pre-transition reachability), pre-execution blast-radius scoring, master cryptographic E-Stop. | [ADR-0005](/adr/0005-saga-pattern-containment-and-break-glass-protocol) | Containment failure fault injection: verified forward perimeter escalation with zero security-state rollback. |
+| **THR-T4: Indirect Prompt Injection & Instruction Manipulation** | **INV-04** (Authority Separation) & **INV-05** (Least Capability) | `CAP-INV-05`, `CAP-AIGOV-02`, `CAP-AIGOV-06` | Agent Trust Boundary (dual-plane data/control isolator), read-only tools, ephemeral SPIFFE SVIDs ($\le 15\text{m}$, max 15 minutes). | [ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall), [ADR-0015](/adr/0015-sandboxed-agent-execution-otlp-convergence-and-ephemeral-identity) | Continuous Evals-as-Code: prompt injection benchmark achieving zero unauthorised tool invocations across test corpus. |
+| **THR-T5: Alert Storm Denial of Service / Desensitisation** | **INV-03** (Evidential Independence) & **INV-06** (Bounded Autonomy) | `CAP-DET-04`, `CAP-DET-05`, `CAP-DET-06` | Dependency-aware risk compounding, supernode graph dampening, monthly SRE Alert Noise Error Budgets. | [ADR-0003](/adr/0003-graph-supernode-pruning-and-clustering-boundaries), [ADR-0008](/adr/0008-secops-error-budgets-and-chaos-security-engineering), [ADR-0009](/adr/0009-bayesian-multi-signal-risk-scoring) | Historical lakehouse backtesting: $\ge 75\%$ reduction in alert volume with noise budget false-positive rate $\le 5\%$. |
+| **THR-T6: Automated Response Sabotage / Outage Trigger** | **INV-07** (Reachability Monotonicity) & **INV-09** (Human Recoverability) | `CAP-RESP-01`, `CAP-RESP-02`, `CAP-RESP-04`, `RESIL-05` | Monotonic state machine ($s_{n+1} \preceq s_n$, where post-transition reachability is a subset of pre-transition reachability), pre-execution blast-radius scoring, master cryptographic E-Stop. | [ADR-0005](/adr/0005-saga-pattern-containment-and-break-glass-protocol) | Containment failure fault injection: verified forward perimeter escalation with zero security-state rollback. |
+| **THR-T7: Machine Token / SVID Hijacking** | **INV-04** (Authority Separation) & **INV-05** (Least Capability) | `CAP-AIGOV-06`, `CAP-AIGOV-07` | SPIFFE/SPIRE dynamic task-scoped SVIDs ($\le 15\text{m}$), line-rate NHI behavioral profiling, zero ambient credentials. | [ADR-0015](/adr/0015-sandboxed-agent-execution-otlp-convergence-and-ephemeral-identity), [ADR-0018](/adr/0018-non-human-identity-lifecycle-and-machine-attestation) | Token replay test: simulated out-of-VPC token re-use triggers immediate alert and auto-revocation in $\lt 5$ seconds. |
+| **THR-T8: Model & Knowledge Base Poisoning** | **INV-02** (Evidence Traceability) & **INV-10** (Reconstructability) | `CAP-DET-05`, `CAP-DET-07`, `CAP-AIGOV-01` | WORM-sealed RAG context, parent-hash DAG verification, SLM grounding judges ($\ge 95\%$), ambient canary anchors. | [ADR-0010](/adr/0010-sabsa-business-architecture-and-attribute-profiling), [ADR-0013](/adr/0013-ambient-deception-fabric-and-canary-anchors), [ADR-0014](/adr/0014-ai-observability-self-learning-and-slm-judges) | Grounding benchmark: corrupted context injection stripped by AST/DAG kernel; SLM judge maintains $\ge 95\%$ grounding accuracy. |
+| **THR-T9: Excessive Agency & Output Leakage** | **INV-05** (Least Capability) & **INV-06** (Bounded Autonomy) | `CAP-INV-05`, `CAP-AIGOV-02`, `CAP-AIGOV-03`, `CAP-AIGOV-05` | Deterministic AST query validation, semantic query loop breakers (max 8 hops), strict financial cost ceiling (\$2.50). | [ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall), [ADR-0012](/adr/0012-ai-orchestration-runtime-mcp-and-mvp-roadmap), [ADR-0017](/adr/0017-agent-fleet-control-plane-and-runtime-observability) | Autonomous loop injection test: recursive query oscillation terminates in $\le 3$ cycles and freezes execution under budget cap. |

@@ -320,9 +320,12 @@ const model: ArchitecturalModel = {
       name: "Sensor Evasion & Telemetry Blinding",
       stride: "Spoofing / Tampering",
       description: "Attacker unloads kernel sensors, disrupts transport forwarders, or exploits network partitions to evade detection.",
-      underpinning_capabilities: ["CAP-DATA-01", "CAP-RESIL-01", "CAP-RESIL-02"],
+      underpinning_capabilities: ["CAP-DATA-01", "RESIL-01", "RESIL-02"],
       mitigated_by_invariants: ["INV-01", "INV-08"],
-      governing_adrs: ["ADR-0021"]
+      governing_adrs: ["ADR-0021"],
+      mitre_attack: ["T1562.001", "T1070"],
+      mitre_atlas: ["AML.T0015"],
+      mitre_d3fend: ["D3-MTC", "D3-HPA", "D3-SFL"]
     },
     {
       id: "THR-T2",
@@ -331,16 +334,22 @@ const model: ArchitecturalModel = {
       description: "Adversary emits malformed payloads or unmapped event floods to exhaust pipeline memory or crash parsers.",
       underpinning_capabilities: ["CAP-DATA-02", "CAP-DATA-03"],
       mitigated_by_invariants: ["INV-01", "INV-11"],
-      governing_adrs: ["ADR-0002"]
+      governing_adrs: ["ADR-0002"],
+      mitre_attack: ["T1565.002", "T1499"],
+      mitre_atlas: ["AML.T0020"],
+      mitre_d3fend: ["D3-SVE", "D3-DLQ", "D3-RPL"]
     },
     {
       id: "THR-T3",
       name: "Evidence Tampering & Audit Destruction",
       stride: "Repudiation",
       description: "Compromised administrator attempts to purge or modify investigative query logs and case dossiers.",
-      underpinning_capabilities: ["CAP-INV-04", "CAP-RESIL-05"],
+      underpinning_capabilities: ["CAP-INV-04", "RESIL-05"],
       mitigated_by_invariants: ["INV-02", "INV-10"],
-      governing_adrs: ["ADR-0001", "ADR-0010"]
+      governing_adrs: ["ADR-0001", "ADR-0010"],
+      mitre_attack: ["T1070.003", "T1485", "T1565.001"],
+      mitre_atlas: ["AML.T0024"],
+      mitre_d3fend: ["D3-WORM", "D3-CH", "D3-TSA"]
     },
     {
       id: "THR-T4",
@@ -349,7 +358,10 @@ const model: ArchitecturalModel = {
       description: "Adversary embeds malicious control directives inside command line arguments, log files, or CTI reports.",
       underpinning_capabilities: ["CAP-INV-05", "CAP-AIGOV-02", "CAP-AIGOV-06"],
       mitigated_by_invariants: ["INV-04", "INV-05"],
-      governing_adrs: ["ADR-0004", "ADR-0015"]
+      governing_adrs: ["ADR-0004", "ADR-0015"],
+      mitre_attack: ["T1059", "T1548"],
+      mitre_atlas: ["AML.T0051", "AML.T0057", "AML.T0054"],
+      mitre_d3fend: ["D3-IT", "D3-LAM", "D3-MDA"]
     },
     {
       id: "THR-T5",
@@ -358,16 +370,58 @@ const model: ArchitecturalModel = {
       description: "Adversary generates high-volume weak anomalies across enterprise nodes to induce alert fatigue.",
       underpinning_capabilities: ["CAP-DET-04", "CAP-DET-05", "CAP-DET-06"],
       mitigated_by_invariants: ["INV-03", "INV-06"],
-      governing_adrs: ["ADR-0003", "ADR-0008", "ADR-0009"]
+      governing_adrs: ["ADR-0003", "ADR-0008", "ADR-0009"],
+      mitre_attack: ["T1499.003", "T1562"],
+      mitre_atlas: ["AML.T0040"],
+      mitre_d3fend: ["D3-ARA", "D3-BCA", "D3-SND"]
     },
     {
       id: "THR-T6",
       name: "Automated Response Sabotage & Self-Inflicted Outage",
       stride: "Denial of Service",
       description: "Adversary manipulates defensive playbooks into isolating critical production databases or domain controllers.",
-      underpinning_capabilities: ["CAP-RESP-01", "CAP-RESP-02", "CAP-RESP-04", "CAP-RESIL-05"],
+      underpinning_capabilities: ["CAP-RESP-01", "CAP-RESP-02", "CAP-RESP-04", "RESIL-05"],
       mitigated_by_invariants: ["INV-06", "INV-07", "INV-09"],
-      governing_adrs: ["ADR-0005"]
+      governing_adrs: ["ADR-0005"],
+      mitre_attack: ["T1489", "T1562.001"],
+      mitre_atlas: ["AML.T0053"],
+      mitre_d3fend: ["D3-SMS", "D3-BRC", "D3-BGO"]
+    },
+    {
+      id: "THR-T7",
+      name: "Machine Token & Ephemeral Identity Hijacking",
+      stride: "Elevation of Privilege / Spoofing",
+      description: "Adversary extracts ephemeral machine tokens, SPIFFE SVID certificates, or MCP API secrets to pivot across the agent mesh.",
+      underpinning_capabilities: ["CAP-AIGOV-06", "CAP-AIGOV-07"],
+      mitigated_by_invariants: ["INV-04", "INV-05"],
+      governing_adrs: ["ADR-0015", "ADR-0018"],
+      mitre_attack: ["T1078.004", "T1550.001"],
+      mitre_atlas: ["AML.T0047", "AML.T0054"],
+      mitre_d3fend: ["D3-LAM", "D3-MTC", "D3-IT"]
+    },
+    {
+      id: "THR-T8",
+      name: "Model & Knowledge Base Poisoning / Adversarial Evasion",
+      stride: "Tampering / Information Disclosure",
+      description: "Adversary injects corrupted case dossiers into RAG memory, poisons CTI threat graphs, or crafts adversarial telemetry to evade ML judges.",
+      underpinning_capabilities: ["CAP-DET-05", "CAP-DET-07", "CAP-AIGOV-01"],
+      mitigated_by_invariants: ["INV-02", "INV-10"],
+      governing_adrs: ["ADR-0010", "ADR-0013", "ADR-0014"],
+      mitre_attack: ["T1565.001", "T1562.001"],
+      mitre_atlas: ["AML.T0018", "AML.T0020", "AML.T0015", "AML.T0040"],
+      mitre_d3fend: ["D3-CH", "D3-BCA", "D3-MDA", "D3-DN"]
+    },
+    {
+      id: "THR-T9",
+      name: "Excessive Agency & Sensitive Data Exfiltration via Model Outputs",
+      stride: "Information Disclosure / Elevation of Privilege",
+      description: "Adversary induces recursive tool invocation loops or coaxes triage agents into exfiltrating sensitive forensic artifacts or credentials.",
+      underpinning_capabilities: ["CAP-INV-05", "CAP-AIGOV-02", "CAP-AIGOV-03", "CAP-AIGOV-05"],
+      mitigated_by_invariants: ["INV-05", "INV-06"],
+      governing_adrs: ["ADR-0004", "ADR-0012", "ADR-0017"],
+      mitre_attack: ["T1005", "T1048", "T1499"],
+      mitre_atlas: ["AML.T0053", "AML.T0024", "AML.T0043"],
+      mitre_d3fend: ["D3-EOP", "D3-SLB", "D3-IT"]
     }
   ],
   glossary: JSON.parse(readFileSync("config/glossary.json", "utf-8")).terms,

@@ -44,7 +44,7 @@ try {
 const threatModelFile = "docs/architecture/09-threat-model.md";
 const threatModelContent = readFileSync(threatModelFile, "utf-8");
 
-const requiredThreats = ["1", "2", "3", "4", "5", "6"];
+const requiredThreats = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
 for (const num of requiredThreats) {
   const hasThreat =
     threatModelContent.includes(`**THR-T${num}:`) ||

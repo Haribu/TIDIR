@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "architecture_version": "1.2.12",
-  "generated_at": "2026-09-18T20:38:23.286Z",
+  "architecture_version": "1.3.0",
+  "generated_at": "2026-09-18T20:49:38.876Z",
   "canonical_source": "https://tidir.harrymclaren.co.uk",
   "title": "TIDIR Reference Architecture Graph",
   "description": "Machine-readable graph representation of TIDIR invariants, capabilities, services, threats, and governance contracts.",
@@ -301,8 +301,8 @@
       "description": "Attacker unloads kernel sensors, disrupts transport forwarders, or exploits network partitions to evade detection.",
       "underpinning_capabilities": [
         "CAP-DATA-01",
-        "CAP-RESIL-01",
-        "CAP-RESIL-02"
+        "RESIL-01",
+        "RESIL-02"
       ],
       "mitigated_by_invariants": [
         "INV-01",
@@ -310,6 +310,18 @@
       ],
       "governing_adrs": [
         "ADR-0021"
+      ],
+      "mitre_attack": [
+        "T1562.001",
+        "T1070"
+      ],
+      "mitre_atlas": [
+        "AML.T0015"
+      ],
+      "mitre_d3fend": [
+        "D3-MTC",
+        "D3-HPA",
+        "D3-SFL"
       ]
     },
     {
@@ -327,6 +339,18 @@
       ],
       "governing_adrs": [
         "ADR-0002"
+      ],
+      "mitre_attack": [
+        "T1565.002",
+        "T1499"
+      ],
+      "mitre_atlas": [
+        "AML.T0020"
+      ],
+      "mitre_d3fend": [
+        "D3-SVE",
+        "D3-DLQ",
+        "D3-RPL"
       ]
     },
     {
@@ -336,7 +360,7 @@
       "description": "Compromised administrator attempts to purge or modify investigative query logs and case dossiers.",
       "underpinning_capabilities": [
         "CAP-INV-04",
-        "CAP-RESIL-05"
+        "RESIL-05"
       ],
       "mitigated_by_invariants": [
         "INV-02",
@@ -345,6 +369,19 @@
       "governing_adrs": [
         "ADR-0001",
         "ADR-0010"
+      ],
+      "mitre_attack": [
+        "T1070.003",
+        "T1485",
+        "T1565.001"
+      ],
+      "mitre_atlas": [
+        "AML.T0024"
+      ],
+      "mitre_d3fend": [
+        "D3-WORM",
+        "D3-CH",
+        "D3-TSA"
       ]
     },
     {
@@ -364,6 +401,20 @@
       "governing_adrs": [
         "ADR-0004",
         "ADR-0015"
+      ],
+      "mitre_attack": [
+        "T1059",
+        "T1548"
+      ],
+      "mitre_atlas": [
+        "AML.T0051",
+        "AML.T0057",
+        "AML.T0054"
+      ],
+      "mitre_d3fend": [
+        "D3-IT",
+        "D3-LAM",
+        "D3-MDA"
       ]
     },
     {
@@ -384,6 +435,18 @@
         "ADR-0003",
         "ADR-0008",
         "ADR-0009"
+      ],
+      "mitre_attack": [
+        "T1499.003",
+        "T1562"
+      ],
+      "mitre_atlas": [
+        "AML.T0040"
+      ],
+      "mitre_d3fend": [
+        "D3-ARA",
+        "D3-BCA",
+        "D3-SND"
       ]
     },
     {
@@ -395,7 +458,7 @@
         "CAP-RESP-01",
         "CAP-RESP-02",
         "CAP-RESP-04",
-        "CAP-RESIL-05"
+        "RESIL-05"
       ],
       "mitigated_by_invariants": [
         "INV-06",
@@ -404,6 +467,121 @@
       ],
       "governing_adrs": [
         "ADR-0005"
+      ],
+      "mitre_attack": [
+        "T1489",
+        "T1562.001"
+      ],
+      "mitre_atlas": [
+        "AML.T0053"
+      ],
+      "mitre_d3fend": [
+        "D3-SMS",
+        "D3-BRC",
+        "D3-BGO"
+      ]
+    },
+    {
+      "id": "THR-T7",
+      "name": "Machine Token & Ephemeral Identity Hijacking",
+      "stride": "Elevation of Privilege / Spoofing",
+      "description": "Adversary extracts ephemeral machine tokens, SPIFFE SVID certificates, or MCP API secrets to pivot across the agent mesh.",
+      "underpinning_capabilities": [
+        "CAP-AIGOV-06",
+        "CAP-AIGOV-07"
+      ],
+      "mitigated_by_invariants": [
+        "INV-04",
+        "INV-05"
+      ],
+      "governing_adrs": [
+        "ADR-0015",
+        "ADR-0018"
+      ],
+      "mitre_attack": [
+        "T1078.004",
+        "T1550.001"
+      ],
+      "mitre_atlas": [
+        "AML.T0047",
+        "AML.T0054"
+      ],
+      "mitre_d3fend": [
+        "D3-LAM",
+        "D3-MTC",
+        "D3-IT"
+      ]
+    },
+    {
+      "id": "THR-T8",
+      "name": "Model & Knowledge Base Poisoning / Adversarial Evasion",
+      "stride": "Tampering / Information Disclosure",
+      "description": "Adversary injects corrupted case dossiers into RAG memory, poisons CTI threat graphs, or crafts adversarial telemetry to evade ML judges.",
+      "underpinning_capabilities": [
+        "CAP-DET-05",
+        "CAP-DET-07",
+        "CAP-AIGOV-01"
+      ],
+      "mitigated_by_invariants": [
+        "INV-02",
+        "INV-10"
+      ],
+      "governing_adrs": [
+        "ADR-0010",
+        "ADR-0013",
+        "ADR-0014"
+      ],
+      "mitre_attack": [
+        "T1565.001",
+        "T1562.001"
+      ],
+      "mitre_atlas": [
+        "AML.T0018",
+        "AML.T0020",
+        "AML.T0015",
+        "AML.T0040"
+      ],
+      "mitre_d3fend": [
+        "D3-CH",
+        "D3-BCA",
+        "D3-MDA",
+        "D3-DN"
+      ]
+    },
+    {
+      "id": "THR-T9",
+      "name": "Excessive Agency & Sensitive Data Exfiltration via Model Outputs",
+      "stride": "Information Disclosure / Elevation of Privilege",
+      "description": "Adversary induces recursive tool invocation loops or coaxes triage agents into exfiltrating sensitive forensic artifacts or credentials.",
+      "underpinning_capabilities": [
+        "CAP-INV-05",
+        "CAP-AIGOV-02",
+        "CAP-AIGOV-03",
+        "CAP-AIGOV-05"
+      ],
+      "mitigated_by_invariants": [
+        "INV-05",
+        "INV-06"
+      ],
+      "governing_adrs": [
+        "ADR-0004",
+        "ADR-0012",
+        "ADR-0017"
+      ],
+      "mitre_attack": [
+        "T1005",
+        "T1048",
+        "T1499"
+      ],
+      "mitre_atlas": [
+        "AML.T0053",
+        "AML.T0024",
+        "AML.T0043"
+      ],
+      "mitre_d3fend": [
+        "D3-EOP",
+        "D3-SLB",
+        "D3-IT"
       ]
     }
   ],
