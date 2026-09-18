@@ -91,7 +91,7 @@ const model: ArchitecturalModel = {
       title: "Absence of current detection value does not justify destruction of forensic evidence",
       normative: true,
       maxim: "Absence of current detection value does not justify destruction of forensic evidence.",
-      property: "Ingested telemetry must survive and remain queryable in an open, vendor-neutral, schema-agnostic representation.",
+      property: "Raw forensic evidence is never discarded solely because no active detection rule consumes it; ingested telemetry must survive in an open, vendor-neutral representation.",
       reference_pattern: "Line-rate stream ingestion into open columnar lakehouses (e.g. Apache Iceberg / Parquet) on object storage."
     },
     {
@@ -100,7 +100,7 @@ const model: ArchitecturalModel = {
       title: "Every consequential machine assertion is traceable to underlying raw observations",
       normative: true,
       maxim: "Every consequential machine assertion is traceable to underlying raw observations.",
-      property: "No detection finding, hypothesis, or containment recommendation exists without citation to immutable observation identifiers.",
+      property: "Every consequential alert, finding, or incident assertion must be deterministically traceable to underlying raw observations.",
       reference_pattern: "source_observation_ids and derivation_chain lineage committed to the Incident Decision DAG."
     },
     {
@@ -109,16 +109,16 @@ const model: ArchitecturalModel = {
       title: "Common ancestry cannot be represented as independent corroboration",
       normative: true,
       maxim: "Common ancestry cannot be represented as independent corroboration.",
-      property: "Correlated derivations sharing common upstream ancestry cannot masquerade as independent evidence; co-derived signals must be discounted.",
+      property: "Correlated derivations sharing common raw telemetry ancestry cannot masquerade as independent evidence; co-derived signals must be discounted.",
       reference_pattern: "Dependency-aware probabilistic risk compounding (Bayesian graph compounding or factor graphs)."
     },
     {
       id: "INV-04",
-      name: "Authority Separation",
+      name: "No Self-Granting Authority (Authority Separation)",
       title: "Probabilistic components propose. Deterministic components authorize",
       normative: true,
       maxim: "Probabilistic components propose. Deterministic components authorize.",
-      property: "Probabilistic models (LLMs, neural embeddings, clustering heuristics) operate strictly in read-only analysis mode.",
+      property: "Probabilistic models propose; deterministic policies authorise. Reasoning agents operate strictly in read-only analysis mode.",
       reference_pattern: "Agent Trust Boundary isolating data plane from control plane; deterministic schema AST validation."
     },
     {
@@ -127,7 +127,7 @@ const model: ArchitecturalModel = {
       title: "Machine identities receive only task-scoped, short-lived authority",
       normative: true,
       maxim: "Machine identities receive only task-scoped, short-lived authority.",
-      property: "Machine authority must be short-lived, workload-bound, and strictly task-scoped without ambient API credentials.",
+      property: "Every machine actor receives only task-scoped, ephemeral authority with cryptographic workload identity (TTL $\\le 15\\text{m}$, max 15 minutes).",
       reference_pattern: "SPIFFE/SPIRE Verifiable Identity Documents (SVIDs) valid for <= 15 minutes."
     },
     {
@@ -136,16 +136,16 @@ const model: ArchitecturalModel = {
       title: "Autonomous execution is strictly constrained by time, cost, scope, and blast radius",
       normative: true,
       maxim: "Autonomous execution is strictly constrained by time, cost, scope, and blast radius.",
-      property: "Automated actions enforce hard ceilings: wall-clock execution timeouts, financial inference limits, max tool-hops, and asset criticality boundaries.",
+      property: "Autonomous execution has strict temporal, financial, computational, and blast-radius limits with critical asset immunity.",
       reference_pattern: "Pre-execution impact simulation with Tier 0 critical asset immunity."
     },
     {
       id: "INV-07",
-      name: "Reachability Monotonicity",
+      name: "Reachability Monotonicity (Fail-Secure Posture)",
       title: "Partial failure cannot silently restore attacker reachability (s_{n+1} <= s_n)",
       normative: true,
       maxim: "Partial failure cannot silently restore attacker reachability.",
-      property: "Attacker reachability tuple <R_net, R_id, E_surface, V_telemetry> must not expand upon component or API failure.",
+      property: "Component failure cannot silently increase attacker reachability ($s_{n+1} \\preceq s_n$, where $R(s_{\\text{post}}) \\subseteq R(s_{\\text{pre}})$: post-transition reachability is a subset of pre-transition reachability).",
       reference_pattern: "Monotonic state machines executing forward perimeter escalation rather than rolling back security barriers."
     },
     {
@@ -154,25 +154,25 @@ const model: ArchitecturalModel = {
       title: "Failure of an advanced capability reduces sophistication, never total visibility",
       normative: true,
       maxim: "Failure of an advanced capability reduces sophistication, never total visibility.",
-      property: "Outages in advanced streaming or generative AI gates automatically fall back to deterministic and local modes.",
+      property: "Loss of an advanced capability reduces sophistication, never total visibility (graceful degradation and Plan B fallbacks).",
       reference_pattern: "4-tier degradation: local edge spooling, scheduled batch lakehouse sweeps, and Zero-AI tabular timelines."
     },
     {
       id: "INV-09",
-      name: "Human Recoverability & Flight Decks",
+      name: "Human Recoverability & Break-Glass Flight Decks",
       title: "Autonomous control planes always preserve independently accessible manual flight decks",
       normative: true,
       maxim: "Autonomous control planes always preserve independently accessible manual flight decks.",
-      property: "Humans retain permanent out-of-band operational authority via cryptographic master kill-switches.",
+      property: "Autonomous control planes always preserve independently accessible manual flight decks and master break-glass emergency stops.",
       reference_pattern: "Cryptographic Master E-Stop and authenticated dual-authorization break-glass protocols."
     },
     {
       id: "INV-10",
-      name: "Reconstructability",
+      name: "Reconstructability (The Incident Decision DAG)",
       title: "Consequential decisions can be deterministically reconstructed from immutable records",
       normative: true,
       maxim: "Consequential decisions can be deterministically reconstructed from immutable records.",
-      property: "All triage findings, model inputs, and containment actions are committed to an immutable ledger.",
+      property: "Consequential decisions and containment actions can be deterministically reconstructed after the fact via the Incident Decision DAG.",
       reference_pattern: "Incident Decision DAG sealed with RFC 3161 cryptographic timestamps and WORM storage."
     },
     {
@@ -181,7 +181,7 @@ const model: ArchitecturalModel = {
       title: "Vendor neutrality is an architectural invariant, not merely a design intention",
       normative: true,
       maxim: "Vendor neutrality is an architectural invariant, not merely a design intention.",
-      property: "No consequential security telemetry, detection logic, case state, policy definition, or audit lineage SHALL be irrecoverably dependent upon a proprietary environment.",
+      property: "No consequential security telemetry, detection logic, case state, policy definition, or audit lineage SHALL be irrecoverably dependent upon a proprietary execution environment.",
       reference_pattern: "Open standards: OCSF schema, Parquet/Iceberg storage, Polyglot DaC, STIX/TAXII 2.1, and open JSON-LD DAGs."
     }
   ],
@@ -375,3 +375,28 @@ const model: ArchitecturalModel = {
 const outputPath = resolve("docs/public/architecture.json");
 writeFileSync(outputPath, JSON.stringify(model, null, 2), "utf-8");
 console.log(`✅ Successfully compiled ${outputPath} (${(Buffer.byteLength(JSON.stringify(model)) / 1024).toFixed(1)} KB)`);
+
+// Synchronize the 11 invariants into docs/public/llms.txt directly from model.invariants
+const llmsTxtPath = resolve("docs/public/llms.txt");
+let llmsTxt = readFileSync(llmsTxtPath, "utf-8");
+
+const invariantListLines = model.invariants.map((inv, idx) => {
+  return `${idx + 1}. **${inv.name}**: ${inv.property}`;
+}).join("\n");
+
+const constitutionHeader = "## The TIDIR Architectural Constitution (11 Invariants)";
+const nextHeader = "## Normative Architectural Contracts & Reference Standards";
+
+const startIdx = llmsTxt.indexOf(constitutionHeader);
+const endIdx = llmsTxt.indexOf(nextHeader);
+
+if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
+  llmsTxt =
+    llmsTxt.substring(0, startIdx) +
+    `${constitutionHeader}\n\n${invariantListLines}\n\n` +
+    llmsTxt.substring(endIdx);
+  writeFileSync(llmsTxtPath, llmsTxt, "utf-8");
+  console.log(`✅ Successfully synchronized 11 invariants to ${llmsTxtPath}`);
+} else {
+  console.warn("⚠️ Warning: Could not match invariant section in llms.txt to synchronize.");
+}

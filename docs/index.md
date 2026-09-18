@@ -109,7 +109,7 @@ Modern security operations are constrained by three structural failure modes:
 2. **The Base Rate Fallacy**: In an enterprise generating $10^9$ daily events, even detections with $99.9\%$ accuracy generate thousands of false alarms, causing catastrophic analyst burnout.
 3. **The Unchecked Automation Hazard**: SOAR playbooks that rely on fragile rollback scripts risk reopening compromised perimeters upon partial network failure, while unchecked LLM agents risk prompt injection attacks escalating into unauthorized infrastructure mutations.
 
-**TIDIR solves this by decoupling the architecture into four distinct planes**—enveloping an expansive, untrusted analytical ecosystem within an ultra-lean, deterministic defence control plane.
+**TIDIR addresses these constraints by decoupling the architecture into four distinct planes**—enveloping an expansive, untrusted analytical ecosystem within an ultra-lean, deterministic defence control plane.
 
 ---
 

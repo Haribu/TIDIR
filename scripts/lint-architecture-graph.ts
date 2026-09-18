@@ -18,13 +18,23 @@ if (!invariantMatches) {
   }
 }
 
-// Check llms.txt invariant count parity
+// Check llms.txt invariant count and identity parity with architecture.json
 try {
   const llmsTxtContent = readFileSync("docs/public/llms.txt", "utf-8");
   const constitutionSection = llmsTxtContent.split("## The TIDIR Architectural Constitution (11 Invariants)")[1]?.split("##")[0] || "";
-  const llmsInvariantMatches = constitutionSection.match(/^\d+\.\s+\*\*/gm);
+  const llmsInvariantMatches = constitutionSection.match(/^\d+\.\s+\*\*(.*?)\*\*/gm);
   if (!llmsInvariantMatches || llmsInvariantMatches.length !== 11) {
     errors.push(`❌ Expected 11 invariants in docs/public/llms.txt, but found ${llmsInvariantMatches?.length || 0}`);
+  } else {
+    const archJsonContent = JSON.parse(readFileSync("docs/public/architecture.json", "utf-8"));
+    if (archJsonContent.invariants) {
+      llmsInvariantMatches.forEach((line, idx) => {
+        const expectedPrefix = `${idx + 1}. **${archJsonContent.invariants[idx].name}**`;
+        if (!line.startsWith(expectedPrefix)) {
+          errors.push(`❌ Invariant #${idx + 1} mismatch in llms.txt: expected '${expectedPrefix}', got '${line}'`);
+        }
+      });
+    }
   }
 } catch (e: any) {
   errors.push(`❌ Failed to read docs/public/llms.txt: ${e.message}`);
