@@ -890,96 +890,96 @@ flowchart TB
 ## 2. Functional Capability Domains
 
 > [!NOTE]
-> **Reference Target SLOs vs. Invariant Conformance Criteria**:
-> Operational latencies, throughput figures, and comprehension metrics listed in the tables below are designated as **Reference Target Service Level Objectives (SLOs)** based on representative enterprise workloads (e.g. 100 TB reference lakehouse tiers). They serve as engineering targets for reference implementations rather than mandatory invariant pass/fail criteria.
+> **MITRE D3FEND Alignment & Reference Target SLOs**:
+> Each capability is formally mapped to its primary **MITRE D3FEND** defensive technique (e.g. `D3-SVE` Schema Validation, `D3-PSA` Process Spawn Analysis, `D3-SMS` State Machine Security, `D3-LAM` Least-Privilege Access Mechanism). Operational latencies, throughput figures, and comprehension metrics listed below are designated as **Reference Target Service Level Objectives (SLOs)** based on representative enterprise workloads (e.g. 100 TB reference lakehouse tiers).
 
 ### Domain 1: Cyber Threat Intelligence (CTI)
 
-| Capability ID | Name | Execution Mode | Description | Reference Target SLO |
-| :--- | :--- | :--- | :--- | :--- |
-| **CTI-01** | Feed Aggregation & Ingestion | `[Deterministic Engine]` | Ingest commercial, open-source, ISAC, and internal telemetry feeds via STIX/TAXII, REST, and streaming endpoints. | Ingestion latency < 5 min from publication |
-| **CTI-02** | Deduplication & Confidence Scoring | `[Deterministic Engine]` | Normalize disparate indicator types, resolve overlapping claims, and compute decay scores over time. | Automated decay curves calculated daily |
-| **CTI-03** | Adversary & TTP Mapping | `[AI/Agent-Augmented]` | Attribute techniques, tactics, and procedures to MITRE ATT&CK enterprise matrices using LLM advisory parsing. | 100% of validated alerts tagged with ATT&CK TTPs |
-| **CTI-04** | Streaming IOC Dissemination | `[Deterministic Engine]` | Publish active, high-confidence indicators to edge detection layers with minimal lookup overhead. | Indicator broadcast to detection tier < 30 sec |
-| **CTI-05** | Retroactive Sweep (Retro-Hunt) | `[Deterministic Engine]` | Automatically sweep historical lakehouse telemetry upon discovery of novel zero-day IOCs/TTPs. | 90-day sweep executed in < 15 min |
+| Capability ID | Name | Execution Mode | MITRE D3FEND | Description | Reference Target SLO |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **CTI-01** | Feed Aggregation & Ingestion | `[Deterministic Engine]` | `D3-TIE`<br>`D3-IDA` | Ingest commercial, open-source, ISAC, and internal telemetry feeds via STIX/TAXII, REST, and streaming endpoints. | Ingestion latency < 5 min from publication |
+| **CTI-02** | Deduplication & Confidence Scoring | `[Deterministic Engine]` | `D3-IDA`<br>`D3-FEH` | Normalize disparate indicator types, resolve overlapping claims, and compute decay scores over time. | Automated decay curves calculated daily |
+| **CTI-03** | Adversary & TTP Mapping | `[AI/Agent-Augmented]` | `D3-TTPM` | Attribute techniques, tactics, and procedures to MITRE ATT&CK enterprise matrices using LLM advisory parsing. | 100% of validated alerts tagged with ATT&CK TTPs |
+| **CTI-04** | Streaming IOC Dissemination | `[Deterministic Engine]` | `D3-NID` | Publish active, high-confidence indicators to edge detection layers with minimal lookup overhead. | Indicator broadcast to detection tier < 30 sec |
+| **CTI-05** | Retroactive Sweep (Retro-Hunt) | `[Deterministic Engine]` | `D3-HA`<br>`D3-IRA` | Automatically sweep historical lakehouse telemetry upon discovery of novel zero-day IOCs/TTPs. | 90-day sweep executed in < 15 min |
 
 ---
 
 ### Domain 2: Telemetry & Data Fabric
 
-| Capability ID | Name | Execution Mode | Description | Reference Target SLO |
-| :--- | :--- | :--- | :--- | :--- |
-| **DATA-01** | Multi-Source Ingestion | `[Deterministic Engine]` | Collect telemetry from host kernel instrumentation, cloud control planes, identity token sessions (OCSF 3002), and network sensors. | Durable acknowledgement; designed for loss-intolerant ingestion with local buffer failover |
-| **DATA-02** | Canonical Schema Normalization | `[Deterministic Engine]` | Coerce raw schema structures into OCSF (Open Cybersecurity Schema Framework) objects at line rate with unmapped data catch-all. | Normalization overhead < 5ms per event |
-| **DATA-03** | Distributed Stream Buffering | `[Deterministic Engine]` | Decouple collectors from consumers using partitioned, distributed append-only streaming logs. | Sustained ingestion capacity ≥ 500k EPS |
-| **DATA-04** | Hot Analytics Index | `[Deterministic Engine]` | Provide low-latency search, aggregations, and filtering over recent telemetry (15–30 days). | P95 search latency < 2 sec |
-| **DATA-05** | Historical Security Lakehouse | `[Deterministic Engine]` | Store long-term telemetry in open columnar formats with partition pruning and compaction on object storage. | 365+ day retention with sub-linear cost |
+| Capability ID | Name | Execution Mode | MITRE D3FEND | Description | Reference Target SLO |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **DATA-01** | Multi-Source Ingestion | `[Deterministic Engine]` | `D3-HPA`<br>`D3-MTC` | Collect telemetry from host kernel instrumentation, cloud control planes, identity token sessions (OCSF 3002), and network sensors. | Durable acknowledgement; designed for loss-intolerant ingestion with local buffer failover |
+| **DATA-02** | Canonical Schema Normalization | `[Deterministic Engine]` | `D3-SVE`<br>`D3-DLQ` | Coerce raw schema structures into OCSF (Open Cybersecurity Schema Framework) objects at line rate with unmapped data catch-all. | Normalization overhead < 5ms per event |
+| **DATA-03** | Distributed Stream Buffering | `[Deterministic Engine]` | `D3-AL`<br>`D3-DRB` | Decouple collectors from consumers using partitioned, distributed append-only streaming logs. | Sustained ingestion capacity ≥ 500k EPS |
+| **DATA-04** | Hot Analytics Index | `[Deterministic Engine]` | `D3-FA`<br>`D3-IRA` | Provide low-latency search, aggregations, and filtering over recent telemetry (15–30 days). | P95 search latency < 2 sec |
+| **DATA-05** | Historical Security Lakehouse | `[Deterministic Engine]` | `D3-WORM`<br>`D3-FEH` | Store long-term telemetry in open columnar formats with partition pruning and compaction on object storage. | 365+ day retention with sub-linear cost |
 
 ---
 
 ### Domain 3: Detection Engineering
 
-| Capability ID | Name | Execution Mode | Description | Reference Target SLO |
-| :--- | :--- | :--- | :--- | :--- |
-| **DET-01** | Real-Time Stream Detection | `[Deterministic Engine]` | Evaluate sliding-window stateful rules, in-flight token replay, and pattern matches against streaming events. | Time-to-detect (MTTD) < 5 seconds |
-| **DET-02** | Lakehouse Batch Analytics | `[Deterministic Engine]` | Execute complex, cross-table SQL analytics, behavioural baselines, and rare event heuristics. | Daily/hourly schedules (MTTD < 24h) |
-| **DET-03** | DaC & Continuous Purple Team | `[AI/Agent-Augmented]` | Manage rules as declarative code validated via continuous automated atomic adversary emulation and multi-model consensus. | 100% rule tests passing prior to production deploy |
-| **DET-04** | Alert Correlation & Aggregation | `[Deterministic Engine]` | Cluster related alerts across time, host, identity, and network into coherent incident candidates via entity graphs. | Reduction of alert volume to analyst by > 75% |
-| **DET-05** | Bayesian Multi-Signal Risk Lens | `[Deterministic Engine]` | Mitigate the operational consequences of the Base Rate Fallacy by compounding orthogonal evidence vectors (asset, identity, network) before elevation. | Dynamic composite score (0–100); false alarms < 5% |
-| **DET-06** | SecOps Error Budgets | `[Deterministic Engine]` | Enforce false-positive Noise Budgets per detection class with automated deployment freeze on budget burn. | Pre-deploy CI gate: peak FPR < 1%; Production SLO: rolling 30-day FPR <= 5% |
-| **DET-07** | Deception & Canary Surface Fabric | `[Deterministic Engine]` | Embed lightweight honeytokens, Kerberos SPN decoys, and file lures emitting OCSF canary events for zero-noise detection. | False Positive Rate = 0.00%; MTTD < 1 second |
+| Capability ID | Name | Execution Mode | MITRE D3FEND | Description | Reference Target SLO |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **DET-01** | Real-Time Stream Detection | `[Deterministic Engine]` | `D3-PSA`<br>`D3-NTA` | Evaluate sliding-window stateful rules, in-flight token replay, and pattern matches against streaming events. | Time-to-detect (MTTD) < 5 seconds |
+| **DET-02** | Lakehouse Batch Analytics | `[Deterministic Engine]` | `D3-UBA`<br>`D3-AAR` | Execute complex, cross-table SQL analytics, behavioural baselines, and rare event heuristics. | Daily/hourly schedules (MTTD < 24h) |
+| **DET-03** | DaC & Continuous Purple Team | `[AI/Agent-Augmented]` | `D3-ATTE`<br>`D3-DTC` | Manage rules as declarative code validated via continuous automated atomic adversary emulation and multi-model consensus. | 100% rule tests passing prior to production deploy |
+| **DET-04** | Alert Correlation & Aggregation | `[Deterministic Engine]` | `D3-EFA`<br>`D3-SND` | Cluster related alerts across time, host, identity, and network into coherent incident candidates via entity graphs. | Reduction of alert volume to analyst by > 75% |
+| **DET-05** | Bayesian Multi-Signal Risk Lens | `[Deterministic Engine]` | `D3-BCA`<br>`D3-EIC` | Mitigate the operational consequences of the Base Rate Fallacy by compounding orthogonal evidence vectors (asset, identity, network) before elevation. | Dynamic composite score (0–100); false alarms < 5% |
+| **DET-06** | SecOps Error Budgets | `[Deterministic Engine]` | `D3-ARA`<br>`D3-SRE` | Enforce false-positive Noise Budgets per detection class with automated deployment freeze on budget burn. | Pre-deploy CI gate: peak FPR < 1%; Production SLO: rolling 30-day FPR <= 5% |
+| **DET-07** | Deception & Canary Surface Fabric | `[Deterministic Engine]` | `D3-DN`<br>`D3-HT` | Embed lightweight honeytokens, Kerberos SPN decoys, and file lures emitting OCSF canary events for zero-noise detection. | False Positive Rate = 0.00%; MTTD < 1 second |
 
 ---
 
 ### Domain 4: Investigation & Case Management
 
-| Capability ID | Name | Execution Mode | Description | Reference Target SLO |
-| :--- | :--- | :--- | :--- | :--- |
-| **INV-01** | Entity Resolution | `[Deterministic Engine]` | Disambiguate and cross-reference identities (usernames, email, Kerberos tickets, hostnames, IP addresses). | Unified entity profile generation < 1 sec |
-| **INV-02** | Interactive Timeline Reconstruction | `[Deterministic Engine]` | Automatically construct a chronological sequence of actor actions, child processes, and auth events. | Multi-source timeline generation < 5 sec |
-| **INV-03** | Relational Graph Exploration | `[Deterministic Engine]` | Provide interactive graph visualization showing nodes (hosts, users, files, domains) and edges (relations). | Render graphs with > 10,000 nodes smoothly |
-| **INV-04** | Evidence Dossier & Auditability | `[Deterministic Engine]` | Maintain immutable records of investigative queries, pinned artifacts, analyst notes, and tags. | Tamper-evident audit logging of analyst actions (RFC 3161) |
-| **INV-05** | Agent Mesh & Multi-Model Consensus | `[AI/Agent-Augmented]` | Coordinate autonomous specialist subagents with adversarial Proposer/Challenger model arbitration behind the Agent Trust Boundary. | Time-to-investigate (MTTI) < 60s; > 80% consensus |
-| **INV-06** | Progressive Disclosure Workbench | `[Human-in-the-Loop]` | Surface structured briefings in a 3-tier hierarchy (Situation Report ➔ Evidence Table ➔ On-Demand Graph Lineage). | Analyst triage comprehension < 60 sec |
-| **INV-07** | Just-in-Time (JIT) Telemetry Elevation | `[AI/Agent-Augmented]` | Programmatically command edge sensors to elevate collection fidelity (eBPF, PCAP, memory) for bounded windows (TTL <= 30m). | Elevation command dispatch < 10 sec; 48h auto-eviction |
+| Capability ID | Name | Execution Mode | MITRE D3FEND | Description | Reference Target SLO |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **INV-01** | Entity Resolution | `[Deterministic Engine]` | `D3-IDA` | Disambiguate and cross-reference identities (usernames, email, Kerberos tickets, hostnames, IP addresses). | Unified entity profile generation < 1 sec |
+| **INV-02** | Interactive Timeline Reconstruction | `[Deterministic Engine]` | `D3-OTR`<br>`D3-CS` | Automatically construct a chronological sequence of actor actions, child processes, and auth events. | Multi-source timeline generation < 5 sec |
+| **INV-03** | Relational Graph Exploration | `[Deterministic Engine]` | `D3-GA` | Provide interactive graph visualization showing nodes (hosts, users, files, domains) and edges (relations). | Render graphs with > 10,000 nodes smoothly |
+| **INV-04** | Evidence Dossier & Auditability | `[Deterministic Engine]` | `D3-CH`<br>`D3-TSA` | Maintain immutable records of investigative queries, pinned artifacts, analyst notes, and tags. | Tamper-evident audit logging of analyst actions (RFC 3161) |
+| **INV-05** | Agent Mesh & Multi-Model Consensus | `[AI/Agent-Augmented]` | `D3-MDA`<br>`D3-IT` | Coordinate autonomous specialist subagents with adversarial Proposer/Challenger model arbitration behind the Agent Trust Boundary. | Time-to-investigate (MTTI) < 60s; > 80% consensus |
+| **INV-06** | Progressive Disclosure Workbench | `[Human-in-the-Loop]` | `D3-PDS`<br>`D3-SAR` | Surface structured briefings in a 3-tier hierarchy (Situation Report ➔ Evidence Table ➔ On-Demand Graph Lineage). | Analyst triage comprehension < 60 sec |
+| **INV-07** | Just-in-Time (JIT) Telemetry Elevation | `[AI/Agent-Augmented]` | `D3-SCA`<br>`D3-JIT` | Programmatically command edge sensors to elevate collection fidelity (eBPF, PCAP, memory) for bounded windows (TTL <= 30m). | Elevation command dispatch < 10 sec; 48h auto-eviction |
 
 ---
 
 ### Domain 5: Automated Response & Containment
 
-| Capability ID | Name | Execution Mode | Description | Reference Target SLO |
-| :--- | :--- | :--- | :--- | :--- |
-| **RESP-01** | Declarative Playbook Orchestration | `[Deterministic Engine]` | Execute multi-step containment, enrichment, and recovery workflows across third-party APIs via monotonic state machines. | Execution step dispatch < 500ms |
-| **RESP-02** | Asymmetric Containment & Forward Escalation | `[AI/Agent-Augmented]` | Fail-secure execution that never rolls back containment on partial failure; executes forward perimeter escalation on error. | Fail-secure posture 100%; MTTR < 60 min |
-| **RESP-03** | Autonomous Rapid Containment | `[Deterministic Engine]` | Execute instantaneous containment for low-blast-radius actions (e.g. host isolation in sandbox, token invalidation). | Time-to-contain (MTTC) < 15 seconds |
-| **RESP-04** | Dual-Auth & Break-Glass Protocols | `[Human-in-the-Loop]` | Enforce multi-signature consensus for high-impact actions with authenticated single-commander break-glass overrides. | MTTC < 5 min; break-glass audit broadcast < 5 sec |
-| **RESP-05** | Closed-Loop & Green Team Triggers | `[Deterministic Engine]` | Extract confirmed indicators for CTI, calibrate DaC rules, and synthesize IaC hardening pull requests for Green Teams to improve defense-in-depth. | Closed-loop & hardening dispatch automated on case closure |
+| Capability ID | Name | Execution Mode | MITRE D3FEND | Description | Reference Target SLO |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **RESP-01** | Declarative Playbook Orchestration | `[Deterministic Engine]` | `D3-DPO`<br>`D3-TBO` | Execute multi-step containment, enrichment, and recovery workflows across third-party APIs via monotonic state machines. | Execution step dispatch < 500ms |
+| **RESP-02** | Asymmetric Containment & Forward Escalation | `[AI/Agent-Augmented]` | `D3-SMS`<br>`D3-FE` | Fail-secure execution that never rolls back containment on partial failure; executes forward perimeter escalation on error. | Fail-secure posture 100%; MTTR < 60 min |
+| **RESP-03** | Autonomous Rapid Containment | `[Deterministic Engine]` | `D3-HI`<br>`D3-CR`<br>`D3-BRC` | Execute instantaneous containment for low-blast-radius actions (e.g. host isolation in sandbox, token invalidation). | Time-to-contain (MTTC) < 15 seconds |
+| **RESP-04** | Dual-Auth & Break-Glass Protocols | `[Human-in-the-Loop]` | `D3-BGO`<br>`D3-MAC` | Enforce multi-signature consensus for high-impact actions with authenticated single-commander break-glass overrides. | MTTC < 5 min; break-glass audit broadcast < 5 sec |
+| **RESP-05** | Closed-Loop & Green Team Triggers | `[Deterministic Engine]` | `D3-CIR`<br>`D3-IaC` | Extract confirmed indicators for CTI, calibrate DaC rules, and synthesize IaC hardening pull requests for Green Teams to improve defense-in-depth. | Closed-loop & hardening dispatch automated on case closure |
 
 ---
 
 ### Cross-Cutting Domain: AI Governance & Verification (AIGOV)
 
-| Capability ID | Name | Execution Mode | Description | Reference Target SLO |
-| :--- | :--- | :--- | :--- | :--- |
-| **AIGOV-01** | Continuous Evals-as-Code | `[AI/Agent-Augmented]` | Automated CI/CD benchmarking of triage prompts and agent workflows against versioned golden incident datasets. | $\ge 95\%$ grounding fidelity; 100% schema tool validity |
-| **AIGOV-02** | Dual-Plane Data/Control Isolation | `[Deterministic Engine]` | Enforces strict boundaries preventing unformatted raw telemetry strings from acting as agent control instructions. | Zero instruction execution from untrusted log payloads |
-| **AIGOV-03** | Cost & Latency Performance Budgets | `[Deterministic Engine]` | Deterministic per-invocation token ceilings, query timeouts, and rate budgeting across model runtimes. | P95 agent triage latency < 5 sec; strict budget compliance |
-| **AIGOV-04** | Agent Fleet Lifecycle & Preemption | `[Deterministic Engine]` | Centralized supervisor tracking agent liveness, heartbeats, zombie task reaping, and priority preemption under Sev-1 crises. | Worker zombie reap < 15 sec; preemption cascade < 1 sec |
-| **AIGOV-05** | MCP Tool Observability & Loop Breakers | `[Deterministic Engine]` | OTel telemetry across MCP servers, parameter schema drift audits, and semantic query oscillation circuit breakers. | Max 8 recursive tool hops; loop termination < 100ms |
-| **AIGOV-06** | Ephemeral Agent Attestation & SVIDs | `[Deterministic Engine]` | Cryptographic SPIFFE/SPIRE attestation issuing task-scoped, short-lived X.509 SVIDs (TTL <= 15m) for every agent worker. | Dynamic SVID minting < 100ms; auto-revocation on task closure |
-| **AIGOV-07** | Non-Human Identity (NHI) Profiling | `[Deterministic Engine]` | Line-rate behavioral profiling and anomaly detection for service accounts, API keys, and machine tokens across clouds. | 14-day baseline drift alert; token replay detection < 5 sec |
+| Capability ID | Name | Execution Mode | MITRE D3FEND | Description | Reference Target SLO |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **AIGOV-01** | Continuous Evals-as-Code | `[AI/Agent-Augmented]` | `D3-EAC`<br>`D3-GJB` | Automated CI/CD benchmarking of triage prompts and agent workflows against versioned golden incident datasets. | $\ge 95\%$ grounding fidelity; 100% schema tool validity |
+| **AIGOV-02** | Dual-Plane Data/Control Isolation | `[Deterministic Engine]` | `D3-IT` | Enforces strict boundaries preventing unformatted raw telemetry strings from acting as agent control instructions. | Zero instruction execution from untrusted log payloads |
+| **AIGOV-03** | Cost & Latency Performance Budgets | `[Deterministic Engine]` | `D3-RCB` | Deterministic per-invocation token ceilings, query timeouts, and rate budgeting across model runtimes. | P95 agent triage latency < 5 sec; strict budget compliance |
+| **AIGOV-04** | Agent Fleet Lifecycle & Preemption | `[Deterministic Engine]` | `D3-FLM` | Centralized supervisor tracking agent liveness, heartbeats, zombie task reaping, and priority preemption under Sev-1 crises. | Worker zombie reap < 15 sec; preemption cascade < 1 sec |
+| **AIGOV-05** | MCP Tool Observability & Loop Breakers | `[Deterministic Engine]` | `D3-SLB`<br>`D3-TO` | OTel telemetry across MCP servers, parameter schema drift audits, and semantic query oscillation circuit breakers. | Max 8 recursive tool hops; loop termination < 100ms |
+| **AIGOV-06** | Ephemeral Agent Attestation & SVIDs | `[Deterministic Engine]` | `D3-LAM`<br>`D3-SVID` | Cryptographic SPIFFE/SPIRE attestation issuing task-scoped, short-lived X.509 SVIDs (TTL <= 15m) for every agent worker. | Dynamic SVID minting < 100ms; auto-revocation on task closure |
+| **AIGOV-07** | Non-Human Identity (NHI) Profiling | `[Deterministic Engine]` | `D3-NHI`<br>`D3-TRD` | Line-rate behavioral profiling and anomaly detection for service accounts, API keys, and machine tokens across clouds. | 14-day baseline drift alert; token replay detection < 5 sec |
 
 ---
 
 ### Cross-Cutting Domain: Operational Continuity & Resilience (RESIL)
 
-| Capability ID | Name | Execution Mode | Description | Reference Target SLO |
-| :--- | :--- | :--- | :--- | :--- |
-| **RESIL-01** | Decoupled Edge Spooling | `[Deterministic Engine]` | Autonomous local disk ring buffering on forwarders during streaming bus network partitions. | 24–48h lossless buffer; zero forensic drop |
-| **RESIL-02** | Direct-to-Object Ingestion Bypass | `[Deterministic Engine]` | Dynamic failover allowing forwarders to write compressed Parquet micro-batches directly to object lakehouse. | Cutover latency < 60s from bus partition trip |
-| **RESIL-03** | Stream-to-Batch Detection Failover | `[Deterministic Engine]` | Automated transfer of detection rules to scheduled 5-minute columnar SQL batch sweeps on graph engine failure. | Fallback activation < 2 min; 100% rule coverage preserved |
-| **RESIL-04** | Hierarchical Model Fallback & Rule-Based Non-AI Mode | `[Deterministic Engine]` | Deterministic shift from cloud LLMs to local SLMs, with fallback to structured tabular/graph rule-based workbenches. | Circuit breaker trip < 3 errors; zero pipeline block |
-| **RESIL-05** | Master Autonomous E-Stop & OOB Containment | `[Human-in-the-Loop]` | Cryptographic emergency kill-switch dropping playbooks to advisory mode, backed by air-gapped signed CLI runbooks. | E-Stop broadcast < 500ms; complete execution freeze |
+| Capability ID | Name | Execution Mode | MITRE D3FEND | Description | Reference Target SLO |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **RESIL-01** | Decoupled Edge Spooling | `[Deterministic Engine]` | `D3-DRB`<br>`D3-LSP` | Autonomous local disk ring buffering on forwarders during streaming bus network partitions. | 24–48h lossless buffer; zero forensic drop |
+| **RESIL-02** | Direct-to-Object Ingestion Bypass | `[Deterministic Engine]` | `D3-OBP` | Dynamic failover allowing forwarders to write compressed Parquet micro-batches directly to object lakehouse. | Cutover latency < 60s from bus partition trip |
+| **RESIL-03** | Stream-to-Batch Detection Failover | `[Deterministic Engine]` | `D3-GDF` | Automated transfer of detection rules to scheduled 5-minute columnar SQL batch sweeps on graph engine failure. | Fallback activation < 2 min; 100% rule coverage preserved |
+| **RESIL-04** | Hierarchical Model Fallback & Rule-Based Non-AI Mode | `[Deterministic Engine]` | `D3-HMF` | Deterministic shift from cloud LLMs to local SLMs, with fallback to structured tabular/graph rule-based workbenches. | Circuit breaker trip < 3 errors; zero pipeline block |
+| **RESIL-05** | Master Autonomous E-Stop & OOB Containment | `[Human-in-the-Loop]` | `D3-MES`<br>`D3-OOB` | Cryptographic emergency kill-switch dropping playbooks to advisory mode, backed by air-gapped signed CLI runbooks. | E-Stop broadcast < 500ms; complete execution freeze |
 
 ================================================================================
 SECTION: CROSS-CUTTING ENGINEERING DISCIPLINES

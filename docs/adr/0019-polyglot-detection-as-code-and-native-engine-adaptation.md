@@ -92,6 +92,8 @@ threat_intel:
   mitre_attack:
     tactics: ["TA0005"]
     techniques: ["T1055.012", "T1036.005"]
+  mitre_d3fend:
+    countermeasures: ["D3-PSA", "D3-EOP"]
   attack_flow_ref: "af-2026-proc-hollow-v1"
 
 data_requirements:

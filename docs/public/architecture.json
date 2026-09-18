@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "architecture_version": "1.3.0",
-  "generated_at": "2026-09-18T20:49:38.876Z",
+  "architecture_version": "1.4.0",
+  "generated_at": "2026-09-18T20:54:58.096Z",
   "canonical_source": "https://tidir.harrymclaren.co.uk",
   "title": "TIDIR Reference Architecture Graph",
   "description": "Machine-readable graph representation of TIDIR invariants, capabilities, services, threats, and governance contracts.",
@@ -130,6 +130,10 @@
       "invariants_enforced": [
         "INV-01",
         "INV-11"
+      ],
+      "mitre_d3fend": [
+        "D3-TIE",
+        "D3-IDA"
       ]
     },
     {
@@ -142,6 +146,10 @@
       "invariants_enforced": [
         "INV-02",
         "INV-03"
+      ],
+      "mitre_d3fend": [
+        "D3-IDA",
+        "D3-FEH"
       ]
     },
     {
@@ -154,6 +162,10 @@
       "invariants_enforced": [
         "INV-01",
         "INV-10"
+      ],
+      "mitre_d3fend": [
+        "D3-HA",
+        "D3-IRA"
       ]
     },
     {
@@ -166,6 +178,10 @@
       "invariants_enforced": [
         "INV-01",
         "INV-08"
+      ],
+      "mitre_d3fend": [
+        "D3-HPA",
+        "D3-MTC"
       ]
     },
     {
@@ -178,6 +194,10 @@
       "invariants_enforced": [
         "INV-01",
         "INV-11"
+      ],
+      "mitre_d3fend": [
+        "D3-SVE",
+        "D3-DLQ"
       ]
     },
     {
@@ -190,6 +210,10 @@
       "invariants_enforced": [
         "INV-01",
         "INV-11"
+      ],
+      "mitre_d3fend": [
+        "D3-WORM",
+        "D3-FEH"
       ]
     },
     {
@@ -202,6 +226,10 @@
       "invariants_enforced": [
         "INV-04",
         "INV-08"
+      ],
+      "mitre_d3fend": [
+        "D3-PSA",
+        "D3-NTA"
       ]
     },
     {
@@ -214,6 +242,26 @@
       "invariants_enforced": [
         "INV-03",
         "INV-04"
+      ],
+      "mitre_d3fend": [
+        "D3-BCA",
+        "D3-EIC"
+      ]
+    },
+    {
+      "id": "CAP-DET-07",
+      "name": "Deception & Canary Surface Fabric",
+      "domain": "Detection Engineering",
+      "execution_mode": "Deterministic Engine",
+      "description": "Embed lightweight honeytokens, Kerberos SPN decoys, and file lures emitting OCSF canary events for zero-noise detection.",
+      "target_slo": "False Positive Rate = 0.00%; MTTD < 1 second",
+      "invariants_enforced": [
+        "INV-03",
+        "INV-04"
+      ],
+      "mitre_d3fend": [
+        "D3-DN",
+        "D3-HT"
       ]
     },
     {
@@ -227,6 +275,57 @@
         "INV-02",
         "INV-04",
         "INV-05"
+      ],
+      "mitre_d3fend": [
+        "D3-MDA",
+        "D3-IT"
+      ]
+    },
+    {
+      "id": "CAP-INV-07",
+      "name": "Just-in-Time (JIT) Telemetry Elevation",
+      "domain": "Investigation & Cases",
+      "execution_mode": "AI/Agent-Augmented",
+      "description": "Programmatically command edge sensors to elevate collection fidelity (eBPF, PCAP, memory) for bounded windows (TTL <= 30m).",
+      "target_slo": "Elevation command dispatch < 10 sec; 48h auto-eviction",
+      "invariants_enforced": [
+        "INV-01",
+        "INV-05"
+      ],
+      "mitre_d3fend": [
+        "D3-SCA",
+        "D3-JIT"
+      ]
+    },
+    {
+      "id": "CAP-AIGOV-02",
+      "name": "Dual-Plane Data/Control Isolation",
+      "domain": "AI Governance & Verification",
+      "execution_mode": "Deterministic Engine",
+      "description": "Enforces strict boundaries preventing unformatted raw telemetry strings from acting as agent control instructions.",
+      "target_slo": "Zero instruction execution from untrusted log payloads",
+      "invariants_enforced": [
+        "INV-04",
+        "INV-05"
+      ],
+      "mitre_d3fend": [
+        "D3-IT"
+      ]
+    },
+    {
+      "id": "CAP-AIGOV-06",
+      "name": "Ephemeral Agent Attestation & SVIDs",
+      "domain": "AI Governance & Verification",
+      "execution_mode": "Deterministic Engine",
+      "description": "Cryptographic SPIFFE/SPIRE attestation issuing task-scoped, short-lived X.509 SVIDs (TTL <= 15m) for every agent worker.",
+      "target_slo": "Dynamic SVID minting < 100ms; auto-revocation on task closure",
+      "invariants_enforced": [
+        "INV-04",
+        "INV-05"
+      ],
+      "mitre_d3fend": [
+        "D3-LAM",
+        "D3-SVID"
       ]
     },
     {
@@ -240,6 +339,10 @@
         "INV-06",
         "INV-07",
         "INV-09"
+      ],
+      "mitre_d3fend": [
+        "D3-SMS",
+        "D3-FE"
       ]
     }
   ],

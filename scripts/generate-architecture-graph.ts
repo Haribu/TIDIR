@@ -193,7 +193,8 @@ const model: ArchitecturalModel = {
       execution_mode: "Deterministic Engine",
       description: "Ingest commercial, open-source, ISAC, and internal telemetry feeds via STIX/TAXII and streaming endpoints.",
       target_slo: "Ingestion latency < 5 min from publication",
-      invariants_enforced: ["INV-01", "INV-11"]
+      invariants_enforced: ["INV-01", "INV-11"],
+      mitre_d3fend: ["D3-TIE", "D3-IDA"]
     },
     {
       id: "CAP-CTI-02",
@@ -202,7 +203,8 @@ const model: ArchitecturalModel = {
       execution_mode: "Deterministic Engine",
       description: "Normalize disparate indicator types, resolve overlapping claims, and compute half-life decay curves.",
       target_slo: "Automated decay curves calculated daily",
-      invariants_enforced: ["INV-02", "INV-03"]
+      invariants_enforced: ["INV-02", "INV-03"],
+      mitre_d3fend: ["D3-IDA", "D3-FEH"]
     },
     {
       id: "CAP-CTI-05",
@@ -211,7 +213,8 @@ const model: ArchitecturalModel = {
       execution_mode: "Deterministic Engine",
       description: "Automatically sweep historical lakehouse telemetry upon discovery of novel zero-day IOCs/TTPs.",
       target_slo: "90-day sweep executed in < 15 min",
-      invariants_enforced: ["INV-01", "INV-10"]
+      invariants_enforced: ["INV-01", "INV-10"],
+      mitre_d3fend: ["D3-HA", "D3-IRA"]
     },
     {
       id: "CAP-DATA-01",
@@ -220,7 +223,8 @@ const model: ArchitecturalModel = {
       execution_mode: "Deterministic Engine",
       description: "Collect telemetry from host kernel instrumentation, cloud control planes, identity tokens, and network sensors.",
       target_slo: "Durable acknowledgement; designed for loss-intolerant ingestion with local buffer failover",
-      invariants_enforced: ["INV-01", "INV-08"]
+      invariants_enforced: ["INV-01", "INV-08"],
+      mitre_d3fend: ["D3-HPA", "D3-MTC"]
     },
     {
       id: "CAP-DATA-02",
@@ -229,7 +233,8 @@ const model: ArchitecturalModel = {
       execution_mode: "Deterministic Engine",
       description: "Coerce raw schema structures into OCSF objects at line rate with structured unmapped_data catch-all.",
       target_slo: "Normalization overhead < 5ms per event",
-      invariants_enforced: ["INV-01", "INV-11"]
+      invariants_enforced: ["INV-01", "INV-11"],
+      mitre_d3fend: ["D3-SVE", "D3-DLQ"]
     },
     {
       id: "CAP-DATA-05",
@@ -238,7 +243,8 @@ const model: ArchitecturalModel = {
       execution_mode: "Deterministic Engine",
       description: "Store long-term telemetry in open columnar formats with partition pruning on object storage.",
       target_slo: "365+ day retention with sub-linear cost",
-      invariants_enforced: ["INV-01", "INV-11"]
+      invariants_enforced: ["INV-01", "INV-11"],
+      mitre_d3fend: ["D3-WORM", "D3-FEH"]
     },
     {
       id: "CAP-DET-01",
@@ -247,7 +253,8 @@ const model: ArchitecturalModel = {
       execution_mode: "Deterministic Engine",
       description: "Evaluate sliding-window stateful rules and pattern matches against line-rate event streams.",
       target_slo: "Time-to-detect (MTTD) < 5 seconds",
-      invariants_enforced: ["INV-04", "INV-08"]
+      invariants_enforced: ["INV-04", "INV-08"],
+      mitre_d3fend: ["D3-PSA", "D3-NTA"]
     },
     {
       id: "CAP-DET-05",
@@ -256,7 +263,18 @@ const model: ArchitecturalModel = {
       execution_mode: "Deterministic Engine",
       description: "Compound orthogonal evidence vectors (asset, identity, network) while discounting co-derived signals.",
       target_slo: "Dynamic composite score (0-100); false alarms < 5%",
-      invariants_enforced: ["INV-03", "INV-04"]
+      invariants_enforced: ["INV-03", "INV-04"],
+      mitre_d3fend: ["D3-BCA", "D3-EIC"]
+    },
+    {
+      id: "CAP-DET-07",
+      name: "Deception & Canary Surface Fabric",
+      domain: "Detection Engineering",
+      execution_mode: "Deterministic Engine",
+      description: "Embed lightweight honeytokens, Kerberos SPN decoys, and file lures emitting OCSF canary events for zero-noise detection.",
+      target_slo: "False Positive Rate = 0.00%; MTTD < 1 second",
+      invariants_enforced: ["INV-03", "INV-04"],
+      mitre_d3fend: ["D3-DN", "D3-HT"]
     },
     {
       id: "CAP-INV-05",
@@ -265,7 +283,38 @@ const model: ArchitecturalModel = {
       execution_mode: "AI/Agent-Augmented",
       description: "Coordinate specialist subagents with adversarial Proposer/Challenger critique behind the Agent Trust Boundary.",
       target_slo: "MTTI < 60s; > 80% consensus",
-      invariants_enforced: ["INV-02", "INV-04", "INV-05"]
+      invariants_enforced: ["INV-02", "INV-04", "INV-05"],
+      mitre_d3fend: ["D3-MDA", "D3-IT"]
+    },
+    {
+      id: "CAP-INV-07",
+      name: "Just-in-Time (JIT) Telemetry Elevation",
+      domain: "Investigation & Cases",
+      execution_mode: "AI/Agent-Augmented",
+      description: "Programmatically command edge sensors to elevate collection fidelity (eBPF, PCAP, memory) for bounded windows (TTL <= 30m).",
+      target_slo: "Elevation command dispatch < 10 sec; 48h auto-eviction",
+      invariants_enforced: ["INV-01", "INV-05"],
+      mitre_d3fend: ["D3-SCA", "D3-JIT"]
+    },
+    {
+      id: "CAP-AIGOV-02",
+      name: "Dual-Plane Data/Control Isolation",
+      domain: "AI Governance & Verification",
+      execution_mode: "Deterministic Engine",
+      description: "Enforces strict boundaries preventing unformatted raw telemetry strings from acting as agent control instructions.",
+      target_slo: "Zero instruction execution from untrusted log payloads",
+      invariants_enforced: ["INV-04", "INV-05"],
+      mitre_d3fend: ["D3-IT"]
+    },
+    {
+      id: "CAP-AIGOV-06",
+      name: "Ephemeral Agent Attestation & SVIDs",
+      domain: "AI Governance & Verification",
+      execution_mode: "Deterministic Engine",
+      description: "Cryptographic SPIFFE/SPIRE attestation issuing task-scoped, short-lived X.509 SVIDs (TTL <= 15m) for every agent worker.",
+      target_slo: "Dynamic SVID minting < 100ms; auto-revocation on task closure",
+      invariants_enforced: ["INV-04", "INV-05"],
+      mitre_d3fend: ["D3-LAM", "D3-SVID"]
     },
     {
       id: "CAP-RESP-02",
@@ -274,7 +323,8 @@ const model: ArchitecturalModel = {
       execution_mode: "Deterministic Engine",
       description: "Fail-secure execution preventing security regression on error; escalates perimeter forward.",
       target_slo: "100% fail-secure posture; MTTR < 60 min",
-      invariants_enforced: ["INV-06", "INV-07", "INV-09"]
+      invariants_enforced: ["INV-06", "INV-07", "INV-09"],
+      mitre_d3fend: ["D3-SMS", "D3-FE"]
     }
   ],
   services: [

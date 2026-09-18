@@ -189,7 +189,7 @@ Every detection rule is maintained as a structured code artifact decoupling a **
 
 1. **Vendor-Neutral Metadata Envelope**:
    - **Identification & Lifecycle**: UUID, semantic rule version, author, and maturity status (`experimental`, `shadow`, `production`, `deprecated`).
-   - **Threat Framework Mapping**: Mapped MITRE ATT&CK Tactics, Techniques, Sub-techniques, and referenced Attack Flow DAGs.
+   - **Threat Framework & Defensive Countermeasure Mapping**: Mapped MITRE ATT&CK Tactics/Techniques, MITRE D3FEND defensive countermeasures (e.g. `D3-PSA`, `D3-EOP`), and referenced Attack Flow DAGs.
    - **Data Requirements**: Target OCSF schema classes (e.g. Class 1007 Process Activity) and required attributes.
    - **Operational Guidance & SRE Budgets**: Severity, false-positive baselines, quiet windows, triage playbooks, and maximum SRE False Positive Rate (FPR $\le 0.05$).
 2. **Detection Logic Execution Blocks**:
@@ -213,6 +213,8 @@ threat_intel:
   mitre_attack:
     tactics: ["TA0005"]
     techniques: ["T1055.012", "T1036.005"]
+  mitre_d3fend:
+    countermeasures: ["D3-PSA", "D3-EOP"]
   attack_flow_ref: "af-2026-proc-hollow-v1"
 
 data_requirements:
