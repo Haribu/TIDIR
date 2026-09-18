@@ -157,6 +157,31 @@ bun ./scripts/lint-terminology.ts # In sandboxes; or `bun run lint:terminology`
     - Declarative schemas (OCSF, STIX 2.1, TAXII), workload identities (SPIFFE SVIDs), state-machine contracts, and the 11 Invariants are **MUST**.
     - Specific concrete technologies (e.g. Kafka, Redpanda, ClickHouse, Apache Iceberg, Falco, DuckDB) are designated as **REFERENCE IMPLEMENTATION** or **EXAMPLE** to maintain pure vendor-neutrality.
 
+11. **Editorial & Information-Quality Doctrine ("Explain First, Name Second")**:
+    - **Progression Sequence**: Whenever introducing a complex or TIDIR-specific concept, follow this sequence:
+      1. *Plain-English statement*: State the intuition without jargon.
+      2. *Concrete engineering example*: Show the operational problem or failure mode.
+      3. *Technical explanation*: Describe the underlying mechanism.
+      4. *Formal TIDIR terminology*: Provide the architectural term.
+      5. *Formalism / Equation*: Provide mathematics only where it adds genuine precision.
+    - **Prefer Concrete Verbs to Abstract Nouns**: Write active sentences showing what the system does (e.g., *"The system combines evidence while tracking dependencies between observations"* instead of *"The system performs dependency-aware probabilistic evidence correlation"*).
+    - **Decompress Noun & Hyphen Stacks**: Avoid chains of 3+ hyphenated modifiers or abstract noun clusters (e.g., break *"blast-radius-constrained autonomous containment orchestration"* into clean grammatical English).
+    - **One Important Idea Per Sentence**: Break dense multi-clause statements into smaller, crisp units—especially across invariants, state transitions, and safety bounds.
+    - **Answer "Why?"**: Structure explanations as: *Problem $\to$ Failure Mode $\to$ Requirement $\to$ TIDIR Response*.
+    - **The "So What?" Test**: Every abstraction must describe its actual operational consequence.
+
+12. **Concept Classification & Burden of Proof (Established, Adapted, TIDIR-Specific)**:
+    - **Established**: Standard computer science / security concepts adopted directly (e.g., least privilege, capability security, circuit breakers, dead-letter queues, append-only logs, state machines, workload identity). Retain established names; do not invent neologisms for known patterns.
+    - **Adapted**: Established engineering concepts applied to security operations (e.g., compensating transactions adapted to containment reachability, SRE alert error budgets applied to detection fidelity).
+    - **TIDIR-Specific**: Novel syntheses or formulations intentionally defined by TIDIR (e.g., Confidence–Authority Separation, Security-State Monotonicity, Evidential Independence).
+    - **Burden of Proof**: Every novel term must prove that existing engineering language is insufficient before being retained.
+    - **What TIDIR is NOT Claiming**: TIDIR does not claim to have invented data lakes, probabilistic inference, graph analysis, workload identity, Detection-as-Code, circuit breakers, or least privilege. Its contribution is the specific architectural synthesis and governing safety invariants under which these techniques interact.
+
+13. **Accessible Mathematics & DOM Machine Readability**:
+    - Every mathematical formula (e.g., $\mathcal{R}(s_{\text{post}}) \subseteq \mathcal{R}(s_{\text{pre}})$, $\mathcal{S}_{n+1} \preceq \mathcal{S}_n$) must be accompanied by an immediate natural-language textual explanation in markdown.
+    - Mathematical notation serves expert verification; plain English ensures accessibility across search indexing, screen readers, and LLM parsers.
+    - Never allow formulas to extract as ungrounded symbols without semantic context.
+
 ---
 
 ## ⚠️ Operational Gotchas & Agent Guidelines (Learned Lessons)

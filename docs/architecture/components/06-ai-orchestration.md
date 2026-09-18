@@ -241,7 +241,7 @@ flowchart LR
 1. **Tier 0 Local SLM Judges (Line-Rate Guardrails)**:
    - Dedicated small language models (SLMs) such as Microsoft Phi-4 (14B), Google Gemma 3 (4B/12B), or Qwen 2.5 (3B/7B) run on local inference engines (vLLM/Ollama) alongside the data pipeline.
    - **Responsibility**: Sub-100ms structural auditing. Verifies schema compliance, extracts entity references, scores grounding citation presence, and detects blatant instruction leakage before any dossier reaches the analyst workbench.
-   - **Economic & Operational Value**: $0.00 incremental cloud API cost; absolute data sovereignty; operates under total WAN severance.
+   - **Economic & Operational Value**: $0.00 incremental cloud API cost; on-premises data boundary enforcement; operates under total WAN severance.
 
 2. **Tier 2 Frontier Model Escalation (Advisory Multi-Model Critique)**:
    - When the local SLM judge scores confidence between 70% and 85% (borderline ambiguity) or when triage recommendations involve Tier 1/2 containment, the evaluation escalates to a cloud frontier model for independent critique and adversarial counter-argumentation (Proposer vs. Challenger).

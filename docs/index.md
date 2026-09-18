@@ -104,32 +104,49 @@ flowchart TB
 
 ## 2. Why TIDIR Exists: The Asymmetric Deficit in SecOps
 
-Modern security operations are constrained by three structural failure modes:
-1. **The Ingestion Dilemma**: Traditional SIEMs force teams to discard security telemetry at the collection boundary due to volume-based licensing penalties, blinding organizations during zero-day retrospectives.
-2. **The Base Rate Fallacy**: In an enterprise generating $10^9$ daily events, even detections with $99.9\%$ accuracy generate thousands of false alarms, causing catastrophic analyst burnout.
-3. **The Unchecked Automation Hazard**: SOAR playbooks that rely on fragile rollback scripts risk reopening compromised perimeters upon partial network failure, while unchecked LLM agents risk prompt injection attacks escalating into unauthorized infrastructure mutations.
+Modern security operations struggle with three basic problems:
 
-**TIDIR addresses these constraints by decoupling the architecture into four distinct planes**—enveloping an expansive, untrusted analytical ecosystem within an ultra-lean, deterministic defence control plane.
+1. **The Ingestion Dilemma (We discard what we might need tomorrow)**: Traditional security monitoring tools charge by data volume. To manage costs, engineering teams discard high-volume logs at the network edge. Months later, when a new vulnerability is discovered, the historical records needed to investigate are gone.
+2. **The Base Rate Fallacy (High accuracy still produces alert fatigue)**: In an enterprise generating a billion events each day, an analytical rule with $99.9\%$ accuracy still creates thousands of false alarms. Analysts burn out investigating false positives.
+3. **The Unchecked Automation Hazard (Automated fixes can break production or reopen doors)**: Traditional response scripts either crash mid-execution or attempt database-style rollbacks that accidentally restore network access for an active attacker. Meanwhile, connecting generative AI directly to operational tools allows prompt injection attacks to trigger unauthorized actions.
+
+**TIDIR solves these problems by separating the architecture into four distinct planes**—isolating untrusted data and advisory AI models within an open analytical environment, while protecting critical systems behind a lean, deterministic defence control plane.
 
 ---
 
 ## 3. The Core Architectural Thesis
 
-TIDIR is founded upon seven non-negotiable architectural ideas:
+TIDIR is built on seven core ideas. Each idea pairs an intuitive rule with a technical safety mechanism:
 
-| Architectural Principle | What It Means | Why It Matters |
+| Principle | Plain-English Intuition | Technical Mechanism & Why It Matters |
 | :--- | :--- | :--- |
-| **Confidence $\neq$ Authority** | Epistemic likelihood ($99.9\%$ confidence) confers **zero** operational authority to isolate hosts or sever connections. | Eliminates self-granting authority; all mutations require independent policy validation. |
-| **Evidence Provenance** | Every consequential finding and hypothesis must cite immutable raw observation IDs (`source_observation_ids`). | Prevents floating or ungrounded machine hallucinations from driving incident triage. |
-| **Evidential Independence** | Correlated detections sharing common upstream ancestry cannot masquerade as independent corroboration. | Mathematically discounts co-derived signals to resolve the Base Rate Fallacy. |
-| **Bounded Probabilistic Reasoning** | Autonomous agents operate strictly in read-only mode behind the **Agent Trust Boundary**. | Assumes prompt injection is permanent; prevents adversarial telemetry from becoming execution authority. |
-| **Security-State Monotonicity** | Partial containment failure cannot increase attacker reachability ($s_{n+1} \preceq s_n$). | Replaces fragile transaction rollbacks with forward perimeter escalation. |
-| **Graceful Degradation** | Failure of an advanced capability reduces sophistication, never total visibility. | Automatically falls back to edge spooling, scheduled batch lakehouse sweeps, and Zero-AI timelines. |
-| **Human Recoverability** | Control planes always preserve out-of-band manual flight decks. | Retains permanent human command via cryptographic master kill-switches. |
+| **Confidence $\neq$ Authority** | Being confident an attack is happening does not grant permission to disrupt critical servers. | **[Confidence–Authority Separation](/architecture/glossary#confidence-authority-separation)**: Epistemic scores confer zero execution privilege. All actions require independent policy approval. |
+| **Evidence Lineage** | Every conclusion must show its work. | **Evidence Provenance (`INV-02`)**: Hypotheses and alerts must link directly to immutable raw observation IDs (`source_observation_ids`). |
+| **Evidential Independence** | Don't count the same observation twice just because multiple tools alerted on it. | **[Evidential Independence](/architecture/glossary#evidential-independence)**: Traces alert ancestry back to parent events so duplicate signals do not artificially inflate confidence. |
+| **Protected AI Boundary** | AI models analyze and suggest; they never hold direct execution keys. | **[Agent Trust Boundary](/architecture/glossary#agent-trust-boundary)**: Operates AI in read-only sandboxes with short-lived credentials ($\le 15\text{m}$), assuming untrusted logs contain prompt injection. |
+| **Monotonic Safety** | If an automated response fails halfway through, never back out of security barriers. | **[Security-State Monotonicity](/architecture/glossary#security-state-monotonicity)**: Invariant $R(s_{\text{post}}) \subseteq R(s_{\text{pre}})$. Partial failures freeze in place or escalate forward; they never roll back. |
+| **Graceful Degradation** | If advanced services go down, fallback to simpler methods rather than going blind. | **[Graceful Degradation](/architecture/glossary#graceful-degradation)**: Automatically steps down through 4 operational tiers to edge spooling and tabular timelines if streaming or AI fails. |
+| **Human Command** | People always retain the master override. | **Human Recoverability (`INV-09`)**: Independent out-of-band flight decks with cryptographic master kill-switches and dual-auth emergency bypass. |
 
 ---
 
-## 4. The 3-Tier Architectural Model
+## 4. What TIDIR Is (and Is NOT) Claiming
+
+To maintain engineering clarity, TIDIR explicitly distinguishes between established industry patterns and its own architectural contributions:
+
+::: tip WHAT TIDIR DOES NOT CLAIM TO HAVE INVENTED
+TIDIR does **not** claim to have invented data lakes, columnar storage, distributed message buses, graph analytics, probabilistic inference, cryptographic workload identities (SPIFFE), Detection-as-Code (DaC), circuit breakers, or the principle of least privilege.
+:::
+
+**TIDIR's contribution is the specific architectural synthesis and governing safety invariants under which these established techniques interact.** 
+
+By wrapping untrusted telemetry and probabilistic AI agents within deterministic policy gates and monotonic state machines, TIDIR enables modern security operations to automate investigations and containment safely—without risking runaway automation, self-granting authority, or catastrophic blind spots.
+
+For detailed definitions of established, adapted, and TIDIR-specific concepts, explore the **[Architectural Glossary & Concept Taxonomy](/architecture/glossary)**.
+
+---
+
+## 5. The 3-Tier Architectural Model
 
 To serve executive leaders, enterprise architects, and engineering practitioners simultaneously, TIDIR organizes its specifications across three increasing levels of technical specificity:
 

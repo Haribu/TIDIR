@@ -165,21 +165,31 @@ In modern security operations, components operate under differing security assum
 
 ### 3.1 The 4-Plane Model & The Defence Control Plane (DCP)
 
-To answer *"what governs the governors?"* and prevent control-plane compromise from cascading, TIDIR strictly decouples operational systems into four architectural planes:
+To answer the fundamental question—*"what governs the systems that govern defence?"*—and to prevent a compromised component from escalating control across the environment, TIDIR divides the architecture into four distinct planes:
 
-1. **The Telemetry Data Plane**: Ingestion forwarders, line-rate streaming buses (e.g., Redpanda/Kafka), schema decoders, and storage lakehouses. *Security Posture: Untrusted / Assumed hostile inputs; strongly typed normalization; zero instruction execution.*
-2. **The Analytical Plane**: Streaming detection engines, batch query workers, graph correlation matrices, and probabilistic agent meshes. *Security Posture: Advisory only; proposals emit without inherent operational authority; bounded by deterministic query contracts.*
-3. **The Defence Control Plane (DCP)**: The security kernel of TIDIR. Governs policy evaluation, invariant enforcement, blast-radius validation, non-human identity issuance, connector authorization, and emergency E-Stops. *Security Posture: Hardened Trusted Computing Base (TCB); changes require multi-signature cryptographic GitOps commits; isolated from telemetry and agent prompt paths.*
-4. **The Actuation Plane**: Outbound API connectors, endpoint EDR agents, firewall interfaces, and identity provider session revocations. *Security Posture: Ephemeral execution; task-scoped SVID validation; strictly monotonic state progression ($s_{n+1} \preceq s_n$, where post-transition reachability is a subset of pre-transition reachability).*
+1. **The Telemetry Data Plane (Untrusted Inputs)**:
+   - *What it does*: Ingests high-throughput event streams, buffers records at the network edge, normalizes raw payloads into OCSF schemas, and writes long-term forensic logs to object storage lakehouses.
+   - *Security Posture*: **Assumed hostile**. Telemetry inputs may contain malicious exploits, malformed payloads, or prompt injection strings. Operates with strongly typed schemas and zero instruction execution.
+2. **The Analytical Plane (Advisory Analysis & Reasoning)**:
+   - *What it does*: Evaluates streaming detection rules, executes scheduled batch analytical queries, models entity correlation graphs, and hosts AI triage agent meshes.
+   - *Security Posture*: **Advisory only**. Analyzes observations and proposes hypotheses, but possesses zero operational authority. All communication passes across the Agent Trust Boundary using strictly read-only, ephemeral credentials.
+3. **The Defence Control Plane (Deterministic Security Kernel)**:
+   - *What it does*: Evaluates declarative security policies, verifies identity attestation, checks blast-radius limits, enforces critical asset immunity, and monitors the master Emergency Stop (E-Stop).
+   - *Security Posture*: **Hardened Trusted Computing Base (TCB)**. Operates deterministically using immutable policies compiled via cryptographically signed GitOps workflows. Decoupled from the primary data bus to ensure telemetry flooding cannot paralyze control.
+4. **The Actuation Plane (Task-Scoped Execution)**:
+   - *What it does*: Interacts with infrastructure APIs, endpoint EDR agents, network switches, firewalls, and identity providers to enforce containment and remediation actions.
+   - *Security Posture*: **Task-scoped and monotonic**. Connectors execute actions using short-lived cryptographic identity certificates ($\le 15\text{ minutes}$). If an execution encounters an error, the state machine freezes in place or escalates forward ($s_{n+1} \preceq s_n$); it never rolls back security boundaries.
 
 ### 3.2 TCB Minimisation: Small Deterministic Kernel, Large Untrusted Ecosystem
 
-TIDIR achieves defensibility by minimizing the **Trusted Computing Base (TCB)**. An expansive ecosystem of probabilistic models, external threat feeds, and complex query tools is contained within an untrusted envelope, governed by an ultra-lean deterministic kernel:
+TIDIR achieves system defensibility by minimizing the size of its **Trusted Computing Base (TCB)**. Rather than trusting hundreds of complex microservices, external threat feeds, and probabilistic AI models, TIDIR isolates the untrusted analytical ecosystem outside a lean, deterministic core:
 
 $$\text{TCB} = \{\text{Identity Authority (SPIFFE/SPIRE)}, \text{Declarative Policy Kernel (OPA/Cedar)}, \text{Containment State Machine}, \text{Cryptographic Evidence DAG}\}$$
 
+*Accessible Explanation: The Trusted Computing Base consists of exactly four components: the Identity Authority, the Policy Kernel, the Containment State Machine, and the Evidence DAG. If any component outside this set is compromised or behaves unpredictably, the deterministic TCB prevents unauthorized changes to infrastructure.*
+
 * **Immutable Policy Governance**: Policies governing blast-radius limits, Tier 0 asset immunity, and invariant rules cannot be modified via API calls, prompt instructions, or runtime agents. They are compiled via cryptographically signed GitOps workflows requiring dual human sign-off.
-* **Control-Plane Isolation**: The Defence Control Plane maintains an out-of-band communication channel decoupled from the primary telemetry streaming bus, ensuring that telemetry flooding or denial-of-service attacks cannot paralyze defensive authorization or human E-Stop flight decks.
+* **Control-Plane Isolation**: The Defence Control Plane maintains an out-of-band communication channel decoupled from the primary telemetry streaming bus. Telemetry floods or denial-of-service attacks cannot paralyze defensive authorization or human E-Stop flight decks.
 
 ---
 

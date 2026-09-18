@@ -17,7 +17,7 @@ TIDIR requires an architectural standard that governs how AI models interact wit
 ## Decision Drivers
 
 * **The Utility Imperative:** Demanding measurable operational impact (compressing MTTI from 45m to <2m, reducing analyst tool pivots by 75%) with clear Day-2 operationalization pathways.
-* **The Trust & Verification Boundary:** Eliminating hallucinations through rigorous testing modalities (golden datasets, deterministic firewalls, LLM-as-a-judge, shadow execution) and cryptographic auditability (RFC 3161).
+* **The Trust & Verification Boundary:** Reducing unsupported recommendations via evidence grounding, rigorous testing modalities (golden datasets, deterministic firewalls, LLM-as-a-judge, shadow execution), and cryptographic auditability (RFC 3161).
 * **Cost & Economic Sustainability:** Balancing usage vs. consumption and subscription models via a hybrid offload strategy (Tier 0 local SLMs absorbing 70%+ of volume at $0.00 marginal cloud cost).
 * **Protocol Standardization:** Decoupling agent tools and forensic capabilities from proprietary model APIs using the Model Context Protocol (MCP).
 * **Incremental Risk Realization:** Establishing a 3-phase MVP-to-maturity roadmap with strict verification gates at each milestone.
