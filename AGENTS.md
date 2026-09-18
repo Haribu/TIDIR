@@ -41,10 +41,12 @@ TIDIR/
 │   │   └── tidir-target-architecture.mmd
 │   └── .vitepress/                # VitePress theme, config & mermaid integration
 │       └── config.ts
-└── scripts/                       # Maintenance & deployment scripts (TypeScript)
+└── scripts/                       # Maintenance & verification scripts (TypeScript)
     ├── validate-diagrams.ts       # Validates Mermaid syntax across .mmd files
-    ├── setup-dns.ts               # Manages Cloudflare DNS records for custom domains
-    └── deploy-cf.ts               # Automated Cloudflare Pages deployment script
+    ├── lint-site-structure.ts     # Asserts navigation, ADR registry & document closure
+    ├── lint-terminology.ts        # Validates controlled architectural vocabulary
+    ├── build-docs.ts              # Production static site compiler
+    └── setup-dns.ts               # Manages Cloudflare DNS records for custom domains
 ```
 
 ---
@@ -78,8 +80,9 @@ bun ./scripts/lint-terminology.ts # In sandboxes; or `bun run lint:terminology`
 # Run full holistic verification suite
 bun run verify # Or run the 4 scripts individually in sandboxes
 
-# Deploy build artifacts to Cloudflare Pages
-bun run deploy
+# Deployments (Cloudflare Pages):
+# Direct local deployments are strictly retired.
+# Deployments occur exclusively and automatically via GitHub Actions (.github/workflows/deploy-pages.yml) upon push to `main`.
 ```
 
 ---
@@ -143,4 +146,9 @@ bun run deploy
    - The `main` branch enforces required CI checks (`Validate Diagrams & Build Site`) and requires 1 approving review on pull requests from external contributors.
    - Force-pushes (`allow_force_pushes: false`) and branch deletions (`allow_deletions: false`) are strictly prohibited.
    - Repository administrator (`Haribu`) retains push privileges to `main` when local verification passes.
+
+6. **Exclusive Deployment via GitHub Actions (Zero Local/Direct Deployments)**:
+   - Deployments to Cloudflare Pages occur **strictly and exclusively via GitHub Actions** (`.github/workflows/deploy-pages.yml`) upon push to `main`.
+   - Direct local deployments (via CLI scripts, local Wrangler, or bypassing CI/CD) are permanently retired and deliberately non-functional to eliminate configuration drift and out-of-band state mutation.
+   - All code, specification, and diagram changes must pass local holistic verification (`bun run verify`) before pushing to `main`. Once pushed, GitHub Actions handles build verification, automated testing, and production deployment.
 

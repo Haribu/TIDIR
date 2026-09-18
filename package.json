@@ -13,7 +13,7 @@
     "diagrams:validate": "bun ./scripts/validate-diagrams.ts",
     "verify": "bun ./scripts/lint-site-structure.ts && bun ./scripts/lint-terminology.ts && bun ./scripts/validate-diagrams.ts && bun ./scripts/build-docs.ts",
     "pre-commit": "bash ./scripts/pre-commit.sh",
-    "deploy": "bun ./scripts/deploy-cf.ts"
+    "deploy": "echo '❌ Direct local deployment is retired. Deployments must occur exclusively via GitHub Actions on push to main.' && exit 1"
   },
   "devDependencies": {
     "@mermaid-js/mermaid-cli": "^11.4.2",
