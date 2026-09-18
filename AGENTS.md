@@ -78,7 +78,7 @@ bun ./scripts/lint-site-structure.ts # In sandboxes; or `bun run lint:structure`
 bun ./scripts/lint-terminology.ts # In sandboxes; or `bun run lint:terminology`
 
 # Run full holistic verification suite
-bun run verify # Or run the 4 scripts individually in sandboxes
+./verify # Or `bun ./scripts/verify.ts` (runs universally in sandboxes, CI, and standard shells)
 
 # Deployments (Cloudflare Pages):
 # Direct local deployments are strictly retired.
@@ -156,11 +156,9 @@ bun run verify # Or run the 4 scripts individually in sandboxes
 
 3. **Pre-Push Holistic Verification**:
    - Before pushing changes to `main`:
-     1. Run diagram validation: `bun ./scripts/validate-diagrams.ts`
-     2. Run site structure check: `bun ./scripts/lint-site-structure.ts`
-     3. Run terminology check: `bun ./scripts/lint-terminology.ts`
-     4. Run docs build: `bun ./scripts/build-docs.ts` (or `bun ./node_modules/.bin/vitepress build docs`)
-     5. Verify working tree is clean: `git status`
+     1. Run the unified verification suite: `./verify` (or `bun ./scripts/verify.ts`)
+        (Executes site structure check, terminology check, Mermaid syntax validation, docs build with sitemap and llms.txt compilation, and MathJax HTML audit).
+     2. Verify working tree is clean: `git status`
    - Never commit speculative fixes piecemeal to `origin/main` to test in CI. Verify local closure first.
 
 4. **Runtime Standard (Zero Node/NPM)**:
@@ -174,7 +172,7 @@ bun run verify # Or run the 4 scripts individually in sandboxes
 6. **Exclusive Deployment via GitHub Actions (Zero Local/Direct Deployments)**:
    - Deployments to Cloudflare Pages occur **strictly and exclusively via GitHub Actions** (`.github/workflows/deploy-pages.yml`) upon push to `main`.
    - Direct local deployments (via CLI scripts, local Wrangler, or bypassing CI/CD) are permanently retired and deliberately non-functional to eliminate configuration drift and out-of-band state mutation.
-   - All code, specification, and diagram changes must pass local holistic verification (`bun run verify`) before pushing to `main`. Once pushed, GitHub Actions handles build verification, automated testing, and production deployment.
+   - All code, specification, and diagram changes must pass local holistic verification (`./verify` or `bun ./scripts/verify.ts`) before pushing to `main`. Once pushed, GitHub Actions handles build verification, automated testing, and production deployment.
 
 7. **LaTeX Math Escaping for VitePress / Markdown-it**:
    - When writing inline math containing relational comparisons ($<$, $>$, $\le$, $\ge$), **never use raw `<` or `>`** inside dollar delimiters (e.g. avoid `$< 5s$`). The VitePress markdown parser treats `<` as an unclosed HTML opening tag and silently swallows or drops the expression in rendered HTML.

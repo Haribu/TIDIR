@@ -1,0 +1,70 @@
+# TIDIR: Threat Intelligence, Detection, Investigation & Response Reference Architecture
+
+> An open, vendor-neutral target technology component architecture for modern autonomous security operations (SecOps). TIDIR synthesises continuous detection engineering, stream processing, decoupled data fabrics, multi-agent AI systems, and automated monotonic containment into a closed-loop cyber defence ecosystem.
+
+TIDIR is maintained by Harry McLaren under the Apache 2.0 open-source licence at https://github.com/Haribu/TIDIR. The canonical interactive documentation is published at https://tidir.harrymclaren.co.uk.
+
+For full-text ingestion across all core specifications in a single file, see: https://tidir.harrymclaren.co.uk/llms-full.txt
+
+## The TIDIR Architectural Constitution (10 Invariants)
+
+1. **Telemetry Preservation**: Raw forensic evidence is never discarded solely because no active detection rule consumes it.
+2. **Evidence Traceability**: Every consequential alert or incident assertion must be deterministically traceable to underlying raw observations.
+3. **Dependency-Aware Confidence**: Correlated derivations sharing common raw telemetry ancestry cannot masquerade as independent corroborating evidence.
+4. **No Self-Granting Authority**: Probabilistic models propose; deterministic policies authorise.
+5. **Least Capability**: Every machine actor receives only task-scoped, ephemeral authority (SPIFFE/SPIRE SVIDs).
+6. **Fail-Secure Posture**: Component failure cannot silently increase attacker reachability ($R(s_{\text{post}}) \subseteq R(s_{\text{pre}})$).
+7. **Bounded Autonomy**: Autonomous execution has strict temporal, financial, computational, and blast-radius limits.
+8. **Human Recoverability**: Autonomous control planes always preserve independently accessible manual flight decks and master break-glass emergency stops.
+9. **Degraded Defence**: Loss of an advanced capability reduces sophistication, never total visibility (graceful degradation and Plan B fallbacks).
+10. **Reconstructability**: Consequential decisions and containment actions can be deterministically reconstructed after the fact via the Incident Decision DAG.
+
+## Core Open Standards
+
+- **Telemetry Normalisation**: Open Cybersecurity Schema Framework (OCSF)
+- **Threat Intelligence**: STIX 2.1 / TAXII 2.1
+- **Detection-as-Code (DaC)**: Polyglot DaC (vendor-neutral metadata envelopes with target-optimized query blocks)
+- **Workload Identity**: SPIFFE / SPIRE (ephemeral cryptographic SVIDs)
+- **Agentic Observability**: OpenTelemetry (OTLP) tracing across model calls, tool executions, and state transitions
+
+---
+
+## Strategic Architecture (Tier 1)
+
+- [Architectural Invariants & Constitution](https://tidir.harrymclaren.co.uk/architecture/00-architectural-invariants): The 10 constitutional invariants, the Confidence-Authority Separation Principle, and security-state monotonicity.
+- [System Overview & Topology](https://tidir.harrymclaren.co.uk/architecture/01-system-overview): End-to-end 4-layer operational pipeline, decoupled data fabrics, and the closed-loop Green Team feedback model.
+- [Target Threat Model](https://tidir.harrymclaren.co.uk/architecture/09-threat-model): Formal threat modelling covering external adversaries, insider threats, supply chain compromise, and prompt injection attacks against SecOps AI runtimes.
+
+## Capabilities & Taxonomy (Tier 2)
+
+- [Capability Model & Taxonomy](https://tidir.harrymclaren.co.uk/architecture/02-capability-model): Functional matrix spanning 35+ atomic capabilities, operational maturity levels, and boundary contracts.
+- [Macro Capabilities & Services](https://tidir.harrymclaren.co.uk/architecture/10-macro-capabilities-and-services): Enterprise SecOps service catalogue mapping technical capabilities to business outcomes, target MTTx SLAs, and validation hypotheses.
+- [Operational User Stories](https://tidir.harrymclaren.co.uk/architecture/08-user-stories): End-to-end operational scenarios spanning credential compromise, ransomware containment, cloud lateral movement, and false-positive tuning loops.
+
+## Technical Specifications (Tier 3)
+
+- [Layer 1: Data Sources & Ingress](https://tidir.harrymclaren.co.uk/architecture/03-layer-1-data-sources): Push/pull collectors, edge OCSF normalisation, and zero-drop buffering.
+- [Layer 2: Pipeline, Storage & Query](https://tidir.harrymclaren.co.uk/architecture/04-layer-2-pipeline-storage-query): Decoupled dual-tier data fabric (Hot Index tier + Columnar Lakehouse tier) with schema enforcement.
+- [Layer 3: Intel & Detection Engineering](https://tidir.harrymclaren.co.uk/architecture/06-layer-3-threat-intel-detection): Stateful stream detection, lakehouse SQL analytics, STIX/TAXII enrichment, and Bayesian multi-signal compounding.
+- [Layer 4: Investigation & Automated Response](https://tidir.harrymclaren.co.uk/architecture/07-layer-4-incident-response): Hierarchical agent triage, Proposer/Challenger arbitration, and monotonic fail-closed containment state machines.
+- [Cross-Cutting Engineering Disciplines](https://tidir.harrymclaren.co.uk/architecture/05-cross-cutting-engineering-disciplines): SRE error budgets for detection noise, Detection-as-Code CI/CD pipelines, continuous purple teaming, and Agent Evals-as-Code.
+
+## Subsystem Deep Dives
+
+- [Threat Intelligence (CTI)](https://tidir.harrymclaren.co.uk/architecture/components/01-threat-intelligence): Dynamic confidence decay scoring, low-latency in-memory caching, and automated retro-hunting against cold lakehouses.
+- [Telemetry & Data Fabric](https://tidir.harrymclaren.co.uk/architecture/components/02-data-fabric-telemetry): Line-rate OCSF normalisation, event streaming buses (Kafka/Redpanda), and tiered retention economics.
+- [Detection Engine](https://tidir.harrymclaren.co.uk/architecture/components/03-detection-engine): Streaming pattern detection, lakehouse SQL analytics, and Alert Noise Error Budget enforcement.
+- [Investigation & Cases](https://tidir.harrymclaren.co.uk/architecture/components/04-investigation-cases): Entity resolution, bipartite graphs, supernode pruning, and tamper-evident evidence lockers.
+- [Response & Automation](https://tidir.harrymclaren.co.uk/architecture/components/05-response-automation): Blast-radius risk tiers, monotonic forward compensation, circuit breakers, and break-glass overrides.
+- [AI & Agent Orchestration](https://tidir.harrymclaren.co.uk/architecture/components/06-ai-orchestration): Dual-plane prompt injection firewalls, sandboxed tools, ephemeral SPIFFE identities, and multi-model consensus arbitration.
+
+## Key Architectural Decision Records (ADRs)
+
+- [ADR-0004: Defensive AI Runtime & Prompt Injection Firewall](https://tidir.harrymclaren.co.uk/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall): Control plane vs data plane separation and untrusted data sanitisation.
+- [ADR-0005: Saga Pattern Containment & Break-Glass Protocol](https://tidir.harrymclaren.co.uk/adr/0005-saga-pattern-containment-and-break-glass-protocol): Monotonic fail-closed containment, forward escalation, and human-in-the-loop overrides.
+- [ADR-0007: Continuous Purple Teaming & Multi-Model Consensus](https://tidir.harrymclaren.co.uk/adr/0007-continuous-automated-purple-teaming-and-multi-model-consensus): Attack emulation CI/CD gates and multi-model arbitration.
+- [ADR-0008: SecOps Error Budgets & Chaos Security Engineering](https://tidir.harrymclaren.co.uk/adr/0008-secops-error-budgets-and-chaos-security-engineering): SRE-inspired false-positive budgets and deployment freezes.
+- [ADR-0009: Bayesian Multi-Signal Risk Scoring & Shared Evidence Discounting](https://tidir.harrymclaren.co.uk/adr/0009-bayesian-multi-signal-risk-scoring): Mitigating the base rate fallacy while explicitly discounting co-derived signals from common raw telemetry ancestry.
+- [ADR-0015: Sandboxed Agent Execution & OTLP Convergence](https://tidir.harrymclaren.co.uk/adr/0015-sandboxed-agent-execution-otlp-convergence-and-ephemeral-identity): MicroVM agent sandboxing, ephemeral SPIFFE SVIDs, and unified OpenTelemetry tracing.
+- [ADR-0019: Polyglot Detection-as-Code & Native Engine Adaptation](https://tidir.harrymclaren.co.uk/adr/0019-polyglot-detection-as-code-and-native-engine-adaptation): Vendor-neutral metadata envelopes with target-optimized native query blocks.
+- [ADR-0021: Graceful Degradation & Plan B Continuity](https://tidir.harrymclaren.co.uk/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b): First-class failure modes, active canary probes, and deterministic fallbacks.

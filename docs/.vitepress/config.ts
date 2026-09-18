@@ -8,6 +8,9 @@ export default withMermaid(
     base: "/",
     cleanUrls: true,
     ignoreDeadLinks: true,
+    sitemap: {
+      hostname: "https://tidir.harrymclaren.co.uk"
+    },
     markdown: {
       math: true
     },
@@ -15,6 +18,120 @@ export default withMermaid(
       [
         "link",
         { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }
+      ],
+      [
+        "link",
+        { rel: "canonical", href: "https://tidir.harrymclaren.co.uk" }
+      ],
+      [
+        "link",
+        { rel: "alternate", type: "text/plain", href: "/llms.txt", title: "LLM Context" }
+      ],
+      [
+        "meta",
+        { name: "author", content: "Harry McLaren" }
+      ],
+      [
+        "meta",
+        { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" }
+      ],
+      [
+        "meta",
+        {
+          name: "keywords",
+          content: "cybersecurity, SecOps, threat intelligence, detection engineering, incident response, OCSF, STIX, TAXII, SOAR, SIEM, security architecture, agentic AI, prompt injection firewall, continuous purple teaming, detection as code, autonomous SOC, SABSA"
+        }
+      ],
+      [
+        "meta",
+        { property: "og:site_name", content: "TIDIR Architecture" }
+      ],
+      [
+        "meta",
+        { property: "og:type", content: "website" }
+      ],
+      [
+        "meta",
+        { property: "og:title", content: "TIDIR — Open SecOps Reference Architecture" }
+      ],
+      [
+        "meta",
+        {
+          property: "og:description",
+          content: "Open, vendor-neutral target technology component architecture for modern autonomous security operations: CTI, OCSF telemetry fabric, Detection-as-Code, agentic investigation, and monotonic response."
+        }
+      ],
+      [
+        "meta",
+        { property: "og:url", content: "https://tidir.harrymclaren.co.uk/" }
+      ],
+      [
+        "meta",
+        { name: "twitter:card", content: "summary_large_image" }
+      ],
+      [
+        "meta",
+        { name: "twitter:title", content: "TIDIR — Open SecOps Reference Architecture" }
+      ],
+      [
+        "meta",
+        {
+          name: "twitter:description",
+          content: "Open, vendor-neutral target technology component architecture for modern autonomous security operations."
+        }
+      ],
+      [
+        "meta",
+        { name: "twitter:creator", content: "@Haribu" }
+      ],
+      [
+        "script",
+        { type: "application/ld+json" },
+        JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebSite",
+              "@id": "https://tidir.harrymclaren.co.uk/#website",
+              "url": "https://tidir.harrymclaren.co.uk/",
+              "name": "TIDIR Architecture",
+              "description": "Open, vendor-neutral target technology component architecture for modern autonomous security operations.",
+              "publisher": {
+                "@type": "Person",
+                "name": "Harry McLaren",
+                "url": "https://harrymclaren.co.uk"
+              },
+              "inLanguage": "en-GB"
+            },
+            {
+              "@type": "TechArticle",
+              "@id": "https://tidir.harrymclaren.co.uk/#article",
+              "isPartOf": { "@id": "https://tidir.harrymclaren.co.uk/#website" },
+              "headline": "TIDIR: Threat Intelligence, Detection, Investigation & Response Reference Architecture",
+              "description": "A comprehensive target technology component architecture unifying cyber threat intelligence, line-rate OCSF normalization, decoupled lakehouse storage, Detection-as-Code, and defensive agentic AI with monotonic automated containment.",
+              "author": {
+                "@type": "Person",
+                "name": "Harry McLaren",
+                "url": "https://harrymclaren.co.uk"
+              },
+              "license": "https://www.apache.org/licenses/LICENSE-2.0",
+              "keywords": [
+                "Cybersecurity",
+                "Security Operations",
+                "Threat Intelligence",
+                "Detection Engineering",
+                "Incident Response",
+                "OCSF",
+                "STIX",
+                "TAXII",
+                "Detection-as-Code",
+                "Agentic AI",
+                "Autonomous SOC",
+                "Security Architecture"
+              ]
+            }
+          ]
+        })
       ],
       [
         "script",

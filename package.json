@@ -12,7 +12,7 @@
     "lint:terminology": "bun ./scripts/lint-terminology.ts",
     "lint:math": "bun ./scripts/lint-docs-math.ts",
     "diagrams:validate": "bun ./scripts/validate-diagrams.ts",
-    "verify": "bun ./scripts/lint-site-structure.ts && bun ./scripts/lint-terminology.ts && bun ./scripts/validate-diagrams.ts && bun ./scripts/build-docs.ts && bun ./scripts/lint-docs-math.ts",
+    "verify": "bun ./scripts/verify.ts",
     "pre-commit": "bash ./scripts/pre-commit.sh",
     "deploy": "echo '❌ Direct local deployment is retired. Deployments must occur exclusively via GitHub Actions on push to main.' && exit 1"
   },

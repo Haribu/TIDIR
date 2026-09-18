@@ -1,0 +1,57 @@
+# robots.txt for TIDIR (Threat Intelligence, Detection, Investigation & Response)
+# https://tidir.harrymclaren.co.uk
+
+User-agent: *
+Allow: /
+
+# Explicit permissions for AI search engines & LLM crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: Cohere-ai
+Allow: /
+
+# Sitemaps & Machine-Readable Architectural Context
+Sitemap: https://tidir.harrymclaren.co.uk/sitemap.xml
+
+# LLM Context File (llms.txt standard)
+# Context file for LLM crawlers, AI agents, and retrieval engines:
+# https://tidir.harrymclaren.co.uk/llms.txt
+# Full-context compilation:
+# https://tidir.harrymclaren.co.uk/llms-full.txt

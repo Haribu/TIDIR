@@ -1,5 +1,15 @@
 ---
 layout: home
+title: "TIDIR — Open SecOps Reference Architecture"
+titleTemplate: false
+description: "Threat Intelligence, Detection, Investigation & Response (TIDIR) is an open, vendor-neutral target technology component architecture for modern autonomous security operations."
+head:
+  - - meta
+    - name: description
+      content: "Open, vendor-neutral target technology component architecture for modern autonomous security operations: CTI, OCSF telemetry fabric, Detection-as-Code, agentic investigation, and monotonic response."
+  - - meta
+    - name: keywords
+      content: "cybersecurity, SecOps, threat intelligence, detection engineering, incident response, OCSF, STIX, TAXII, SOAR, SIEM, security architecture, agentic AI, prompt injection firewall, continuous purple teaming, detection as code, autonomous SOC"
 
 hero:
   name: "TIDIR"
@@ -44,6 +54,14 @@ features:
 Modern security operations face an asymmetric challenge: attackers operate at machine velocity with automated, multi-stage attack chains, whilst defenders struggle against proprietary silos, alert fatigue, and prohibitive telemetry licensing costs. 
 
 **TIDIR** (Threat Intelligence, Detection, Investigation & Response) provides a vendor-neutral, capability-driven target technology component architecture. It synthesises modern software reliability engineering, continuous purple teaming, and secure agentic AI into an integrated, closed-loop defence ecosystem.
+
+### TIDIR at a Glance
+
+* **What It Is:** An open, vendor-neutral target technology component architecture unifying cyber threat intelligence (CTI), line-rate telemetry pipelines, detection engineering, and incident response into an autonomous closed-loop system.
+* **Core Operating Maxim:** *"Probabilistic components propose; deterministic components authorise."* Probabilistic models (LLMs, neural embeddings, clustering heuristics) operate in a strictly read-only analytical capacity. Mutations and containment actions require deterministic policy evaluation.
+* **Open Standards First:** Built natively on open standards including the **Open Cybersecurity Schema Framework (OCSF)**, **STIX 2.1 / TAXII 2.1**, **Polyglot Detection-as-Code (DaC)**, and **SPIFFE/SPIRE** workload identities.
+* **Who It's For:** Enterprise Security Architects, Detection Engineers, SecOps Leaders, and AI Security Researchers designing next-generation Security Operations Centers (SOC).
+* **Machine-Readable Context for AI Agents:** AI crawlers, retrieval engines, and autonomous research agents can consume our curated context directly via [`/llms.txt`](/llms.txt) and [`/llms-full.txt`](/llms-full.txt).
 
 ---
 
@@ -154,7 +172,7 @@ Explore the complete architecture and engineering specifications across the plat
 
 ---
 
-## 🌐 Open Source & Community
+## 🌐 Open Source & Machine-Readable Context
 
 TIDIR is hosted as an open-source research initiative under the **Apache 2.0 License**:
 
@@ -162,5 +180,7 @@ TIDIR is hosted as an open-source research initiative under the **Apache 2.0 Lic
 - 🤝 **Contribute**: Check out the [Contribution Guide](https://github.com/Haribu/TIDIR/blob/main/CONTRIBUTING.md) to propose RFCs or component additions.
 - 🐛 **Issues & Feedback**: Report broken diagrams, links, or architectural proposals on [GitHub Issues](https://github.com/Haribu/TIDIR/issues).
 - 🛡️ **Security Advisories**: Report vulnerabilities privately via [GitHub Security Advisories](https://github.com/Haribu/TIDIR/security/advisories) or directly to `info@harrymclaren.co.uk`.
+- 🤖 **AI & LLM Context**: Ingest the canonical architecture summary via [`/llms.txt`](/llms.txt) or the complete single-file corpus via [`/llms-full.txt`](/llms-full.txt).
+- 🗺️ **Search Engine Index**: View the complete URL manifest at [`/sitemap.xml`](/sitemap.xml).
 
 </div>
