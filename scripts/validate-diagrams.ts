@@ -28,6 +28,38 @@ console.log("🔍 Rigorously validating all Mermaid diagrams with mermaid.parse(
 let totalDiagrams = 0;
 let failedDiagrams: { file: string; block: number | string; error: string; snippet: string }[] = [];
 
+function validateSequentialSubgraphs(content: string): string | null {
+  const sgRegex = /subgraph\s+([A-Za-z0-9_]+)\s*\["?(\d+)\.\s*([^"\]]+)"?\]/g;
+  const subgraphs: { id: string; num: number; title: string }[] = [];
+  let m;
+  while ((m = sgRegex.exec(content)) !== null) {
+    subgraphs.push({ id: m[1], num: parseInt(m[2], 10), title: m[3] });
+  }
+
+  if (subgraphs.length <= 1) return null;
+
+  // 1. Monotonic declaration order
+  for (let i = 1; i < subgraphs.length; i++) {
+    if (subgraphs[i].num < subgraphs[i - 1].num) {
+      return `Sequential Subgraph Order Violation: Subgraph '${subgraphs[i].id}' (#${subgraphs[i].num}) is declared after Subgraph '${subgraphs[i - 1].id}' (#${subgraphs[i - 1].num}). Subgraphs must be declared in increasing numerical sequence.`;
+    }
+  }
+
+  // 2. Prevent backward cycle rank inversion
+  for (const src of subgraphs) {
+    for (const dst of subgraphs) {
+      if (src.num > dst.num) {
+        const backEdgeRegex = new RegExp(`\\b${src.id}\\s*[-=~.]+>[^\\n]*\\b${dst.id}\\b`);
+        if (backEdgeRegex.test(content)) {
+          return `Dagre Rank Inversion Hazard: Backward directed edge found from Subgraph '${src.id}' (#${src.num}) to Subgraph '${dst.id}' (#${dst.num}). In Mermaid flowchart TB/LR, backward edges between numbered subgraphs cause Dagre to invert topological layering, rendering later numbered stages before earlier ones. Terminate feedback flows into a downstream calibration stage (e.g. 4 ==> 5) or describe feedback in node annotations without inter-subgraph backward edges.`;
+        }
+      }
+    }
+  }
+
+  return null;
+}
+
 // 1. Standalone .mmd files
 const mmdFiles = findFiles("./docs", ".mmd");
 for (const file of mmdFiles) {
@@ -35,6 +67,10 @@ for (const file of mmdFiles) {
   totalDiagrams++;
   try {
     await mermaid.parse(content);
+    const orderErr = validateSequentialSubgraphs(content);
+    if (orderErr) {
+      throw new Error(orderErr);
+    }
     console.log(`✅ [MMD] ${file}`);
   } catch (err: any) {
     console.error(`❌ [MMD FAIL] ${file}: ${err.message}`);
@@ -61,6 +97,10 @@ for (const file of mdFiles) {
     }
     try {
       await mermaid.parse(diagramCode);
+      const orderErr = validateSequentialSubgraphs(diagramCode);
+      if (orderErr) {
+        throw new Error(orderErr);
+      }
       console.log(`✅ [MD] ${file} (block #${blockIndex})`);
     } catch (err: any) {
       console.error(`❌ [MD FAIL] ${file} (block #${blockIndex}): ${err.message}`);

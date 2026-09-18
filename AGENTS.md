@@ -104,6 +104,8 @@ bun ./scripts/lint-terminology.ts # In sandboxes; or `bun run lint:terminology`
    - All architecture diagrams must be written in **Mermaid** and version-controlled.
    - Flow direction should standardise on `flowchart TB` or `flowchart LR`.
    - Subgraphs must group logical subsystems clearly.
+   - **Sequential Numbering & Monotonic Top-to-Bottom / Left-to-Right Ordering**: Numbered subgraphs (`1. ...`, `2. ...`, `N. ...`) must always be declared and rendered in strict sequential order matching their numeric sequence (e.g. 1 at top/left down to N at bottom/right).
+   - **Feedback Loop Layout Restraint (Dagre Cycle Inversion Prevention)**: In Mermaid (`flowchart TB` / `flowchart LR`), drawing a direct backward directed edge from a downstream subgraph (e.g. `subgraph 5`) back to an upstream subgraph (e.g. `subgraph 1`) causes Mermaid's Dagre layout engine to invert graph ranking, erroneously placing the final grouping at the very top of the diagram before Step 1. Feedback, learning, and calibration channels returning to earlier stages MUST terminate downstream into a dedicated terminal calibration/feedback subgraph (e.g. `ACT ==> FB`), with internal annotations or edge text articulating the re-injection channels. Inter-subgraph backward arrows that violate sequential topological ordering are strictly prohibited and enforced by `./scripts/validate-diagrams.ts`.
 
 3. **Architectural Decisions (ADR)**:
    - Any architectural decision, technology selection, or significant change must be accompanied by an ADR in `docs/adr/`.

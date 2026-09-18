@@ -85,19 +85,20 @@ flowchart TB
 
     subgraph FB ["5. CLOSED-LOOP CONTINUOUS CALIBRATION"]
         direction LR
-        FB_FEED["Attributed CTI Re-Cache"] --- FB_EVAL["Evals-as-Code CI/CD"] --- FB_GREEN["Green Team Preventative IaC PRs"]
+        FB_FEED["Attributed CTI Re-Cache\n(Re-injected into Layer 1/2)"] --- FB_EVAL["Evals-as-Code CI/CD\n(Continuous Regression Testing)"] --- FB_GREEN["Green Team Preventative IaC PRs\n(Infrastructure Hardening)"]
     end
 
     DP ==>|1. Normalized Telemetry| AP
     AP ==>|2. Investigative Findings & Hypotheses| DCP
     DCP ==>|3. Authorized Execution Bounds| ACT
     ACT ==>|4. Environmental Outcomes & DAG Nodes| FB
-    FB -.->|5. Posture Hardening & Telemetry Re-tuning| DP
 
     class DP,AP,ACT plane;
     class DCP kernel;
     class FB feedback;
 ```
+
+*The closed loop is completed as operational outcomes and incident graph nodes from Actuation (4) enter Continuous Calibration (5), which continuously re-keys threat caches, tunes detection noise budgets, and issues automated hardening pull requests back into the Telemetry Data Plane (1).*
 
 ---
 
