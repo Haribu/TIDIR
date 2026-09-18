@@ -53,7 +53,7 @@ To balance executive clarity with engineering precision, TIDIR is organised acro
 
 | Tier | Focus | Key Deliverables & Documents | Target Audience |
 | :--- | :--- | :--- | :--- |
-| **Tier 1: Strategic Architecture** | System topology, high-level components, and the closed-loop operating paradigm. | [01. System Overview](/architecture/01-system-overview), [Cross-Cutting Disciplines](/architecture/05-cross-cutting-engineering-disciplines) | CISOs, Heads of SecOps, Lead Enterprise Architects |
+| **Tier 1: Strategic Architecture** | System topology, high-level components, and the closed-loop operating paradigm. | [Architectural Invariants & Constitution](/architecture/00-architectural-invariants), [01. System Overview](/architecture/01-system-overview), [Cross-Cutting Disciplines](/architecture/05-cross-cutting-engineering-disciplines) | CISOs, Heads of SecOps, Lead Enterprise Architects |
 | **Tier 2: Capabilities & Taxonomy** | Functional capability matrix, enterprise service catalogue, MTTx service levels, and error budgets. | [02. Capability Model](/architecture/02-capability-model), [10. Macro Capabilities & Services](/architecture/10-macro-capabilities-and-services), [User Stories](/architecture/08-user-stories) | Security Managers, Detection Engineering Leads, SOC Managers |
 | **Tier 3: Technical Specifications** | Concrete data schemas, pipeline protocols, state machines, and ADRs. | [Component Deep Dives](/architecture/components/01-threat-intelligence), [ADR Registry](/adr/0001-record-architecture-decisions) | Detection Engineers, Security Automation Engineers, SecOps Architects |
 
@@ -119,8 +119,8 @@ TIDIR strictly rejects artificial "output-driven" ingestion where logs are disca
 * **Hot Index (Tier 1):** High-value, immediate-retrieval telemetry retained for active operational windows (15–30 days).
 * **Columnar Lakehouse (Tier 2):** Cost-effective, open-format columnar storage (Parquet/metadata catalogue) for complete historical audit retention and petabyte-scale SQL analytics.
 
-### 2. Suppressing the Base Rate Fallacy with Dependency-Aware Evidence Aggregation
-When processing billions of daily events, even detections with a 99.9% accuracy rate produce thousands of false alarms because malicious actions are rare events (the *False Positive Paradox*). TIDIR solves this by treating single-point anomalies as **weak graph signals** rather than standalone alerts. Detections are only elevated to an active incident once dependency-aware Bayesian risk aggregation correlates signals across orthogonal observation domains, discounting co-derived findings that share common raw telemetry ancestry:
+### 2. Mitigating the Base Rate Fallacy with Dependency-Aware Evidence Aggregation
+When processing billions of daily events, even detections with a 99.9% accuracy rate produce thousands of false alarms because malicious actions are rare events (the *False Positive Paradox*). TIDIR mitigates the operational impact of this phenomenon by treating single-point anomalies as **weak graph signals** rather than standalone alerts. Detections are only elevated to an active incident once dependency-aware Bayesian risk aggregation correlates signals across orthogonal observation domains, discounting co-derived findings that share common raw telemetry ancestry:
 $$
 \text{Compounded Risk} = f(\text{Adversary TTP Severity}, \text{Asset Criticality}, \text{Identity Privilege}, \text{Orthogonal Evidence Domains})
 $$

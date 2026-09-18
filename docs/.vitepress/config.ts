@@ -32,6 +32,7 @@ export default withMermaid(
         {
           text: "Architecture",
           items: [
+            { text: "Architectural Invariants & Constitution", link: "/architecture/00-architectural-invariants" },
             { text: "System Overview & Topology", link: "/architecture/01-system-overview" },
             { text: "Target Threat Model", link: "/architecture/09-threat-model" },
             { text: "Layer 1: Data Sources & Ingress", link: "/architecture/03-layer-1-data-sources" },
@@ -67,6 +68,7 @@ export default withMermaid(
         {
           text: "Tier 1: Strategic Architecture",
           items: [
+            { text: "Architectural Invariants & Constitution", link: "/architecture/00-architectural-invariants" },
             { text: "System Overview & Topology", link: "/architecture/01-system-overview" },
             { text: "Target Threat Model", link: "/architecture/09-threat-model" }
           ]

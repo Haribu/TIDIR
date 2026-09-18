@@ -59,5 +59,13 @@ if ! bun ./scripts/lint-terminology.ts; then
   exit 1
 fi
 
+# 6. Check Documentation MathJax & Parameter Rendering Integrity
+echo "📐 Checking MathJax rendering & parameter integrity in built HTML..."
+if ! bun ./scripts/lint-docs-math.ts; then
+  echo "❌ [MATH RENDERING ERROR] Documentation HTML contains empty or corrupted MathJax containers."
+  echo "Please resolve math formatting errors before committing. Commit aborted."
+  exit 1
+fi
+
 echo "✅ All pre-commit checks passed successfully!"
 exit 0

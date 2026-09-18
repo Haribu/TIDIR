@@ -79,7 +79,8 @@ independence_class: "SAME_OBSERVATION_DERIVATION" # SAME_OBSERVATION_DERIVATION,
     $$S = f(\text{Adversary TTP Severity}, \text{Asset Criticality}, \text{Identity Privilege}, \text{Orthogonal Evidence Domains})$$
   - When two signals share identical `source_observation_ids` or upstream `derivation_chain` steps, the secondary signal's likelihood ratio ($LR$) is discounted to its residual information gain:
     $$LR_{\text{adjusted}}(e_2 \mid e_1) = 1 + (LR(e_2) - 1) \cdot (1 - \text{Overlap}(e_1, e_2))$$
-  - *Orthogonal Domain Requirement*: Compound risk elevation ($S \ge 75/100$) requires corroboration across at least two independent `sensor_domains` (e.g. an endpoint parent-child process relationship *and* an outbound connection to an unclassified Autonomous System Number / ASN) sharing `CROSS_DOMAIN_ORTHOGONAL` status.
+  - *Orthogonal Domain Requirement*: Compound risk elevation ($S \ge 75/100$) requires corroboration across at least two distinct `sensor_domains` (e.g. an endpoint parent-child process relationship *and* an outbound connection to an unclassified Autonomous System Number / ASN) evaluated as `CROSS_DOMAIN_ORTHOGONAL`.
+  - *Evidential vs. Statistical Independence*: In security telemetry, distinct sensor domains (e.g. host process events and network flows) may still be causally linked observations of the same underlying attacker activity. `CROSS_DOMAIN_ORTHOGONAL` does not assert literal statistical independence; it defines **sufficient evidential independence for the scoring model, validated empirically** against production baselines to prevent co-derived finding inflation.
   - Isolated anomalies that fail to accumulate corroborating signals within a configurable time window decay naturally without operator intervention.
 
 ### 3. Deterministic Override Circuit (Preventing Single-Event False Negatives & Guarding Against Operational DoS)
@@ -104,3 +105,9 @@ independence_class: "SAME_OBSERVATION_DERIVATION" # SAME_OBSERVATION_DERIVATION,
 
 * Introduces short in-memory graph correlation windows (typically 15–30 minutes) before certain compound findings elevate.
 * Highly sophisticated attacks executing an isolated single-action exploit against non-critical assets must rely on lakehouse batch sweeps (`DET-02`) if real-time corroboration is absent and no deterministic invariant rule applies.
+
+### Architectural Invariant Mapping
+
+* **Preserves**: `I2` (Evidence Provenance & Traceability via canonical observation IDs), `I3` (Evidential Independence via shared ancestry discounting), `I4` (Authority Separation by maintaining risk scores as analytical proposals).
+* **Potential Tensions & Boundary Conditions**: `I6` (Bounded Autonomy) is managed via token-bucket rate limiters on the deterministic override circuit to prevent adversary-induced operational DoS.
+* **Empirical Validation Strategy**: 30-day historical replay backtests asserting $\ge 75\%$ triage queue load reduction; atomic adversary canary injection verifying sub-second deterministic bypass.

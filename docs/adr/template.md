@@ -36,6 +36,12 @@ Chosen option: "[Option 1]", because [justification. e.g., only option, which me
 * [e.g., compromising one quality attribute, ...]
 * [e.g., operational complexity introduced, ...]
 
+### Architectural Invariant Mapping
+
+* **Preserves**: [e.g., I2 (Evidence Provenance), I3 (Evidential Independence)]
+* **Potential Tensions & Boundary Conditions**: [e.g., I6 (Bounded Autonomy) requires strict timeout budget]
+* **Empirical Validation Strategy**: [e.g., automated regression backtests, chaos canary injections]
+
 ## Pros and Cons of the Options
 
 ### [Option 1]

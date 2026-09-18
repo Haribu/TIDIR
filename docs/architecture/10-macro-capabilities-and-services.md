@@ -143,13 +143,15 @@ Compresses investigation and containment timelines from hours to seconds while m
 
 ---
 
-## 3. Executive Business Value & ROI Matrix
+## 3. Target Outcome & Validation Hypotheses Matrix
 
-The matrix below maps the enterprise outcomes, financial benefits, and operational metrics delivered by the TIDIR service architecture:
+The matrix below operationalises the enterprise outcomes, architectural hypotheses, validation metrics, and demonstration maturity states across the TIDIR service architecture:
 
-| Macro Capability | Core Enterprise Business Outcomes | Financial & Operational ROI | Primary Metric & Service Level |
-| :--- | :--- | :--- | :--- |
-| **1. Threat Horizon & Intelligence** | Proactive posture adaptation; instantaneous exposure quantification during global zero-day crises. | Eliminates emergency incident response consultancy fees during major threat outbreaks. | Retrospective sweep completion $\lt 15\,\text{min}$ |
-| **2. Telemetry Fabric & Lakehouse** | Complete operational and compliance visibility; elimination of vendor lock-in and data retention penalties. | $\ge 70\%$ reduction in annual storage and indexing licensing expenditure. | Ingestion throughput $\ge 500\text{k EPS}$; Hot search latency $\lt 2\,\text{s}$ |
-| **3. Continuous Detection & Purple Teaming** | Resilient detections that do not rot; predictable alert queues; elimination of operational fatigue. | Multiplies engineering output by $5\times$; eliminates wasted hours investigating false alarms. | Detection MTTD $\lt 5\,\text{s}$ (stream) / $\lt 24\,\text{h}$ (batch); Noise ratio false-positive rate $\le 5\%$ |
-| **4. Autonomous Investigation & Containment** | Machine-speed threat neutralisation; zero accidental operational outages; regulatory-grade defensibility. | Protects enterprise revenue by preventing self-inflicted production downtime during incidents. | Investigation MTTI $\lt 60\,\text{s}$; Automated MTTC $\lt 15\,\text{s}$; Human MTTC $\lt 5\,\text{min}$ |
+| Macro Capability | Core Enterprise Target Outcome | Target Validation Hypothesis | Validation Metric & Service Level | Validation State |
+| :--- | :--- | :--- | :--- | :--- |
+| **1. Threat Horizon & Intelligence** | Proactive posture adaptation; exposure quantification during zero-day crises. | **Hypothesis:** Continuous STIX/TAXII indicator decay and automated retro-hunting reduce time-to-assess enterprise exposure from days to under 15 minutes. | Retrospective sweep completion $\lt 15\,\text{min}$; Indicator cache lookup $\lt 5\,\text{ms}$ | `Pilot Validated` |
+| **2. Telemetry Fabric & Lakehouse** | Unified operational and compliance visibility; elimination of vendor storage lock-in. | **Hypothesis:** Line-rate OCSF normalisation paired with decoupled columnar lakehouse storage reduces annual telemetry licensing expenditure by $\ge 70\%$ versus proprietary index models. | Ingestion throughput $\ge 500\text{k EPS}$; Hot search latency $\lt 2\,\text{s}$ | `Lab Validated` |
+| **3. Continuous Detection & Purple Teaming** | Resilient detections; predictable alert queues; elimination of analyst operational fatigue. | **Hypothesis:** Automated adversary emulation in CI/CD paired with alert noise error budgets improves detection rule lifespan and reduces triage queue noise by $\ge 75\%$. | Detection MTTD $\lt 5\,\text{s}$ (stream) / $\lt 24\,\text{h}$ (batch); Noise ratio false-positive rate $\le 5\%$ | `Lab Validated` |
+| **4. Autonomous Investigation & Containment** | Machine-speed threat neutralisation; zero unintended operational outages; regulatory-grade defensibility. | **Hypothesis:** Pre-execution blast-radius simulation, multi-model consensus, and reachability-bounded forward compensation allow sub-60s containment without inducing operational downtime. | Investigation MTTI $\lt 60\,\text{s}$; Automated MTTC $\lt 15\,\text{s}$; Human MTTC $\lt 5\,\text{min}$ | `Lab Validated` |
+
+*Validation Maturity Lifecycle:* `Unvalidated` ➔ `Lab Validated` ➔ `Pilot Validated` ➔ `Production Observed`

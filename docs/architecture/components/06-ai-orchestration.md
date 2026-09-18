@@ -70,7 +70,7 @@ In mission-critical security operations, relying exclusively on commercial publi
 2. **Self-Hosted Sovereign Backup (Air-Gapped Operational Continuity)**:
    - To guarantee operational continuity during commercial cloud outages, rate-limit exhaustion, or WAN isolation during major cyber attacks, TIDIR specifies an on-premises or private-cloud **Sovereign Open-Weights Inference Cluster** (e.g. 70B+ parameter models running on vLLM/Triton).
    - **Zero Censorship on Defensive Payloads**: Self-hosted open-weights models operate without third-party public guardrails, enabling uninhibited reverse-engineering of live malware payloads, zero-day shellcode, and forensic dumps.
-   - **Absolute Data Sovereignty**: Critical breach evidence, executive communications, and unredacted customer data can be processed entirely within the enterprise perimeter without third-party cloud data egress.
+   - **On-Premises Data Boundary Enforcement**: Critical breach evidence, executive communications, and unredacted customer data can be processed entirely within the enterprise perimeter without third-party cloud data egress.
 
 ### 2. Model Context Protocol (MCP) as the Canonical Tool Bus
 All forensic, contextual, and simulation tools are exposed to agents exclusively via the **Model Context Protocol (MCP)**:
@@ -97,7 +97,7 @@ Multi-stage investigations require persistent shared memory, auditability, and p
 
 ### 4. Deterministic Safety Kernel & Zero Trust AI
 TIDIR rejects the assumption that prompt sanitization can deterministically prevent adversarial manipulation. Instead, it enforces a **Zero Trust AI Architecture**:
-- **Explicit Adversarial Assumption**: The system assumes untrusted evidence can influence model reasoning. Security therefore does not depend upon successful prompt-injection detection. A compromised reasoning agent remains strictly bounded by deterministic controls:
+- **Explicit Adversarial Threat Assumption**: TIDIR assumes adversarial evidence may successfully influence model reasoning. No security boundary therefore depends upon the model correctly distinguishing instructions from data. Consequential effects are bounded by deterministic capability, identity, schema, policy, and execution controls outside the reasoning model:
   1. *Capability-Bounded Permissions*: Agents operate with read-only query capabilities via strongly typed MCP tools. They hold zero administrative or mutating execution credentials.
   2. *Task-Scoped Ephemeral SVIDs*: SPIFFE/SPIRE mints short-lived X.509 identities ($\le 15\text{m}$) enforcing least-privilege tool contracts at the network layer.
   3. *Independent Response Authority*: Mutating containment actions are evaluated and authorized exclusively by the deterministic response safety kernel and human incident commanders.
