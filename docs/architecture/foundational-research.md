@@ -132,6 +132,21 @@ TIDIR maintains a strict epistemic boundary between **normative architectural in
 
 Admission to this research programme is deliberately constrained: we do not add architectural features simply because an idea is appealing. Every research track must establish a concrete mechanism to test, falsify, or benchmark how TIDIR properties survive contact with real-world workloads and adversarial conditions.
 
+### The 8-Axis Falsification Matrix
+
+Rather than a speculative feature queue, the TIDIR research backlog functions as an adversarial falsification battery designed to stress-test the architecture's core invariants across eight operational dimensions:
+
+| Research Axis | Operational Falsification Question | Target Under Stress |
+| :--- | :--- | :--- |
+| **Load & Scale** | Does TIDIR collapse or drop events under realistic data storms? | Reference Workloads ($W_1, W_2, W_3$) |
+| **Evidence Reasoning** | Does confidence compounding artificially inflate belief or explode DAG cardinality? | Provenance Scalability & Lineage Fusion (`INV-02`, `INV-03`) |
+| **Failure Boundaries** | What combination of crashes breaks an invariant? | Invariant Violation & Fault Trees (`INV-01`–`INV-11`) |
+| **Compositional Safety** | Can locally correct components compose into global unsafety? | Cross-Plane Consistency & Interleavings |
+| **Semantic Fidelity** | Does OCSF mapping irreversibly destroy forensic truth or enable evasion? | Normalization Loss vs. Preservation (`INV-01`, `INV-02`) |
+| **Monotonicity Bounds** | Can availability constraints compromise containment reachability? | Multi-Dimensional Reachability ($R_{\text{attacker}} \mid C_{\text{availability}}$) |
+| **Empirical Proof** | Can declarative assurance cases be reproduced in code? | Attack-to-Containment Benchmark Harness |
+| **Unit Economics** | Does defensive value scale faster than ingest and compute costs? | Telemetry ROI & Value-Cost Derivatives |
+
 ### Priority Research Tracks
 
 #### 1. Reproducible Attack-to-Containment Benchmark Harness (Priority Experimental Vehicle)
@@ -144,26 +159,41 @@ Admission to this research programme is deliberately constrained: we do not add 
 - **Core Research Question**: *Under what combinations of compromised control-plane components, stale policy, identity failure, partial network partition, and adversarial telemetry can a nominally TIDIR-compliant implementation violate `INV-01` through `INV-11`?*
 - **Outcome**: Formal fault trees, property-based testing matrices, and foundations for mechanical verification.
 
-#### 3. Formal Provenance Scalability & Lineage Fusion (INV-02 & INV-03)
+#### 3. Compositional Safety & Cross-Plane Consistency (Local-to-System Safety)
+- **Objective**: Investigate whether the satisfaction of isolated component contracts is sufficient to guarantee `INV-01` through `INV-11` at the system level.
+- **Core Research Questions**:
+  - *Under what asynchronous interleavings (e.g. stale policy distribution, delayed telemetry, concurrent containment playbooks, delayed identity rotation) can locally conformant components produce globally unsafe states?*
+  - *Which invariants require global coordination, causal ordering, distributed fencing, or cross-plane saga locks rather than purely local boundary enforcement?*
+- **Outcome**: Formal composition proofs, negative counterexamples, and distributed coordination requirements for multi-plane deployments.
+
+#### 4. Normalization Fidelity & Irreversible Information Loss (Semantic Preservation)
+- **Objective**: Quantify and mitigate semantic degradation across the telemetry transformation pipeline (`raw telemetry ➔ parser ➔ OCSF mapping ➔ enrichment ➔ finding`).
+- **Core Research Questions**:
+  - *What source telemetry semantics cannot be mapped losslessly into standardized OCSF envelopes, and does unmapped raw preservation (`INV-01`) sufficiently mitigate forensic loss?*
+  - *Can two distinct malicious actions collapse into an identical normalized representation, and can adversaries exploit normalization ambiguity to blind downstream Detection-as-Code rules?*
+  - *How do upstream schema evolution and parser version shifts impact historical replay and cryptographic provenance (`INV-02`)?*
+- **Outcome**: A formal metric for semantic preservation, schema ambiguity test suites, and cryptographic raw-to-normalized provenance linkage specifications.
+
+#### 5. Formal Provenance Scalability & Lineage Fusion (INV-02 & INV-03)
 - **Objective**: Resolve the operational tension between forensic fidelity, dependency calibration, and graph cardinality in evidence provenance.
 - **Core Research Questions**:
   - *Can `INV-02`'s provenance requirement represent aggregate, negative, statistical, and model-derived evidence without either exploding lineage cardinality or weakening reconstructability?*
   - *How far up the provenance DAG must dependencies propagate, and how can co-derived signals sharing common ancestry be discounted without requiring complex full generative models at line rate?*
 - **Direction**: Evaluate whether operational defense requires elaborate Bayesian probability calibration or whether deterministic dependency suppression sufficiently eliminates artificial confidence compounding while preserving tamper-evident reconstructability.
 
-#### 4. Multi-Dimensional Containment Constraints ($R_{\text{attacker}} \mid C_{\text{availability}}$)
+#### 6. Multi-Dimensional Containment Constraints ($R_{\text{attacker}} \mid C_{\text{availability}}$)
 - **Objective**: Model operational continuity without degrading containment safety.
 - **Strict Framing**: Availability and business continuity are investigated exclusively as **deterministic constraints on permissible containment candidates**, never as an optimization trade-off against attacker reachability.
 - **Non-Negotiable Invariant**: Monotonicity remains absolute: $\mathcal{R}(s_{\text{post}}) \subseteq \mathcal{R}(s_{\text{pre}})$. A containment action cannot permit attacker reachability expansion on the pretext of preserving availability.
 
-#### 5. Parameterized Workload Benchmark Models ($W_1, W_2, W_3$)
+#### 7. Parameterized Workload Benchmark Models ($W_1, W_2, W_3$)
 - **Objective**: Replace ungrounded latency and throughput targets with explicit, reproducible workload vectors:
   $$W = \{\text{EPS}, \text{bytes/event}, \text{entities/day}, \text{cardinality}, \text{retention}, \text{hot \%}, \text{query concurrency}, \text{enrichment fanout}\}$$
 - **Status**: Defined strictly as TIDIR reference profiles for benchmark reproducibility, not as universal industry standards: $W_1$ (Mid-Market Reference, 25k EPS), $W_2$ (Enterprise Reference, 250k EPS), and $W_3$ (Hyperscale Reference, 1M EPS).
 
-#### 6. Minimum Viable Architecture (MVA)
+#### 8. Minimum Viable Architecture (MVA)
 - **Objective**: Specify the leanest provably compliant TIDIR deployment topology: Ingress $\to$ OCSF Normalization $\to$ Dual-Tier Storage $\to$ Polyglot DaC $\to$ Case Dossiers $\to$ Policy-Gated Actuation ([ADR-0012](/adr/0012-ai-orchestration-runtime-mcp-and-mvp-roadmap)).
 
-#### 7. SecOps Unit Economics Framework
+#### 9. SecOps Unit Economics Framework
 - **Objective**: Model telemetry economics as a first-class architectural dimension:
   $$\frac{\Delta(\text{Marginal Defensive Value})}{\Delta(\text{Compute} + \text{Storage} + \text{Human Cost})}$$

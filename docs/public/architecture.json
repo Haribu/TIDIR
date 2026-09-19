@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "architecture_version": "1.9.1",
-  "generated_at": "2026-09-19T17:19:16.930Z",
+  "architecture_version": "1.10.0",
+  "generated_at": "2026-09-19T17:26:56.143Z",
   "canonical_source": "https://tidir.harrymclaren.co.uk",
   "title": "TIDIR Reference Architecture Graph",
   "description": "Machine-readable graph representation of TIDIR invariants, capabilities, services, threats, and governance contracts.",
