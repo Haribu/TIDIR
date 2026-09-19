@@ -19,7 +19,7 @@ The central thesis of the TIDIR architecture is the strict decoupling of analyti
 > **The Confidence–Authority Separation Principle**:
 > *Epistemic confidence SHALL NOT implicitly confer operational authority. Authority is independently derived from policy, identity, asset criticality, blast-radius constraints, and human governance.*
 
-A probabilistic reasoning model or Bayesian correlation engine may compute a $99.9\%$ confidence score that a database cluster is compromised. That confidence provides **zero self-granting authority** to sever network links or isolate the host. 
+A probabilistic reasoning model or Bayesian correlation engine may compute a 99.9% confidence score that a database cluster is compromised. That confidence provides **zero self-granting authority** to sever network links or isolate the host. 
 
 Conversely, interaction with a high-fidelity canary credential produces high-confidence, directly attributable evidence, yet the response policy still constrains the blast radius to non-destructive session freezing if the entity is designated as Tier 0 critical infrastructure.
 
