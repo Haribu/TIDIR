@@ -21,6 +21,28 @@ with deterministic controls wrapped around all probabilistic stages:
 
 ---
 
+## Strategic Context: The Four Generations & The Shadow Risk Register
+
+### The Four Generations of Cyber Engineering
+To understand why TIDIR is architected as an integrated Cyber Defence Control System rather than an unbundled collection of discrete security tools, consider the historical evolution of the cyber engineering discipline across four distinct archetypes:
+
+1. **Generation 1: The Gatekeeper (Pre-2010)**: Focused on static perimeter defence, network access control lists (ACLs), stateful firewalls, and manual host patching. Control was maintained through physical and logical network boundaries—an operating model that dissolved with the advent of distributed cloud infrastructure, microservices, and dynamic ephemeral APIs.
+2. **Generation 2: The Integrator (2010–2020)**: Characterized by the explosion of point solutions, Software-as-a-Service (SaaS), and best-of-breed product acquisition. Security engineers lived inside vendor graphical user interfaces ("ClickOps"), acting as human routers manually copying data between unintegrated consoles ("swivel-chair security").
+3. **Generation 3: The Builder (2020–Present)**: Recognizing that security is fundamentally a software and systems problem, Gen 3 adopted software engineering discipline: Infrastructure-as-Code (IaC), GitOps, version-controlled Detection-as-Code (DaC), and automated Continuous Integration and Continuous Delivery (CI/CD) pipelines.
+4. **Generation 4: The Optimiser (TIDIR Target Architecture, 2023+)**: Resolves the scalability, cost, and cognitive crisis of Gen 3. Ingesting every log into monolithic indices is financially unsustainable; running thousands of uncalibrated rules creates crushing alert fatigue. Gen 4 engineering treats security operations as an optimized distributed data systems and bounded artificial intelligence (AI) problem: combining line-rate schema validation (OCSF), unbundled query engines on columnar lakehouses, and autonomous agent orchestration governed by deterministic safety boundaries.
+
+### The Shadow Risk Register: Engineering Constraints as Business Risk Acceptance
+In conventional Security Operations Centers (SOCs), operational compromises are routinely justified as mere engineering constraints, storage quotas, or performance tuning. In practice, **every engineering constraint functions as an unacknowledged proxy for business risk acceptance**—creating an invisible **Shadow Risk Register**:
+
+* **Telemetry Sampling & Sensor Dropping**: When an engineering team deploys lightweight endpoint sensors or truncates telemetry streams to save bandwidth or central processing unit (CPU) cycles, they implicitly accept the business risk of **data blindness** to novel zero-day memory injections and living-off-the-land techniques.
+* **Alert Tuning for False Positives**: When detection engineers tune out noisy rules to protect analysts from alert fatigue, they prioritize precision over recall—implicitly accepting the business risk of **silent false negatives**, where slight adversary mutations evade overly restrictive detection queries.
+* **Superficial Queue Speed-Running**: When human analysts are overwhelmed by alert volume and forced to speed-run ticket queues to satisfy Mean Time to Respond (MTTR) Service Level Agreements (SLAs), the organisation implicitly accepts the risk of **shallow investigations**, sacrificing proactive threat hunting for reactive queue clearing.
+* **Hesitant or Partial Containment**: When automated response is restricted to single-host isolation out of fear of disrupting business operations, the organisation implicitly accepts the risk of **unmitigated lateral movement** and rapid enterprise-wide compromise.
+
+**TIDIR's Mission**: The 11 Architectural Invariants of TIDIR systematically eliminate the Shadow Risk Register. By decoupling storage into cost-effective lakehouses (preserving unmapped raw telemetry), applying dependency-aware Bayesian risk compounding (surfacing weak, correlated signals without alert flooding), and enforcing mathematically monotonic containment state machines, TIDIR converts hidden operational compromises into transparent, governed, and verifiable architectural guarantees.
+
+---
+
 ## 1. System Topology & Control Loop
 
 The architecture operates across two orthogonal dimensions:
@@ -29,7 +51,9 @@ The architecture operates across two orthogonal dimensions:
 
 ### 1.1 Operational Runtime Pipeline
 
-The operational pipeline processes security events in a strict directional flow from point-of-origin generation to automated mitigation, with an outer perimeter feedback channel for attributed threat intelligence and visibility calibration:
+The operational pipeline processes security events in a strict directional flow from point-of-origin generation to automated mitigation, with an outer perimeter feedback channel for attributed threat intelligence and visibility calibration.
+
+Layer 1 anchors ingestion in the **SOC Visibility Quad**—incorporating machine-readable Logs, Endpoint events, Network metadata, and Application / Cloud / Artificial Intelligence (AI) execution traces—supplemented by enterprise asset context and Cyber Threat Intelligence (CTI):
 
 ```mermaid
 flowchart TB
