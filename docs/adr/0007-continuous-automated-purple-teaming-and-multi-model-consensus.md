@@ -67,3 +67,9 @@ Chosen option: **Continuous Automated Purple Teaming, Dual-Model Consensus, and 
 
 * Automated emulation harnesses require continuous maintenance to update atomic execution payloads.
 * Dual-model arbitration incurs additional token consumption and asynchronous out-of-band inference latency ($\le 3\,\text{s}$ SLA) during case framing (streaming containment remains decoupled and evaluated by the deterministic safety kernel in $\le 500\,\text{ms}$).
+
+### Scientific & Literature Grounding
+
+* **Base-Rate Fallacy & Alert Fatigue Mitigation**: [Axelsson (2000)](https://doi.org/10.1145/357830.357849), *The Base-Rate Fallacy and the Difficulty of Intrusion Detection*; [FND-01](/architecture/foundational-research#fnd-01).
+* **Empirical Limits of Autonomous Cyber Reasoning & Exploit Discovery**: [UK AI Security Institute [AISI] (2026)](/architecture/foundational-research#fnd-17), *Empirical Evaluations of Frontier Autonomous Cyber Capabilities*; [FND-17](/architecture/foundational-research#fnd-17).
+* **Elimination of Shared Mode Collapse via Proposer/Challenger Consensus**: [Anthropic (2026)](/architecture/foundational-research#fnd-17), *Claude Mythos System Card & Project Glasswing*; [FND-17](/architecture/foundational-research#fnd-17).
