@@ -83,7 +83,7 @@ TIDIR synthesizes defensive strategy, analytic taxonomy, API safety, and operati
 
 ## 🗺️ Roadmap, Research & Release Milestones
 
-TIDIR maintains strict discipline between what is formally specified and verified in the live architecture versus active research and future exploratory ideas.
+TIDIR maintains strict discipline between what is specification-validated in the target architecture versus empirically validated through experimental testbeds and future research.
 
 ### ✅ Delivered Milestones
 
