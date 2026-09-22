@@ -898,7 +898,7 @@ The three benchmark compound campaigns below illustrate how TIDIR maintains safe
 
 Modern SecOps architectures increasingly integrate Large Language Models (LLMs) and Small Language Models (SLMs) for advisory parsing, query compilation, and triage summarisation. TIDIR treats AI components not as trusted reasoning oracles, but as probabilistic workers operating in a Zero Trust environment governed by the **TIDIR Trust Doctrine Maxim**:
 
-$$\text{“Probabilistic components may propose. Deterministic components authorize.”}$$
+> *"Probabilistic components may propose. Deterministic components authorise."*
 
 ### AI Threat Taxonomy Alignment (MITRE ATLAS & OWASP Top 10 for LLMs)
 

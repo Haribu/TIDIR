@@ -32,7 +32,7 @@ hero:
 features:
   - icon: 🛡️
     title: The Operating Maxim
-    details: "«Probabilistic components propose. Deterministic components authorise.» Generative models and neural embeddings analyze; deterministic policy kernels govern execution."
+    details: "'Probabilistic components propose. Deterministic components authorise.' Generative models and neural embeddings analyse; deterministic policy kernels govern execution."
   - icon: 🌊
     title: Telemetry & Data Fabric
     details: Line-rate OCSF normalisation, decoupled streaming, and dual-tier storage (hot search vs open columnar lakehouse) preserving forensic evidence independent of current detection value.

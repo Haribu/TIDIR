@@ -256,6 +256,10 @@ for (const file of targetFiles) {
       }
     }
 
+    if (/[«»‹›]/.test(line)) {
+      warnings.push(`⚠️ [Punctuation / AI Marker] ${file}:${lineNum} — Non-standard guillemet quotation mark (prefer standard English quotes or markdown italics)`);
+    }
+
     if (!isInvariantDoc) {
       // 1. Check claims discipline (Hard Errors)
       for (const rule of absoluteErrorRules) {
