@@ -145,10 +145,10 @@ bun ./scripts/lint-terminology.ts # In sandboxes; or `bun run lint:terminology`
     3. *Dependency-Aware Confidence*: Correlated derivations sharing common ancestry cannot masquerade as independent evidence. Co-derived signals are discounted via dependency-aware probabilistic models (e.g. Bayesian graph compounding).
     4. *No Self-Granting Authority*: Probabilistic components propose; deterministic components authorise.
     5. *Least Capability*: Every machine actor receives only task-scoped, short-lived, ephemeral authority (e.g. SPIFFE SVIDs with TTL $\le 15\text{m}$).
-    6. *Fail-Secure Posture*: Component failure cannot silently increase attacker reachability ($s_{n+1} \preceq s_n$).
-    7. *Bounded Autonomy*: Autonomous execution has explicit temporal, financial, computational, and blast-radius limits.
-    8. *Human Recoverability*: Autonomous control planes always preserve independently accessible manual flight decks (master E-stop, break-glass).
-    9. *Degraded Defence*: Loss of an advanced capability reduces sophistication, never total visibility (graceful degradation).
+    6. *Bounded Autonomy*: Autonomous execution has explicit temporal, financial, computational, and blast-radius limits.
+    7. *Fail-Secure Posture*: Component failure cannot silently increase attacker reachability ($s_{n+1} \preceq s_n$).
+    8. *Degraded Defence*: Loss of an advanced capability reduces sophistication, never total visibility (graceful degradation).
+    9. *Human Recoverability*: Autonomous control planes always preserve independently accessible manual flight decks (master E-stop, break-glass).
     10. *Reconstructability*: Consequential decisions and actions can be deterministically reconstructed after the fact via the Incident Decision DAG.
     11. *Operational Portability & Exit*: No consequential security telemetry, detection logic, case state, policy definition, or audit lineage SHALL be irrecoverably dependent upon a proprietary execution environment.
 

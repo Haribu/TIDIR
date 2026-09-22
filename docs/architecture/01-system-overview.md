@@ -5,18 +5,19 @@
 
 ---
 
-This document defines the target component architecture for **TIDIR** (Threat Intelligence, Detection, Investigation & Response). TIDIR is architected as a closed-loop **Cyber Defence Control System** that governs the operational progression:
+This document defines the target component architecture for **TIDIR** (Threat Intelligence, Detection, Investigation & Response). TIDIR is architected as a closed-loop **Cyber Defence Control System** that governs the bidirectional operational progression:
 
-$$\text{Observe} \longrightarrow \text{Normalise} \longrightarrow \text{Infer} \longrightarrow \text{Investigate} \longrightarrow \text{Decide} \longrightarrow \text{Actuate} \longrightarrow \text{Learn}$$
+$$\text{Exposure} \longleftrightarrow \text{Observe} \longrightarrow \text{Normalise} \longrightarrow \text{Infer} \longrightarrow \text{Investigate} \longrightarrow \text{Decide} \longrightarrow \text{Actuate} \longrightarrow \text{Learn} \longleftrightarrow \text{Exposure}$$
 
 with deterministic controls wrapped around all probabilistic stages:
-* **Observation**: Telemetry & Data Fabric (Layer 1 & 2) collecting raw environmental events.
+* **Exposure Intelligence**: Continuous Threat Exposure Management (CTEM) integration, asset criticality scoring, and attack path mapping providing dynamic Bayesian priors, updated continuously by incident reality.
+* **Observation**: Telemetry & Data Fabric (Layer 1 & 2) collecting raw environmental events and native edge security findings.
 * **Normalisation**: Open Cybersecurity Schema Framework (OCSF) validation and schema registry mapping.
-* **Inference & Threat Estimation**: Stateful streaming detection and dependency-aware Bayesian risk compounding (Layer 3).
-* **Investigation**: Bounded hierarchical agent mesh with evidence grounding across entity-finding graphs (Layer 4).
+* **Inference & Threat Estimation**: Distributed detection model pairing native edge detections (EDR, NDR, CNAPP, IdP) with central cross-domain correlation and dependency-aware Bayesian risk compounding (Layer 3).
+* **Investigation**: Bounded hierarchical agent mesh with evidence grounding across entity-finding graphs (Layer 4), retrieving contextual telemetry on-demand.
 * **Decision**: Universal Incident Decision Directed Acyclic Graph (DAG) recording causal provenance.
 * **Actuation & Control**: Monotonic fail-closed containment state machines governed by reachability invariants.
-* **Feedback & Learning**: Continuous Red, Blue, and Green Team prevention calibration loops.
+* **Feedback & Learning**: Continuous Red, Blue, Green Team, and Exposure Management calibration loops.
 * **Resilience**: Four-tier graceful degradation, local NVMe spooling, and air-gapped continuity modes.
 
 ---
@@ -64,10 +65,11 @@ flowchart TB
   classDef layer4 fill:#06372b,stroke:#34d399,stroke-width:2px,color:#f8fafc;
 
   %% Layer 1: Data Sources & Environmental Inputs
-  subgraph L1 ["LAYER 1: DATA SOURCES & CONTEXTUAL INGESTION"]
+  subgraph L1 ["LAYER 1: DATA SOURCES, EXPOSURE & EDGE FINDINGS"]
     L1_LOGS["Machine-Readable Logs & OS Events\n(Syslog RFC 5424, JSON/NDJSON, Windows EVTX, journald, cloud audit)"]:::layer1
     L1_TELEM["Runtime Operational Telemetry\n(Kernel hooks, eBPF, audit trails, network flows & identity)"]:::layer1
-    L1_CTX["Enterprise Posture & Asset Context\n(CMDB hierarchy, attack surface exposure, control status)"]:::layer1
+    L1_EDGE["Distributed Edge Findings\n(Native EDR, NDR, CNAPP, IdP OCSF Findings; ADR-0023)"]:::layer1
+    L1_EXPO["Exposure Intelligence Fabric\n(CTEM attack paths, KEV exploitability, asset criticality; ADR-0022)"]:::layer1
     L1_CTI["Cyber Threat Intelligence (CTI)\n(STIX 2.1 tactical feeds, CVE weaponization, threat actors)"]:::layer1
   end
 
@@ -81,8 +83,8 @@ flowchart TB
   %% Layer 3: Threat Intelligence & Detection Engineering
   subgraph L3 ["LAYER 3: THREAT INTEL & DETECTION ENGINEERING"]
     L3_FLOW["Machine-Readable Threat Models\n(Adversary attack flows, PIRs, graph mapping)"]:::layer3
-    L3_DAC["Dual-Lane DaC Engine\n(Fast-lane emergency zero-day + standard 30d lakehouse)"]:::layer3
-    L3_RISK["Risk Lens & Finding Synthesis\n(Supernode-dampened graph clustering, OCSF 2001/2004)"]:::layer3
+    L3_DAC["Dual-Lane DaC Engine\n(Cross-domain correlation + fast-lane zero-day)"]:::layer3
+    L3_RISK["Exposure-Aware Risk Lens\n(Dynamic priors, supernode graph clustering, OCSF 2001/2004)"]:::layer3
   end
 
   %% Layer 4: Incident Response & Automation
@@ -95,6 +97,7 @@ flowchart TB
   %% Closed-Loop Architectural Feedback
   subgraph FB ["CLOSED-LOOP CONTINUOUS CALIBRATION"]
     FB_INTEL["Attributed Threat Flows & IOCs\n(Re-ingested into L1 CTI & L3 Detection Backlog)"]
+    FB_EXPO["Realized Risk Elevation\n(Converts theoretical exposure to active threat in CTEM)"]
     FB_GAPS["Telemetry Blindspot Analysis\n(Re-tunes L1 Sensor Filters & Collection Audits)"]
     FB_JIT["JIT Telemetry Elevation Orders\n(Dynamically re-instruments L1 edge sensors for 15-30m)"]
     FB_RESP["Playbook Execution Efficacy\n(Refines L4 Blast-Radius & Forward Models)"]
@@ -243,17 +246,19 @@ To prevent ambiguous claims of correctness, TIDIR enforces a strict three-tier v
 
 ### Layer 1: Data Sources & Environmental Inputs
 - **Generation, Collection & Transport**: Emits raw facts at the point of origin across standard machine-readable logs (Syslog RFC 5424, JSON/NDJSON, Windows EVTX, journald, cloud audit trails), kernel hooks (eBPF, ETW), control plane APIs, and wire taps, buffering at the edge and transporting across network boundaries via secure, compressed streams.
-- **Multidimensional Inputs**: Unifies standard machine-readable logs and runtime operational telemetry with external cyber threat intelligence (CTI), organizational context (asset CMDB, directory hierarchies), attack surface exposure (EASM), and security control posture.
+- **Multidimensional Ingress & Distributed Findings**: Unifies raw telemetry with native edge findings emitted directly by domain security controls (EDR, NDR, CNAPP, IdP OCSF Classes 2001/2004; [ADR-0023](../adr/0023-distributed-detection-and-edge-to-center-correlation.md)).
+- **Exposure Intelligence & CTEM Fabric**: Ingests continuous asset criticality, network reachability, identity attack path graphs, and vulnerability exploitability metrics (CISA KEV, EPSS), establishing the baseline context for detection prioritization ([ADR-0022](../adr/0022-exposure-management-and-continuous-threat-exposure-integration.md)).
 - See full spec: [Layer 1 Specification](03-layer-1-data-sources.md).
 
 ### Layer 2: Pipeline, Storage & Query Fabric
-- **Line-Rate Normalization**: Standardises raw payloads into Open Cybersecurity Schema Framework (OCSF) objects via an authoritative Schema Registry.
+- **Line-Rate Normalization**: Standardises raw payloads and native edge findings into Open Cybersecurity Schema Framework (OCSF) objects via an authoritative Schema Registry.
 - **Value-Based Routing**: Diverts high-value security events to hot indexing and stream engines while streaming bulk forensic telemetry into low-cost columnar lakehouse storage.
-- **Multi-Paradigm Querying**: Provides four specialized engines: Real-Time Streaming ($\lt 5\text{s}$), Scheduled Batch SQL (7–90 day baselines), Federated Query-in-Place, and ML Feature Stores.
+- **Multi-Paradigm & Federated Querying**: Provides four specialized engines: Real-Time Streaming ($\lt 5\text{s}$), Scheduled Batch SQL (7–90 day baselines), Federated Query-in-Place (for on-demand edge/VPC context retrieval), and ML Feature Stores.
 - See full spec: [Layer 2 Specification](04-layer-2-pipeline-storage-query.md).
 
 ### Layer 3: Threat Intelligence & Detection Engineering
-- **Dual-Lane Detection Ingress**: Balances a probabilistic, dependency-aware Bayesian compounding lane for correlated weak signals with a deterministic fast-path that immediately elevates zero-tolerance invariants (canary tokens, BYOVD kernel tampering) without graph delay.
+- **Distributed & Cross-Domain Detection**: Adheres to the principle *"detect as close to the signal as practical; correlate as centrally as necessary."* Offloads commodity single-source detections to native edge controls, reserving central stream and batch engines for cross-domain correlations and bespoke enterprise logic ([ADR-0023](../adr/0023-distributed-detection-and-edge-to-center-correlation.md)).
+- **Exposure-Aware Bayesian Risk Lens**: Dynamically injects asset criticality and exposure posture as prior probabilities $P(\text{Breach})$ into the Bayesian Multi-Signal Risk Lens ([ADR-0009](../adr/0009-bayesian-multi-signal-risk-scoring.md)), mitigating the Base Rate Fallacy by aggressively elevating weak anomalies on exposed choke points while dampening benign activity on isolated assets ([ADR-0022](../adr/0022-exposure-management-and-continuous-threat-exposure-integration.md)).
 - **Machine-Readable Attack Flows**: Codifies multi-stage adversary behaviours into structured graphs, prioritising detection engineering backlogs via threat likelihood and asset exposure.
 - **Detection-as-Code (DaC)**: All rules are authored as declarative code using a Polyglot DaC pattern (vendor-neutral YAML metadata envelopes coupled with target-optimized query blocks, see [ADR-0019](../adr/0019-polyglot-detection-as-code-and-native-engine-adaptation.md)), versioned in Git.
 - **Empirical Test Harness**: Validates rules through controlled adversary simulation, synthetic unit tests, and 30-day historical lakehouse backtesting.

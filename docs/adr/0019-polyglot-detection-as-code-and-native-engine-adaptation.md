@@ -14,7 +14,7 @@ Early Detection-as-Code (DaC) proposals advocated for a "100% vendor-neutral dec
 
 In enterprise production environments, this abstraction introduces the **Lowest Common Denominator Trap**:
 1. **Expressive Asymmetry**: Advanced detection relies on engine-native capabilities—such as KQL timeseries decomposition (`make-series`, `series_decompose_anomalies()`), Splunk streaming statistics (`streamstats`, `transaction`), Lakehouse SQL window partitions (`QUALIFY`, `PARTITION BY`), or Flink stateful event-time watermarking. A generic YAML DSL cannot express these primitives without inventing a bespoke, unmaintainable programming language within YAML.
-2. **Performance & Index Impedance**: Universal AST transpilers generate naive queries that fail to utilize table clustering keys, partition pruning, Bloom filters, or materialized projections, causing massive scan overhead and cloud compute costs.
+2. **Performance & Index Impedance**: Universal AST transpilers generate naive queries that fail to use table clustering keys, partition pruning, Bloom filters, or materialized projections, causing massive scan overhead and cloud compute costs.
 3. **The Role of AI**: Generative AI models and LLM judges have fundamentally matured. Transpilation is no longer confined to brittle regex token rewriters; AI agents can synthesize and optimize dialect-native queries directly while validating semantic parity.
 
 How should TIDIR structure Detection-as-Code to preserve vendor-neutral governance and portability without crippling detection engineers or sacrificing query execution efficiency?
@@ -26,7 +26,7 @@ How should TIDIR structure Detection-as-Code to preserve vendor-neutral governan
 * **Expressive Freedom**: Detection engineers must be able to exploit the full analytical depth of specialized engines (KQL, SPL, ClickHouse/Snowflake SQL, Flink SQL).
 * **Vendor-Neutral Governance**: Lifecycles, OCSF class bindings, MITRE ATT&CK taxonomies, SRE noise budgets, and triage playbooks must remain 100% vendor-neutral and portable.
 * **Deterministic Verification**: Detections must be testable via synthetic test fixtures and adversary emulation before reaching production runtimes.
-* **Continuous Detection Engineering**: Architecture leverages agentic assistance to draft native query implementations from Attack Flows, with deterministic CI fixtures and human peer review enforcing cross-platform semantic parity.
+* **Continuous Detection Engineering**: Architecture uses agentic assistance to draft native query implementations from Attack Flows, with deterministic CI fixtures and human peer review enforcing cross-platform semantic parity.
 
 ---
 
@@ -174,8 +174,8 @@ The Polyglot DaC envelope formalises two critical operational properties:
 
 ## Positive Consequences
 
-* **Zero Expressive Bottlenecks**: Detection engineers can author complex analytical logic, windowed aggregations, and graph correlations utilizing the full power of native query engines.
-* **Engine Optimization**: Queries directly leverage native partitioning, clustering indexes, streaming window states, and cost-efficient execution plans.
+* **Zero Expressive Bottlenecks**: Detection engineers can author complex analytical logic, windowed aggregations, and graph correlations using the full power of native query engines.
+* **Engine Optimization**: Queries directly use native partitioning, clustering indexes, streaming window states, and cost-efficient execution plans.
 * **Uncompromised Governance**: Life-cycle states, threat taxonomy mappings, SRE noise budgets, and unit fixtures remain fully decoupled and vendor-neutral.
 * **AI-Driven Cross-Compilation & Parity**: Detection rule copilots can synthesize dialect-specific implementations from universal attack flows and verify them against shared OCSF test fixtures in CI/CD.
 

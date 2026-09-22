@@ -179,6 +179,8 @@ export default withMermaid(
             items: [
               { text: "What is TIDIR?", link: "/guide/what-is-tidir" },
               { text: "15-Minute Golden Path", link: "/guide/golden-path" },
+              { text: "Adoption Roadmap & Maturity", link: "/guide/adoption-roadmap" },
+              { text: "Persona-Driven Journeys", link: "/guide/persona-journeys" },
               { text: "Foundational Research & Literature", link: "/architecture/foundational-research" },
               { text: "Assurance Case Map", link: "/architecture/assurance-map" }
             ]
@@ -210,6 +212,7 @@ export default withMermaid(
               { text: "Architectural Invariants", link: "/architecture/00-architectural-invariants" },
               { text: "Foundational Research & Literature", link: "/architecture/foundational-research" },
               { text: "System Overview & 4-Plane Model", link: "/architecture/01-system-overview" },
+              { text: "Reference Stacks", link: "/architecture/reference-stacks" },
               { text: "ADR Registry", link: "/adr/" }
             ]
           }
@@ -220,6 +223,8 @@ export default withMermaid(
             items: [
               { text: "Architectural Invariants & Constitution", link: "/architecture/00-architectural-invariants" },
               { text: "System Overview & 4-Plane Model", link: "/architecture/01-system-overview" },
+              { text: "Concrete Reference Stacks", link: "/architecture/reference-stacks" },
+              { text: "Failure Modes & Tradeoffs", link: "/architecture/failure-modes-and-tradeoffs" },
               { text: "Foundational Research & Literature", link: "/architecture/foundational-research" },
               { text: "Glossary & Concept Taxonomy", link: "/architecture/glossary" },
               { text: "Target Threat Model", link: "/architecture/09-threat-model" },
@@ -286,7 +291,9 @@ export default withMermaid(
               { text: "0009 - Bayesian Multi-Signal Risk Scoring", link: "/adr/0009-bayesian-multi-signal-risk-scoring" },
               { text: "0011 - Bipartite Entity-Finding Graph", link: "/adr/0011-bipartite-entity-finding-graph-consolidation" },
               { text: "0013 - Ambient Deception & Canary Anchors", link: "/adr/0013-ambient-deception-fabric-and-canary-anchors" },
-              { text: "0019 - Polyglot DaC & Native Engine Adaptation", link: "/adr/0019-polyglot-detection-as-code-and-native-engine-adaptation" }
+              { text: "0019 - Polyglot DaC & Native Engine Adaptation", link: "/adr/0019-polyglot-detection-as-code-and-native-engine-adaptation" },
+              { text: "0022 - Exposure Management & CTEM Integration", link: "/adr/0022-exposure-management-and-continuous-threat-exposure-integration" },
+              { text: "0023 - Distributed Detection & Edge Correlation", link: "/adr/0023-distributed-detection-and-edge-to-center-correlation" }
             ]
           },
           {
