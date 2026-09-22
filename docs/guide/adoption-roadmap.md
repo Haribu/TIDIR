@@ -56,6 +56,7 @@ TIDIR Transition:   Raw High-Volume Events ──► Edge Forwarder ────
 1. **Establish the GitOps detection repository ([ADR-0019](/adr/0019-polyglot-detection-as-code-and-native-engine-adaptation))**: Codify every detection rule as a declarative YAML metadata envelope paired with target-optimized query blocks (ClickHouse SQL, Snowflake SQL, KQL, or Sigma).
 2. **Add automated CI validation**: Run pull-request checks that validate schema syntax and execute synthetic attack scenarios against candidate rules before merging.
 3. **Backtest against 30-day historical data**: Query candidate rules against lakehouse partitions to measure false-positive rates and enforce alert noise budgets ([ADR-0008](/adr/0008-secops-error-budgets-and-chaos-security-engineering)). Block rules that exceed noise thresholds.
+4. **Declare inverted telemetry dependencies ([ADR-0019](/adr/0019-polyglot-detection-as-code-and-native-engine-adaptation))**: Enrich DaC rules with explicit required vs optional telemetry requirements, enabling automated alerting and graceful confidence discounting when upstream collection pipelines degrade.
 
 ### Phase 3: The 4-Plane Model & Agent Trust Boundary (Days 181–270)
 
@@ -72,6 +73,7 @@ TIDIR Transition:   Raw High-Volume Events ──► Edge Forwarder ────
 1. **Feed exposure context into detection priors ([ADR-0022](/adr/0022-exposure-management-and-continuous-threat-exposure-integration))**: Connect attack surface reachability, vulnerability exploitability (CISA KEV, EPSS), and identity choke points to the Bayesian Multi-Signal Risk Lens ([ADR-0009](/adr/0009-bayesian-multi-signal-risk-scoring)) as dynamic prior probabilities $P(\text{Breach})$.
 2. **Execute playbooks as monotonic sagas ([ADR-0005](/adr/0005-saga-pattern-containment-and-break-glass-protocol))**: Structure response automation so partial failures escalate outward or freeze perimeters rather than rolling back defenses ($\hat{\mathcal{R}}_A(s_{\text{post}}) \subseteq \hat{\mathcal{R}}_A(s_{\text{pre}})$).
 3. **Shield critical infrastructure and install the E-Stop**: Permanently protect Tier 0 infrastructure (domain controllers, core transaction switches) from automated destructive actions. Maintain an independent, cryptographically signed Emergency Stop (E-Stop) for human commanders.
+4. **Decouple response intents from vendor APIs ([Component: Response Automation](/architecture/components/05-response-automation))**: Standardize automation on declarative Action Intents (`ISOLATE_HOST`, `REVOKE_SESSION`, `BLOCK_INDICATOR`), using adapters to execute across Defender, CrowdStrike, Entra, or firewalls, preserving evidence lineage across vendor migrations.
 
 ---
 

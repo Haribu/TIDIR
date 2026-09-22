@@ -38,7 +38,7 @@ features:
     details: Line-rate OCSF normalisation, decoupled streaming, and dual-tier storage (hot search vs open columnar lakehouse) preserving forensic evidence independent of current detection value.
   - icon: 🎯
     title: Continuous Detection Engineering
-    details: Stateful streaming rules, scheduled lakehouse SQL, and GitOps Detection-as-Code (DaC) tested continuously against atomic adversary simulations in CI/CD.
+    details: Distributed detection placement across edge controls, streaming, and lakehouse SQL, with inverted telemetry dependencies tested continuously in CI/CD.
   - icon: 🧠
     title: Agent Trust Boundary
     details: Specialised triage agents operate behind the Agent Trust Boundary. Untrusted evidence is kept separate from control instructions, and agents receive only short-lived, task-scoped credentials.

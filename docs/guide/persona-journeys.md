@@ -50,6 +50,7 @@ flowchart TD
 
 * **Key Architectural Answers in TIDIR**:
   * *How do we test rules without deploying to production?* **Detection-as-Code (DaC)** pairs vendor-neutral YAML metadata envelopes with target-optimized queries tested via automated CI/CD pipelines and 30-day historical lakehouse backtesting ([ADR-0019](/adr/0019-polyglot-detection-as-code-and-native-engine-adaptation)).
+  * *How do we prevent upstream pipeline changes from silently breaking detections?* **Inverted Telemetry Dependencies** ([ADR-0019](/adr/0019-polyglot-detection-as-code-and-native-engine-adaptation)) allow rules to declare required vs optional signals, automatically flagging operational status as `DEGRADED` when pipeline feeds stall.
   * *How do we stop alert fatigue?* **SRE Alert Noise Budgets** ([ADR-0008](/adr/0008-secops-error-budgets-and-chaos-security-engineering)) enforce strict False Positive Rate (FPR) ceilings, automatically freezing deployments when a detection class burns its error budget.
   * *How do we correlate without streaming every raw log centrally?* **Distributed Detection & Finding Federation** ([ADR-0023](/adr/0023-distributed-detection-and-edge-to-center-correlation)) offloads commodity detections to edge domain controls while the central core executes cross-domain graph correlation.
 
@@ -70,14 +71,16 @@ flowchart TD
 * **Key Architectural Answers in TIDIR**:
   * *How do analysts avoid cognitive fatigue?* The **Progressive Disclosure Analyst Workbench** ([INV-06](/architecture/02-capability-model)) presents findings in a structured 3-tier hierarchy: Situation Report ➔ Evidence Summary ➔ On-Demand Graph Lineage.
   * *How do automated playbooks handle failures?* Automated containment runs as a **Forward-Compensating Saga** ([ADR-0005](/adr/0005-saga-pattern-containment-and-break-glass-protocol)); if an API fails mid-action, defenses freeze in place or escalate outward rather than rolling back.
+  * *How do we avoid vendor lock-in when automating response?* **Declarative Action Intents** ([Component: Response Automation](/architecture/components/05-response-automation)) decouple response intent (e.g. `ISOLATE_HOST`, `REVOKE_SESSION`) from vendor-specific APIs, preserving evidence lineage across infrastructure migrations.
   * *How do we retain investigative intuition when AI automates routine triage?* **Continuous Operator Skill Retention Simulators** ([ADR-0020](/adr/0020-operator-skill-retention-and-incident-replay-simulators)) run regular unannounced synthetic incident drills to prevent deskilling.
 
 * **Curated Reading Order (Total Time: ~20 minutes)**:
   1. [Layer 4: Investigation & Automated Response Specification](/architecture/07-layer-4-incident-response)
-  2. [ADR-0005: Saga Pattern Containment & Break-Glass Protocol](/adr/0005-saga-pattern-containment-and-break-glass-protocol)
-  3. [ADR-0016: Just-in-Time Telemetry Elevation & Ephemeral Forensics](/adr/0016-just-in-time-telemetry-elevation-and-ephemeral-forensics)
-  4. [ADR-0020: Operator Skill Retention & Incident Replay Simulators](/adr/0020-operator-skill-retention-and-incident-replay-simulators)
-  5. [ADR-0021: Graceful Degradation, Automated Fallback & Plan B](/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b)
+  2. [Component: Response Automation & Containment](/architecture/components/05-response-automation)
+  3. [ADR-0005: Saga Pattern Containment & Break-Glass Protocol](/adr/0005-saga-pattern-containment-and-break-glass-protocol)
+  4. [ADR-0016: Just-in-Time Telemetry Elevation & Ephemeral Forensics](/adr/0016-just-in-time-telemetry-elevation-and-ephemeral-forensics)
+  5. [ADR-0020: Operator Skill Retention & Incident Replay Simulators](/adr/0020-operator-skill-retention-and-incident-replay-simulators)
+  6. [ADR-0021: Graceful Degradation, Automated Fallback & Plan B](/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b)
 
 ---
 
@@ -86,6 +89,7 @@ flowchart TD
 **Your Core Challenges**: Establishing component boundaries, verifying cryptographic trust models, securing non-human identities, mitigating prompt injection risks in agentic workflows, and ensuring high-availability distributed systems resilience.
 
 * **Key Architectural Answers in TIDIR**:
+  * *How do we interface heterogeneous security products without copying all data centrally?* The **Three First-Class OCSF Interface Types** and **Detection Placement Policy Matrix** ([ADR-0023](/adr/0023-distributed-detection-and-edge-to-center-correlation), [System Overview](/architecture/01-system-overview)) formally separate raw Telemetry (Categories 1, 3, 4, 6), standardized Findings (Category 2: Classes 2001/2004), and Entity Context.
   * *Where is the trust boundary for AI agents?* The **Agent Trust Boundary** ([ADR-0004](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall)) isolates reasoning models into the untrusted Analytical Plane; execution authority is held exclusively by deterministic policy kernels in the Defence Control Plane.
   * *How are machine credentials secured?* **Non-Human Identity Attestation** ([ADR-0018](/adr/0018-non-human-identity-lifecycle-and-machine-attestation)) issues task-scoped, ephemeral SPIFFE SVIDs valid for $\le 15\text{ minutes}$.
   * *What happens during an outage?* **Graceful Degradation (Plan B)** ([ADR-0021](/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b)) defines four explicit operational tiers, automatically dropping down to local edge spooling and tabular timelines upon upstream service failure.
@@ -93,11 +97,12 @@ flowchart TD
 * **Curated Reading Order (Total Time: ~30 minutes)**:
   1. [System Overview & The 4-Plane Model](/architecture/01-system-overview)
   2. [The Architectural Constitution & 11 Invariants](/architecture/00-architectural-invariants)
-  3. [Concrete Reference Stacks](/architecture/reference-stacks)
-  4. [ADR-0004: Defensive AI Runtime & Agent Trust Boundary](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall)
-  5. [ADR-0018: Non-Human Identity Lifecycle & Machine Attestation](/adr/0018-non-human-identity-lifecycle-and-machine-attestation)
-  6. [ADR-0021: Graceful Degradation & Plan B](/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b)
-  7. [Failure Modes & Engineering Tradeoffs](/architecture/failure-modes-and-tradeoffs)
+  3. [ADR-0023: Distributed Detection & Edge Correlation](/adr/0023-distributed-detection-and-edge-to-center-correlation)
+  4. [Concrete Reference Stacks](/architecture/reference-stacks)
+  5. [ADR-0004: Defensive AI Runtime & Agent Trust Boundary](/adr/0004-defensive-ai-runtime-and-prompt-injection-firewall)
+  6. [ADR-0018: Non-Human Identity Lifecycle & Machine Attestation](/adr/0018-non-human-identity-lifecycle-and-machine-attestation)
+  7. [ADR-0021: Graceful Degradation & Plan B](/adr/0021-graceful-degradation-automated-fallback-and-continuity-plan-b)
+  8. [Failure Modes & Engineering Tradeoffs](/architecture/failure-modes-and-tradeoffs)
 
 ---
 
