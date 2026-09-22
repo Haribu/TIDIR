@@ -102,11 +102,29 @@ threat_intel:
 
 data_requirements:
   ocsf_version: "1.1.0"
-  target_classes: [1007] # Process Activity
-  mandatory_attributes:
-    - "process.file.name"
-    - "process.file.signature.is_signed"
-    - "process.parent_process.file.name"
+  telemetry_dependencies:
+    required:
+      - class: 1007 # Process Activity
+        authority: "endpoint_edr" # e.g. defender_for_endpoint, crowdstrike_falcon
+        fields:
+          - "process.file.name"
+          - "process.file.signature.is_signed"
+          - "process.parent_process.file.name"
+        max_delivery_latency: "30s"
+    optional:
+      - class: 4001 # Network Connection Activity
+        authority: "network_ndr" # e.g. zeek_ndr, corelight
+        fields:
+          - "connection_info.direction"
+          - "dst_endpoint.ip"
+  context_dependencies:
+    - entity_type: "device"
+      required_attributes: ["criticality_tier", "owner_team"]
+    - entity_type: "user"
+      required_attributes: ["privilege_level"]
+  health_policy:
+    missing_required: "offline" # Marks rule inactive if endpoint_edr stream fails
+    missing_optional: "degraded" # Marks rule degraded; reduces alert confidence
 
 operational:
   intent: "finding" # Typed egress: finding | risk_increment | signal | telemetry_elevation_trigger
@@ -164,11 +182,12 @@ tests:
           parent_process: { file: { name: "services.exe" } }
 ```
 
-### Typed Detection Egress & Empirical Evasion Resilience
+### Typed Detection Egress, Empirical Evasion Resilience & Inverted Dependencies
 
-The Polyglot DaC envelope formalises two critical operational properties:
+The Polyglot DaC envelope formalises three critical operational properties:
 1. **Typed Egress Intent (`operational.intent`)**: Decouples detection matching from alert generation. Rules explicitly declare whether a match emits an actionable security `finding` (OCSF 2001/2004), increments an entity's `risk_increment` in the Bayesian Multi-Signal Risk Lens ([ADR-0009](0009-bayesian-multi-signal-risk-scoring.md)), tags raw events as an informational `signal` for retro-hunting, or fires a `telemetry_elevation_trigger` commanding Just-in-Time (JIT) ephemeral sensor verbosity ([ADR-0016](0016-just-in-time-telemetry-elevation-and-ephemeral-forensics.md)).
 2. **Empirical Evasion Resilience (`threat_intel.evasion_resilience`)**: Rather than relying on self-declared coverage checklists ("ATT&CK Bingo"), rules undergo automated mutation testing in CI ([ADR-0007](0007-continuous-automated-purple-teaming-and-multi-model-consensus.md)). Detections that withstand syntactic and procedural variations are classified as `functional`, intermediate sequences as `operational`, and brittle syntax matches as `tactical`.
+3. **Inverted Telemetry Dependencies (`data_requirements.telemetry_dependencies`)**: Traditional pipelines push raw data blindly toward detection engines. Polyglot DaC inverts this relationship: rules declare exactly which OCSF event classes, authority sources, and fields they require versus which are optional. If a supporting telemetry stream (e.g. NDR network flow) degrades or stalls, the detection runtime automatically marks the rule's operational status as `DEGRADED`, discounting the resulting finding's confidence ceiling and alerting SecOps pipeline engineering (e.g. in Cribl or Vector) to restore signal health.
 
 ---
 

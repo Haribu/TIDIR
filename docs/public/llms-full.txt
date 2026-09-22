@@ -520,16 +520,24 @@ To prevent ambiguous claims of correctness, TIDIR enforces a strict three-tier v
 
 ---
 
-## 5. Data Contracts Across the Architecture
+## 5. Interface Types & Boundary Contracts
+
+Rather than indiscriminately shipping all raw data into a centralized repository, TIDIR establishes three first-class interface types grounded in OCSF:
+
+1. **Telemetry (Observations)**: Raw factual records emitted by endpoints, networks, cloud providers, and applications. Mapped to **OCSF Categories 1, 3, 4, and 6** (e.g. `1007: Process Activity`, `3001: Authentication`, `4001: Network Connection`). Telemetry is retained in tiered columnar lakehouses or edge ring buffers, queried on demand.
+2. **Findings (Evaluative Intelligence)**: Evaluative conclusions produced by specialized detection engines and controls. Mapped strictly to **OCSF Category 2 (Class 2001: Security Finding and Class 2004: Detection Finding)**. Native domain controls (EDR, NDR, CNAPP, IdP) detect locally and stream findings to TIDIR at line rate ([ADR-0023](../adr/0023-distributed-detection-and-edge-to-center-correlation.md)).
+3. **Context (Security Knowledge)**: Ground-truth reference state used to interpret observations and findings. Mapped to **OCSF Standard Objects** (`Device`, `User`, `Account`, `Process`, `Cloud`) and structured into the **Bipartite Entity-Finding Graph ([ADR-0011](../adr/0011-bipartite-entity-finding-graph-consolidation.md))**. Context tracks identity resolution, asset criticality tiers, exposure paths, and governing controls.
+
+### Canonical Boundary Contracts
 
 | Boundary | Schema Contract | Purpose |
 | :--- | :--- | :--- |
 | **L1 ➔ L2 Ingress** | Native / Schema Registry Envelope | Bounded transport batch carrying origin metadata and raw event facts. |
 | **L2 Normalization** | OCSF (Open Cybersecurity Schema Framework) | Canonical schema across system, identity, network, cloud, and application domains. |
-| **L3 Detection Target** | OCSF Classes (1001, 1007, 3002, 4001, etc.) & Target Dialects | Vendor-neutral governance metadata envelope with target-optimized query blocks (KQL, SPL, SQL). |
+| **L3 Detection Target** | OCSF Classes & Inverted Dependencies ([ADR-0019](../adr/0019-polyglot-detection-as-code-and-native-engine-adaptation.md)) | Rules declare required/optional telemetry streams, executing on native engines (KQL, SPL, SQL). |
 | **L3 ➔ L4 Handoff** | OCSF Class 2001 & Class 2004 Findings with Evidence Lineage | Standardised security and detection findings carrying evidence lineage, ATT&CK tags, and dependency-discounted risk scores. |
 | **L4 Agent Tool Contract** | Model Context Protocol (MCP) & Typed JSON Schema | Parameters for read-only forensic queries; strictly isolates prompts from unformatted raw telemetry. |
-| **L4 Monotonic Containment** | Asymmetric Action Specifications | Parameterized forward action ($T_i$) and forward escalation payloads; strictly fail-closed with reachability-bounded forward compensation ($R(s_{\text{post}}) \subseteq R(s_{\text{pre}})$: post-action reachability remains a subset of pre-action reachability). |
+| **L4 Monotonic Containment** | Declarative Action Intents & Asymmetric State Machine | Standardized action intents (`ISOLATE_HOST`, `REVOKE_SESSION`, `BLOCK_INDICATOR`) decoupled from vendor APIs; strictly fail-closed with reachability-bounded forward compensation ($R(s_{\text{post}}) \subseteq R(s_{\text{pre}})$). |
 
 ---
 

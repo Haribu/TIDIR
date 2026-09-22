@@ -93,14 +93,25 @@ flowchart TB
   JIT_TRIG -.->|Re-instruments Sensors| EdgeControls
 ```
 
-### Core Architecture Responsibilities
+### The Detection Placement Policy Matrix
 
-| Responsibility Tier | Execution Location | Detection Scope & Rationale | Ingress Volume |
+TIDIR rejects the concept of a monolithic "Detection Engine." Real-world enterprise defense distributes detection logic across specialized runtimes based on explicit engineering criteria:
+
+| Detection Tier | Typical Runtimes | Primary Responsibilities & Detection Classes | Placement Criteria & Constraints |
 | :--- | :--- | :--- | :--- |
-| **Commodity Domain Detections** | Native Edge / Domain Controls (EDR, IdP, CNAPP, NDR) | Known tool signatures, local LOLBin execution, simple threshold bursts, OS system call violations. Best executed locally with zero transit latency. | High Volume (Processed at Edge); emits low-volume OCSF Findings. |
-| **Cross-Domain Correlation** | TIDIR Central Streaming Core | Temporal correlation linking an identity anomaly with a cloud API spike and an endpoint process tree. Native controls lack multi-domain visibility. | Low-to-Medium Volume (Consumes Findings & Key State $\Delta t$). |
-| **Bespoke Enterprise Detection** | TIDIR Polyglot DaC Engine | Custom business logic, proprietary application telemetry, and threat actor flows specific to the enterprise risk profile. | Targeted / Filtered Ingest Streams. |
-| **Deep Forensic Retrieval** | Federated Storage & JIT Elevation | Retained raw telemetry queried on-demand by investigation agents or elevated via JIT triggers when an investigation opens. | On-Demand (Query Pushdown / Temporary Sensor Elevation). |
+| **1. Specialized Edge Controls** | EDR (Defender for Endpoint, CrowdStrike Falcon), CNAPP (Wiz, Prisma, Defender for Cloud), IdP/ITDR (Entra ID, Okta, Defender for Identity), NDR (Zeek, Corelight) | Known exploit signatures, memory tampering, LOLBin abuse, privileged container escape, impossible travel, and line-rate protocol anomalies. | **Latency**: $\lt 1\text{s}$.<br>**Scope**: Local host, container, or single protocol stream.<br>**Action**: Direct pre-execution block or local quarantine. |
+| **2. High-Throughput Streaming** | Flink, Vector, Cribl, Kafka Streams | Event-time windowed aggregations, sliding rate thresholds (e.g. $\gt 100$ failed logins in 60s), and continuous stateless filtering. | **Latency**: $\lt 5\text{s}$.<br>**Scope**: Ephemeral event stream across identical classes.<br>**Depth**: In-memory sliding windows ($\le 15\text{m}$). |
+| **3. Central SIEM / Correlation Core** | Microsoft Sentinel, Splunk, Elastic | Cross-cloud and multi-source event correlation, standard operational triage playbooks, and enterprise rule lifecycles. | **Latency**: $\lt 60\text{s}$.<br>**Scope**: Multi-vendor audit logs, IAM events, and aggregated edge findings.<br>**Depth**: 7–30 days hot index. |
+| **4. Security Lakehouse Analytics** | Databricks, Snowflake, ClickHouse, Apache Iceberg | Complex timeseries baseline deviations, rare-event clustering, 30–90 day historical retro-hunting, and heavy graph analysis. | **Latency**: 5–60 minutes (Scheduled batch / micro-batch).<br>**Scope**: Petabyte-scale enterprise historical data.<br>**Depth**: 30–365+ days columnar storage. |
+| **5. Cross-Domain Orchestrator** | TIDIR Orchestration Plane | Multi-control finding synthesis, Bipartite Entity-Finding Graph community clustering, Bayesian risk score compounding, and closed-loop containment gating. | **Latency**: Event-driven on elevated finding ingress.<br>**Scope**: Enterprise-wide cross-domain state of record.<br>**Depth**: Active incident lifecycle. |
+
+### Three First-Class Interface Types via OCSF
+
+To avoid the anti-pattern of indiscriminately shipping all raw telemetry into a single monolithic repository, TIDIR formally distinguishes three interface types grounded in OCSF:
+
+1. **Telemetry (Observations)**: Raw factual records emitted by endpoints, networks, cloud providers, and applications. Mapped to **OCSF Categories 1, 3, 4, and 6** (e.g. `1007: Process Activity`, `3001: Authentication`, `4001: Network Connection`). Telemetry is retained in cost-effective columnar lakehouses or edge ring buffers and queried on demand.
+2. **Findings (Evaluative Intelligence)**: Evaluative outputs produced by specialized detection engines and controls. Mapped strictly to **OCSF Category 2 (Class 2001: Security Finding and Class 2004: Detection Finding)**. Findings carry threat framework mappings (MITRE ATT&CK), analytic identifiers, and pointers to triggering evidence. Native domain controls stream findings into TIDIR at line rate.
+3. **Context (Security Knowledge)**: Ground-truth reference information used to interpret observations and findings. Mapped to **OCSF Standard Objects** (`Device`, `User`, `Account`, `Process`, `Cloud`, `Digital Signature`) and organized into the **Bipartite Entity-Finding Graph ([ADR-0011](0011-bipartite-entity-finding-graph-consolidation.md))**. Context tracks identity resolution, asset criticality tiers, exposure paths, and governing controls.
 
 ### Overcoming the "Alerts-Only" Vulnerability
  
