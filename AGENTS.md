@@ -28,13 +28,14 @@ TIDIR/
 │   ├── architecture/
 │   │   ├── 01-system-overview.md  # Target component architecture & topology
 │   │   ├── 02-capability-model.md # Functional capability taxonomy matrix
+│   │   ├── distributed-detection-and-the-finding-bus.md # Strategic position paper
 │   │   └── components/            # Domain-level architecture specifications
 │   │       ├── 01-threat-intelligence.md
 │   │       ├── 02-data-fabric-telemetry.md
 │   │       ├── 03-detection-engine.md
 │   │       ├── 04-investigation-cases.md
 │   │       └── 05-response-automation.md
-│   ├── adr/                       # Architectural Decision Records (MADR format)
+│   ├── adr/                       # Architectural Decision Records (MADR format; 26 ADRs)
 │   │   ├── template.md            # Standard ADR template
 │   │   └── 0001-record-architecture-decisions.md
 │   ├── diagrams/                  # Standalone Mermaid diagrams (.mmd)

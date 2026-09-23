@@ -16,7 +16,7 @@ flowchart TB
 
   %% Layer 2: Pipeline, Storage & Query Fabric
   subgraph L2 ["LAYER 2: PIPELINE, STORAGE & QUERY FABRIC"]
-    L2_INGEST["Line-Rate Ingestion & OCSF Normalization\n(Schema registry, unmapped data catch-all & DLQ)"]:::layer2
+    L2_INGEST["Line-Rate Ingestion & OCSF Normalization\n(Schema registry, W3C trace lineage & DLQ; ADR-0025)"]:::layer2
     L2_ROUTER["Value-Based Tiering & Stream Router\n(Tier A hot stream, Tier B lakehouse, Tier C filter)"]:::layer2
     L2_STORAGE["Multi-Paradigm Storage & Query Core\n(Hot index, columnar lakehouse, two-tier sketch state Δt)"]:::layer2
   end
@@ -24,7 +24,7 @@ flowchart TB
   %% Layer 3: Threat Intelligence & Detection Engineering
   subgraph L3 ["LAYER 3: THREAT INTEL & DETECTION ENGINEERING"]
     L3_FLOW["Machine-Readable Threat Models\n(Adversary attack flows, PIRs, graph mapping)"]:::layer3
-    L3_DAC["Dual-Lane DaC Engine\n(Inverted telemetry dependencies & cross-domain correlation)"]:::layer3
+    L3_DAC["Dual-Lane DaC Engine\n(Inverted dependencies & coverage assurance; ADR-0019/0026)"]:::layer3
     L3_RISK["Exposure-Aware Risk Lens\n(Dynamic priors, supernode graph clustering, OCSF 2001/2004)"]:::layer3
   end
 
@@ -48,5 +48,5 @@ flowchart TB
   %% Operational Progression (Strict Top-to-Bottom DAG)
   L1 ==>|1. Transport Envelopes & Raw Ingestion| L2
   L2 ==>|2. Normalized Telemetry & Low-Latency State Δt| L3
-  L3 ==>|3. Correlated Security & Detection Findings| L4
+  L3 ==>|3. The Finding Bus: OCSF 2001/2004 Findings - ADR-0024| L4
   L4 ==>|4. Incident Dossiers & Post-Mortem Outcomes| FB

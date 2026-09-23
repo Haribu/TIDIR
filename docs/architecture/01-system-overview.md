@@ -75,7 +75,7 @@ flowchart TB
 
   %% Layer 2: Pipeline, Storage & Query Fabric
   subgraph L2 ["LAYER 2: PIPELINE, STORAGE & QUERY FABRIC"]
-    L2_INGEST["Line-Rate Ingestion & OCSF Normalization\n(Schema registry, unmapped data catch-all & DLQ)"]:::layer2
+    L2_INGEST["Line-Rate Ingestion & OCSF Normalization\n(Schema registry, W3C trace lineage & DLQ; ADR-0025)"]:::layer2
     L2_ROUTER["Value-Based Tiering & Stream Router\n(Tier A hot stream, Tier B lakehouse, Tier C filter)"]:::layer2
     L2_STORAGE["Multi-Paradigm Storage & Query Core\n(Hot index, columnar lakehouse, two-tier sketch state Δt)"]:::layer2
   end
@@ -83,7 +83,7 @@ flowchart TB
   %% Layer 3: Threat Intelligence & Detection Engineering
   subgraph L3 ["LAYER 3: THREAT INTEL & DETECTION ENGINEERING"]
     L3_FLOW["Machine-Readable Threat Models\n(Adversary attack flows, PIRs, graph mapping)"]:::layer3
-    L3_DAC["Dual-Lane DaC Engine\n(Inverted telemetry dependencies & cross-domain correlation)"]:::layer3
+    L3_DAC["Dual-Lane DaC Engine\n(Inverted dependencies & coverage assurance; ADR-0019/0026)"]:::layer3
     L3_RISK["Exposure-Aware Risk Lens\n(Dynamic priors, supernode graph clustering, OCSF 2001/2004)"]:::layer3
   end
 
@@ -107,7 +107,7 @@ flowchart TB
   %% Operational Progression (Strict Top-to-Bottom DAG)
   L1 ==>|1. Transport Envelopes & Raw Ingestion| L2
   L2 ==>|2. Normalized Telemetry & Low-Latency State Δt| L3
-  L3 ==>|3. Correlated Security & Detection Findings| L4
+  L3 ==>|3. The Finding Bus: OCSF 2001/2004 Findings - ADR-0024| L4
   L4 ==>|4. Incident Dossiers & Post-Mortem Outcomes| FB
 ```
 
@@ -279,18 +279,18 @@ To prevent ambiguous claims of correctness, TIDIR enforces a strict three-tier v
 
 Rather than indiscriminately shipping all raw data into a centralized repository, TIDIR establishes three first-class interface types grounded in OCSF:
 
-1. **Telemetry (Observations)**: Raw factual records emitted by endpoints, networks, cloud providers, and applications. Mapped to **OCSF Categories 1, 3, 4, and 6** (e.g. `1007: Process Activity`, `3001: Authentication`, `4001: Network Connection`). Telemetry is retained in tiered columnar lakehouses or edge ring buffers, queried on demand.
-2. **Findings (Evaluative Intelligence)**: Evaluative conclusions produced by specialized detection engines and controls. Mapped strictly to **OCSF Category 2 (Class 2001: Security Finding and Class 2004: Detection Finding)**. Native domain controls (EDR, NDR, CNAPP, IdP) detect locally and stream findings to TIDIR at line rate ([ADR-0023](../adr/0023-distributed-detection-and-edge-to-center-correlation.md)).
-3. **Context (Security Knowledge)**: Ground-truth reference state used to interpret observations and findings. Mapped to **OCSF Standard Objects** (`Device`, `User`, `Account`, `Process`, `Cloud`) and structured into the **Bipartite Entity-Finding Graph ([ADR-0011](../adr/0011-bipartite-entity-finding-graph-consolidation.md))**. Context tracks identity resolution, asset criticality tiers, exposure paths, and governing controls.
+1. **Telemetry (Observations)**: Raw factual records emitted by endpoints, networks, cloud providers, and applications. Mapped to **OCSF Categories 1, 3, 4, and 6** (e.g. `1007: Process Activity`, `3001: Authentication`, `4001: Network Connection`). Telemetry is retained in tiered columnar lakehouses or edge ring buffers, queried on demand, with upstream lineage tracked via W3C Trace Context ([ADR-0025](../adr/0025-pre-detection-telemetry-provenance-and-ingestion-lineage.md)).
+2. **Findings (Evaluative Intelligence)**: Evaluative conclusions produced by specialized detection engines and controls. Mapped strictly to **OCSF Category 2 (Class 2001: Security Finding and Class 2004: Detection Finding)**. Native domain controls (EDR, NDR, CNAPP, IdP) detect locally and publish findings to the **Finding Bus** at line rate ([ADR-0023](../adr/0023-distributed-detection-and-edge-to-center-correlation.md), [ADR-0024](../adr/0024-finding-bus-architecture-lineage-and-finding-contract.md), and the [Strategic Position Paper](distributed-detection-and-the-finding-bus.md)).
+3. **Context (Security Knowledge)**: Ground-truth reference state used to interpret observations and findings. Mapped to **OCSF Standard Objects** (`Device`, `User`, `Account`, `Process`, `Cloud`) and structured into the **Bipartite Entity-Finding Graph ([ADR-0011](../adr/0011-bipartite-entity-finding-graph-consolidation.md))**. Context tracks identity resolution, asset criticality tiers, exposure paths, and governing controls across four epistemic tiers (Authoritative, Observed, Derived, Inferred).
 
 ### Canonical Boundary Contracts
 
 | Boundary | Schema Contract | Purpose |
 | :--- | :--- | :--- |
-| **L1 ➔ L2 Ingress** | Native / Schema Registry Envelope | Bounded transport batch carrying origin metadata and raw event facts. |
+| **L1 ➔ L2 Ingress** | Schema Registry Envelope & Ingestion Lineage ([ADR-0025](../adr/0025-pre-detection-telemetry-provenance-and-ingestion-lineage.md)) | Bounded transport batch carrying origin metadata, W3C trace context, and raw event facts. |
 | **L2 Normalization** | OCSF (Open Cybersecurity Schema Framework) | Canonical schema across system, identity, network, cloud, and application domains. |
-| **L3 Detection Target** | OCSF Classes & Inverted Dependencies ([ADR-0019](../adr/0019-polyglot-detection-as-code-and-native-engine-adaptation.md)) | Rules declare required/optional telemetry streams, executing on native engines (KQL, SPL, SQL). |
-| **L3 ➔ L4 Handoff** | OCSF Class 2001 & Class 2004 Findings with Evidence Lineage | Standardised security and detection findings carrying evidence lineage, ATT&CK tags, and dependency-discounted risk scores. |
+| **L3 Detection Target** | OCSF Classes, Inverted Dependencies ([ADR-0019](../adr/0019-polyglot-detection-as-code-and-native-engine-adaptation.md)) & Coverage Assurance ([ADR-0026](../adr/0026-end-to-end-coverage-assurance-and-degradation-circuit-breakers.md)) | Rules declare required/optional telemetry streams, executing on native engines with automated degradation circuit breakers. |
+| **L3 ➔ L4 Handoff** | The Finding Bus: OCSF Class 2001 & Class 2004 Findings ([ADR-0024](../adr/0024-finding-bus-architecture-lineage-and-finding-contract.md)) | Standardised security and detection findings carrying evidence lineage, ATT&CK tags, and dependency-discounted risk scores. |
 | **L4 Agent Tool Contract** | Model Context Protocol (MCP) & Typed JSON Schema | Parameters for read-only forensic queries; strictly isolates prompts from unformatted raw telemetry. |
 | **L4 Monotonic Containment** | Declarative Action Intents & Asymmetric State Machine | Standardized action intents (`ISOLATE_HOST`, `REVOKE_SESSION`, `BLOCK_INDICATOR`) decoupled from vendor APIs; strictly fail-closed with reachability-bounded forward compensation ($R(s_{\text{post}}) \subseteq R(s_{\text{pre}})$). |
 
